@@ -1,0 +1,80 @@
+import express, { Express } from "express";
+import path from "path";
+import methodOverride from "method-override";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import flash from "express-flash";
+import moment from "moment";
+import http from "http";
+import dotenv from "dotenv";
+import { Server } from "socket.io";
+dotenv.config();
+import cors from "cors";
+import * as database from "./config/database";
+import systemConfig from "./config/system";
+
+import routeAdmin from "./routes/admin/index.route";
+
+database.connect();
+
+const app: Express = express();
+
+const port: number | string = process.env.PORT || 3000;
+
+app.use(cors());
+// Socket IO
+const server = http.createServer(app);
+const io = new Server(server);
+global._io = io;
+// End Socket IO
+
+app.use(methodOverride("_method"));
+
+// // parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded());
+
+// Parse JSON bodies
+app.use(bodyParser.json());
+
+// Cấu hình pug
+app.set("views", `${__dirname}/views`);
+app.set("view engine", "pug");
+// End Cấu hình pug
+
+// flash
+app.use(cookieParser("dfdfsadasd"));
+app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(flash());
+// End flash
+
+// Tinymce
+app.use(
+  "/tinymce",
+  express.static(path.join(__dirname, "node_modules", "tinymce"))
+);
+// End Tinymce
+
+// App Locals Variables (Tạo ra các biến toàn cục, file .pug nào cũng xài được, và chỉ đc sử dụng trong file .pug)
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
+
+app.use(express.static(`${__dirname}/public`)); // Rất quan trọng, muốn cái gì public thì cho vào thư mục public còn lại là private
+
+// Routes
+routeAdmin(app);
+// route(app);
+// app.get("*", function (req, res) {
+//   res.render("client/pages/errors/404.pug", {
+//     pageTitle: "404 Not Found",
+//   });
+// });
+app.use(function (req, res) {
+  res.status(404).render("client/pages/errors/404.pug", {
+    pageTitle: "404 Not Found",
+  });
+});
+
+server.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
