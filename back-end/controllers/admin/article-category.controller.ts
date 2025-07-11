@@ -249,7 +249,7 @@ export const detail = async (req: Request, res: Response) => {
     const record = await ArticleCategory.findOne(find);
     res.json({
       code: 200,
-      message: `Đã cập nhật thành công bài viết!`,
+      message: `Thành công!`,
       record: record,
     });
   } catch (error) {
