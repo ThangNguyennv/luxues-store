@@ -191,7 +191,7 @@ export const createPost = async (req: Request, res: Response) => {
       req.body.position = parseInt(req.body.position);
     }
     req.body.createdBy = {
-      account_id: res.locals.user.id,
+      account_id: req["accountAdmin"].id,
     };
 
     const records = new ArticleCategory(req.body);
