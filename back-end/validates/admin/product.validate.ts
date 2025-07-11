@@ -1,8 +1,15 @@
-module.exports.createPost = (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+export const createPost = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.body.title) {
-    req.flash("error", `Vui lòng nhập tiêu đề!`);
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
+    res.json({
+      code: 400,
+      message: `Vui lòng nhập tiêu đề!`,
+    });
     return;
   }
   next();

@@ -12,7 +12,7 @@ import { accountRoutes } from "./account.route";
 // import { userRoutes } from "./user.route";
 import { authRoutes } from "./auth.route";
 // import { myAccountRoutes } from "./my-account.route";
-// import { articleRoutes } from "./article.route";
+import { articleRoutes } from "./article.route";
 import { articleCategoryRoutes } from "./article-category.route";
 // import { orderRoutes } from "./order.route";
 // import { settingRoutes } from "./setting.route";
@@ -27,5 +27,6 @@ const routeAdmin = (app: Express): void => {
     articleCategoryRoutes
   );
   app.use(PATH_ADMIN + "/auth", authRoutes);
+  app.use(PATH_ADMIN + "/articles", authMiddleware.requireAuth, articleRoutes);
 };
 export default routeAdmin;
