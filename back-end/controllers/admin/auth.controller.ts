@@ -1,6 +1,5 @@
 import Account from "../../models/account.model";
 import md5 from "md5";
-import systemConfig from "../../config/system";
 import { Request, Response } from "express";
 
 // [POST] /admin/auth/login
@@ -49,8 +48,18 @@ export const loginPost = async (req: Request, res: Response) => {
 };
 
 // [GET] /admin/auth/logout
-module.exports.logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
   // Xóa token trong cookie
-  res.clearCookie("token");
-  res.redirect(`${systemConfig.prefixAdmin}/auth/login`);
+  try {
+    res.clearCookie("token");
+    res.json({
+      code: 200,
+      message: "Đăng xuất thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
 };
