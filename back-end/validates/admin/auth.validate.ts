@@ -1,15 +1,23 @@
-module.exports.loginPost = (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+export const loginPost = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.body.email) {
-    req.flash("error", `Vui lòng nhập email!`);
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
+    res.json({
+      code: 400,
+      message: `Vui lòng nhập email!`,
+    });
     return;
   }
 
   if (!req.body.password) {
-    req.flash("error", `Vui lòng nhập mật khẩu!`);
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
+    res.json({
+      code: 400,
+      message: `Vui lòng nhập mật khẩu!`,
+    });
     return;
   }
   next();

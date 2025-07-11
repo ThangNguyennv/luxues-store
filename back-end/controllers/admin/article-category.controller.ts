@@ -59,7 +59,7 @@ export const changeStatus = async (req: Request, res: Response) => {
     const status: string = req.params.status;
     const id: string = req.params.id;
     const updatedBy = {
-      account_id: res.locals.user.id,
+      account_id: req["user"].id,
       updatedAt: new Date(),
     };
     await ArticleCategory.updateOne(
@@ -75,6 +75,7 @@ export const changeStatus = async (req: Request, res: Response) => {
     res.json({
       code: 400,
       message: "Lỗi!",
+      data: req.params,
     });
   }
 };

@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 
-export const createPost = (req: Request, res: Response, next: NextFunction) => {
+export const createPost = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.body.fullName) {
     res.json({
       code: 400,
@@ -27,7 +31,11 @@ export const createPost = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export const editPatch = (req: Request, res: Response, next: NextFunction) => {
+export const editPatch = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.body.fullName) {
     res.json({
       code: 400,

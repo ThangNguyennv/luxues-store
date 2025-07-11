@@ -1,51 +1,51 @@
-const Account = require("../../models/account.model");
-const md5 = require("md5");
-const systemConfig = require("../../config/system");
-
-// [GET] /admin/auth/login
-module.exports.login = (req, res) => {
-  if (req.cookies.token) {
-    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
-  } else {
-    res.render("admin/pages/auth/login.pug", {
-      pageTitle: "Trang đăng nhập",
-    });
-  }
-};
+import Account from "../../models/account.model";
+import md5 from "md5";
+import systemConfig from "../../config/system";
+import { Request, Response } from "express";
 
 // [POST] /admin/auth/login
-module.exports.loginPost = async (req, res) => {
-  // Cách 1:
-  //    const email = req.body.email;
-  //    const password = req.body.password;
-  // Cách 2:
-  const { email, password } = req.body;
+export const loginPost = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
 
-  const user = await Account.findOne({
-    email: email,
-    deleted: false,
-  });
-  if (!user) {
-    req.flash("error", "Email không tồn tại!");
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
-    return;
+    const accountAdmin = await Account.findOne({
+      email: email,
+      deleted: false,
+    });
+    if (!accountAdmin) {
+      res.json({
+        code: 400,
+        message: "Email không tồn tại!",
+      });
+      return;
+    }
+    if (md5(password) != accountAdmin.password) {
+      res.json({
+        code: 400,
+        message: "Tài khoản hoặc mật khẩu không chính xác",
+      });
+      return;
+    }
+    if (accountAdmin.status == "inactive") {
+      res.json({
+        code: 400,
+        message: "Tài khoản đã bị khóa!",
+      });
+      return;
+    }
+    // Tạo token lưu trên cookie
+    res.cookie("token", accountAdmin.token);
+    res.json({
+      code: 200,
+      message: "Đăng nhập thành công!",
+      token: accountAdmin.token,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  if (md5(password) != user.password) {
-    req.flash("error", "Tài khoản hoặc mật khẩu không chính xác");
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
-    return;
-  }
-  if (user.status == "inactive") {
-    req.flash("error", "Tài khoản đã bị khóa!");
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
-    return;
-  }
-  // Tạo token lưu trên cookie
-  res.cookie("token", user.token);
-  res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 };
 
 // [GET] /admin/auth/logout

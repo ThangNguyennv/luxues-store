@@ -10,7 +10,7 @@ import * as authMiddleware from "../../middlewares/admin/auth.middleware";
 // import { roleRoutes } from "./role.route";
 import { accountRoutes } from "./account.route";
 // import { userRoutes } from "./user.route";
-// import { authRoutes } from "./auth.route";
+import { authRoutes } from "./auth.route";
 // import { myAccountRoutes } from "./my-account.route";
 // import { articleRoutes } from "./article.route";
 import { articleCategoryRoutes } from "./article-category.route";
@@ -23,8 +23,9 @@ const routeAdmin = (app: Express): void => {
   app.use(PATH_ADMIN + "/accounts", authMiddleware.requireAuth, accountRoutes);
   app.use(
     PATH_ADMIN + "/articles-category",
-    // authMiddleware.requireAuth,
+    authMiddleware.requireAuth,
     articleCategoryRoutes
   );
+  app.use(PATH_ADMIN + "/auth", authRoutes);
 };
 export default routeAdmin;
