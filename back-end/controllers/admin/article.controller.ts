@@ -112,25 +112,27 @@ export const createPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/articles/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
+// [GET] /admin/articles/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
 
-//     const article = await Article.findOne(find);
-//     res.render("admin/pages/articles/detail.pug", {
-//       pageTitle: article.title,
-//       article: article,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại bài viết này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/articles`);
-//   }
-// };
+    const article = await Article.findOne(find);
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      article: article,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/articles/edit/:id
 // module.exports.edit = async (req, res) => {

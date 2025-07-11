@@ -23,7 +23,7 @@ router.post(
   controller.createPost
 );
 
-// router.get("/detail/:id", controller.detail);
+router.get("/detail/:id", controller.detail);
 
 // // Khi click vào nút chỉnh sửa, web chuyển hướng sang trang chỉnh sửa sản phẩm.
 // router.get("/edit/:id", controller.edit);
