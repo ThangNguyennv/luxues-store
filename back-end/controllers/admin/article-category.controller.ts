@@ -82,10 +82,11 @@ export const changeStatus = async (req: Request, res: Response) => {
 // [PATCH] /admin/articles-category/change-multi
 export const changeMulti = async (req: Request, res: Response) => {
   try {
-    const type: string = req.body.type;
-    const ids: string[] = req.body.ids.split(", ");
+    const body = req.body as { type: string; ids: string[] };
+    const type = body.type;
+    const ids = body.ids;
     const updatedBy = {
-      account_id: res.locals.user.id,
+      account_id: req["accountAdmin"].id,
       updatedAt: new Date(),
     };
     enum Key {
@@ -98,7 +99,7 @@ export const changeMulti = async (req: Request, res: Response) => {
       case Key.ACTIVE:
         await ArticleCategory.updateMany(
           { _id: { $in: ids } },
-          { status: "active", $push: { updatedBy: updatedBy } }
+          { status: Key.ACTIVE, $push: { updatedBy: updatedBy } }
         );
         res.json({
           code: 200,
@@ -108,7 +109,7 @@ export const changeMulti = async (req: Request, res: Response) => {
       case Key.INACTIVE:
         await ArticleCategory.updateMany(
           { _id: { $in: ids } },
-          { status: "inactive", $push: { updatedBy: updatedBy } }
+          { status: Key.INACTIVE, $push: { updatedBy: updatedBy } }
         );
         res.json({
           code: 200,
@@ -126,10 +127,6 @@ export const changeMulti = async (req: Request, res: Response) => {
         });
         break;
       case Key.CHANGEPOSITION:
-        interface Item {
-          id: string;
-          position: number;
-        }
         for (const item of ids) {
           let [id, position] = item.split("-");
           await ArticleCategory.updateOne(
