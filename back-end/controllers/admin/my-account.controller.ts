@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import Account from "../../models/account.model";
-import Role from "../../models/role.model";
-import systemConfig from "../../config/system";
 import md5 from "md5";
 
 // [GET] /admin/my-account

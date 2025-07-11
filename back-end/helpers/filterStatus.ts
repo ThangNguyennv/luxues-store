@@ -1,4 +1,4 @@
-interface StatusItem {
+export interface StatusItem {
   name: string;
   status: string;
   class: string;

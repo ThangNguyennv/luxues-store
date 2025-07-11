@@ -1,5 +1,6 @@
-module.exports = (query) => {
-  let filterOrder = [
+import { StatusItem } from "./filterStatus";
+const filterOrderHelpers = (query: Record<string, any>): StatusItem[] => {
+  const filterOrder: StatusItem[] = [
     {
       name: "Tất cả",
       status: "",
@@ -21,14 +22,12 @@ module.exports = (query) => {
       class: "",
     },
   ];
-
-  if (query.status) {
-    const index = filterOrder.findIndex((item) => item.status == query.status);
-    filterOrder[index].class = "confirmed";
-  } else {
-    const index = filterOrder.findIndex((item) => item.status == "");
+  const target = query.status ?? "";
+  const index = filterOrder.findIndex((item) => item.status === target);
+  if (index >= 0) {
     filterOrder[index].class = "confirmed";
   }
 
   return filterOrder;
 };
+export default filterOrderHelpers;

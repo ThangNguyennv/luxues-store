@@ -14,7 +14,7 @@ import { authRoutes } from "./auth.route";
 import { myAccountRoutes } from "./my-account.route";
 import { articleRoutes } from "./article.route";
 import { articleCategoryRoutes } from "./article-category.route";
-// import { orderRoutes } from "./order.route";
+import { orderRoutes } from "./order.route";
 // import { settingRoutes } from "./setting.route";
 
 const routeAdmin = (app: Express): void => {
@@ -38,5 +38,6 @@ const routeAdmin = (app: Express): void => {
     authMiddleware.requireAuth,
     myAccountRoutes
   );
+  app.use(PATH_ADMIN + "/orders", authMiddleware.requireAuth, orderRoutes);
 };
 export default routeAdmin;
