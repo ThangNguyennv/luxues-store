@@ -1,14 +1,9 @@
 import { Request, Response } from "express";
-
 import Article from "../../models/article.model";
-import ArticleCategory from "../../models/article-category.model";
 import Account from "../../models/account.model";
-
-import systemConfig from "../../config/system";
 import filterStatusHelpers from "../../helpers/filterStatus";
 import searchHelpers from "../../helpers/search";
 import paginationHelpers from "../../helpers/pagination";
-import { tree, TreeItem } from "../../helpers/createTree";
 
 // [GET] /admin/articles
 export const index = async (req: Request, res: Response) => {
