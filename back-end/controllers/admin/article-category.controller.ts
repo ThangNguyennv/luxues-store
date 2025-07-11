@@ -214,7 +214,7 @@ export const editPatch = async (req: Request, res: Response) => {
   try {
     req.body.position = parseInt(req.body.position);
     const updatedBy = {
-      account_id: res.locals.user.id,
+      account_id: req["accountAdmin"].id,
       updatedAt: new Date(),
     };
     await ArticleCategory.updateOne(
