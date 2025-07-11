@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // Sử dụng mongoose, buộc phải tuần theo Schema này, nếu chẳng may có người thêm các thuộc tính linh tinh khác vào thì nó sẽ không lưu vào database.
-const OrderSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
     // user_id: String,
     cart_id: String,
@@ -54,6 +54,6 @@ const OrderSchema = new mongoose.Schema(
 );
 
 // Tham số thứ ba là tên collection trong database
-const Order = mongoose.model("Order", OrderSchema, "orders");
+const Order = mongoose.model("Order", orderSchema, "orders");
 
 export default Order;

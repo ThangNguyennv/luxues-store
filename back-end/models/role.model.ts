@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // Sử dụng mongoose, buộc phải tuần theo Schema này, nếu chẳng may có người thêm các thuộc tính linh tinh khác vào thì nó sẽ không lưu vào database.
-const RoleSchema = new mongoose.Schema(
+const roleSchema = new mongoose.Schema(
   {
     title: String, // San pham 1
     description: String,
@@ -31,6 +31,6 @@ const RoleSchema = new mongoose.Schema(
 );
 
 // Tham số thứ ba là tên collection trong database
-const Role = mongoose.model("Role", RoleSchema, "roles");
+const Role = mongoose.model("Role", roleSchema, "roles");
 
 export default Role;

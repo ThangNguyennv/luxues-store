@@ -37,11 +37,6 @@ app.use(methodOverride("_method"));
 // Parse JSON bodies
 app.use(bodyParser.json());
 
-// Cấu hình pug
-app.set("views", `${__dirname}/views`);
-app.set("view engine", "pug");
-// End Cấu hình pug
-
 // flash
 app.use(cookieParser("dfdfsadasd"));
 app.use(session({ cookie: { maxAge: 60000 } }));

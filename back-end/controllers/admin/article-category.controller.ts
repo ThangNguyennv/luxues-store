@@ -3,8 +3,8 @@ import { Request, Response } from "express";
 import ArticleCategory from "../../models/article-category.model";
 import filterStatusHelpers from "../../helpers/filterStatus";
 import searchHelpers from "../../helpers/search";
-import tree, { TreeNode } from "../../helpers/createTree";
-import addLogInfoToTree from "../../helpers/addLogInfoToChildren";
+import { tree, TreeItem } from "../../helpers/createTree";
+import { addLogInfoToTree, LogNode } from "../../helpers/addLogInfoToChildren";
 
 // [GET] /admin/articles-category
 export const index = async (req: Request, res: Response) => {
@@ -34,15 +34,16 @@ export const index = async (req: Request, res: Response) => {
   } else {
     sort["position"] = "desc";
   }
-  // End Sort
-  const records = await ArticleCategory.find(find)
-    .sort(sort)
-    .lean<TreeNode[]>();
+  // // End Sort
 
-  const newRecords = tree(records);
+  const records = await ArticleCategory.find(find).sort(sort);
 
-  // Add log info to all nodes (parent and children)
-  await addLogInfoToTree(newRecords);
+  // Tạo cây phân cấp
+  const newRecords = tree(records as TreeItem[]);
+
+  // Thêm thông tin log
+  await addLogInfoToTree(newRecords as LogNode[]);
+
   res.json({
     code: 200,
     message: "Thành công!",

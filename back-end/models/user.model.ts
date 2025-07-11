@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import * as generate from "../helpers/generate";
 
 // Sử dụng mongoose, buộc phải tuần theo Schema này, nếu chẳng may có người thêm các thuộc tính linh tinh khác vào thì nó sẽ không lưu vào database.
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: String,
     email: String,
@@ -30,6 +30,6 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Tham số thứ ba là tên collection trong database
-const User = mongoose.model("User", UserSchema, "users");
+const User = mongoose.model("User", userSchema, "users");
 
 export default User;

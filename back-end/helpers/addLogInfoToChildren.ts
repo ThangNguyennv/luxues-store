@@ -1,29 +1,42 @@
-const Account = require("../models/account.model");
+import Account from "../models/account.model";
+import { TreeItem } from "./createTree";
 
-let addLogInfoToTree = async (nodes) => {
+interface UserRef {
+  account_id: string;
+  accountFullName?: string;
+}
+
+export interface LogNode extends TreeItem {
+  createdBy: UserRef[];
+  updatedBy: UserRef[];
+  accountFullName?: string;
+}
+
+// Second helper: add log info to each node
+export const addLogInfoToTree = async (nodes: LogNode[]): Promise<void> => {
   for (const node of nodes) {
-    // Lấy ra thông tin người tạo
-    const user = await Account.findOne({
-      _id: node.createdBy.account_id,
-    });
-    if (user) {
-      node.accountFullName = user.fullName;
+    // Lấy thông tin người tạo
+    const creator = node.createdBy?.[0];
+    if (creator) {
+      const user = await Account.findById(creator.account_id).exec();
+      if (user) {
+        node.accountFullName = user.fullName;
+      }
     }
 
-    // Lấy ra thông tin người cập nhật gần nhất
-    const updatedBy = node.updatedBy[node.updatedBy.length - 1];
-    if (updatedBy) {
-      const userUpdated = await Account.findOne({
-        _id: updatedBy.account_id,
-      });
-      updatedBy.accountFullName = userUpdated.fullName;
+    // Lấy thông tin người cập nhật gần nhất
+    // const lastUpdater = node.updatedBy?.slice(-1)[0]
+    const lastUpdater = node.updatedBy[node.updatedBy.length - 1];
+    if (lastUpdater) {
+      const userUpdated = await Account.findById(lastUpdater.account_id).exec();
+      if (userUpdated) {
+        lastUpdater.accountFullName = userUpdated.fullName;
+      }
     }
 
-    // Recursively process children
+    // Đệ quy xử lý children
     if (node.children && node.children.length > 0) {
-      await addLogInfoToTree(node.children);
+      await addLogInfoToTree(node.children as LogNode[]);
     }
   }
 };
-
-export default addLogInfoToTree = addLogInfoToTree;

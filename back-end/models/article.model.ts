@@ -5,7 +5,7 @@ import slug from "mongoose-slug-updater";
 mongoose.plugin(slug);
 
 // Sử dụng mongoose, buộc phải tuần theo Schema này, nếu chẳng may có người thêm các thuộc tính linh tinh khác vào thì nó sẽ không lưu vào database.
-const ArticleSchema = new mongoose.Schema(
+const articleSchema = new mongoose.Schema(
   {
     title: String, // San pham 1
     article_category_id: {
@@ -53,6 +53,6 @@ const ArticleSchema = new mongoose.Schema(
 );
 
 // Tham số thứ ba là tên collection trong database
-const Article = mongoose.model("Article", ArticleSchema, "articles");
+const Article = mongoose.model("Article", articleSchema, "articles");
 
 export default Article;

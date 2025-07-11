@@ -5,7 +5,7 @@ import slug from "mongoose-slug-updater";
 mongoose.plugin(slug);
 
 // Sử dụng mongoose, buộc phải tuần theo Schema này, nếu chẳng may có người thêm các thuộc tính linh tinh khác vào thì nó sẽ không lưu vào database.
-const ProductCategorySchema = new mongoose.Schema(
+const productCategorySchema = new mongoose.Schema(
   {
     title: String, // San pham 1
     parent_id: {
@@ -53,7 +53,7 @@ const ProductCategorySchema = new mongoose.Schema(
 // Tham số thứ ba là tên collection trong database
 const ProductCategory = mongoose.model(
   "ProductCategory",
-  ProductCategorySchema,
+  productCategorySchema,
   "products-category"
 );
 
