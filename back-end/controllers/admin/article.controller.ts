@@ -134,69 +134,34 @@ export const detail = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/articles/edit/:id
-// module.exports.edit = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-//     const article = await Article.findOne(find);
-//     const category = await ArticleCategory.find({
-//       deleted: false,
-//     });
-//     const newCategory = createTreeHelpers.tree(category);
-
-//     res.render("admin/pages/articles/edit.pug", {
-//       pageTitle: "Chỉnh sửa bài viết",
-//       article: article,
-//       category: newCategory,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại bài viết này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/articles`);
-//   }
-// };
-
-// // [PATCH] /admin/articles/edit/:id
-// module.exports.editPatch = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("articles_edit")) {
-//     req.body.position = parseInt(req.body.position);
-
-//     try {
-//       const updatedBy = {
-//         account_id: res.locals.user.id,
-//         updatedAt: new Date(),
-//       };
-//       await Article.updateOne(
-//         { _id: req.params.id },
-//         {
-//           ...req.body,
-//           $push: {
-//             updatedBy: updatedBy,
-//           },
-//         }
-//       );
-//       req.flash("success", `Đã cập nhật thành công bài viết!`);
-
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     } catch (error) {
-//       req.flash("error", `Không thể chỉnh sửa bài viết này!`);
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     }
-//   } else {
-//     req.flash("error", `Bạn không có quyền chỉnh sửa bài viết!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   }
-// };
+// [PATCH] /admin/articles/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+  req.body.position = parseInt(req.body.position);
+  try {
+    const updatedBy = {
+      account_id: req["accountAdmin"].id,
+      updatedAt: new Date(),
+    };
+    await Article.updateOne(
+      { _id: req.params.id },
+      {
+        ...req.body,
+        $push: {
+          updatedBy: updatedBy,
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã cập nhật thành công bài viết!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [PATCH] /admin/articles/change-status/:status/:id
 // module.exports.changeStatus = async (req, res) => {
