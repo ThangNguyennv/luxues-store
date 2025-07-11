@@ -4,7 +4,7 @@ const router: Router = Router();
 import * as controller from "../../controllers/admin/order.controller";
 
 router.get("/", controller.index);
-// router.patch("/change-status/:status/:id", controller.changeStatus);
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
 // router.patch("/change-multi", controller.changeMulti);
 
