@@ -8,7 +8,6 @@ export const index = async (req: Request, res: Response) => {
   let find = {
     deleted: false,
   };
-  // Dấu '-': Loại bỏ các trường password và token khỏi kết quả.
   const records = await Account.find(find).select("-password -token");
 
   for (const record of records) {
@@ -18,7 +17,11 @@ export const index = async (req: Request, res: Response) => {
     });
     record["role"] = role;
   }
-  res.json(records);
+  res.json({
+    code: 200,
+    message: "Thành công!",
+    records: records,
+  });
 };
 
 // [POST] /admin/accounts/create

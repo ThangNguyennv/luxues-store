@@ -11,7 +11,7 @@ import { dashboardRoutes } from "./dashboard.route";
 import { accountRoutes } from "./account.route";
 // import { userRoutes } from "./user.route";
 import { authRoutes } from "./auth.route";
-// import { myAccountRoutes } from "./my-account.route";
+import { myAccountRoutes } from "./my-account.route";
 import { articleRoutes } from "./article.route";
 import { articleCategoryRoutes } from "./article-category.route";
 // import { orderRoutes } from "./order.route";
@@ -32,6 +32,11 @@ const routeAdmin = (app: Express): void => {
     PATH_ADMIN + "/dashboard",
     authMiddleware.requireAuth,
     dashboardRoutes
+  );
+  app.use(
+    PATH_ADMIN + "/my-account",
+    authMiddleware.requireAuth,
+    myAccountRoutes
   );
 };
 export default routeAdmin;

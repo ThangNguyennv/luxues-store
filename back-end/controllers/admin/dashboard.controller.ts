@@ -78,13 +78,13 @@ export const dashboard = async (req: Request, res: Response) => {
       status: "inactive",
     });
     res.json({
-      code: 400,
+      code: 200,
       message: "Thành công!",
       statistic: statistic,
     });
   } catch (error) {
     res.json({
-      code: 200,
+      code: 400,
       message: "Lỗi!",
     });
   }
