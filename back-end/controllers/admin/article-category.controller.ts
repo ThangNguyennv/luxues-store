@@ -164,7 +164,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       {
         deleted: true,
         deletedBy: {
-          account_id: res.locals.user.id,
+          account_id: req["accountAdmin"].id,
           deletedAt: new Date(),
         },
       }
