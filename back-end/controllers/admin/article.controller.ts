@@ -163,38 +163,34 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [PATCH] /admin/articles/change-status/:status/:id
-// module.exports.changeStatus = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("articles_edit")) {
-//     // params: lưu 1 đối tượng chứa các thuộc tính sau dấu ':' trên url như sau { status: '...' , id: '...' }
-//     const status = req.params.status;
-//     const id = req.params.id;
+// [PATCH] /admin/articles/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+  try {
+    const status = req.params.status;
+    const id = req.params.id;
 
-//     const updatedBy = {
-//       account_id: res.locals.user.id,
-//       updatedAt: new Date(),
-//     };
-//     await Article.updateOne(
-//       { _id: id },
-//       {
-//         status: status,
-//         $push: { updatedBy: updatedBy },
-//       }
-//     );
-
-//     req.flash("success", "Cập nhật trạng thái thành công!");
-
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } else {
-//     req.flash("error", `Bạn không có quyền thay đổi trạng thái bài viết!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   }
-// };
+    const updatedBy = {
+      account_id: req["accountAdmin"].id,
+      updatedAt: new Date(),
+    };
+    await Article.updateOne(
+      { _id: id },
+      {
+        status: status,
+        $push: { updatedBy: updatedBy },
+      }
+    );
+    res.json({
+      code: 200,
+      message: "Cập nhật trạng thái thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [PATCH] /admin/articles/change-multi
 // module.exports.changeMulti = async (req, res) => {
