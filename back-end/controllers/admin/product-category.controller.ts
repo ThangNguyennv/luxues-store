@@ -236,22 +236,23 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/products-category/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-
-//     const record = await ProductCategory.findOne(find);
-//     res.render("admin/pages/products-category/detail.pug", {
-//       pageTitle: record.title,
-//       record: record,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-//   }
-// };
+// [GET] /admin/products-category/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const record = await ProductCategory.findOne(find);
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      record: record,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
