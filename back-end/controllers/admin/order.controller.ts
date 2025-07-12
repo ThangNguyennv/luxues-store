@@ -231,38 +231,42 @@ export const deleteItem = async (req: Request, res: Response) => {
     }
 };
 
-// // [GET] /admin/orders/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-//     const findDeleted = {
-//       deleted: true,
-//       _id: req.params.id,
-//     };
-//     const order = await Order.findOne(find);
-//     const orderDeleted = await Order.findOne(findDeleted);
+// [GET] /admin/orders/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const findDeleted = {
+      deleted: true,
+      _id: req.params.id,
+    };
+    const order = await Order.findOne(find);
+    const orderDeleted = await Order.findOne(findDeleted);
 
-//     if (order) {
-//       res.render("admin/pages/orders/detail.pug", {
-//         pageTitle: "Chi tiết đơn hàng",
-//         order: order,
-//       });
-//     }
-//     if (orderDeleted) {
-//       res.render("admin/pages/orders/detail.pug", {
-//         pageTitle: "Chi tiết đơn hàng",
-//         order: orderDeleted,
-//       });
-//     }
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại đơn hàng này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/orders`);
-//   }
-// };
+    if (order) {
+       res.json({
+        code: 400,
+        message: "Chi tiết đơn hàng!",
+        order: order,
+      })
+    }
+    if (orderDeleted) {
+        res.json({
+        code: 400,
+        message: "Chi tiết đơn hàng bị xóa!",
+        orderDeleted: orderDeleted,
+      })
+    }
+    
+  } catch (error) {
+     res.json({
+        code: 400,
+        message: "Lỗi!"
+      })
+  }
+};
 
 // // [PATCH] /admin/orders/recover/:id
 // module.exports.recoverPatch = async (req, res) => {
