@@ -152,33 +152,31 @@ export const changeMulti = async (req: Request, res: Response) => {
   }
 };
 
-// // [DELETE] /admin/products-category/delete/:id
-// module.exports.deleteItem = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products-category_delete")) {
-//     const id = req.params.id;
-
-//     // await Product.deleteOne({ _id: id }); => Xóa vĩnh viễn trong db, nếu sử dụng updateOne() -> chỉ cập nhật trong db chứ ko xóa.
-//     await ProductCategory.updateOne(
-//       { _id: id },
-//       {
-//         deleted: true,
-//         deletedBy: {
-//           account_id: res.locals.user.id,
-//           deletedAt: new Date(),
-//         },
-//       }
-//     );
-//     req.flash("success", `Đã xóa thành công sản phẩm!`);
-
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
+// [DELETE] /admin/products-category/delete/:id
+export const deleteItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await ProductCategory.updateOne(
+      { _id: id },
+      {
+        deleted: true,
+        deletedBy: {
+          account_id: req["accountAdmin"].id,
+          deletedAt: new Date(),
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã xóa thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/products-category/create
 // module.exports.create = async (req, res) => {
