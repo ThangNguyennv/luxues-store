@@ -207,70 +207,34 @@ export const createPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/products-category/edit/:id
-// module.exports.edit = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-
-//     const record = await ProductCategory.findOne(find);
-
-//     const records = await ProductCategory.find({
-//       deleted: false,
-//     });
-
-//     const newRecords = createTreeHelpers.tree(records);
-
-//     res.render("admin/pages/products-category/edit.pug", {
-//       pageTitle: "Chỉnh sửa sản phẩm",
-//       record: record,
-//       records: newRecords,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-//   }
-// };
-
-// // [PATCH] /admin/products-category/edit/:id
-// module.exports.editPatch = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products-category_edit")) {
-//     req.body.position = parseInt(req.body.position);
-
-//     try {
-//       const updatedBy = {
-//         account_id: res.locals.user.id,
-//         updatedAt: new Date(),
-//       };
-//       await ProductCategory.updateOne(
-//         { _id: req.params.id },
-//         {
-//           ...req.body,
-//           $push: {
-//             updatedBy: updatedBy,
-//           },
-//         }
-//       );
-//       req.flash("success", `Đã cập nhật thành công sản phẩm!`);
-
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     } catch (error) {
-//       req.flash("error", `Không thể chỉnh sửa sản phẩm này!`);
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     }
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
+// [PATCH] /admin/products-category/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+  try {
+    req.body.position = parseInt(req.body.position);
+    const updatedBy = {
+      account_id: req["accountAdmin"].id,
+      updatedAt: new Date(),
+    };
+    await ProductCategory.updateOne(
+      { _id: req.params.id },
+      {
+        ...req.body,
+        $push: {
+          updatedBy: updatedBy,
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã cập nhật thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/products-category/detail/:id
 // module.exports.detail = async (req, res) => {
