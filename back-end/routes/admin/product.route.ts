@@ -25,16 +25,13 @@ router.post(
   controller.createPost
 );
 
-// // Khi click vào nút chỉnh sửa, web chuyển hướng sang trang chỉnh sửa sản phẩm.
-// router.get("/edit/:id", controller.edit);
-// // Bắt đầu chỉnh sửa sản phẩm và gửi form đi.
-// router.patch(
-//   "/edit/:id",
-//   multer().single("thumbnail"),
-//   uploadCloud,
-//   validate.createPost, // middleware
-//   controller.editPatch
-// );
+router.patch(
+  "/edit/:id",
+  multer().single("thumbnail"),
+  uploadCloud,
+  validate.createPost, // middleware
+  controller.editPatch
+);
 
 // router.get("/detail/:id", controller.detail);
 
