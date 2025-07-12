@@ -178,49 +178,34 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/products-category/create
-// module.exports.create = async (req, res) => {
-//   let find = {
-//     deleted: false,
-//   };
-
-//   const records = await ProductCategory.find(find);
-
-//   const newRecords = createTreeHelpers.tree(records);
-
-//   res.render("admin/pages/products-category/create.pug", {
-//     pageTitle: "Tạo danh mục sản phẩm",
-//     records: newRecords,
-//   });
-// };
-
-// // [POST] /admin/products-category/create
-// module.exports.createPost = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products-category_create")) {
-//     req.body.price = parseInt(req.body.price);
-//     req.body.discountPercentage = parseInt(req.body.discountPercentage);
-//     req.body.stock = parseInt(req.body.stock);
-//     if (req.body.position == "") {
-//       const count = await ProductCategory.countDocuments();
-//       req.body.position = count + 1;
-//     } else {
-//       req.body.position = parseInt(req.body.position);
-//     }
-//     req.body.createdBy = {
-//       account_id: res.locals.user.id,
-//     };
-
-//     const records = new ProductCategory(req.body);
-//     await records.save();
-
-//     req.flash("success", `Đã thêm thành công sản phẩm!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
+// [POST] /admin/products-category/create
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    if (req.body.position == "") {
+      const count = await ProductCategory.countDocuments();
+      req.body.position = count + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+    req.body.createdBy = {
+      account_id: req["accountAdmin"].id,
+    };
+    const records = new ProductCategory(req.body);
+    await records.save();
+    res.json({
+      code: 200,
+      message: `Đã thêm thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/products-category/edit/:id
 // module.exports.edit = async (req, res) => {

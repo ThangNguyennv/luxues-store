@@ -17,15 +17,13 @@ router.patch("/change-multi", controller.changeMulti);
 
 router.delete("/delete/:id", controller.deleteItem);
 
-// router.get("/create", controller.create);
-
-// router.post(
-//   "/create",
-//   multer().single("thumbnail"),
-//   uploadCloud,
-//   validate.createPost, // middleware
-//   controller.createPost
-// );
+router.post(
+  "/create",
+  multer().single("thumbnail"),
+  uploadCloud,
+  validate.createPost, // middleware
+  controller.createPost
+);
 
 // // Khi click vào nút chỉnh sửa, web chuyển hướng sang trang chỉnh sửa sản phẩm.
 // router.get("/edit/:id", controller.edit);
