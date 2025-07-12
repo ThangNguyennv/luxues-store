@@ -277,22 +277,24 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/products/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-
-//     const product = await Product.findOne(find);
-//     res.render("admin/pages/products/detail.pug", {
-//       pageTitle: product.title,
-//       product: product,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/products`);
-//   }
-// };
+// [GET] /admin/products/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const id = req.params.id;
+    const product = await Product.findOne(find);
+    res.json({
+      code: 200,
+      message: `Thành công!`,
+      product: product,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};

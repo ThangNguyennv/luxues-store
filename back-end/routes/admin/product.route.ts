@@ -33,6 +33,6 @@ router.patch(
   controller.editPatch
 );
 
-// router.get("/detail/:id", controller.detail);
+router.get("/detail/:id", controller.detail);
 
 export const productRoutes: Router = router;
