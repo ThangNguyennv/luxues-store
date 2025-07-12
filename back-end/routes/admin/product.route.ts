@@ -11,7 +11,7 @@ import * as validate from "../../validates/admin/product.validate";
 
 router.get("/", controller.product);
 
-// router.patch("/change-status/:status/:id", controller.changeStatus);
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
 // router.patch("/change-multi", controller.changeMulti);
 
