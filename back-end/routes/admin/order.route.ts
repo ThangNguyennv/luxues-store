@@ -12,6 +12,6 @@ router.delete("/delete/:id", controller.deleteItem);
 
 router.get("/detail/:id", controller.detail);
 
-// router.patch("/recover/:id", controller.recoverPatch);
+router.patch("/recover/:id", controller.recoverPatch);
 
 export const orderRoutes: Router = router;

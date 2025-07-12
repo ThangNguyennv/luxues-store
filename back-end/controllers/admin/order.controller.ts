@@ -207,8 +207,8 @@ export const changeMulti = async (req: Request, res: Response) => {
 
 // [DELETE] /admin/orders/delete/:id
 export const deleteItem = async (req: Request, res: Response) => {
-    try {
-      const id = req.params.id;
+  try {
+    const id = req.params.id;
     await Order.updateOne(
       { _id: id },
       {
@@ -219,16 +219,16 @@ export const deleteItem = async (req: Request, res: Response) => {
         },
       }
     );
-     res.json({
-        code: 200,
-        message: `Đã xóa thành công đơn hàng!`
-      })
-    } catch (error) {
-      res.json({
-        code: 400,
-        message: "Lỗi!"
-      })
-    }
+    res.json({
+      code: 200,
+      message: `Đã xóa thành công đơn hàng!`
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!"
+    })
+  }
 };
 
 // [GET] /admin/orders/detail/:id
@@ -246,38 +246,45 @@ export const detail = async (req: Request, res: Response) => {
     const orderDeleted = await Order.findOne(findDeleted);
 
     if (order) {
-       res.json({
-        code: 400,
+      res.json({
+        code: 200,
         message: "Chi tiết đơn hàng!",
         order: order,
       })
     }
     if (orderDeleted) {
-        res.json({
-        code: 400,
+      res.json({
+        code: 200,
         message: "Chi tiết đơn hàng bị xóa!",
         orderDeleted: orderDeleted,
       })
     }
-    
+
   } catch (error) {
-     res.json({
-        code: 400,
-        message: "Lỗi!"
-      })
+    res.json({
+      code: 400,
+      message: "Lỗi!"
+    })
   }
 };
 
-// // [PATCH] /admin/orders/recover/:id
-// module.exports.recoverPatch = async (req, res) => {
-//   const id = req.params.id;
-//   await Order.updateOne(
-//     { _id: id },
-//     { deleted: false, recoveredAt: new Date() }
-//   );
-//   req.flash("success", `Đã khôi phục thành công đơn hàng!`);
+// [PATCH] /admin/orders/recover/:id
+export const recoverPatch = async (req: Request, res: Response) => {
 
-//   // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+  try {
+    const id = req.params.id;
+    await Order.updateOne(
+      { _id: id },
+      { deleted: false, recoveredAt: new Date() }
+    );
+    res.json({
+      code: 200,
+      message: "`Đã khôi phục thành công đơn hàng!`!"
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!"
+    })
+  }
+};
