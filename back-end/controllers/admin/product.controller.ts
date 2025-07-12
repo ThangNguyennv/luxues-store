@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Product from "../../models/product.model";
 import Account from "../../models/account.model";
-
 import filterStatusHelpers from "../../helpers/filterStatus";
 import searchHelpers from "../../helpers/search";
 import paginationHelpers from "../../helpers/pagination";
@@ -190,78 +189,61 @@ export const changeMulti = async (req: Request, res: Response) => {
   }
 };
 
-// // [DELETE] /admin/products/delete/:id
-// module.exports.deleteItem = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products_delete")) {
-//     const id = req.params.id;
-//     // await Product.deleteOne({ _id: id }); => Xóa vĩnh viễn trong db, nếu sử dụng updateOne() -> chỉ cập nhật trong db chứ ko xóa.
-//     await Product.updateOne(
-//       { _id: id },
-//       {
-//         deleted: true,
-//         deletedBy: {
-//           account_id: res.locals.user.id,
-//           deletedAt: new Date(),
-//         },
-//       }
-//     );
-//     req.flash("success", `Đã xóa thành công sản phẩm!`);
+// [DELETE] /admin/products/delete/:id
+export const deleteItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await Product.updateOne(
+      { _id: id },
+      {
+        deleted: true,
+        deletedBy: {
+          account_id: req["accountAdmin"].id,
+          deletedAt: new Date(),
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã xóa thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
-
-// // [GET] /admin/products/create
-// module.exports.create = async (req, res) => {
-//   const category = await ProductCategory.find({
-//     deleted: false,
-//   });
-//   const newCategory = createTreeHelpers.tree(category);
-//   res.render("admin/pages/products/create.pug", {
-//     pageTitle: "Thêm mới sản phẩm",
-//     category: newCategory,
-//   });
-// };
-
-// // [POST] /admin/products/create
-// module.exports.createPost = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products_create")) {
-//     req.body.price = parseInt(req.body.price);
-//     req.body.discountPercentage = parseInt(req.body.discountPercentage);
-//     req.body.stock = parseInt(req.body.stock);
-
-//     if (req.body.position == "") {
-//       const countProducts = await Product.countDocuments();
-//       req.body.position = countProducts + 1;
-//     } else {
-//       req.body.position = parseInt(req.body.position);
-//     }
-//     req.body.createdBy = {
-//       account_id: res.locals.user.id,
-//     };
-
-//     // Bỏ lưu trên local
-//     // if (req.file) {
-//     //   req.body.thumbnail = `/uploads/${req.file.filename}`;
-//     // }
-
-//     const product = new Product(req.body);
-//     await product.save();
-
-//     req.flash("success", `Đã thêm thành công sản phẩm!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/products`);
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
+// [POST] /admin/products/create
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    req.body.price = parseInt(req.body.price);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    req.body.stock = parseInt(req.body.stock);
+    if (req.body.position == "") {
+      const count = await Product.countDocuments();
+      req.body.position = count + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+    req.body.createdBy = {
+      account_id: req["accountAdmin"].id,
+    };
+    const records = new Product(req.body);
+    await records.save();
+    res.json({
+      code: 200,
+      message: `Đã thêm thành công sản phẩm!`,
+      data: req.body,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/products/edit/:id
 // module.exports.edit = async (req, res) => {

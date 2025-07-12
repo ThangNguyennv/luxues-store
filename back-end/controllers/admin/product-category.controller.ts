@@ -186,9 +186,6 @@ export const deleteItem = async (req: Request, res: Response) => {
 // [POST] /admin/products-category/create
 export const createPost = async (req: Request, res: Response) => {
   try {
-    req.body.price = parseInt(req.body.price);
-    req.body.discountPercentage = parseInt(req.body.discountPercentage);
-    req.body.stock = parseInt(req.body.stock);
     if (req.body.position == "") {
       const count = await ProductCategory.countDocuments();
       req.body.position = count + 1;

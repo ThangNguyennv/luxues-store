@@ -15,18 +15,15 @@ router.patch("/change-status/:status/:id", controller.changeStatus);
 
 router.patch("/change-multi", controller.changeMulti);
 
-// router.delete("/delete/:id", controller.deleteItem);
+router.delete("/delete/:id", controller.deleteItem);
 
-// // Khi click vào nút thêm mới, web chuyển hướng sang trang thêm mới sản phẩm.
-// router.get("/create", controller.create);
-// // Bắt đẩu thêm mới sản phẩm và gửi form đi.
-// router.post(
-//   "/create",
-//   multer().single("thumbnail"),
-//   uploadCloud
-//   validate.createPost, // middleware
-//   controller.createPost
-// );
+router.post(
+  "/create",
+  multer().single("thumbnail"),
+  uploadCloud,
+  validate.createPost, // middleware
+  controller.createPost
+);
 
 // // Khi click vào nút chỉnh sửa, web chuyển hướng sang trang chỉnh sửa sản phẩm.
 // router.get("/edit/:id", controller.edit);
