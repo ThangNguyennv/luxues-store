@@ -77,70 +77,80 @@ export const changeStatus = async (req: Request, res: Response) => {
   }
 };
 
-// // [PATCH] /admin/products-category/change-multi
-// module.exports.changeMulti = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("products-category_edit")) {
-//     const type = req.body.type;
-//     const ids = req.body.ids.split(", ");
-//     const updatedBy = {
-//       account_id: res.locals.user.id,
-//       updatedAt: new Date(),
-//     };
-//     switch (type) {
-//       case "active":
-//         await ProductCategory.updateMany(
-//           { _id: { $in: ids } },
-//           { status: "active", $push: { updatedBy: updatedBy } }
-//         );
-//         req.flash(
-//           "success",
-//           `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
-//         );
-//         break;
-//       case "inactive":
-//         await ProductCategory.updateMany(
-//           { _id: { $in: ids } },
-//           { status: "inactive", $push: { updatedBy: updatedBy } }
-//         );
-//         req.flash(
-//           "success",
-//           `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
-//         );
-//         break;
-//       case "delete-all":
-//         await ProductCategory.updateMany(
-//           { _id: { $in: ids } },
-//           { deleted: "true", deletedAt: new Date() }
-//         );
-//         req.flash("success", `Đã xóa thành công ${ids.length} sản phẩm!`);
-//         break;
-//       case "change-position":
-//         for (const item of ids) {
-//           let [id, position] = item.split("-");
-//           position = parseInt(position);
-//           await ProductCategory.updateOne(
-//             { _id: { $in: id } },
-//             { position: position, $push: { updatedBy: updatedBy } }
-//           );
-//         }
-//         req.flash(
-//           "success",
-//           `Đã đổi vị trí thành công ${ids.length} sản phẩm!`
-//         );
-//         break;
-//       default:
-//         break;
-//     }
-
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } else {
-//     res.send("403"); // Không có quyền truy cập
-//     return;
-//   }
-// };
+// [PATCH] /admin/products-category/change-multi
+export const changeMulti = async (req: Request, res: Response) => {
+  try {
+    const body = req.body as { type: string; ids: string[] };
+    const type = body.type;
+    const ids = body.ids;
+    const updatedBy = {
+      account_id: req["accountAdmin"].id,
+      updatedAt: new Date(),
+    };
+    enum Key {
+      ACTIVE = "active",
+      INACTIVE = "inactive",
+      DELETEALL = "delete-all",
+      CHANGEPOSITION = "change-position",
+    }
+    switch (type) {
+      case Key.ACTIVE:
+        await ProductCategory.updateMany(
+          { _id: { $in: ids } },
+          { status: Key.ACTIVE, $push: { updatedBy: updatedBy } }
+        );
+        res.json({
+          code: 200,
+          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`,
+        });
+        break;
+      case Key.INACTIVE:
+        await ProductCategory.updateMany(
+          { _id: { $in: ids } },
+          { status: Key.INACTIVE, $push: { updatedBy: updatedBy } }
+        );
+        res.json({
+          code: 200,
+          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`,
+        });
+        break;
+      case Key.DELETEALL:
+        await ProductCategory.updateMany(
+          { _id: { $in: ids } },
+          { deleted: "true", deletedAt: new Date() }
+        );
+        res.json({
+          code: 200,
+          message: `Đã xóa thành công ${ids.length} sản phẩm!`,
+        });
+        break;
+      case Key.CHANGEPOSITION:
+        for (const item of ids) {
+          let [id, position] = item.split("-");
+          await ProductCategory.updateOne(
+            { _id: { $in: id } },
+            { position: Number(position), $push: { updatedBy: updatedBy } }
+          );
+        }
+        res.json({
+          code: 200,
+          message: `Đã đổi vị trí thành công ${ids.length} sản phẩm!`,
+        });
+        break;
+      default:
+        res.json({
+          code: 400,
+          message: "Không tồn tại!",
+        });
+        break;
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [DELETE] /admin/products-category/delete/:id
 // module.exports.deleteItem = async (req, res) => {
