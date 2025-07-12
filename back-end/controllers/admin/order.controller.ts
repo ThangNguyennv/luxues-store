@@ -221,13 +221,13 @@ export const deleteItem = async (req: Request, res: Response) => {
     );
     res.json({
       code: 200,
-      message: `Đã xóa thành công đơn hàng!`
-    })
+      message: `Đã xóa thành công đơn hàng!`,
+    });
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!"
-    })
+      message: "Lỗi!",
+    });
   }
 };
 
@@ -250,27 +250,25 @@ export const detail = async (req: Request, res: Response) => {
         code: 200,
         message: "Chi tiết đơn hàng!",
         order: order,
-      })
+      });
     }
     if (orderDeleted) {
       res.json({
         code: 200,
         message: "Chi tiết đơn hàng bị xóa!",
         orderDeleted: orderDeleted,
-      })
+      });
     }
-
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!"
-    })
+      message: "Lỗi!",
+    });
   }
 };
 
 // [PATCH] /admin/orders/recover/:id
 export const recoverPatch = async (req: Request, res: Response) => {
-
   try {
     const id = req.params.id;
     await Order.updateOne(
@@ -279,12 +277,12 @@ export const recoverPatch = async (req: Request, res: Response) => {
     );
     res.json({
       code: 200,
-      message: "`Đã khôi phục thành công đơn hàng!`!"
-    })
+      message: "`Đã khôi phục thành công đơn hàng!`!",
+    });
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!"
-    })
+      message: "Lỗi!",
+    });
   }
 };
