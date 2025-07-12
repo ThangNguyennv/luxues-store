@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-
 import ProductCategory from "../../models/product-category.model";
-import systemConfig from "../../config/system";
 import filterStatusHelpers from "../../helpers/filterStatus";
 import searchHelpers from "../../helpers/search";
 import { tree, TreeItem } from "../../helpers/createTree";
