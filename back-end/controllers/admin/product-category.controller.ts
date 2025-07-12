@@ -9,47 +9,54 @@ import { addLogInfoToTree, LogNode } from "../../helpers/addLogInfoToChildren";
 
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
-  interface Find {
-    deleted: boolean;
-    status?: string;
-    title?: RegExp;
+  try {
+    interface Find {
+      deleted: boolean;
+      status?: string;
+      title?: RegExp;
+    }
+    let find: Find = {
+      deleted: false,
+    };
+
+    if (req.query.status) {
+      find.status = req.query.status.toString();
+    }
+
+    const objectSearch = searchHelpers(req.query);
+    if (objectSearch.regex) {
+      find.title = objectSearch.regex;
+    }
+
+    // Sort
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+      const sortKey = req.query.sortKey.toLocaleString();
+      sort[sortKey] = req.query.sortValue;
+    } else {
+      sort["position"] = "desc";
+    }
+    // // End Sort
+
+    const records = await ProductCategory.find(find).sort(sort);
+
+    const newRecords = tree(records as TreeItem[]);
+
+    // Add log info to all nodes (parent and children)
+    await addLogInfoToTree(newRecords as LogNode[]);
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      records: newRecords,
+      filterStatus: filterStatusHelpers(req.query),
+      keyword: objectSearch.keyword,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  let find: Find = {
-    deleted: false,
-  };
-
-  if (req.query.status) {
-    find.status = req.query.status.toString();
-  }
-
-  const objectSearch = searchHelpers(req.query);
-  if (objectSearch.regex) {
-    find.title = objectSearch.regex;
-  }
-
-  // Sort
-  let sort = {};
-  if (req.query.sortKey && req.query.sortValue) {
-    const sortKey = req.query.sortKey.toLocaleString();
-    sort[sortKey] = req.query.sortValue;
-  } else {
-    sort["position"] = "desc";
-  }
-  // // End Sort
-
-  const records = await ProductCategory.find(find).sort(sort);
-
-  const newRecords = tree(records as TreeItem[]);
-
-  // Add log info to all nodes (parent and children)
-  await addLogInfoToTree(newRecords as LogNode[]);
-  res.json({
-    code: 200,
-    message: "Thành công!",
-    records: newRecords,
-    filterStatus: filterStatusHelpers(req.query),
-    keyword: objectSearch.keyword,
-  });
 };
 
 // [PATCH] /admin/products-category/change-status/:status/:id

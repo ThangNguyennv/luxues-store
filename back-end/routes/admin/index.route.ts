@@ -4,7 +4,7 @@ import systemConfig from "../../config/system";
 import * as authMiddleware from "../../middlewares/admin/auth.middleware";
 
 import { dashboardRoutes } from "./dashboard.route";
-// import { productRoutes } from "./product.route";
+import { productRoutes } from "./product.route";
 // import { trashRoutes } from "./trash.route";
 import { productCategoryRoutes } from "./product-category.route";
 // import { roleRoutes } from "./role.route";
@@ -39,10 +39,11 @@ const routeAdmin = (app: Express): void => {
     myAccountRoutes
   );
   app.use(PATH_ADMIN + "/orders", authMiddleware.requireAuth, orderRoutes);
-    app.use(
-      PATH_ADMIN + "/products-category",
-      authMiddleware.requireAuth,
-      productCategoryRoutes
-    );
+  app.use(
+    PATH_ADMIN + "/products-category",
+    authMiddleware.requireAuth,
+    productCategoryRoutes
+  );
+  app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
 };
 export default routeAdmin;

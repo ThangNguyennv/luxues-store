@@ -8,77 +8,84 @@ import paginationHelpers from "../../helpers/pagination";
 // [GET] /admin/articles
 export const index = async (req: Request, res: Response) => {
   // Bộ lọc
-  interface Find {
-    deleted: boolean;
-    status?: string;
-    title?: RegExp;
-  }
-  let find: Find = {
-    deleted: false,
-  };
-
-  if (req.query.status) {
-    find.status = req.query.status.toString();
-  }
-
-  const objectSearch = searchHelpers(req.query);
-  if (objectSearch.regex) {
-    find.title = objectSearch.regex;
-  }
-
-  // Pagination
-  const countArticles = await Article.countDocuments(find); // Đứng trước model, ở đây là 'article' là thêm await
-
-  let objectPagination = paginationHelpers(
-    {
-      currentPage: 1,
-      limitItems: 3,
-    },
-    req.query,
-    countArticles
-  );
-  // End Pagination
-
-  // Sort
-  let sort = {};
-  if (req.query.sortKey && req.query.sortValue) {
-    const sortKey = req.query.sortKey.toLocaleString();
-    sort[sortKey] = req.query.sortValue;
-  } else {
-    sort["position"] = "desc";
-  }
-  // End Sort
-
-  const articles = await Article.find(find)
-    .sort(sort.toString())
-    .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
-
-  for (const article of articles) {
-    // Lấy ra thông tin người tạo
-    const user = await Account.findOne({
-      _id: article.createdBy.account_id,
-    });
-    if (user) {
-      article["accountFullName"] = user.fullName;
+  try {
+    interface Find {
+      deleted: boolean;
+      status?: string;
+      title?: RegExp;
     }
-    // Lấy ra thông tin người cập nhật gần nhất
-    const updatedBy = article.updatedBy[article.updatedBy.length - 1];
-    if (updatedBy) {
-      const userUpdated = await Account.findOne({
-        _id: updatedBy.account_id,
+    let find: Find = {
+      deleted: false,
+    };
+
+    if (req.query.status) {
+      find.status = req.query.status.toString();
+    }
+
+    const objectSearch = searchHelpers(req.query);
+    if (objectSearch.regex) {
+      find.title = objectSearch.regex;
+    }
+
+    // Pagination
+    const countArticles = await Article.countDocuments(find); // Đứng trước model, ở đây là 'article' là thêm await
+
+    let objectPagination = paginationHelpers(
+      {
+        currentPage: 1,
+        limitItems: 3,
+      },
+      req.query,
+      countArticles
+    );
+    // End Pagination
+
+    // Sort
+    let sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+      const sortKey = req.query.sortKey.toLocaleString();
+      sort[sortKey] = req.query.sortValue;
+    } else {
+      sort["position"] = "desc";
+    }
+    // End Sort
+
+    const articles = await Article.find(find)
+      .sort(sort.toString())
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip);
+
+    for (const article of articles) {
+      // Lấy ra thông tin người tạo
+      const user = await Account.findOne({
+        _id: article.createdBy.account_id,
       });
-      updatedBy["accountFullName"] = userUpdated.fullName;
+      if (user) {
+        article["accountFullName"] = user.fullName;
+      }
+      // Lấy ra thông tin người cập nhật gần nhất
+      const updatedBy = article.updatedBy[article.updatedBy.length - 1];
+      if (updatedBy) {
+        const userUpdated = await Account.findOne({
+          _id: updatedBy.account_id,
+        });
+        updatedBy["accountFullName"] = userUpdated.fullName;
+      }
     }
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      articles: articles,
+      filterStatus: filterStatusHelpers(req.query),
+      keyword: objectSearch.keyword,
+      pagination: objectPagination,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  res.json({
-    code: 200,
-    message: "Thành công!",
-    articles: articles,
-    filterStatus: filterStatusHelpers(req.query),
-    keyword: objectSearch.keyword,
-    pagination: objectPagination,
-  });
 };
 
 // [POST] /admin/articles/create

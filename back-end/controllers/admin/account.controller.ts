@@ -5,23 +5,30 @@ import md5 from "md5";
 
 // [GET] /admin/accounts
 export const index = async (req: Request, res: Response) => {
-  let find = {
-    deleted: false,
-  };
-  const records = await Account.find(find).select("-password -token");
-
-  for (const record of records) {
-    const role = await Role.findOne({
+  try {
+    let find = {
       deleted: false,
-      _id: record.role_id,
+    };
+    const records = await Account.find(find).select("-password -token");
+
+    for (const record of records) {
+      const role = await Role.findOne({
+        deleted: false,
+        _id: record.role_id,
+      });
+      record["role"] = role;
+    }
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      records: records,
     });
-    record["role"] = role;
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  res.json({
-    code: 200,
-    message: "Thành công!",
-    records: records,
-  });
 };
 
 // [POST] /admin/accounts/create
