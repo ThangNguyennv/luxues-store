@@ -34,66 +34,50 @@ export const index = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/roles/create
-// module.exports.create = async (req, res) => {
-//   res.render("admin/pages/roles/create.pug", {
-//     pageTitle: "Thêm mới nhóm quyền",
-//   });
-// };
+// [POST] /admin/roles/create
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    const record = new Role(req.body);
+    await record.save();
+    res.json({
+      code: 200,
+      message: "Tạo thành công nhóm quyền!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
-// // [POST] /admin/roles/create
-// module.exports.createPost = async (req, res) => {
-//   const record = new Role(req.body);
-//   await record.save();
-//   res.redirect(`${systemConfig.prefixAdmin}/roles`);
-// };
-
-// // [GET] /admin/roles/edit/:id
-// module.exports.edit = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-//     const record = await Role.findOne(find);
-//     res.render("admin/pages/roles/edit.pug", {
-//       pageTitle: "Chỉnh sửa nhóm quyền",
-//       record: record,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/roles`);
-//   }
-// };
-
-// // [PATCH] /admin/roles/edit/:id
-// module.exports.editPatch = async (req, res) => {
-//   try {
-//     const updatedBy = {
-//       account_id: res.locals.user.id,
-//       updatedAt: new Date(),
-//     };
-//     await Role.updateOne(
-//       { _id: req.params.id },
-//       {
-//         ...req.body,
-//         $push: {
-//           updatedBy: updatedBy,
-//         },
-//       }
-//     );
-//     req.flash("success", `Đã cập nhật thành công sản phẩm!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } catch (error) {
-//     req.flash("error", `Không thể chỉnh sửa sản phẩm này!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   }
-// };
+// [PATCH] /admin/roles/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+  try {
+    const updatedBy = {
+      account_id: req["accountAdmin"].id,
+      updatedAt: new Date(),
+    };
+    await Role.updateOne(
+      { _id: req.params.id },
+      {
+        ...req.body,
+        $push: {
+          updatedBy: updatedBy,
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã cập nhật thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [DELETE] /admin/roles/delete/:id
 // module.exports.deleteItem = async (req, res) => {
