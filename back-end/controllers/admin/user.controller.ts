@@ -40,64 +40,38 @@ export const changeStatus = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/users/edit/:id
-// module.exports.edit = async (req, res) => {
-//   try {
-//     const record = await User.findOne({
-//       deleted: false,
-//       _id: req.params.id,
-//     });
-
-//     res.render("admin/pages/users/edit.pug", {
-//       pageTitle: "Chỉnh sửa người dùng",
-//       record: record,
-//     });
-//   } catch (error) {
-//     req.flash("error", `Không tồn tại người dùng này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/users`);
-//   }
-// };
-
-// // [PATCH] /admin/users/edit/:id
-// module.exports.editPatch = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("users_edit")) {
-//     try {
-//       const isEmailExist = await User.findOne({
-//         _id: { $ne: req.params.id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
-//         email: req.body.email,
-//         deleted: false,
-//       });
-//       if (isEmailExist) {
-//         req.flash(
-//           "error",
-//           `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
-//         );
-//       } else {
-//         if (req.body.password) {
-//           req.body.password = md5(req.body.password); // Mã hóa password mới để lưu lại vào db
-//         } else {
-//           delete req.body.password; // Xóa value password, tránh cập nhật lại vào db xóa mất mật khẩu cũ
-//         }
-//         await User.updateOne({ _id: req.params.id }, req.body);
-//         req.flash("success", `Đã cập nhật thành công người dùng!`);
-//       }
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     } catch (error) {
-//       req.flash("error", `Không thể chỉnh sửa người dùng này!`);
-//       // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//     }
-//   } else {
-//     req.flash("error", `Bạn không có quyền chỉnh sửa người dùng!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   }
-// };
+// [PATCH] /admin/users/edit/:id
+export const editPatch = async (req: Request, res: Response) => {
+  try {
+    const isEmailExist = await User.findOne({
+      _id: { $ne: req.params.id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
+      email: req.body.email,
+      deleted: false,
+    });
+    if (isEmailExist) {
+      res.json({
+        code: 400,
+        message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`,
+      });
+    } else {
+      if (req.body.password) {
+        req.body.password = md5(req.body.password); // Mã hóa password mới để lưu lại vào db
+      } else {
+        delete req.body.password; // Xóa value password, tránh cập nhật lại vào db xóa mất mật khẩu cũ
+      }
+      await User.updateOne({ _id: req.params.id }, req.body);
+      res.json({
+        code: 200,
+        message: `Đã cập nhật thành công người dùng!`,
+      });
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: `Không tồn tại người dùng này!`,
+    });
+  }
+};
 
 // // [GET] /admin/users/detail/:id
 // module.exports.detail = async (req, res) => {

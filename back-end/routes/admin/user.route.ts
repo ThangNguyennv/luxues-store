@@ -12,13 +12,13 @@ router.get("/", controller.index);
 
 router.patch("/change-status/:status/:id", controller.changeStatus);
 
-// router.patch(
-//   "/edit/:id",
-//   multer().single("avatar"),
-//   uploadCloud,
-//   validate.editPatch, // middleware
-//   controller.editPatch
-// );
+router.patch(
+  "/edit/:id",
+  multer().single("avatar"),
+  uploadCloud,
+  validate.editPatch, // middleware
+  controller.editPatch
+);
 // router.get("/detail/:id", controller.detail);
 // router.delete("/delete/:id", controller.deleteItem);
 
