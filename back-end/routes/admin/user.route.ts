@@ -10,7 +10,7 @@ import * as validate from "../../validates/admin/account.validate";
 
 router.get("/", controller.index);
 
-// router.patch("/change-status/:status/:id", controller.changeStatus);
+router.patch("/change-status/:status/:id", controller.changeStatus);
 
 // router.patch(
 //   "/edit/:id",
