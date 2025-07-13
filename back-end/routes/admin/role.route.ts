@@ -14,6 +14,6 @@ router.patch(
 );
 router.delete("/delete/:id", controller.deleteItem);
 router.get("/detail/:id", controller.detail);
-// router.patch("/permissions", controller.permissionsPatch);
+router.patch("/permissions", controller.permissionsPatch);
 
 export const roleRoutes: Router = router;
