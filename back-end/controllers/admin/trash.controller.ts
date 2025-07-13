@@ -119,17 +119,23 @@ export const permanentlyDeleteItem = async (req: Request, res: Response) => {
   }
 };
 
-// // [PATCH] /admin/trash/recover/:id
-// module.exports.recoverItem = async (req, res) => {
-//   const id = req.params.id;
+// [PATCH] /admin/trash/recover/:id
+export const recoverItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
 
-//   await Product.updateOne(
-//     { _id: id },
-//     { deleted: false, recoveredAt: new Date() }
-//   );
-//   req.flash("success", `Đã khôi phục thành công sản phẩm!`);
-
-//   // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+    await Product.updateOne(
+      { _id: id },
+      { deleted: false, recoveredAt: new Date() }
+    );
+    res.json({
+      code: 200,
+      message: `Đã khôi phục thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
