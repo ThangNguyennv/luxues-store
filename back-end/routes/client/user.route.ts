@@ -21,7 +21,7 @@ router.post(
   controller.forgotPasswordPost
 );
 
-// router.post("/password/otp", controller.otpPasswordPost);
+router.post("/password/otp", controller.otpPasswordPost);
 
 // router.post(
 //   "/password/reset",

@@ -158,27 +158,37 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [POST] /user/password/otp
-// module.exports.otpPasswordPost = async (req, res) => {
-//   const email = req.body.email;
-//   const otp = req.body.otp;
-//   const result = await ForgotPassword.findOne({
-//     email: email,
-//     otp: otp,
-//   });
-//   if (!result) {
-//     req.flash("error", "OTP không hợp lệ!");
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//     return;
-//   }
-//   const user = await User.findOne({
-//     email: email,
-//   });
-
-//   res.cookie("tokenUser", user.tokenUser);
-//   res.redirect(`/user/password/reset`);
-// };
+// [POST] /user/password/otp
+export const otpPasswordPost = async (req: Request, res: Response) => {
+  try {
+    const email = req.body.email;
+    const otp = req.body.otp;
+    const result = await ForgotPassword.findOne({
+      email: email,
+      otp: otp,
+    });
+    if (!result) {
+      res.json({
+        code: 400,
+        message: "OTP không hợp lệ!",
+      });
+      return;
+    }
+    const user = await User.findOne({
+      email: email,
+    });
+    res.cookie("tokenUser", user.tokenUser);
+    res.json({
+      code: 200,
+      message: "Mã OTP hợp lệ!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [POST] /user/password/reset
 // module.exports.resetPasswordPost = async (req, res) => {
