@@ -7,7 +7,7 @@ import { dashboardRoutes } from "./dashboard.route";
 import { productRoutes } from "./product.route";
 // import { trashRoutes } from "./trash.route";
 import { productCategoryRoutes } from "./product-category.route";
-// import { roleRoutes } from "./role.route";
+import { roleRoutes } from "./role.route";
 import { accountRoutes } from "./account.route";
 // import { userRoutes } from "./user.route";
 import { authRoutes } from "./auth.route";
@@ -45,5 +45,6 @@ const routeAdmin = (app: Express): void => {
     productCategoryRoutes
   );
   app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
+  app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoutes);
 };
 export default routeAdmin;
