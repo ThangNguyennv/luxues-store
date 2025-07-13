@@ -105,25 +105,27 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/roles/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
+// [GET] /admin/roles/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
 
-//     const record = await Role.findOne(find);
-//     res.render("admin/pages/roles/detail.pug", {
-//       pageTitle: record.title,
-//       record: record,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/roles`);
-//   }
-// };
+    const record = await Role.findOne(find);
+    res.json({
+      code: 200,
+      message: `Thành công!`,
+      record: record,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/roles/permissions
 // module.exports.permissions = async (req, res) => {

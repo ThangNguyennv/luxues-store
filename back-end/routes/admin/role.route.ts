@@ -13,7 +13,7 @@ router.patch(
   controller.editPatch
 );
 router.delete("/delete/:id", controller.deleteItem);
-// router.get("/detail/:id", controller.detail);
+router.get("/detail/:id", controller.detail);
 // router.patch("/permissions", controller.permissionsPatch);
 
 export const roleRoutes: Router = router;
