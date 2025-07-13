@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 
-export const createPost = (req: Request, res: Response, next: NextFunction) => {
+export const createPost = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (!req.body.title) {
     res.json({
       code: 400,

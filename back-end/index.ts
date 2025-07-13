@@ -14,6 +14,7 @@ import cors from "cors";
 import * as database from "./config/database";
 import systemConfig from "./config/system";
 
+import routeClient from "./routes/client/index.route";
 import routeAdmin from "./routes/admin/index.route";
 
 database.connect();
@@ -58,7 +59,7 @@ app.use(express.static(`${__dirname}/public`)); // Rất quan trọng, muốn c�
 
 // Routes
 routeAdmin(app);
-// route(app);
+routeClient(app);
 // app.get("*", function (req, res) {
 //   res.render("client/pages/errors/404.pug", {
 //     pageTitle: "404 Not Found",

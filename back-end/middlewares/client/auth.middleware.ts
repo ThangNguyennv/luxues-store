@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Account from "../../models/account.model";
+import User from "../../models/user.model";
 
 export const requireAuth = async (
   req: Request,
@@ -7,20 +7,19 @@ export const requireAuth = async (
   next: NextFunction
 ): Promise<void> => {
   if (req.headers.authorization) {
-    const token = req.headers.authorization.split(" ")[1];
-    const accountAdmin = await Account.findOne({
-      token: token,
+    const tokenUser = req.headers.authorization.split(" ")[1];
+    const user = await User.findOne({
+      tokenUser: tokenUser,
       deleted: false,
     }).select("-password");
-
-    if (!accountAdmin) {
+    if (!user) {
       res.json({
         code: 400,
         message: "Token không hợp lệ!",
       });
       return;
     }
-    req["accountAdmin"] = accountAdmin;
+    req["accountUser"] = user;
     next();
   } else {
     res.json({
