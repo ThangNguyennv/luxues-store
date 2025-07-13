@@ -20,6 +20,6 @@ router.patch(
   controller.editPatch
 );
 router.get("/detail/:id", controller.detail);
-// router.delete("/delete/:id", controller.deleteItem);
+router.delete("/delete/:id", controller.deleteItem);
 
 export const userRoutes: Router = router;

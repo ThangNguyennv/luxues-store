@@ -68,7 +68,7 @@ export const editPatch = async (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       code: 400,
-      message: `Không tồn tại người dùng này!`,
+      message: `Lỗi!`,
     });
   }
 };
@@ -94,22 +94,19 @@ export const detail = async (req: Request, res: Response) => {
   }
 };
 
-// // [DELETE] /admin/users/delete/:id
-// module.exports.deleteItem = async (req, res) => {
-//   const permissions = res.locals.role.permissions;
-//   if (permissions.includes("users_delete")) {
-//     const id = req.params.id;
-//     // await Role.deleteOne({ _id: id }); => Xóa vĩnh viễn trong db, nếu sử dụng updateOne() -> chỉ cập nhật trong db chứ ko xóa.
-//     await User.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() });
-//     req.flash("success", `Đã xóa thành công người dùng!`);
-
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   } else {
-//     req.flash("error", `Bạn không có quyền xóa người dùng!`);
-//     // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//   }
-// };
+// [DELETE] /admin/users/delete/:id
+export const deleteItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await User.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() });
+    res.json({
+      code: 200,
+      message: `Đã xóa thành công người dùng!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: `Lỗi!`,
+    });
+  }
+};
