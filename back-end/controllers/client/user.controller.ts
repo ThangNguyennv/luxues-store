@@ -1,33 +1,38 @@
-const User = require("../../models/user.model");
-const ForgotPassword = require("../../models/forgot-password.model");
-const Cart = require("../../models/cart.model");
-const md5 = require("md5");
-const generateHelper = require("../../helpers/generate");
-const sendMailHelper = require("../../helpers/sendMail");
-
-// [GET] /user/register
-module.exports.register = async (req, res) => {
-  res.render("client/pages/user/register.pug", {
-    pageTitle: "Đăng ký tài khoản",
-  });
-};
+import { Request, Response } from "express";
+import User from "../../models/user.model";
+import ForgotPassword from "../../models/forgot-password.model";
+import Cart from "../../models/cart.model";
+import md5 from "md5";
+import generateHelper from "../../helpers/generate";
+import sendMailHelper from "../../helpers/sendMail";
 
 // [POST] /user/register
-module.exports.registerPost = async (req, res) => {
-  const isExistEmail = await User.findOne({
-    email: req.body.email,
-  });
-  if (isExistEmail) {
-    req.flash("error", "Email đã tồn tại, vui lòng chọn email khác!");
-    const backURL = req.get("Referrer") || "/";
-    res.redirect(backURL);
-    return;
+export const registerPost = async (req: Request, res: Response) => {
+  try {
+    const isExistEmail = await User.findOne({
+      email: req.body.email,
+    });
+    if (isExistEmail) {
+      res.json({
+        code: 400,
+        message: "Email đã tồn tại, vui lòng chọn email khác!",
+      });
+      return;
+    }
+    req.body.password = md5(req.body.password);
+    const user = new User(req.body);
+    await user.save();
+    res.cookie("tokenUser", user.tokenUser);
+    res.json({
+      code: 200,
+      message: "Đăng ký tài khoản thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  req.body.password = md5(req.body.password);
-  const user = new User(req.body);
-  await user.save();
-  res.cookie("tokenUser", user.tokenUser);
-  res.redirect("/");
 };
 
 // [GET] /user/login

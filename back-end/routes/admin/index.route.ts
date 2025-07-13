@@ -9,7 +9,7 @@ import { trashRoutes } from "./trash.route";
 import { productCategoryRoutes } from "./product-category.route";
 import { roleRoutes } from "./role.route";
 import { accountRoutes } from "./account.route";
-// import { userRoutes } from "./user.route";
+import { userRoutes } from "./user.route";
 import { authRoutes } from "./auth.route";
 import { myAccountRoutes } from "./my-account.route";
 import { articleRoutes } from "./article.route";
@@ -48,5 +48,6 @@ const routeAdmin = (app: Express): void => {
   app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoutes);
   app.use(PATH_ADMIN + "/settings", authMiddleware.requireAuth, settingRoutes);
   app.use(PATH_ADMIN + "/trash", authMiddleware.requireAuth, trashRoutes);
+  app.use(PATH_ADMIN + "/users", authMiddleware.requireAuth, userRoutes);
 };
 export default routeAdmin;
