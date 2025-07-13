@@ -11,7 +11,7 @@ import * as authMiddleware from "../../middlewares/client/auth.middleware";
 
 router.post("/register", validate.registerPost, controller.registerPost);
 
-// router.post("/login", validate.loginPost, controller.loginPost);
+router.post("/login", validate.loginPost, controller.loginPost);
 
 // router.get("/logout", controller.logout);
 

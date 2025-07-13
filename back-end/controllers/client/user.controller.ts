@@ -35,56 +35,61 @@ export const registerPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /user/login
-// module.exports.login = async (req, res) => {
-//   res.render("client/pages/user/login.pug", {
-//     pageTitle: "Đăng nhập tài khoản",
-//   });
-// };
-
-// // [POST] /user/login
-// module.exports.loginPost = async (req, res) => {
-//   const user = await User.findOne({
-//     email: req.body.email,
-//     deleted: false,
-//   });
-//   if (!user) {
-//     req.flash("error", "Email không tồn tại!");
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//     return;
-//   }
-//   if (md5(req.body.password) !== user.password) {
-//     req.flash("error", "Tài khoản hoặc mật khẩu không chính xác!");
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//     return;
-//   }
-//   if (user.status === "inactive") {
-//     req.flash("error", "Tài khoản đang bị khóa!");
-//     const backURL = req.get("Referrer") || "/";
-//     res.redirect(backURL);
-//     return;
-//   }
-
-//   const cart = await Cart.findOne({
-//     user_id: user.id,
-//   });
-//   if (cart) {
-//     res.cookie("cartId", cart.id);
-//   } else {
-//     await Cart.updateOne(
-//       {
-//         _id: req.cookies.cartId,
-//       },
-//       {
-//         user_id: user.id,
-//       }
-//     );
-//   }
-//   res.cookie("tokenUser", user.tokenUser);
-//   res.redirect("/");
-// };
+// [POST] /user/login
+export const loginPost = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({
+      email: req.body.email,
+      deleted: false,
+    });
+    if (!user) {
+      res.json({
+        code: 400,
+        message: "Email không tồn tại!",
+      });
+      return;
+    }
+    if (md5(req.body.password) !== user.password) {
+      res.json({
+        code: 400,
+        message: "Tài khoản hoặc mật khẩu không chính xác!",
+      });
+      return;
+    }
+    if (user.status === "inactive") {
+      res.json({
+        code: 400,
+        message: "Tài khoản đang bị khóa!",
+      });
+      return;
+    }
+    const cart = await Cart.findOne({
+      user_id: user.id,
+    });
+    if (cart) {
+      res.cookie("cartId", cart.id);
+    } else {
+      await Cart.updateOne(
+        {
+          _id: req.cookies.cartId,
+        },
+        {
+          user_id: user.id,
+        }
+      );
+    }
+    res.cookie("tokenUser", user.tokenUser);
+    res.json({
+      code: 200,
+      message: "Đăng nhập thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /user/logout
 // module.exports.logout = async (req, res) => {
