@@ -15,11 +15,11 @@ router.post("/login", validate.loginPost, controller.loginPost);
 
 router.get("/logout", controller.logout);
 
-// router.post(
-//   "/password/forgot",
-//   validate.forgotPasswordPost,
-//   controller.forgotPasswordPost
-// );
+router.post(
+  "/password/forgot",
+  validate.forgotPasswordPost,
+  controller.forgotPasswordPost
+);
 
 // router.post("/password/otp", controller.otpPasswordPost);
 

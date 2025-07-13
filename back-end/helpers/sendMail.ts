@@ -1,6 +1,10 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
-module.exports.sendMail = (email, subject, html) => {
+export const sendMail = (
+  email: string,
+  subject: string,
+  html: string
+): void => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
