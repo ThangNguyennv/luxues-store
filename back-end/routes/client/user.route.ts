@@ -13,7 +13,7 @@ router.post("/register", validate.registerPost, controller.registerPost);
 
 router.post("/login", validate.loginPost, controller.loginPost);
 
-// router.get("/logout", controller.logout);
+router.get("/logout", controller.logout);
 
 // router.post(
 //   "/password/forgot",

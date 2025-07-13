@@ -91,12 +91,22 @@ export const loginPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /user/logout
-// module.exports.logout = async (req, res) => {
-//   res.clearCookie("tokenUser");
-//   res.clearCookie("cartId");
-//   res.redirect("/");
-// };
+// [GET] /user/logout
+export const logout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("tokenUser");
+    res.clearCookie("cartId");
+    res.json({
+      code: 200,
+      message: "Đăng xuất thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /user/password/forgot
 // module.exports.forgotPassword = async (req, res) => {
