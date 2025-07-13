@@ -73,26 +73,26 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /admin/users/detail/:id
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       _id: req.params.id,
-//     };
-
-//     const record = await User.findOne(find);
-
-//     res.render("admin/pages/users/detail.pug", {
-//       pageTitle: record.title,
-//       record: record,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại người dùng này!`);
-//     res.redirect(`${systemConfig.prefixAdmin}/users`);
-//   }
-// };
+// [GET] /admin/users/detail/:id
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const record = await User.findOne(find);
+    res.json({
+      code: 200,
+      message: `Chi tiết người dùng!`,
+      record: record,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: `Lỗi!`,
+    });
+  }
+};
 
 // // [DELETE] /admin/users/delete/:id
 // module.exports.deleteItem = async (req, res) => {

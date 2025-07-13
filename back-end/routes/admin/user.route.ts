@@ -19,7 +19,7 @@ router.patch(
   validate.editPatch, // middleware
   controller.editPatch
 );
-// router.get("/detail/:id", controller.detail);
+router.get("/detail/:id", controller.detail);
 // router.delete("/delete/:id", controller.deleteItem);
 
 export const userRoutes: Router = router;
