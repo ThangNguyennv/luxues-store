@@ -15,7 +15,7 @@ import { myAccountRoutes } from "./my-account.route";
 import { articleRoutes } from "./article.route";
 import { articleCategoryRoutes } from "./article-category.route";
 import { orderRoutes } from "./order.route";
-// import { settingRoutes } from "./setting.route";
+import { settingRoutes } from "./setting.route";
 
 const routeAdmin = (app: Express): void => {
   const PATH_ADMIN = systemConfig.prefixAdmin;
@@ -46,5 +46,6 @@ const routeAdmin = (app: Express): void => {
   );
   app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
   app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, roleRoutes);
+  app.use(PATH_ADMIN + "/settings", authMiddleware.requireAuth, settingRoutes);
 };
 export default routeAdmin;
