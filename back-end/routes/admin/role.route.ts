@@ -12,7 +12,7 @@ router.patch(
   validate.createPost, // middleware
   controller.editPatch
 );
-// router.delete("/delete/:id", controller.deleteItem);
+router.delete("/delete/:id", controller.deleteItem);
 // router.get("/detail/:id", controller.detail);
 // router.patch("/permissions", controller.permissionsPatch);
 

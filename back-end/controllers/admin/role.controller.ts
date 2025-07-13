@@ -79,26 +79,31 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [DELETE] /admin/roles/delete/:id
-// module.exports.deleteItem = async (req, res) => {
-//   const id = req.params.id;
-//   // await Role.deleteOne({ _id: id }); => Xóa vĩnh viễn trong db, nếu sử dụng updateOne() -> chỉ cập nhật trong db chứ ko xóa.
-//   await Role.updateOne(
-//     { _id: id },
-//     {
-//       deleted: true,
-//       deletedBy: {
-//         account_id: res.locals.user.id,
-//         deletedAt: new Date(),
-//       },
-//     }
-//   );
-//   req.flash("success", `Đã xóa thành công sản phẩm!`);
-
-//   // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+// [DELETE] /admin/roles/delete/:id
+export const deleteItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await Role.updateOne(
+      { _id: id },
+      {
+        deleted: true,
+        deletedBy: {
+          account_id: req["accountAdmin"].id,
+          deletedAt: new Date(),
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: `Đã xóa thành công sản phẩm!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /admin/roles/detail/:id
 // module.exports.detail = async (req, res) => {
