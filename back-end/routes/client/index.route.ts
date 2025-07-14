@@ -8,7 +8,7 @@ import * as settingMiddleware from "../../middlewares/client/setting.middleware"
 // import * as authMiddleware from "../../middlewares/client/auth.middleware";
 
 import { articleRoutes } from "./article.route";
-// import searchRoutes from "./search.route";
+import { searchRoutes } from "./search.route";
 // import cartRoutes from "./cart.route";
 // import checkoutRoutes from "./checkout.route";
 import { userRoutes } from "./user.route";
@@ -25,7 +25,7 @@ const routeClient = (app: Express): void => {
   app.use("/", homeRoutes);
   // app.use("/products", productRoutes);
   app.use("/articles", articleRoutes);
-  // app.use("/search", searchRoutes);
+  app.use("/search", searchRoutes);
   // app.use("/cart", cartRoutes);
   // app.use("/checkout", checkoutRoutes);
   app.use("/user", userRoutes);
