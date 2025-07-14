@@ -21,48 +21,49 @@ export const index = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /articles/:slugCategory
-// module.exports.category = async (req, res) => {
-//   try {
-//     const category = await ArticleCategory.findOne({
-//       slug: req.params.slugCategory,
-//       status: "active",
-//       deleted: false,
-//     });
+// [GET] /articles/:slugCategory
+export const category = async (req: Request, res: Response) => {
+  try {
+    const category = await ArticleCategory.findOne({
+      slug: req.params.slugCategory,
+      status: "active",
+      deleted: false,
+    });
+    const getSubArticle = async (parentId) => {
+      const subs = await ArticleCategory.find({
+        deleted: false,
+        status: "active",
+        parent_id: parentId,
+      });
+      let allSub = [...subs]; // Cú pháp trải ra (spread syntax)
 
-//     const getSubArticle = async (parentId) => {
-//       const subs = await ArticleCategory.find({
-//         deleted: false,
-//         status: "active",
-//         parent_id: parentId,
-//       });
-//       let allSub = [...subs]; // Cú pháp trải ra (spread syntax)
+      for (const sub of subs) {
+        const childs = await getSubArticle(sub.id); // Gọi đệ quy để lấy tất cả các danh mục con
+        allSub = allSub.concat(childs); // Nối mảng con vào mảng cha
+      }
+      return allSub;
+    };
 
-//       for (const sub of subs) {
-//         const childs = await getSubArticle(sub.id); // Gọi đệ quy để lấy tất cả các danh mục con
-//         allSub = allSub.concat(childs); // Nối mảng con vào mảng cha
-//       }
-//       return allSub;
-//     };
+    const listSubCategory = await getSubArticle(category.id);
 
-//     const listSubCategory = await getSubArticle(category.id);
+    const listSubCategoryId = listSubCategory.map((item) => item.id);
 
-//     const listSubCategoryId = listSubCategory.map((item) => item.id);
-
-//     const articles = await Article.find({
-//       deleted: false,
-//       article_category_id: { $in: [category.id, ...listSubCategoryId] },
-//     }).sort({ position: "desc" });
-//     console.log(articles);
-//     res.render("client/pages/articles/index.pug", {
-//       pageTitle: category.title,
-//       articles: articles,
-//     });
-//   } catch (error) {
-//     req.flash("error", `Không tồn tại danh mục bài viết này!`);
-//     res.redirect(`/articles`);
-//   }
-// };
+    const articles = await Article.find({
+      deleted: false,
+      article_category_id: { $in: [category.id, ...listSubCategoryId] },
+    }).sort({ position: "desc" });
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      articles: articles,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /articles/:slugArticle
 // module.exports.detail = async (req, res) => {
