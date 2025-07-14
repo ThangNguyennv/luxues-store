@@ -95,25 +95,31 @@ export const addPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /cart/delete/:productId
-// module.exports.delete = async (req, res) => {
-//   const cartId = req.cookies.cartId;
-//   const productId = req.params.productId;
-
-//   // $pull: Loại bỏ phần tử khỏi mảng theo điều kiện
-//   await Cart.updateOne(
-//     {
-//       _id: cartId,
-//     },
-//     {
-//       $pull: { products: { product_id: productId } },
-//     }
-//   );
-
-//   req.flash("success", "Đã xóa sản phẩm khỏi giỏ hàng!");
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+// [GET] /cart/delete/:productId
+export const deleteCart = async (req: Request, res: Response) => {
+  try {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.productId;
+    // $pull: Loại bỏ phần tử khỏi mảng theo điều kiện
+    await Cart.updateOne(
+      {
+        _id: cartId,
+      },
+      {
+        $pull: { products: { product_id: productId } },
+      }
+    );
+    res.json({
+      code: 200,
+      message: "Đã xóa sản phẩm khỏi giỏ hàng!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /cart/update/:productId/:quantity
 // module.exports.update = async (req, res) => {
