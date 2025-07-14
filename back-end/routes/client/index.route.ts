@@ -1,5 +1,5 @@
 import { Express } from "express";
-// import homeRoutes from "./home.route";
+import { homeRoutes } from "./home.route";
 // import productRoutes from "./product.route";
 import * as userMiddleware from "../../middlewares/client/user.middleware";
 import * as categoryMiddleware from "../../middlewares/client/category.middleware";
@@ -22,7 +22,7 @@ const routeClient = (app: Express): void => {
   app.use(userMiddleware.infoUser);
   // app.use(settingMiddleware.settingsGeneral);
 
-  // app.use("/", homeRoutes);
+  app.use("/", homeRoutes);
   // app.use("/products", productRoutes);
   app.use("/articles", articleRoutes);
   // app.use("/search", searchRoutes);
