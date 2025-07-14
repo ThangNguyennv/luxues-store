@@ -27,50 +27,54 @@ export const index = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /products/:slugCategory
-// module.exports.category = async (req, res) => {
-//   try {
-//     const category = await ProductCategory.findOne({
-//       slug: req.params.slugCategory,
-//       status: "active",
-//       deleted: false,
-//     });
+// [GET] /products/:slugCategory
+export const category = async (req: Request, res: Response) => {
+  try {
+    const category = await ProductCategory.findOne({
+      slug: req.params.slugCategory,
+      status: "active",
+      deleted: false,
+    });
 
-//     const getSubCategory = async (parentId) => {
-//       const subs = await ProductCategory.find({
-//         deleted: false,
-//         status: "active",
-//         parent_id: parentId,
-//       });
-//       let allSub = [...subs]; // Cú pháp trải ra (spread syntax)
+    const getSubCategory = async (parentId) => {
+      const subs = await ProductCategory.find({
+        deleted: false,
+        status: "active",
+        parent_id: parentId,
+      });
+      let allSub = [...subs]; // Cú pháp trải ra (spread syntax)
 
-//       for (const sub of subs) {
-//         const childs = await getSubCategory(sub.id); // Gọi đệ quy để lấy tất cả các danh mục con
-//         allSub = allSub.concat(childs); // Nối mảng con vào mảng cha
-//       }
-//       return allSub;
-//     };
+      for (const sub of subs) {
+        const childs = await getSubCategory(sub.id); // Gọi đệ quy để lấy tất cả các danh mục con
+        allSub = allSub.concat(childs); // Nối mảng con vào mảng cha
+      }
+      return allSub;
+    };
 
-//     const listSubCategory = await getSubCategory(category.id);
+    const listSubCategory = await getSubCategory(category.id);
 
-//     const listSubCategoryId = listSubCategory.map((item) => item.id);
+    const listSubCategoryId = listSubCategory.map((item) => item.id);
 
-//     const products = await Product.find({
-//       deleted: false,
-//       product_category_id: { $in: [category.id, ...listSubCategoryId] },
-//     }).sort({ position: "desc" });
+    const products = await Product.find({
+      deleted: false,
+      product_category_id: { $in: [category.id, ...listSubCategoryId] },
+    }).sort({ position: "desc" });
 
-//     const newProducts = productsHelper.priceNewProducts(products);
-
-//     res.render("client/pages/products/index.pug", {
-//       pageTitle: category.title,
-//       products: newProducts,
-//     });
-//   } catch (error) {
-//     req.flash("error", `Không tồn tại danh mục sản phẩm này!`);
-//     res.redirect(`/products`);
-//   }
-// };
+    const newProducts = productsHelper.priceNewProducts(
+      products as OneProduct[]
+    );
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      products: newProducts,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /products/:slugProduct
 // module.exports.detail = async (req, res) => {
