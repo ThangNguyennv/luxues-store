@@ -190,22 +190,30 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [POST] /user/password/reset
-// module.exports.resetPasswordPost = async (req, res) => {
-//   const password = req.body.password;
-//   const tokenUser = req.cookies.tokenUser;
-
-//   await User.updateOne(
-//     {
-//       tokenUser: tokenUser,
-//     },
-//     {
-//       password: md5(password),
-//     }
-//   );
-//   req.flash("success", "Đổi mật khẩu thành công!");
-//   res.redirect("/");
-// };
+// [POST] /user/password/reset
+export const resetPasswordPost = async (req: Request, res: Response) => {
+  try {
+    const password = req.body.password;
+    const tokenUser = req.cookies.tokenUser;
+    await User.updateOne(
+      {
+        tokenUser: tokenUser,
+      },
+      {
+        password: md5(password),
+      }
+    );
+    res.json({
+      code: 400,
+      message: "Đổi mật khẩu thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /user/info
 // module.exports.info = async (req, res) => {

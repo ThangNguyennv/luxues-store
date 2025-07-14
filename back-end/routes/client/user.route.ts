@@ -23,11 +23,11 @@ router.post(
 
 router.post("/password/otp", controller.otpPasswordPost);
 
-// router.post(
-//   "/password/reset",
-//   validate.resetPasswordPost,
-//   controller.resetPasswordPost
-// );
+router.post(
+  "/password/reset",
+  validate.resetPasswordPost,
+  controller.resetPasswordPost
+);
 
 // // route private
 // router.get("/info", authMiddleware.requireAuth, controller.info);
