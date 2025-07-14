@@ -8,6 +8,6 @@ router.get("/", controller.index);
 
 router.post("/order", controller.order);
 
-// router.get("/success/:orderId", controller.success);
+router.get("/success/:orderId", controller.success);
 
 export const checkoutRoutes: Router = router;

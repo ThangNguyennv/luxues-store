@@ -109,25 +109,35 @@ export const order = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /checkout/success/:orderId
-// module.exports.success = async (req, res) => {
-//   const order = await Order.findOne({
-//     _id: req.params.orderId,
-//   });
-//   for (const product of order.products) {
-//     const productInfo = await Product.findOne({
-//       _id: product.product_id,
-//     }).select("title thumbnail");
-//     product.productInfo = productInfo;
-//     product.priceNew = productsHelper.priceNewProduct(product);
-//     product.totalPrice = product.priceNew * product.quantity;
-//   }
-//   order.totalsPrice = order.products.reduce(
-//     (sum, item) => sum + item.totalPrice,
-//     0
-//   );
-//   res.render("client/pages/checkout/success.pug", {
-//     pageTitle: "Đặt hàng thành công",
-//     order: order,
-//   });
-// };
+// [GET] /checkout/success/:orderId
+export const success = async (req: Request, res: Response) => {
+  try {
+    const order = await Order.findOne({
+      _id: req.params.orderId,
+    });
+    for (const product of order.products) {
+      const productInfo = await Product.findOne({
+        _id: product.product_id,
+      }).select("title thumbnail");
+      product["productInfo"] = productInfo;
+      product["priceNew"] = productsHelper.priceNewProduct(
+        product as OneProduct
+      );
+      product["totalPrice"] = product["priceNew"] * product.quantity;
+    }
+    order["totalsPrice"] = order.products.reduce(
+      (sum, item) => sum + item["totalPrice"],
+      0
+    );
+    res.json({
+      code: 200,
+      message: "Đặt hàng thành công",
+      order: order,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
