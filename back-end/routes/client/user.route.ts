@@ -34,16 +34,18 @@ router.get("/info", authMiddleware.requireAuth, controller.info);
 
 router.patch(
   "/info/edit",
+  authMiddleware.requireAuth,
   multer().single("avatar"),
   uploadCloud,
   validate.editPatch,
   controller.editPatch
 );
 
-// router.patch(
-//   "/info/edit/change-password",
-//   validate.changePasswordPatch,
-//   controller.changePasswordPatch
-// );
+router.patch(
+  "/info/edit/change-password",
+  authMiddleware.requireAuth,
+  validate.changePasswordPatch,
+  controller.changePasswordPatch
+);
 
 export const userRoutes: Router = router;

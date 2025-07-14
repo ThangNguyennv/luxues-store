@@ -264,28 +264,36 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// // [PATCH] /user/info/edit/change-password
-// module.exports.changePasswordPatch = async (req, res) => {
-//   const user = await User.findOne({
-//     _id: res.locals.user.id,
-//     deleted: false,
-//   });
-//   if (user) {
-//     if (md5(req.body.currentPassword) != user.password) {
-//       req.flash("error", `Mật khẩu hiện tại không chính xác!`);
-//       const backURL = req.get("Referrer") || "/";
-//       res.redirect(backURL);
-//       return;
-//     }
-//     if (req.body.password) {
-//       req.body.password = md5(req.body.password); // Mã hóa password mới để lưu lại vào db
-//     } else {
-//       delete req.body.password; // Xóa value password, tránh cập nhật lại vào db xóa mất mật khẩu cũ
-//     }
-//     await User.updateOne({ email: res.locals.user.email }, req.body);
-//     req.flash("success", `Đã đổi mật khẩu thành công!`);
-//   }
-//   // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+// [PATCH] /user/info/edit/change-password
+export const changePasswordPatch = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({
+      _id: req["accountUser"].id,
+      deleted: false,
+    });
+    if (user) {
+      if (md5(req.body.currentPassword) != user.password) {
+        res.json({
+          code: 400,
+          message: `Mật khẩu hiện tại không chính xác!`,
+        });
+        return;
+      }
+      if (req.body.password) {
+        req.body.password = md5(req.body.password); // Mã hóa password mới để lưu lại vào db
+      } else {
+        delete req.body.password; // Xóa value password, tránh cập nhật lại vào db xóa mất mật khẩu cũ
+      }
+      await User.updateOne({ email: req["accountUser"].email }, req.body);
+      res.json({
+        code: 400,
+        message: `Đã đổi mật khẩu thành công!`,
+      });
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
