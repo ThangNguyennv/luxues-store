@@ -121,24 +121,32 @@ export const deleteCart = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /cart/update/:productId/:quantity
-// module.exports.update = async (req, res) => {
-//   const cartId = req.cookies.cartId;
-//   const productId = req.params.productId;
-//   const quantity = req.params.quantity;
+// [GET] /cart/update/:productId/:quantity
+export const update = async (req: Request, res: Response) => {
+  try {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.productId;
+    const quantity = req.params.quantity;
 
-//   await Cart.updateOne(
-//     {
-//       _id: cartId,
-//       "products.product_id": productId,
-//     },
-//     {
-//       $set: {
-//         "products.$.quantity": quantity,
-//       },
-//     }
-//   );
-//   req.flash("success", "Cập nhật số lượng thành công!");
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+    await Cart.updateOne(
+      {
+        _id: cartId,
+        "products.product_id": productId,
+      },
+      {
+        $set: {
+          "products.$.quantity": quantity,
+        },
+      }
+    );
+    res.json({
+      code: 200,
+      message: "Cập nhật số lượng thành công!",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
