@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { homeRoutes } from "./home.route";
-// import productRoutes from "./product.route";
+import { productRoutes } from "./product.route";
 import * as userMiddleware from "../../middlewares/client/user.middleware";
 import * as categoryMiddleware from "../../middlewares/client/category.middleware";
 import * as cartMiddleware from "../../middlewares/client/cart.middleware";
@@ -23,7 +23,7 @@ const routeClient = (app: Express): void => {
   // app.use(settingMiddleware.settingsGeneral);
 
   app.use("/", homeRoutes);
-  // app.use("/products", productRoutes);
+  app.use("/products", productRoutes);
   app.use("/articles", articleRoutes);
   app.use("/search", searchRoutes);
   // app.use("/cart", cartRoutes);
