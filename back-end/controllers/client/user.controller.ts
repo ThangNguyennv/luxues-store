@@ -204,7 +204,7 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
       }
     );
     res.json({
-      code: 400,
+      code: 200,
       message: "Đổi mật khẩu thành công!",
     });
   } catch (error) {
@@ -237,24 +237,31 @@ export const info = async (req: Request, res: Response) => {
 };
 
 // [PATCH] /user/info/edit
-module.exports.editPatch = async (req, res) => {
-  const isEmailExist = await User.findOne({
-    _id: { $ne: res.locals.user.id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
-    email: req.body.email,
-    deleted: false,
-  });
-  if (isEmailExist) {
-    req.flash(
-      "error",
-      `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
-    );
-  } else {
-    await User.updateOne({ _id: res.locals.user.id }, req.body);
-    req.flash("success", `Đã cập nhật thành công tài khoản!`);
+export const editPatch = async (req: Request, res: Response) => {
+  try {
+    const isEmailExist = await User.findOne({
+      _id: { $ne: req["accountUser"].id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
+      email: req.body.email,
+      deleted: false,
+    });
+    if (isEmailExist) {
+      res.json({
+        code: 400,
+        message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`,
+      });
+    } else {
+      await User.updateOne({ _id: req["accountUser"].id }, req.body);
+      res.json({
+        code: 200,
+        message: `Đã cập nhật thành công tài khoản!`,
+      });
+    }
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
   }
-  // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-  const backURL = req.get("Referrer") || "/";
-  res.redirect(backURL);
 };
 
 // // [PATCH] /user/info/edit/change-password

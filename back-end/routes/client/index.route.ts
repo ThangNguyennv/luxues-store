@@ -19,7 +19,7 @@ const routeClient = (app: Express): void => {
   // app.use(categoryMiddleware.category);
   // app.use(categoryMiddleware.categoryArticle);
   // app.use(cartMiddleware.cartId);
-  // app.use(userMiddleware.infoUser);
+  app.use(userMiddleware.infoUser);
   // app.use(settingMiddleware.settingsGeneral);
 
   // app.use("/", homeRoutes);
