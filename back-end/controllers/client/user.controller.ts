@@ -215,33 +215,47 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /user/info
-// module.exports.info = async (req, res) => {
-//   res.render("client/pages/user/info", {
-//     pageTitle: "Thông tin tài khoản",
-//   });
-// };
+// [GET] /user/info
+export const info = async (req: Request, res: Response) => {
+  try {
+    const tokenUser = req.cookies.tokenUser;
+    const userInfo = await User.findOne({
+      tokenUser: tokenUser,
+      deleted: false,
+    });
+    res.json({
+      code: 200,
+      message: "Thông tin tài khoản!",
+      userInfo: userInfo,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
-// // [PATCH] /user/info/edit
-// module.exports.editPatch = async (req, res) => {
-//   const isEmailExist = await User.findOne({
-//     _id: { $ne: res.locals.user.id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
-//     email: req.body.email,
-//     deleted: false,
-//   });
-//   if (isEmailExist) {
-//     req.flash(
-//       "error",
-//       `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
-//     );
-//   } else {
-//     await User.updateOne({ _id: res.locals.user.id }, req.body);
-//     req.flash("success", `Đã cập nhật thành công tài khoản!`);
-//   }
-//   // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+// [PATCH] /user/info/edit
+module.exports.editPatch = async (req, res) => {
+  const isEmailExist = await User.findOne({
+    _id: { $ne: res.locals.user.id }, // $ne ($notequal) -> Tránh trường hợp khi tìm bị lặp và không cập nhật lại lên đc.
+    email: req.body.email,
+    deleted: false,
+  });
+  if (isEmailExist) {
+    req.flash(
+      "error",
+      `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
+    );
+  } else {
+    await User.updateOne({ _id: res.locals.user.id }, req.body);
+    req.flash("success", `Đã cập nhật thành công tài khoản!`);
+  }
+  // Không bị quay về trang 1 khi thay đổi trạng thái hoạt động
+  const backURL = req.get("Referrer") || "/";
+  res.redirect(backURL);
+};
 
 // // [PATCH] /user/info/edit/change-password
 // module.exports.changePasswordPatch = async (req, res) => {

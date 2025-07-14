@@ -30,7 +30,7 @@ router.post(
 );
 
 // // route private
-// router.get("/info", authMiddleware.requireAuth, controller.info);
+router.get("/info", authMiddleware.requireAuth, controller.info);
 // router.patch(
 //   "/info/edit",
 //   multer().single("avatar"),
