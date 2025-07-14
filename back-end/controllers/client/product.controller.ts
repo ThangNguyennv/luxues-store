@@ -76,35 +76,35 @@ export const category = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /products/:slugProduct
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       slug: req.params.slugProduct,
-//       status: "active",
-//     };
+// [GET] /products/detail/:slugProduct
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      slug: req.params.slugProduct,
+      status: "active",
+    };
 
-//     const product = await Product.findOne(find);
+    const product = await Product.findOne(find);
 
-//     if (product.product_category_id) {
-//       const category = await ProductCategory.findOne({
-//         _id: product.product_category_id,
-//         deleted: false,
-//         status: "active",
-//       });
-//       product.category = category;
-//     }
-
-//     product.priceNew = productsHelper.priceNewProduct(product);
-
-//     res.render("client/pages/products/detail.pug", {
-//       pageTitle: product.title,
-//       product: product,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại sản phẩm này!`);
-//     res.redirect(`/products`);
-//   }
-// };
+    if (product.product_category_id) {
+      const category = await ProductCategory.findOne({
+        _id: product.product_category_id,
+        deleted: false,
+        status: "active",
+      });
+      product["category"] = category;
+    }
+    product["priceNew"] = productsHelper.priceNewProduct(product as OneProduct);
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      product: product,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
