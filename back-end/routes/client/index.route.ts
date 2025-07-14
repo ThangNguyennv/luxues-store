@@ -7,7 +7,7 @@ import * as cartMiddleware from "../../middlewares/client/cart.middleware";
 import * as settingMiddleware from "../../middlewares/client/setting.middleware";
 // import * as authMiddleware from "../../middlewares/client/auth.middleware";
 
-// import articleRoutes from "./article.route";
+import { articleRoutes } from "./article.route";
 // import searchRoutes from "./search.route";
 // import cartRoutes from "./cart.route";
 // import checkoutRoutes from "./checkout.route";
@@ -17,14 +17,14 @@ import { userRoutes } from "./user.route";
 const routeClient = (app: Express): void => {
   // Middleware để lấy danh mục sản phẩm và bài viết
   // app.use(categoryMiddleware.category);
-  // app.use(categoryMiddleware.categoryArticle);
+  app.use(categoryMiddleware.categoryArticle);
   // app.use(cartMiddleware.cartId);
   app.use(userMiddleware.infoUser);
   // app.use(settingMiddleware.settingsGeneral);
 
   // app.use("/", homeRoutes);
   // app.use("/products", productRoutes);
-  // app.use("/articles", articleRoutes);
+  app.use("/articles", articleRoutes);
   // app.use("/search", searchRoutes);
   // app.use("/cart", cartRoutes);
   // app.use("/checkout", checkoutRoutes);
