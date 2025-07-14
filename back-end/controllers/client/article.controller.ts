@@ -65,32 +65,34 @@ export const category = async (req: Request, res: Response) => {
   }
 };
 
-// // [GET] /articles/:slugArticle
-// module.exports.detail = async (req, res) => {
-//   try {
-//     const find = {
-//       deleted: false,
-//       slug: req.params.slugArticle,
-//       status: "active",
-//     };
+// [GET] /articles/detail/:slugArticle
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      slug: req.params.slugArticle,
+      status: "active",
+    };
 
-//     const article = await Article.findOne(find);
+    const article = await Article.findOne(find);
 
-//     if (article.article_category_id) {
-//       const category = await ArticleCategory.findOne({
-//         _id: article.article_category_id,
-//         deleted: false,
-//         status: "active",
-//       });
-//       article.category = category;
-//     }
-//     res.render("client/pages/articles/detail.pug", {
-//       pageTitle: article.title,
-//       article: article,
-//     });
-//   } catch (error) {
-//     // Có thể không xảy ra / Ít xảy ra
-//     req.flash("error", `Không tồn tại bài viết này!`);
-//     res.redirect(`/articles`);
-//   }
-// };
+    if (article.article_category_id) {
+      const category = await ArticleCategory.findOne({
+        _id: article.article_category_id,
+        deleted: false,
+        status: "active",
+      });
+      article["category"] = category;
+    }
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      article: article,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
