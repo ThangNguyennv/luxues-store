@@ -16,11 +16,11 @@ import { userRoutes } from "./user.route";
 
 const routeClient = (app: Express): void => {
   // Middleware để lấy danh mục sản phẩm và bài viết
-  // app.use(categoryMiddleware.category);
+  app.use(categoryMiddleware.category);
   app.use(categoryMiddleware.categoryArticle);
   app.use(cartMiddleware.cartId);
   app.use(userMiddleware.infoUser);
-  // app.use(settingMiddleware.settingsGeneral);
+  app.use(settingMiddleware.settingsGeneral);
 
   app.use("/", homeRoutes);
   app.use("/products", productRoutes);

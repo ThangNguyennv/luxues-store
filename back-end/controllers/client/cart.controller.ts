@@ -42,51 +42,58 @@ export const index = async (req: Request, res: Response) => {
   }
 };
 
-// // [POST] /cart/add/:productId
-// module.exports.addPost = async (req, res) => {
-//   const productId = req.params.productId;
-//   const quantity = parseInt(req.body.quantity);
-//   const cartId = req.cookies.cartId;
-//   const objectCart = {
-//     product_id: productId,
-//     quantity: quantity,
-//   };
-//   const cart = await Cart.findOne({
-//     _id: cartId,
-//   });
-//   // find() trong js (Khác find trong mongoose là tìm nhiều) -> Tìm 1 bản ghi
-//   const isExistProductInCart = cart.products.find(
-//     (item) => item.product_id == productId
-//   );
+// [POST] /cart/add/:productId
+export const addPost = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const quantity = parseInt(req.body.quantity);
+    const cartId = req.cookies.cartId;
+    const objectCart = {
+      product_id: productId,
+      quantity: quantity,
+    };
+    const cart = await Cart.findOne({
+      _id: cartId,
+    });
+    // find() trong js (Khác find trong mongoose là tìm nhiều) -> Tìm 1 bản ghi
+    const isExistProductInCart = cart.products.find(
+      (item) => item.product_id == productId
+    );
 
-//   // Thêm sản phẩm để không bị tạo object mới
-//   if (isExistProductInCart) {
-//     const quantityNew = quantity + isExistProductInCart.quantity;
-//     await Cart.updateOne(
-//       {
-//         _id: cartId,
-//         "products.product_id": productId,
-//       },
-//       {
-//         $set: {
-//           "products.$.quantity": quantityNew,
-//         },
-//       }
-//     );
-//   } else {
-//     // $push: Thêm phần tử vào mảng
-//     await Cart.updateOne(
-//       { _id: cartId },
-//       {
-//         $push: { products: objectCart },
-//       }
-//     );
-//   }
-
-//   req.flash("success", `Đã thêm sản phẩm vào giỏ hàng!`);
-//   const backURL = req.get("Referrer") || "/";
-//   res.redirect(backURL);
-// };
+    // Thêm sản phẩm để không bị tạo object mới
+    if (isExistProductInCart) {
+      const quantityNew = quantity + isExistProductInCart.quantity;
+      await Cart.updateOne(
+        {
+          _id: cartId,
+          "products.product_id": productId,
+        },
+        {
+          $set: {
+            "products.$.quantity": quantityNew,
+          },
+        }
+      );
+    } else {
+      // $push: Thêm phần tử vào mảng
+      await Cart.updateOne(
+        { _id: cartId },
+        {
+          $push: { products: objectCart },
+        }
+      );
+    }
+    res.json({
+      code: 200,
+      message: `Đã thêm sản phẩm vào giỏ hàng!`,
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Lỗi!",
+    });
+  }
+};
 
 // // [GET] /cart/delete/:productId
 // module.exports.delete = async (req, res) => {
