@@ -5,9 +5,15 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 import reactPlugin from 'eslint-plugin-react'
+
 export default tseslint.config([
   globalIgnores(['dist']),
   {
+    settings: {
+      'import/resolver': {
+        typescript: {}
+      }
+    },
     files: ['**/*.{js,jsx,ts,tsx}'],
     ...reactPlugin.configs.flat.recommended,
     extends: [

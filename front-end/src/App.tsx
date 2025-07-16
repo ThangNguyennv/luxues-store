@@ -1,12 +1,17 @@
-import Alert from '@mui/material/Alert'
-import CheckIcon from '@mui/icons-material/Check'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import LayoutDefault from './layouts/LayoutDefault/LayoutDefault'
+import Home from './pages/Home/Home'
 
 function App() {
   return (
     <>
-      <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-        Here is a gentle confirmation that your action was successful.
-      </Alert>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<LayoutDefault />}>
+            <Route path={'/'} element={<Home />}/>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
