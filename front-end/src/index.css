@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
-.hihi {
-    background-color: yellow;
-}
-
 @theme {
     --color-primary: #000000
+}
+
+.sm\:border-r:last-child {
+    border-right: 0;
+    padding-right: 0;
+    margin-right: 0;
+}
+
+input {
+    outline: none;
 }
