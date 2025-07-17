@@ -1,33 +1,33 @@
-import { StatusItem } from "./filterStatus";
-const filterOrderHelpers = (query: Record<string, any>): StatusItem[] => {
+import { StatusItem } from './filterStatus'
+const filterOrderHelpers = (query: Record<string, unknown>): StatusItem[] => {
   const filterOrder: StatusItem[] = [
     {
-      name: "Tất cả",
-      status: "",
-      class: "",
+      name: 'Tất cả',
+      status: '',
+      class: ''
     },
     {
-      name: "Chờ duyệt",
-      status: "waiting",
-      class: "",
+      name: 'Chờ duyệt',
+      status: 'waiting',
+      class: ''
     },
     {
-      name: "Đã xác nhận",
-      status: "confirmed",
-      class: "",
+      name: 'Đã xác nhận',
+      status: 'confirmed',
+      class: ''
     },
     {
-      name: "Đã hủy",
-      status: "canceled",
-      class: "",
-    },
-  ];
-  const target = query.status ?? "";
-  const index = filterOrder.findIndex((item) => item.status === target);
+      name: 'Đã hủy',
+      status: 'canceled',
+      class: ''
+    }
+  ]
+  const target = query.status ?? ''
+  const index = filterOrder.findIndex((item) => item.status === target)
   if (index >= 0) {
-    filterOrder[index].class = "confirmed";
+    filterOrder[index].class = 'confirmed'
   }
 
-  return filterOrder;
+  return filterOrder
 };
-export default filterOrderHelpers;
+export default filterOrderHelpers

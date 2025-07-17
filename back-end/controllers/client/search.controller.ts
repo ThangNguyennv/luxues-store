@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import Product from "../../models/product.model";
-import * as productsHelper from "../../helpers/product";
-import { OneProduct } from "../../helpers/product";
+import { Request, Response } from 'express'
+import Product from '../../models/product.model'
+import * as productsHelper from '../../helpers/product'
+import { OneProduct } from '../../helpers/product'
 
 interface ObjectSearch {
   keyword: string;
@@ -10,30 +10,31 @@ interface ObjectSearch {
 // [GET] /search
 export const index = async (req: Request, res: Response) => {
   try {
-    let objectSearch: ObjectSearch = {
-      keyword: "",
-    };
-    let newProducts = [];
+    const objectSearch: ObjectSearch = {
+      keyword: ''
+    }
+    let newProducts = []
     if (req.query.keyword) {
-      objectSearch.keyword = req.query.keyword as string | any;
-      const regex = new RegExp(objectSearch.keyword, "i");
+      objectSearch.keyword = req.query.keyword as string | never
+      const regex = new RegExp(objectSearch.keyword, 'i')
       const products = await Product.find({
         title: regex,
         deleted: false,
-        status: "active",
-      });
-      newProducts = productsHelper.priceNewProducts(products as OneProduct[]);
+        status: 'active'
+      })
+      newProducts = productsHelper.priceNewProducts(products as OneProduct[])
     }
     res.json({
       code: 200,
-      message: "Thành công!",
+      message: 'Thành công!',
       keyword: objectSearch.keyword,
-      products: newProducts,
-    });
+      products: newProducts
+    })
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!",
-    });
+      message: 'Lỗi!',
+      error: error
+    })
   }
-};
+}

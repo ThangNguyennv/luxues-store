@@ -7,18 +7,20 @@ interface ObjectPagination {
 
 const paginationHelpers = (
   objectPagination: ObjectPagination,
-  query: Record<string, any>,
+  query: Record<string, unknown>,
   countProducts: number
 ): ObjectPagination => {
   if (query.page) {
-    objectPagination.currentPage = parseInt(query.page);
+    if (typeof query.page === 'string') {
+      objectPagination.currentPage = parseInt(query.page)
+    }
   }
   objectPagination.skip =
-    (objectPagination.currentPage - 1) * objectPagination.limitItems;
-  const totalPage = Math.ceil(countProducts / objectPagination.limitItems);
+    (objectPagination.currentPage - 1) * objectPagination.limitItems
+  const totalPage = Math.ceil(countProducts / objectPagination.limitItems)
 
-  objectPagination.totalPage = totalPage;
+  objectPagination.totalPage = totalPage
 
-  return objectPagination;
-};
-export default paginationHelpers;
+  return objectPagination
+}
+export default paginationHelpers

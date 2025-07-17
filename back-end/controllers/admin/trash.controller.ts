@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import Product from "../../models/product.model";
-import filterStatusHelpers from "../../helpers/filterStatus";
-import searchHelpers from "../../helpers/search";
-import paginationHelpers from "../../helpers/pagination";
+import { Request, Response } from 'express'
+import Product from '../../models/product.model'
+import filterStatusHelpers from '../../helpers/filterStatus'
+import searchHelpers from '../../helpers/search'
+import paginationHelpers from '../../helpers/pagination'
 
 // [GET] /admin/trash
 export const trash = async (req: Request, res: Response) => {
@@ -12,130 +12,134 @@ export const trash = async (req: Request, res: Response) => {
       status?: string;
       title?: RegExp;
     }
-    let find: Find = {
-      deleted: true,
-    };
-
-    if (req.query.status) {
-      find.status = req.query.status.toString();
+    const find: Find = {
+      deleted: true
     }
 
-    const objectSearch = searchHelpers(req.query);
+    if (req.query.status) {
+      find.status = req.query.status.toString()
+    }
+
+    const objectSearch = searchHelpers(req.query)
     if (objectSearch.regex) {
-      find.title = objectSearch.regex;
+      find.title = objectSearch.regex
     }
 
     // Pagination
-    const countProducts = await Product.countDocuments(find);
+    const countProducts = await Product.countDocuments(find)
 
-    let objectPagination = paginationHelpers(
+    const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 3,
+        limitItems: 3
       },
       req.query,
       countProducts
-    );
+    )
     // End Pagination
 
     const products = await Product.find(find)
-      .sort({ position: "desc" })
+      .sort({ position: 'desc' })
       .limit(objectPagination.limitItems)
-      .skip(objectPagination.skip);
+      .skip(objectPagination.skip)
 
     res.json({
       code: 200,
-      message: "Thành công!",
+      message: 'Thành công!',
       products: products,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
-      pagination: objectPagination,
-    });
+      pagination: objectPagination
+    })
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!",
-    });
+      message: 'Lỗi!',
+      error: error
+    })
   }
-};
+}
 
 // [DELETE] /admin/trash/form-change-multi-trash
 export const changeMulti = async (req: Request, res: Response) => {
   try {
-    const body = req.body as { type: string; ids: string[] };
-    const type = body.type;
-    const ids = body.ids;
+    const body = req.body as { type: string; ids: string[] }
+    const type = body.type
+    const ids = body.ids
     enum Key {
-      DELETEALL = "delete-all",
-      RECOVER = "recover",
+      DELETEALL = 'delete-all',
+      RECOVER = 'recover',
     }
     switch (type) {
       case Key.DELETEALL:
-        await Product.deleteMany({ _id: { $in: ids } });
+        await Product.deleteMany({ _id: { $in: ids } })
         res.json({
           code: 200,
-          message: `Đã xóa vĩnh viễn thành công ${ids.length} sản phẩm!`,
-        });
-        break;
+          message: `Đã xóa vĩnh viễn thành công ${ids.length} sản phẩm!`
+        })
+        break
       case Key.RECOVER:
         await Product.updateMany(
           { _id: { $in: ids } },
           { deleted: false, recoveredAt: new Date() }
-        );
+        )
         res.json({
           code: 200,
-          message: `Đã khôi phục thành công ${ids.length} sản phẩm!`,
-        });
-        break;
+          message: `Đã khôi phục thành công ${ids.length} sản phẩm!`
+        })
+        break
       default:
         res.json({
           code: 400,
-          message: "Không tồn tại!",
-        });
-        break;
+          message: 'Không tồn tại!'
+        })
+        break
     }
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!",
-    });
+      message: 'Lỗi!',
+      error: error
+    })
   }
-};
+}
 
 // [DELETE] /admin/trash/permanently-delete/:id
 export const permanentlyDeleteItem = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
-    await Product.deleteOne({ _id: id });
+    const id = req.params.id
+    await Product.deleteOne({ _id: id })
     res.json({
       code: 200,
-      message: `Đã xóa thành công sản phẩm!`,
-    });
+      message: 'Đã xóa thành công sản phẩm!'
+    })
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!",
-    });
+      message: 'Lỗi!',
+      error: error
+    })
   }
-};
+}
 
 // [PATCH] /admin/trash/recover/:id
 export const recoverItem = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id = req.params.id
 
     await Product.updateOne(
       { _id: id },
       { deleted: false, recoveredAt: new Date() }
-    );
+    )
     res.json({
       code: 200,
-      message: `Đã khôi phục thành công sản phẩm!`,
-    });
+      message: 'Đã khôi phục thành công sản phẩm!'
+    })
   } catch (error) {
     res.json({
       code: 400,
-      message: "Lỗi!",
-    });
+      message: 'Lỗi!',
+      error: error
+    })
   }
-};
+}
