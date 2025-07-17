@@ -1,0 +1,97 @@
+import { Request, Response } from 'express'
+import Article from '~/models/article.model'
+import ArticleCategory from '~/models/article-category.model'
+
+// [GET] /articles
+export const index = async (req: Request, res: Response) => {
+  try {
+    const articles = await Article.find({
+      deleted: false
+    }).sort({ position: 'desc' })
+    res.json({
+      code: 200,
+      message: 'Thành công!',
+      articles: articles
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
+
+// [GET] /articles/:slugCategory
+export const category = async (req: Request, res: Response) => {
+  try {
+    const category = await ArticleCategory.findOne({
+      slug: req.params.slugCategory,
+      status: 'active',
+      deleted: false
+    })
+    const getSubArticle = async (parentId) => {
+      const subs = await ArticleCategory.find({
+        deleted: false,
+        status: 'active',
+        parent_id: parentId
+      })
+      let allSub = [...subs] // Cú pháp trải ra (spread syntax)
+
+      for (const sub of subs) {
+        const childs = await getSubArticle(sub.id) // Gọi đệ quy để lấy tất cả các danh mục con
+        allSub = allSub.concat(childs) // Nối mảng con vào mảng cha
+      }
+      return allSub
+    }
+    const listSubCategory = await getSubArticle(category.id)
+    const listSubCategoryId = listSubCategory.map((item) => item.id)
+
+    const articles = await Article.find({
+      deleted: false,
+      article_category_id: { $in: [category.id, ...listSubCategoryId] }
+    }).sort({ position: 'desc' })
+    res.json({
+      code: 200,
+      message: 'Thành công!',
+      articles: articles
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
+
+// [GET] /articles/detail/:slugArticle
+export const detail = async (req: Request, res: Response) => {
+  try {
+    const find = {
+      deleted: false,
+      slug: req.params.slugArticle,
+      status: 'active'
+    }
+    const article = await Article.findOne(find)
+    if (article.article_category_id) {
+      const category = await ArticleCategory.findOne({
+        _id: article.article_category_id,
+        deleted: false,
+        status: 'active'
+      })
+      article['category'] = category
+    }
+    res.json({
+      code: 200,
+      message: 'Thành công!',
+      article: article
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}

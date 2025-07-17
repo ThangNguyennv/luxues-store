@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src --ext js"
+    "lint": "eslint . --ext ts"
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +29,8 @@
     "nodemailer": "^7.0.5",
     "sharp": "^0.34.3",
     "socket.io": "^4.8.1",
-    "streamifier": "^0.1.1"
+    "streamifier": "^0.1.1",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
@@ -37,7 +38,11 @@
     "@types/md5": "^2.3.5",
     "@types/node": "^24.0.12",
     "@types/nodemailer": "^6.4.17",
+    "@types/streamifier": "^0.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
     "eslint": "^9.31.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "globals": "^16.3.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
