@@ -7,8 +7,14 @@ const LayoutDefaultAdmin = () => {
   return (
     <>
       <Header />
-      <Sidebar />
-      <Outlet />
+      <div className='flex'>
+        <Sidebar />
+        <div className='flex justify-center w-[90%]'>
+          <div className='container flex flex-col gap-[15px] p-[15px]'>
+            <Outlet />
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   )

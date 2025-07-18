@@ -6,6 +6,39 @@ const Sidebar = () => {
           <li className="border-b border-[#9D9995] pb-[7px]">
             <a className="text-[#F9F9FF] font-[500]">Tổng quan</a>
           </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Danh mục sản phẩm</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Danh sách Sản phẩm</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Danh sách đơn hàng</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Danh mục bài viết</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Danh sách bài viết</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Thùng rác</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Nhóm quyền</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Phân quyền</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Tài khoản</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Người dùng</a>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <a className="text-[#F9F9FF] font-[500]">Cài đặt chung</a>
+          </li>
         </ul>
       </div>
     </div>
