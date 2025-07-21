@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { PiGreaterThan } from 'react-icons/pi'
-import { PiLessThan } from 'react-icons/pi'
+
+import FilterStatusProps from '~/components/Admin/FilterStatus/FilterStatus'
+import PaginationProps from '~/components/Admin/Pagination/Pagination'
 
 interface ProductInterface {
   _id: string;
@@ -20,14 +21,13 @@ interface ProductInterface {
   position: number,
   accountFullName: string
 }
-
-interface FilterStatus {
+export interface FilterStatus {
   name: string,
   status: string,
   class?: string
 }
 
-interface Pagination {
+export interface Pagination {
   currentPage: number,
   limitItems: number,
   skip: number,
@@ -55,7 +55,7 @@ const ProductAdmin = () => {
       setFilterStatus(res.filterStatus)
     })
   }, [currentStatus, currentPage])
-  const handleFilterStatus = (status: string) => {
+  const handleFilterStatus = (status: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {
       newParams.set('status', status)
@@ -64,7 +64,7 @@ const ProductAdmin = () => {
     }
     setSearchParams(newParams)
   }
-  const handlePagination = (currentPage: string) => {
+  const handlePagination = (currentPage: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (currentPage) {
       newParams.set('page', currentPage)
@@ -73,7 +73,7 @@ const ProductAdmin = () => {
     }
     setSearchParams(newParams)
   }
-  const handlePaginationPrevious = (currentPage: number) => {
+  const handlePaginationPrevious = (currentPage: number): void => {
     const newParams = new URLSearchParams(searchParams)
     if (currentPage) {
       newParams.set('page', (currentPage - 1).toString())
@@ -82,7 +82,7 @@ const ProductAdmin = () => {
     }
     setSearchParams(newParams)
   }
-  const handlePaginationNext = (currentPage: number) => {
+  const handlePaginationNext = (currentPage: number): void => {
     const newParams = new URLSearchParams(searchParams)
     if (currentPage) {
       newParams.set('page', (currentPage + 1).toString())
@@ -98,23 +98,12 @@ const ProductAdmin = () => {
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
-            {filterStatus && (
-              <div className='flex gap-[15px] items-center'>
-                {filterStatus.map((item, index) => {
-                  const isActive = currentStatus === item.status
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => handleFilterStatus(item.status)}
-                      className={`cursor-pointer p-[15px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] ${isActive ? 'bg-[#525FE1] border-[#525FE1]' : 'bg-white'}`}
-                    >
-                      {item.name}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-            <div></div>
+            <FilterStatusProps
+              filterStatus={filterStatus}
+              currentStatus={currentStatus}
+              handleFilterStatus={handleFilterStatus}
+            />
+            <div>search</div>
           </div>
         </div>
         <Table sx={{
@@ -164,30 +153,12 @@ const ProductAdmin = () => {
             </TableBody>
           )}
         </Table>
-        {pagination && (
-          <nav className='flex items-center justify-center p-[30px]'>
-            <ul className='flex items-center justify-center gap-[10px]'>
-              {pagination.currentPage > 1 && (
-                <li>
-                  <button onClick={() => handlePaginationPrevious(pagination.currentPage)} className='cursor-pointer'><PiLessThan /></button>
-                </li>
-              )}
-              {[...Array(pagination.totalPage)].map((_item, index) => {
-                const isActive = pagination.currentPage === (index + 1)
-                return (
-                  <li key={index}>
-                    <button onClick={() => handlePagination((index + 1).toString())} className={`cursor-pointer p-[4px] border rounded-[4px] border-[#525FE1] hover:bg-[#525FE1] ${isActive ? 'bg-[#525FE1]' : 'bg-white'}`}>{index + 1}</button>
-                  </li>
-                )
-              })}
-              {pagination.currentPage < pagination.totalPage && (
-                <li>
-                  <button onClick={() => handlePaginationNext(pagination.currentPage)} className='cursor-pointer'><PiGreaterThan /></button>
-                </li>
-              )}
-            </ul>
-          </nav>
-        )}
+        <PaginationProps
+          pagination={pagination}
+          handlePagination={handlePagination}
+          handlePaginationPrevious={handlePaginationPrevious}
+          handlePaginationNext={handlePaginationNext}
+        />
       </div>
     </>
   )
