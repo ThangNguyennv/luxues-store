@@ -1,22 +1,11 @@
 import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
 
-import type { Pagination, ProductInterface } from '../pages/Admin/Product/Product'
-import type { FilterStatus } from '../pages/Admin/Product/Product'
+import type { ProductAllResponse } from '../pages/Admin/Product/Product'
 
-export const fetchProductAPI = async (status: string): Promise<ProductInterface[]> => {
-  const query = status ? `status=${status}` : ''
-  const response = await axios.get(`${API_ROOT}/admin/products?${query}`)
-  return response.data.products
+export const fetchProductAllAPI = async (status: string, page: number): Promise<ProductAllResponse> => {
+  const queryStatus = status ? `status=${status}` : ''
+  const queryPage = page ? `page=${page}` : '1'
+  const response = await axios.get(`${API_ROOT}/admin/products?${queryStatus}&${queryPage}`)
+  return response.data
 }
-
-export const fetchFilterstatusAPI = async (): Promise<FilterStatus[]> => {
-  const response = await axios.get(`${API_ROOT}/admin/products`)
-  return response.data.filterStatus
-}
-
-export const fetchPaginationAPI = async (): Promise<Pagination> => {
-  const response = await axios.get(`${API_ROOT}/admin/products`)
-  return response.data.pagination
-}
-
