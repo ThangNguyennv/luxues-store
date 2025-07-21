@@ -13,3 +13,7 @@
 input {
     outline: none;
 }
+
+.active {
+    background-color: #525FE1;
+}

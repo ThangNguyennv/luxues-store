@@ -31,9 +31,9 @@ const Header = () => {
             <nav className="md:block hidden">
               <ul className="flex gap-x-[24px] font-[400] text-[16px] text-black">
                 <li><a href="">Trang phục</a></li>
-                <li><a href="">Giày/phụ kiện</a></li>
+                <li><a href="">Giày</a></li>
+                <li><a href="">Phụ kiện</a></li>
                 <li><a href="">Bài Viết</a></li>
-                <li><a href="">Liên hệ</a></li>
               </ul>
             </nav>
             <form className="flex-1 lg:flex hidden items-center gap-x-[12px] px-[16px] py-[12px] bg-[#F0F0F0] rounded-[62px] text-[16px]" action="#">
