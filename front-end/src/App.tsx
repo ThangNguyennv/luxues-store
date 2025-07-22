@@ -21,6 +21,8 @@ import General from './pages/Admin/Setting/General'
 import Advance from './pages/Admin/Setting/Advance'
 import Trash from './pages/Admin/Trash/Trash'
 import User from './pages/Admin/User/User'
+import Login from './pages/Admin/Auth/Login'
+import Logout from './pages/Admin/Auth/Logout'
 
 function App() {
   useEffect(() => {
@@ -43,7 +45,6 @@ function App() {
             <Route path='accounts' element={ <Account />}/>
             <Route path='articles' element={ <ArticleAdmin />}/>
             <Route path='articles-category' element={ <ArticleCategoryAdmin />}/>
-            <Route path='auth' element={ <AuthAdmin />}/>
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='my-account' element={ <MyAccountAdmin />}/>
             <Route path='orders' element={ <OrderAdmin />}/>
@@ -56,6 +57,10 @@ function App() {
             </Route>
             <Route path='trash' element={<Trash />}/>
             <Route path='users' element={<User />}/>
+          </Route>
+          <Route path='/admin/auth' element={<AuthAdmin />}>
+            <Route path='login' element={ <Login />}/>
+            <Route path='logout' element={ <Logout />}/>
           </Route>
         </Routes>
       </BrowserRouter>

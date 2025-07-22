@@ -29,3 +29,9 @@ export interface ProductAllResponseInterface {
   pagination: PaginationInterface;
   currentKeyword: string
 }
+
+export interface LoginResponseInterface {
+  code: number;
+  email: string,
+  password: string
+}
