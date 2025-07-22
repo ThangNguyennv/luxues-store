@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import Product from './pages/Client/Product/Product'
 import Dashboard from './pages/Admin/Dashboard/Dashboard'
 import Account from './pages/Admin/Account/Account'
-import Auth from './pages/Admin/Auth/Auth'
+import AuthAdmin from './pages/Admin/Auth/Auth'
 import ArticleAdmin from './pages/Admin/Article/Article'
 import ArticleCategoryAdmin from './pages/Admin/ArticleCategory/ArticleCategory'
 import MyAccountAdmin from './pages/Admin/MyAccount/MyAccount'
@@ -43,7 +43,7 @@ function App() {
             <Route path='accounts' element={ <Account />}/>
             <Route path='articles' element={ <ArticleAdmin />}/>
             <Route path='articles-category' element={ <ArticleCategoryAdmin />}/>
-            <Route path='auth' element={ <Auth />}/>
+            <Route path='auth' element={ <AuthAdmin />}/>
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='my-account' element={ <MyAccountAdmin />}/>
             <Route path='orders' element={ <OrderAdmin />}/>

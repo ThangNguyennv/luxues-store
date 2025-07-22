@@ -1,1 +1,1 @@
-export const API_ROOT: string = 'http://localhost:3100'
+export const API_ROOT = import.meta.env.VITE_API_ROOT

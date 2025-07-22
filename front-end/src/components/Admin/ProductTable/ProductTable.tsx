@@ -45,7 +45,11 @@ const ProductTableProps = ({ products }: Props) => {
                 <TableCell align="center">${product.price.toLocaleString()}</TableCell>
                 <TableCell align='center'><input type='number' value={product.position} min={'1'} name='position' className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'/></TableCell>
                 <TableCell align='center'>
-                  <a className='border rounded-[5px] bg-[#607D00] p-[5px] text-white'>Hoạt động</a>
+                  {product.status === 'active' ? (
+                    <span className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">Hoạt động</span>
+                  ) : (
+                    <span className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Ngừng hoạt động</span>
+                  )}
                 </TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>

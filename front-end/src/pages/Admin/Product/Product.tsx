@@ -58,6 +58,18 @@ const ProductAdmin = () => {
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
+        <div className='flex items-center justify-between'>
+          <form className='flex gap-[5px]'>
+            <select name="type" id="" className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'>
+              <option disabled selected>-- Chọn hành động --</option>
+              <option value="active">Hoạt động</option>
+              <option value="inactive">Dừng hoạt động</option>
+              <option value="delete-all">Xóa tất cả</option>
+              <option value="change-position">Thay đổi vị trí</option>
+            </select>
+            <button type='submit' className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>Áp dụng</button>
+          </form>
+        </div>
         <ProductTableProps products={products}/>
         <PaginationProps
           pagination={pagination}

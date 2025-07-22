@@ -7,6 +7,7 @@ export interface ProductInterface {
   stock: number,
   position: number,
   accountFullName: string
+  status: string
 }
 
 export interface FilterStatusInterface {
