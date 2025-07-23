@@ -36,3 +36,7 @@ export interface LoginResponseInterface {
   password: string,
   token: string
 }
+
+export interface LogoutResponseInterface {
+  code: number;
+}

@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
-import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
+import type { LogoutResponseInterface } from '~/components/Admin/Types/Interface'
 import type { LoginResponseInterface } from '~/components/Admin/Types/Interface'
+import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
+
 
 export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string): Promise<ProductAllResponseInterface> => {
   const queryParams = new URLSearchParams()
@@ -20,5 +22,12 @@ export const fetchLoginAPI = async (email: string, password: string): Promise<Lo
     { email, password }, {
       withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
     })
+  return response.data
+}
+
+export const fetchLogoutAPI = async (): Promise<LogoutResponseInterface> => {
+  const response = await axios.get(`${API_ROOT}/admin/auth/logout`, {
+    withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
+  })
   return response.data
 }

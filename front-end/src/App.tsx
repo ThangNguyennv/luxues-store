@@ -22,7 +22,6 @@ import Advance from './pages/Admin/Setting/Advance'
 import Trash from './pages/Admin/Trash/Trash'
 import User from './pages/Admin/User/User'
 import Login from './pages/Admin/Auth/Login'
-import Logout from './pages/Admin/Auth/Logout'
 
 function App() {
   useEffect(() => {
@@ -60,7 +59,6 @@ function App() {
           </Route>
           <Route path='/admin/auth' element={<AuthAdmin />}>
             <Route path='login' element={ <Login />}/>
-            <Route path='logout' element={ <Logout />}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,10 +1,14 @@
-import { type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis'
 import backgroundLogin from '~/assets/images/Home/image-login.png'
+import { AlertToast } from '~/components/Alert/Alert'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [alertOpen, setAlertOpen] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = event.currentTarget
@@ -12,16 +16,26 @@ const Login = () => {
     const password = form.password.value
     try {
       const res = await fetchLoginAPI(email, password)
-      // Nếu cần, bạn có thể lưu token vào localStorage ở đây
       if (res.code === 200) {
-        alert('Đăng nhập thành công!')
-        navigate('/admin/dashboard')
+        setAlertMessage('Đăng nhập thành công!')
+        setAlertSeverity('success')
+        setAlertOpen(true)
+
+        setTimeout(() => {
+          navigate('/admin/dashboard')
+        }, 1500)
       } else if (res.code === 400) {
-        alert('Email không tồn tại!')
+        setAlertMessage('Email không tồn tại!')
+        setAlertSeverity('error')
+        setAlertOpen(true)
       } else if (res.code === 401) {
-        alert('Tài khoản hoặc mật khẩu không chính xác')
+        setAlertMessage('Tài khoản hoặc mật khẩu không chính xác')
+        setAlertSeverity('error')
+        setAlertOpen(true)
       } else if (res.code == 402) {
-        alert('Tài khoản đã bị khóa!')
+        setAlertMessage('Tài khoản đã bị khóa!')
+        setAlertSeverity('error')
+        setAlertOpen(true)
       }
     } catch (error) {
       alert('Lỗi!' + error)
@@ -30,6 +44,12 @@ const Login = () => {
 
   return (
     <>
+      <AlertToast
+        open={alertOpen}
+        message={alertMessage}
+        onClose={() => setAlertOpen(false)}
+        severity={alertSeverity}
+      />
       <div className="w-screen h-screen bg-[#9D9995] p-[25px] text-[#ECECEC] flex items-center justify-center">
         <div className='flex items-center gap-[10px] justify-center border rounded-[15px] border-[#231F40] p-[25px] bg-[#827385]'>
           <div className='w-[50%]'>
