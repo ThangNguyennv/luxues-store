@@ -20,20 +20,25 @@ export const loginPost = async (req: Request, res: Response) => {
     }
     if (md5(password) != accountAdmin.password) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'Tài khoản hoặc mật khẩu không chính xác'
       })
       return
     }
     if (accountAdmin.status == 'inactive') {
       res.json({
-        code: 400,
+        code: 402,
         message: 'Tài khoản đã bị khóa!'
       })
       return
     }
     // Tạo token lưu trên cookie
-    res.cookie('token', accountAdmin.token)
+    res.cookie('token', accountAdmin.token, {
+      httpOnly: true,     // ngăn JS đọc được token
+      secure: true,       // chỉ gửi qua HTTPS
+      sameSite: 'none',    //  'None' nếu dùng nhiều domain
+      maxAge: 24 * 60 * 60 * 1000  // 1 ngày
+    })
     res.json({
       code: 200,
       message: 'Đăng nhập thành công!',
@@ -41,7 +46,7 @@ export const loginPost = async (req: Request, res: Response) => {
     })
   } catch (error) {
     res.json({
-      code: 400,
+      code: 403,
       message: 'Lỗi!',
       error: error
     })

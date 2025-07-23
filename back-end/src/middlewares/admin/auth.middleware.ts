@@ -6,8 +6,8 @@ export const requireAuth = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  if (req.headers.authorization) {
-    const token = req.headers.authorization.split(' ')[1]
+  const token = req.cookies.token
+  if (token) {
     const accountAdmin = await Account.findOne({
       token: token,
       deleted: false
@@ -25,7 +25,8 @@ export const requireAuth = async (
   } else {
     res.json({
       code: 400,
-      message: 'Vui lòng gửi kèm token!'
+      message: 'Vui lòng gửi kèm token!',
     })
+    return
   }
 }

@@ -90,8 +90,8 @@ export const product = async (req: Request, res: Response) => {
 // [PATCH] /admin/products/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
   try {
-    const status = req.params.status
-    const id = req.params.id
+    const status: string = req.params.status
+    const id: string = req.params.id
     const updatedBy = {
       account_id: req['accountAdmin'].id,
       updatedAt: new Date()
@@ -195,7 +195,7 @@ export const changeMulti = async (req: Request, res: Response) => {
 // [DELETE] /admin/products/delete/:id
 export const deleteItem = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id
+    const id: string = req.params.id
     await Product.updateOne(
       { _id: id },
       {

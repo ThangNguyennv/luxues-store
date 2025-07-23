@@ -172,8 +172,9 @@ export const editPatch = async (req: Request, res: Response) => {
 // [PATCH] /admin/articles/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
   try {
-    const status = req.params.status
-    const id = req.params.id
+    console.log('accountAdmin:', req['accountAdmin'])
+    const status: string = req.params.status
+    const id: string = req.params.id
 
     const updatedBy = {
       account_id: req['accountAdmin'].id,
@@ -278,7 +279,7 @@ export const changeMulti = async (req: Request, res: Response) => {
 // [DELETE] /admin/articles/delete/:id
 export const deleteItem = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id
+    const id: string = req.params.id
     await Article.updateOne(
       { _id: id },
       {
