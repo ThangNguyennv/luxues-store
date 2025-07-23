@@ -33,5 +33,6 @@ export interface ProductAllResponseInterface {
 export interface LoginResponseInterface {
   code: number;
   email: string,
-  password: string
+  password: string,
+  token: string
 }

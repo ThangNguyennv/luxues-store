@@ -15,7 +15,6 @@ const Login = () => {
       // Nếu cần, bạn có thể lưu token vào localStorage ở đây
       if (res.code === 200) {
         alert('Đăng nhập thành công!')
-        // Redirect to the admin dashboard or another page
         navigate('/admin/dashboard')
       } else if (res.code === 400) {
         alert('Email không tồn tại!')
