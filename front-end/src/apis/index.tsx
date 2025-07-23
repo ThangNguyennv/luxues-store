@@ -10,7 +10,7 @@ export const fetchProductAllAPI = async (status: string, page: number, currentKe
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())
   if (currentKeyword) queryParams.set('keyword', currentKeyword)
-  const response = await axios.get(`${API_ROOT}/admin/products?${queryParams.toString()}`, { 
+  const response = await axios.get(`${API_ROOT}/admin/products?${queryParams.toString()}`, {
     withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
   }
   )
@@ -34,6 +34,13 @@ export const fetchLogoutAPI = async (): Promise<LogoutResponseInterface> => {
 
 export const fetchDashboardAPI = async () => {
   const response = await axios.get(`${API_ROOT}/admin/dashboard`, {
+    withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
+  })
+  return response.data
+}
+
+export const fetchMyAccountAPI = async () => {
+  const response = await axios.get(`${API_ROOT}/admin/my-account`, {
     withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
   })
   return response.data
