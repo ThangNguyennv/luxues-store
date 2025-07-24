@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { fetchMyAccountAPI } from '~/apis'
 
 interface Role {
   title: string;
 }
 
-interface AccountInfo {
+export interface AccountInfo {
   avatar: string;
   fullName: string;
   email: string;
@@ -29,8 +30,7 @@ const MyAccountAdmin = () => {
       {accountInfo && (
         <div className="border rounded-[5px] p-[10px] m-[20px]">
           <p>
-            <b>Avatar:</b>
-            <img src={accountInfo.avatar} alt="Avatar" className="" />
+            <img src={accountInfo.avatar} alt="Avatar" className="w-[150px] h-[150px]" />
           </p>
           <p className='text-[35px] font-[600] text-[#00171F]'><b>Tên:</b> {accountInfo.fullName}</p>
           <p className='text-[35px] font-[600] text-[#00171F]'><b>Email:</b> {accountInfo.email}</p>
@@ -42,6 +42,9 @@ const MyAccountAdmin = () => {
             <b>Trạng thái:</b>
             {accountInfo.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}
           </p>
+          <Link to={'/admin/my-account/edit'} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[15%] text-center'>
+            Chỉnh sửa thông tin
+          </Link>
         </div>
       )}
     </>

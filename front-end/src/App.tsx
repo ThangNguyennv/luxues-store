@@ -22,6 +22,8 @@ import Advance from './pages/Admin/Setting/Advance'
 import Trash from './pages/Admin/Trash/Trash'
 import User from './pages/Admin/User/User'
 import Login from './pages/Admin/Auth/Login'
+import Permission from './pages/Admin/Role/Permission'
+import EditMyAccount from './pages/Admin/MyAccount/Edit'
 
 function App() {
   useEffect(() => {
@@ -46,10 +48,12 @@ function App() {
             <Route path='articles-category' element={ <ArticleCategoryAdmin />}/>
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='my-account' element={ <MyAccountAdmin />}/>
+            <Route path='my-account/edit' element={ <EditMyAccount />}/>
             <Route path='orders' element={ <OrderAdmin />}/>
             <Route path='products' element={ <ProductAdmin />}/>
             <Route path='products-category' element={<ProductCategoryAdmin />}/>
-            <Route path='roles' element={ <Role />}/>
+            <Route path='roles' element={ <Role />} />
+            <Route path='roles/permissions' element={<Permission />} />
             <Route path='settings' element={<LayoutSetting />}>
               <Route path='general' element={<General />}/>
               <Route path='advance' element={<Advance />}/>

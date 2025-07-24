@@ -17,3 +17,21 @@ input {
 .active {
     background-color: #525FE1;
 }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group input {
+    border: 1px solid #192335;
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+.form-group textarea {
+    border: 1px solid #192335;
+    border-radius: 5px;
+    padding-left: 5px;
+}

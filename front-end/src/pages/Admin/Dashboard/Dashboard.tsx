@@ -26,7 +26,6 @@ const Dashboard = () => {
   return (
     <>
       <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Tổng quan</h1>
-      <h1 className="text-[20px] font-[500] text-[#000000] m-[20px">Thông tin tài khoản</h1>
 
       <div className='grid grid-cols-2 gap-[10px] border rounded-[5px] p-[5px]'>
         <div className='border p-[5px]'>

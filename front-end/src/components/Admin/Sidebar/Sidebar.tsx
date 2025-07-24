@@ -1,43 +1,48 @@
+import { NavLink } from 'react-router-dom'
+
 const Sidebar = () => {
   return (
     <div className="sider w-[10%] bg-[#192335] p-[20px] text-[15px] font-[600] text-[#EFF2F2] h-screen">
       <div className="inner-menu">
-        <ul className="flex flex-col gap-[10px]">
+        <ul className="flex flex-col gap-[10px] text-[#F9F9FF] font-[500]">
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Tổng quan</a>
+            <NavLink to={'/admin/dashboard'}>Tổng quan</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Danh mục sản phẩm</a>
+            <NavLink to={'/admin/products-category'}>Danh mục sản phẩm</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Danh sách Sản phẩm</a>
+            <NavLink to={'/admin/products'}>Danh sách Sản phẩm</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Danh sách đơn hàng</a>
+            <NavLink to={'/admin/orders'}>Danh sách đơn hàng</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Danh mục bài viết</a>
+            <NavLink to={'/admin/articles-category'}>Danh mục bài viết</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Danh sách bài viết</a>
+            <NavLink to={'/admin/articles'}>Danh sách bài viết</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Thùng rác</a>
+            <NavLink to={'/admin/trash'}>Thùng rác</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Nhóm quyền</a>
+            <NavLink to={'/admin/roles'}>Nhóm quyền</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Phân quyền</a>
+            <NavLink to={'/admin/roles/permissions'}>Phân quyền</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Tài khoản</a>
+            <NavLink to={'/admin/accounts'}>Tài khoản Admin</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Người dùng</a>
+            <NavLink to={'/admin/users'}>Người dùng</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <a className="text-[#F9F9FF] font-[500]">Cài đặt chung</a>
+            <NavLink to={'/admin/general'}>Cài đặt chung</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/dvance'}>Cài đặt nâng cao</NavLink>
           </li>
         </ul>
       </div>
