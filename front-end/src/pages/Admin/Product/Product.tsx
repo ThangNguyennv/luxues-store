@@ -70,7 +70,7 @@ const ProductAdmin = () => {
             <button type='submit' className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>Áp dụng</button>
           </form>
         </div>
-        <ProductTableProps products={products}/>
+        <ProductTableProps listProducts={products}/>
         <PaginationProps
           pagination={pagination}
           handlePagination={(page) => updateSearchParams('page', page)}

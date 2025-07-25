@@ -28,15 +28,15 @@ const MyAccountAdmin = () => {
     <>
       <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Thông tin tài khoản</h1>
       {accountInfo && (
-        <div className="border rounded-[5px] p-[10px] m-[20px]">
+        <div className="border rounded-[5px] p-[10px] m-[20px] flex flex-col gap-[5px]">
           <p>
             <img src={accountInfo.avatar} alt="Avatar" className="w-[150px] h-[150px]" />
           </p>
-          <p className='text-[35px] font-[600] text-[#00171F]'><b>Tên:</b> {accountInfo.fullName}</p>
+          <p className='text-[35px] font-[600] text-[#00171F]'><b>Họ và tên:</b> {accountInfo.fullName}</p>
           <p className='text-[35px] font-[600] text-[#00171F]'><b>Email:</b> {accountInfo.email}</p>
           <p className='text-[35px] font-[600] text-[#00171F]'><b>Số điện thoại:</b> {accountInfo.phone}</p>
           {role && (
-            <p className='text-[35px] font-[600] text-[#00171F]'><b>Vai trò:</b> {role.title}</p>
+            <div className='text-[35px] font-[600] text-[#00171F]'><b>Vai trò:</b> {role.title}</div>
           )}
           <p className='text-[35px] font-[600] text-[#00171F]'>
             <b>Trạng thái:</b>

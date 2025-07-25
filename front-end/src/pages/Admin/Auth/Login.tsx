@@ -36,6 +36,10 @@ const Login = () => {
         setAlertMessage('Tài khoản đã bị khóa!')
         setAlertSeverity('error')
         setAlertOpen(true)
+      } else if (res.code === 404 || res.code === 405) {
+        setAlertMessage('Vui lòng đăng nhập lại tài khoản mật khẩu!')
+        setAlertSeverity('error')
+        setAlertOpen(true)
       }
     } catch (error) {
       alert('Lỗi!' + error)

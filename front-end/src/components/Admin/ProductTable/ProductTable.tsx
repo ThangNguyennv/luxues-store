@@ -4,14 +4,48 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import type { ProductInterface } from '../Types/Interface'
+import { fetchChangeStatusAPI } from '~/apis'
+import { useEffect, useState } from 'react'
+import { AlertToast } from '~/components/Alert/Alert'
 
 interface Props {
-  products: ProductInterface[]
+  listProducts: ProductInterface[]
 }
 
-const ProductTableProps = ({ products }: Props) => {
+const ProductTableProps = ({ listProducts }: Props) => {
+  const [products, setProducts] = useState<ProductInterface[]>(listProducts)
+  const [alertOpen, setAlertOpen] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
+  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  useEffect(() => {
+    setProducts(listProducts)
+  }, [listProducts])
+  const handleToggleStatus = async (_id: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
+    try {
+      const response = await fetchChangeStatusAPI(newStatus, _id)
+      if (response.code === 200) {
+        setProducts((prevProducts: ProductInterface[]) =>
+          prevProducts.map((product) =>
+            product._id === _id ? { ...product, status: newStatus } : product
+          )
+        )
+        setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
+        setAlertSeverity('success')
+        setAlertOpen(true)
+      }
+    } catch (error) {
+      alert('Lỗi!' + error)
+    }
+  }
   return (
     <>
+      <AlertToast
+        open={alertOpen}
+        message={alertMessage}
+        onClose={() => setAlertOpen(false)}
+        severity={alertSeverity}
+      />
       <Table sx={{
         borderCollapse: 'collapse',
         '& th, & td': {
@@ -46,9 +80,9 @@ const ProductTableProps = ({ products }: Props) => {
                 <TableCell align='center'><input type='number' value={product.position} min={'1'} name='position' className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'/></TableCell>
                 <TableCell align='center'>
                   {product.status === 'active' ? (
-                    <span className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">Hoạt động</span>
+                    <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">Hoạt động</button>
                   ) : (
-                    <span className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Ngừng hoạt động</span>
+                    <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Ngừng hoạt động</button>
                   )}
                 </TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>

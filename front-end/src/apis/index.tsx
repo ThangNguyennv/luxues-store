@@ -48,10 +48,14 @@ export const fetchMyAccountAPI = async () => {
 
 export const fetchUpdateMyAccountAPI = async (formData: FormData) => {
   const response = await axios.patch(`${API_ROOT}/admin/my-account/edit`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
     withCredentials: true // Cho phép gửi cookie và nhận cookie từ server
+  })
+  return response.data
+}
+
+export const fetchChangeStatusAPI = async (status: string, id: string) => {
+  const response = await axios.patch(`${API_ROOT}/admin/products/change-status/${status}/${id}`, { status }, {
+    withCredentials: true
   })
   return response.data
 }

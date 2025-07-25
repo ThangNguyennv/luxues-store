@@ -33,7 +33,9 @@ const Header = () => {
       alert('Lỗi khi đăng xuất: ' + error)
     }
   }
-
+  useEffect(() => {
+    setAccountInfo(accountInfo)
+  }, [accountInfo])
   return (
     <>
       <AlertToast

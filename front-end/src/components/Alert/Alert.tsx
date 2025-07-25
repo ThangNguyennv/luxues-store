@@ -12,7 +12,7 @@ export const AlertToast = ({ open, message, severity, onClose }: ToastAlertProps
     <>
       <Snackbar
         open={open}
-        autoHideDuration={5000}
+        autoHideDuration={3000}
         onClose={onClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >

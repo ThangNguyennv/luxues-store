@@ -9,20 +9,23 @@ const EditMyAccount = () => {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+
   useEffect(() => {
     fetchMyAccountAPI().then((data) => {
       setAccountInfo(data.account)
     })
   }, [])
+
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
-  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
       uploadImagePreviewRef.current.src = URL.createObjectURL(file)
     }
   }
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!accountInfo) return
     const formData = new FormData(event.currentTarget)
@@ -30,17 +33,12 @@ const EditMyAccount = () => {
     formData.set('email', accountInfo.email)
     formData.set('phone', accountInfo.phone)
     formData.set('password', password)
-
     try {
       const response = await fetchUpdateMyAccountAPI(formData)
-      setAccountInfo(response.account)
       if (response.code === 200) {
         setAlertMessage('Đã cập nhật thành công tài khoản!')
         setAlertSeverity('success')
         setAlertOpen(true)
-        setTimeout(() => {
-          window.location.href = '/admin/my-account'
-        }, 1500)
       } else if (response.code === 401) {
         setAlertMessage(`Email ${response.account.email} đã tồn tại, vui lòng chọn email khác!`)
         setAlertSeverity('error')
@@ -124,7 +122,7 @@ const EditMyAccount = () => {
               />
             </div>
           </div>
-          <button type="submit" className="border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Cập nhật</button>
+          <button type="submit" className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Cập nhật</button>
         </form>
       )}
     </>
