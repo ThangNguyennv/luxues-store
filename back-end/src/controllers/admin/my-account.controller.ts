@@ -1,14 +1,21 @@
 import { Request, Response } from 'express'
 import Account from '~/models/account.model'
 import md5 from 'md5'
+import Role from '~/models/role.model'
 
 // [GET] /admin/my-account
 export const index = async (req: Request, res: Response) => {
   try {
-    res.json({
+    const account = await Account.findOne({ _id: req['accountAdmin'].id, deleted: false })
+    const role = await Role.findOne({ _id: account.role_id, deleted: false })
+    if (account && role) {
+      res.json({
       code: 200,
-      message: 'Thành công!'
+      message: 'Thành công!',
+      account: account,
+      role: role
     })
+    }
   } catch (error) {
     res.json({
       code: 400,
@@ -28,7 +35,7 @@ export const editPatch = async (req: Request, res: Response) => {
     })
     if (isEmailExist) {
       res.json({
-        code: 400,
+        code: 401,
         message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
       })
     } else {
@@ -45,7 +52,7 @@ export const editPatch = async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.json({
-      code: 400,
+      code: 402,
       message: 'Lỗi!',
       error: error
     })

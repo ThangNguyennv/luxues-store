@@ -24,7 +24,7 @@ const port: number | string = process.env.PORT || 3000
 app.use(cors({
   origin: 'http://localhost:5173', // FE origin
   credentials: true, // Cho phép gửi cookie từ FE
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],     // Các phương thức HTTP được phép
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],     // Các phương thức HTTP được phép
   allowedHeaders: ['Content-Type', 'Authorization']     // Cho phép các header cần thiết
 }))
 
