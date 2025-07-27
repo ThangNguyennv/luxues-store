@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import type { AccountInfo } from './MyAccount'
 import { fetchMyAccountAPI, fetchUpdateMyAccountAPI } from '~/apis'
+import type { AccountInfoInterface, AccountInterface } from '~/components/Admin/Types/Interface'
 import { AlertToast } from '~/components/Alert/Alert'
 
 const EditMyAccount = () => {
-  const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null)
+  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
   const [password, setPassword] = useState<string>('')
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
-    fetchMyAccountAPI().then((data) => {
+    fetchMyAccountAPI().then((data: AccountInterface) => {
       setAccountInfo(data.account)
     })
   }, [])
@@ -28,17 +28,23 @@ const EditMyAccount = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!accountInfo) return
+
     const formData = new FormData(event.currentTarget)
     formData.set('fullName', accountInfo.fullName)
     formData.set('email', accountInfo.email)
     formData.set('phone', accountInfo.phone)
     formData.set('password', password)
+
     try {
       const response = await fetchUpdateMyAccountAPI(formData)
+      console.log("🚀 ~ Edit.tsx ~ handleSubmit ~ response:", response);
       if (response.code === 200) {
         setAlertMessage('Đã cập nhật thành công tài khoản!')
         setAlertSeverity('success')
         setAlertOpen(true)
+        setTimeout(() => {
+          window.location.href = '/admin/my-account' // Fix load lại trang sau!
+        }, 2000)
       } else if (response.code === 401) {
         setAlertMessage(`Email ${response.account.email} đã tồn tại, vui lòng chọn email khác!`)
         setAlertSeverity('error')
@@ -48,6 +54,7 @@ const EditMyAccount = () => {
       alert('Lỗi!' + error)
     }
   }
+
   return (
     <>
       <AlertToast
@@ -67,12 +74,14 @@ const EditMyAccount = () => {
               type="file"
               className="border rounded-[5px] w-[5%] bg-[#DDDDDD] p-[5px]"
               name="avatar"
-              accept="image/*"/>
+              accept="image/*"
+            />
             <img
               ref={uploadImagePreviewRef}
               src={accountInfo.avatar}
               alt="Avatar preview"
-              className="w-[150px] h-[150px]"/>
+              className="w-[150px] h-[150px]"
+            />
           </div>
           <div className="form-group">
             <label htmlFor="fullName"><b>Họ và tên</b></label>
@@ -85,6 +94,7 @@ const EditMyAccount = () => {
               id="fullName"
               name="fullName"
               value={accountInfo.fullName}
+              required
             />
           </div>
           <div className="form-group">
@@ -97,7 +107,9 @@ const EditMyAccount = () => {
             className=""
             id='email'
             name="email"
-            value={accountInfo.email}/>
+            value={accountInfo.email}
+            required
+            />
           </div>
           <div className="form-group">
             <label htmlFor="phone"><b>Số điện thoại</b></label>
@@ -109,7 +121,8 @@ const EditMyAccount = () => {
             className=""
             id='phone'
             name="phone"
-            value={accountInfo.phone}/>
+            value={accountInfo.phone}
+            />
             <div className="form-group">
               <label htmlFor="password"><b>Mật khẩu</b></label>
               <input

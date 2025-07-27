@@ -9,7 +9,8 @@ const Login = () => {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
     const email = form.email.value
@@ -64,11 +65,11 @@ const Login = () => {
             <form onSubmit={(event) => handleSubmit(event)} className="p-[25px] flex flex-col gap-[15px]">
               <div className='flex flex-col gap-[5px]'>
                 <label htmlFor='email' className="text-[15px] font-[500]">Email:</label>
-                <input type="email" className="border rounded-[10px] border-[#231F40] p-[15px]" name="email"/>
+                <input type="email" className="border rounded-[10px] border-[#231F40] p-[15px]" name="email" required/>
               </div>
               <div className='flex flex-col gap-[5px]'>
                 <label htmlFor='password' className="text-[15px] font-[500]">Mật khẩu:</label>
-                <input type="password" className="border rounded-[10px] border-[#231F40] p-[15px]" name="password"/>
+                <input type="password" className="border rounded-[10px] border-[#231F40] p-[15px]" name="password" required/>
               </div>
               <div className='flex items-center justify-center'>
                 <button className="cursor-pointer p-[5px] border rounded-[10px] border-[#00171F] bg-[#525FE1] text-[#F5F5F5] w-[40%]">

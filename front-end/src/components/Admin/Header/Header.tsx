@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchLogoutAPI, fetchMyAccountAPI } from '~/apis'
 import { AlertToast } from '~/components/Alert/Alert'
-import type { AccountInfo } from '~/pages/Admin/MyAccount/MyAccount'
 import { FaRegUserCircle } from 'react-icons/fa'
+import type { AccountInfoInterface, AccountInterface } from '../Types/Interface'
 
 const Header = () => {
   const navigate = useNavigate()
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
-  const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null)
+  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
 
   useEffect(() => {
-    fetchMyAccountAPI().then((data) => {
-      setAccountInfo(data.account)
+    fetchMyAccountAPI().then((res: AccountInterface) => {
+      setAccountInfo(res.account)
     })
   }, [])
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     try {
       const res = await fetchLogoutAPI()
       if (res.code === 200) {
@@ -33,9 +33,6 @@ const Header = () => {
       alert('Lỗi khi đăng xuất: ' + error)
     }
   }
-  useEffect(() => {
-    setAccountInfo(accountInfo)
-  }, [accountInfo])
   return (
     <>
       <AlertToast

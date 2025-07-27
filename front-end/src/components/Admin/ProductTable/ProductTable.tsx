@@ -7,6 +7,7 @@ import type { ProductInterface } from '../Types/Interface'
 import { fetchChangeStatusAPI } from '~/apis'
 import { useEffect, useState } from 'react'
 import { AlertToast } from '~/components/Alert/Alert'
+import { Link } from 'react-router-dom'
 
 interface Props {
   listProducts: ProductInterface[]
@@ -17,10 +18,12 @@ const ProductTableProps = ({ listProducts }: Props) => {
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+
   useEffect(() => {
     setProducts(listProducts)
   }, [listProducts])
-  const handleToggleStatus = async (_id: string, currentStatus: string) => {
+
+  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     try {
       const response = await fetchChangeStatusAPI(newStatus, _id)
@@ -88,7 +91,7 @@ const ProductTableProps = ({ listProducts }: Props) => {
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>
-                  <a href='#' className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</a>
+                  <Link to={'/admin/products/detail'} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
                   <a href='#' className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</a>
                   <a href='#' className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</a>
                 </TableCell>

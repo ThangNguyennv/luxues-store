@@ -25,6 +25,7 @@ import Login from './pages/Admin/Auth/Login'
 import Permission from './pages/Admin/Role/Permission'
 import EditMyAccount from './pages/Admin/MyAccount/Edit'
 import PrivateRoute from './components/Admin/PrivateRoute/PrivateRoute '
+import DetailProducts from './pages/Admin/Product/Detail'
 
 function App() {
   useEffect(() => {
@@ -52,6 +53,7 @@ function App() {
             <Route path='my-account/edit' element={ <EditMyAccount />}/>
             <Route path='orders' element={ <OrderAdmin />}/>
             <Route path='products' element={ <ProductAdmin />}/>
+            <Route path='products/detail' element={ <DetailProducts />}/>
             <Route path='products-category' element={<ProductCategoryAdmin />}/>
             <Route path='roles' element={ <Role />} />
             <Route path='roles/permissions' element={<Permission />} />

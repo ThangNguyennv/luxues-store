@@ -1,29 +1,19 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import { fetchMyAccountAPI } from '~/apis'
-
-interface Role {
-  title: string;
-}
-
-export interface AccountInfo {
-  avatar: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  role: Role;
-  status: string;
-};
+import type { AccountInfoInterface, AccountInterface, RoleInterface } from '~/components/Admin/Types/Interface'
 
 const MyAccountAdmin = () => {
-  const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null)
-  const [role, setRole] = useState<Role | null>(null)
+  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
+  const [role, setRole] = useState<RoleInterface | null>(null)
+
   useEffect(() => {
-    fetchMyAccountAPI().then((data) => {
+    fetchMyAccountAPI().then((data: AccountInterface) => {
       setAccountInfo(data.account)
       setRole(data.role)
     })
   }, [])
+
   return (
     <>
       <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Thông tin tài khoản</h1>

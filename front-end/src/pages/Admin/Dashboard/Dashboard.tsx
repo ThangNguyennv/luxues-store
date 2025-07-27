@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchDashboardAPI } from '~/apis'
+import type { DashboardInterface } from '~/components/Admin/Types/Interface'
 
 const Dashboard = () => {
   const [statistic, setStatistic] = useState({
@@ -13,16 +14,16 @@ const Dashboard = () => {
       total: 0, active: 0, inactive: 0
     },
     user: {
-      total: 0,
-      active: 0,
-      inactive: 0
+      total: 0, active: 0, inactive: 0
     }
   })
+
   useEffect(() => {
-    fetchDashboardAPI().then((data) => {
+    fetchDashboardAPI().then((data: DashboardInterface) => {
       setStatistic(data.statistic)
     })
   }, [])
+
   return (
     <>
       <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Tổng quan</h1>

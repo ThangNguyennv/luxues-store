@@ -40,3 +40,38 @@ export interface LoginResponseInterface {
 export interface LogoutResponseInterface {
   code: number;
 }
+
+interface StatisticGroup {
+  total: number;
+  active: number;
+  inactive: number;
+}
+
+interface Statistic {
+  categoryProduct: StatisticGroup;
+  product: StatisticGroup;
+  account: StatisticGroup;
+  user: StatisticGroup;
+}
+
+export interface DashboardInterface {
+  statistic: Statistic
+}
+
+export interface RoleInterface {
+  title: string;
+}
+
+export interface AccountInfoInterface {
+  avatar: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  status: string;
+  token: string
+};
+
+export interface AccountInterface {
+  account: AccountInfoInterface
+  role: RoleInterface;
+}
