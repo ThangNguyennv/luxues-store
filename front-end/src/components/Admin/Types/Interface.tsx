@@ -9,6 +9,7 @@ export interface ProductDetailInterface {
   accountFullName: string
   status: string
   description: string
+  featured: string
 }
 
 export interface FilterStatusInterface {

@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI } from '~/apis'
 import type { ProductDetailInterface, ProductInterface } from '~/components/Admin/Types/Interface'
+import { stripHTML } from '~/utils/stripHTML'
 
 const DetailProduct = () => {
   const [productDetail, setProductDetail] = useState<ProductDetailInterface | null>(null)
   const params = useParams()
-  const id = params.id as string
+  const id = params.id
 
   useEffect(() => {
     if (!id) return
@@ -31,7 +32,7 @@ const DetailProduct = () => {
             Còn lại: <b>{productDetail.stock}</b>
           </div>
           <div>
-            <img src={productDetail.thumbnail} alt={productDetail.title}/>
+            <img src={productDetail.thumbnail} alt={productDetail.title} className='w-[150px] h-[150px]'/>
           </div>
           <div>
             Trạng thái: <b>{productDetail.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}</b>
@@ -40,7 +41,7 @@ const DetailProduct = () => {
             Vị trí: <b>{productDetail.position}</b>
           </div>
           <div>
-            Mô tả: <b>{productDetail.description}</b>
+            Mô tả: <b>{stripHTML(productDetail.description)}</b>
           </div>
           <Link to={`/admin/products/edit/${id}`} className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</Link>
         </div>

@@ -75,3 +75,12 @@ export const fetchDetailProductAPI = async (id: string): Promise<ProductInterfac
   )
   return response.data
 }
+
+export const fetchEditProductAPI = async (id: string, formData: FormData) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/products/edit/${id}`,
+    formData,
+    { withCredentials: true }
+  )
+  return response.data
+}
