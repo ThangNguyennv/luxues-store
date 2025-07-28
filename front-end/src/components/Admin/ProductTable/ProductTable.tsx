@@ -90,7 +90,7 @@ const ProductTableProps = ({ listProducts }: Props) => {
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>
-                  <Link to={'/admin/products/detail'} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
+                  <Link to={`/admin/products/detail/${product._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
                   <a href='#' className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</a>
                   <a href='#' className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</a>
                 </TableCell>

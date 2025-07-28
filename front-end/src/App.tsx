@@ -25,7 +25,8 @@ import Login from './pages/Admin/Auth/Login'
 import Permission from './pages/Admin/Role/Permission'
 import EditMyAccount from './pages/Admin/MyAccount/Edit'
 import PrivateRoute from './components/Admin/PrivateRoute/PrivateRoute '
-import DetailProducts from './pages/Admin/Product/Detail'
+import DetailProduct from './pages/Admin/Product/Detail'
+import EditProduct from './pages/Admin/Product/Edit'
 
 function App() {
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
     })
     AOS.refresh() // đảm bảo refresh lại khi nội dung động
   }, [])
+
   return (
     <>
       <BrowserRouter>
@@ -53,7 +55,8 @@ function App() {
             <Route path='my-account/edit' element={ <EditMyAccount />}/>
             <Route path='orders' element={ <OrderAdmin />}/>
             <Route path='products' element={ <ProductAdmin />}/>
-            <Route path='products/detail' element={ <DetailProducts />}/>
+            <Route path='products/detail/:id' element={ <DetailProduct />}/>
+            <Route path='products/edit/:id' element={<EditProduct />}/>
             <Route path='products-category' element={<ProductCategoryAdmin />}/>
             <Route path='roles' element={ <Role />} />
             <Route path='roles/permissions' element={<Permission />} />

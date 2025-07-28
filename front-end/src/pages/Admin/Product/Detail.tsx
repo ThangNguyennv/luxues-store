@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI } from '~/apis'
 import type { ProductDetailInterface, ProductInterface } from '~/components/Admin/Types/Interface'
 
-const DetailProducts = () => {
+const DetailProduct = () => {
   const [productDetail, setProductDetail] = useState<ProductDetailInterface | null>(null)
-  const [id, setId] = useState('')
+  const params = useParams()
+  const id = params.id as string
 
   useEffect(() => {
-    fetchDetailProductAPI(id).then((res: ProductInterface) => {
-      setProductDetail(res.product)
-    })
+    if (!id) return
+    fetchDetailProductAPI(id)
+      .then((response: ProductInterface) => {
+        setProductDetail(response.product)
+      })
   }, [id])
+
   return (
     <>
       {productDetail && (
-        <div>
+        <div className='flex flex-col gap-[10px]'>
           <h1 className='text-[35px] font-[600] text-[#00171F] underline'>{productDetail.title}</h1>
           <div className=''>
             Giá: <b>${productDetail.price}</b>
@@ -29,7 +34,7 @@ const DetailProducts = () => {
             <img src={productDetail.thumbnail} alt={productDetail.title}/>
           </div>
           <div>
-            Trạng thái: <b>{productDetail.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}</b>
+            Trạng thái: <b>{productDetail.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}</b>
           </div>
           <div>
             Vị trí: <b>{productDetail.position}</b>
@@ -37,11 +42,11 @@ const DetailProducts = () => {
           <div>
             Mô tả: <b>{productDetail.description}</b>
           </div>
-          <button className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</button>
+          <Link to={`/admin/products/edit/${id}`} className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</Link>
         </div>
       )}
     </>
   )
 }
 
-export default DetailProducts
+export default DetailProduct

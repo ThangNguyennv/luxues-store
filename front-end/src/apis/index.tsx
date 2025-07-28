@@ -9,6 +9,7 @@ export const fetchProductAllAPI = async (status: string, page: number, currentKe
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())
   if (currentKeyword) queryParams.set('keyword', currentKeyword)
+
   const response = await axios.get(
     `${API_ROOT}/admin/products?${queryParams.toString()}`,
     { withCredentials: true }
@@ -59,7 +60,8 @@ export const fetchUpdateMyAccountAPI = async (formData: FormData) => {
 }
 
 export const fetchChangeStatusAPI = async (status: string, id: string) => {
-  const response = await axios.patch(`${API_ROOT}/admin/products/change-status/${status}/${id}`,
+  const response = await axios.patch(
+    `${API_ROOT}/admin/products/change-status/${status}/${id}`,
     { status },
     { withCredentials: true }
   )
@@ -67,6 +69,9 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
 }
 
 export const fetchDetailProductAPI = async (id: string): Promise<ProductInterface> => {
-  const response = await axios.get(`${API_ROOT}/admin/products/detail/${id}`)
+  const response = await axios.get(
+    `${API_ROOT}/admin/products/detail/${id}`,
+    { withCredentials: true }
+  )
   return response.data
 }
