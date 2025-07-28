@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
-import type { AccountInterface, DashboardInterface, LogoutResponseInterface, UpdateMyAccountInterface } from '~/components/Admin/Types/Interface'
+import type { AccountInterface, DashboardInterface, LogoutResponseInterface, ProductInterface } from '~/components/Admin/Types/Interface'
 import type { LoginResponseInterface } from '~/components/Admin/Types/Interface'
 import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
 
@@ -66,6 +66,7 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
   return response.data
 }
 
-export const fetchDetailProductAPI = async (id: string) => {
+export const fetchDetailProductAPI = async (id: string): Promise<ProductInterface> => {
   const response = await axios.get(`${API_ROOT}/admin/products/detail/${id}`)
+  return response.data
 }

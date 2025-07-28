@@ -7,8 +7,8 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const [token, setToken] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    fetchMyAccountAPI().then((data: AccountInterface) => {
-      setToken(data.account.token)
+    fetchMyAccountAPI().then((response: AccountInterface) => {
+      setToken(response.account.token)
     })
       .catch(() => {
         setToken(null) // nếu lỗi thì vẫn set null

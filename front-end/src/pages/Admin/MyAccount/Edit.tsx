@@ -11,8 +11,8 @@ const EditMyAccount = () => {
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
-    fetchMyAccountAPI().then((data: AccountInterface) => {
-      setAccountInfo(data.account)
+    fetchMyAccountAPI().then((res: AccountInterface) => {
+      setAccountInfo(res.account)
     })
   }, [])
 
@@ -35,23 +35,18 @@ const EditMyAccount = () => {
     formData.set('phone', accountInfo.phone)
     formData.set('password', password)
 
-    try {
-      const response = await fetchUpdateMyAccountAPI(formData)
-      console.log("🚀 ~ Edit.tsx ~ handleSubmit ~ response:", response);
-      if (response.code === 200) {
-        setAlertMessage('Đã cập nhật thành công tài khoản!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
-        setTimeout(() => {
-          window.location.href = '/admin/my-account' // Fix load lại trang sau!
-        }, 2000)
-      } else if (response.code === 401) {
-        setAlertMessage(`Email ${response.account.email} đã tồn tại, vui lòng chọn email khác!`)
-        setAlertSeverity('error')
-        setAlertOpen(true)
-      }
-    } catch (error) {
-      alert('Lỗi!' + error)
+    const response = await fetchUpdateMyAccountAPI(formData)
+    if (response.code === 200) {
+      setAlertMessage('Đã cập nhật thành công tài khoản!')
+      setAlertSeverity('success')
+      setAlertOpen(true)
+      setTimeout(() => {
+        window.location.href = '/admin/my-account' // Fix load lại trang sau!
+      }, 2000)
+    } else if (response.code === 409) {
+      setAlertMessage(`Email ${response.account.email} đã tồn tại, vui lòng chọn email khác!`)
+      setAlertSeverity('error')
+      setAlertOpen(true)
     }
   }
 

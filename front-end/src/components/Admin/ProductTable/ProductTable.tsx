@@ -3,18 +3,18 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import type { ProductInterface } from '../Types/Interface'
+import type { ProductDetailInterface } from '../Types/Interface'
 import { fetchChangeStatusAPI } from '~/apis'
 import { useEffect, useState } from 'react'
 import { AlertToast } from '~/components/Alert/Alert'
 import { Link } from 'react-router-dom'
 
 interface Props {
-  listProducts: ProductInterface[]
+  listProducts: ProductDetailInterface[]
 }
 
 const ProductTableProps = ({ listProducts }: Props) => {
-  const [products, setProducts] = useState<ProductInterface[]>(listProducts)
+  const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
@@ -25,20 +25,19 @@ const ProductTableProps = ({ listProducts }: Props) => {
 
   const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    try {
-      const response = await fetchChangeStatusAPI(newStatus, _id)
-      if (response.code === 200) {
-        setProducts((prevProducts: ProductInterface[]) =>
-          prevProducts.map((product) =>
-            product._id === _id ? { ...product, status: newStatus } : product
-          )
+    const response = await fetchChangeStatusAPI(newStatus, _id)
+    if (response.code === 200) {
+      setProducts((prevProducts: ProductDetailInterface[]) =>
+        prevProducts.map((product) =>
+          product._id === _id ? { ...product, status: newStatus } : product
         )
-        setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
-      }
-    } catch (error) {
-      alert('Lỗi!' + error)
+      )
+      setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
+      setAlertSeverity('success')
+      setAlertOpen(true)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
     }
   }
   return (

@@ -15,35 +15,27 @@ const Login = () => {
     const form = event.currentTarget
     const email = form.email.value
     const password = form.password.value
-    try {
-      const res = await fetchLoginAPI(email, password)
-      if (res.code === 200) {
-        setAlertMessage('Đăng nhập thành công!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
+    const res = await fetchLoginAPI(email, password)
+    if (res.code === 200) {
+      setAlertMessage('Đăng nhập thành công!')
+      setAlertSeverity('success')
+      setAlertOpen(true)
 
-        setTimeout(() => {
-          navigate('/admin/dashboard')
-        }, 1500)
-      } else if (res.code === 400) {
-        setAlertMessage('Email không tồn tại!')
-        setAlertSeverity('error')
-        setAlertOpen(true)
-      } else if (res.code === 401) {
-        setAlertMessage('Tài khoản hoặc mật khẩu không chính xác')
-        setAlertSeverity('error')
-        setAlertOpen(true)
-      } else if (res.code == 402) {
-        setAlertMessage('Tài khoản đã bị khóa!')
-        setAlertSeverity('error')
-        setAlertOpen(true)
-      } else if (res.code === 404 || res.code === 405) {
-        setAlertMessage('Vui lòng đăng nhập lại tài khoản mật khẩu!')
-        setAlertSeverity('error')
-        setAlertOpen(true)
-      }
-    } catch (error) {
-      alert('Lỗi!' + error)
+      setTimeout(() => {
+        navigate('/admin/dashboard')
+      }, 1500)
+    } else if (res.code === 401) {
+      setAlertMessage('Tài khoản hoặc mật khẩu không chính xác')
+      setAlertSeverity('error')
+      setAlertOpen(true)
+    } else if (res.code == 403) {
+      setAlertMessage('Tài khoản đã bị khóa!')
+      setAlertSeverity('error')
+      setAlertOpen(true)
+    } else if (res.code === 400) {
+      setAlertMessage('Vui lòng đăng nhập lại tài khoản mật khẩu!')
+      setAlertSeverity('error')
+      setAlertOpen(true)
     }
   }
 

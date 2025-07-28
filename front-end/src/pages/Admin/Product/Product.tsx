@@ -6,13 +6,13 @@ import FilterStatusProps from '~/components/Admin/FilterStatus/FilterStatus'
 import PaginationProps from '~/components/Admin/Pagination/Pagination'
 import ProductTableProps from '~/components/Admin/ProductTable/ProductTable'
 import SearchProps from '~/components/Admin/Search/Search'
-import type { ProductInterface } from '~/components/Admin/Types/Interface'
+import type { ProductDetailInterface } from '~/components/Admin/Types/Interface'
 import type { FilterStatusInterface } from '~/components/Admin/Types/Interface'
 import type { PaginationInterface } from '~/components/Admin/Types/Interface'
 import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
 
 const ProductAdmin = () => {
-  const [products, setProducts] = useState<ProductInterface[]>([])
+  const [products, setProducts] = useState<ProductDetailInterface[]>([])
   const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])
   const [pagination, setPagination] = useState<PaginationInterface | null>(null)
   const [keyword, setKeyword] = useState('')

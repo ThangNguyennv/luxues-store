@@ -13,24 +13,23 @@ const Header = () => {
   const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
 
   useEffect(() => {
-    fetchMyAccountAPI().then((res: AccountInterface) => {
-      setAccountInfo(res.account)
+    fetchMyAccountAPI().then((response: AccountInterface) => {
+      setAccountInfo(response.account)
     })
   }, [])
 
   const handleLogout = async (): Promise<void> => {
-    try {
-      const res = await fetchLogoutAPI()
-      if (res.code === 200) {
-        setAlertMessage('Đăng xuất thành công!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
-        setTimeout(() => {
-          navigate('/admin/auth/login')
-        })
-      }
-    } catch (error) {
-      alert('Lỗi khi đăng xuất: ' + error)
+    const response = await fetchLogoutAPI()
+    if (response.code === 200) {
+      setAlertMessage('Đăng xuất thành công!')
+      setAlertSeverity('success')
+      setAlertOpen(true)
+      setTimeout(() => {
+        navigate('/admin/auth/login')
+      })
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
     }
   }
   return (

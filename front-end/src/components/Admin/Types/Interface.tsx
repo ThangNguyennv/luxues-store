@@ -1,4 +1,4 @@
-export interface ProductInterface {
+export interface ProductDetailInterface {
   _id: string;
   title: string;
   price: number;
@@ -8,6 +8,7 @@ export interface ProductInterface {
   position: number,
   accountFullName: string
   status: string
+  description: string
 }
 
 export interface FilterStatusInterface {
@@ -24,7 +25,7 @@ export interface PaginationInterface {
 }
 
 export interface ProductAllResponseInterface {
-  products: ProductInterface[];
+  products: ProductDetailInterface[];
   filterStatus: FilterStatusInterface[];
   pagination: PaginationInterface;
   currentKeyword: string
@@ -38,6 +39,7 @@ export interface LoginResponseInterface {
 }
 
 export interface LogoutResponseInterface {
+  error: Error,
   code: number;
 }
 
@@ -74,4 +76,8 @@ export interface AccountInfoInterface {
 export interface AccountInterface {
   account: AccountInfoInterface
   role: RoleInterface;
+}
+
+export interface ProductInterface {
+  product: ProductDetailInterface
 }
