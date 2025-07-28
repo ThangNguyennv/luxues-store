@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI } from '~/apis'
 import type { ProductDetailInterface, ProductInterface } from '~/components/Admin/Types/Interface'
-import { stripHTML } from '~/utils/stripHTML'
 
 const DetailProduct = () => {
   const [productDetail, setProductDetail] = useState<ProductDetailInterface | null>(null)
@@ -16,7 +15,6 @@ const DetailProduct = () => {
         setProductDetail(response.product)
       })
   }, [id])
-
   return (
     <>
       {productDetail && (
@@ -41,7 +39,7 @@ const DetailProduct = () => {
             Vị trí: <b>{productDetail.position}</b>
           </div>
           <div>
-            Mô tả: <b>{stripHTML(productDetail.description)}</b>
+            Mô tả: <div dangerouslySetInnerHTML={{ __html: productDetail.description }} />
           </div>
           <Link to={`/admin/products/edit/${id}`} className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</Link>
         </div>

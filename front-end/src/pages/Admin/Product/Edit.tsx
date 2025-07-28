@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis'
 import type { ProductDetailInterface, ProductInterface } from '~/components/Admin/Types/Interface'
 import { AlertToast } from '~/components/Alert/Alert'
-import { stripHTML } from '~/utils/stripHTML'
+import { Editor } from '@tinymce/tinymce-react'
+import { API_KEY } from '~/utils/constants'
 
 const EditProduct = () => {
   const [productInfo, setProductInfo] = useState<ProductDetailInterface | null>(null)
@@ -53,6 +54,9 @@ const EditProduct = () => {
         navigate(`/admin/products/detail/${id}`)
       }, 2000)
     }
+  }
+  if (productInfo) {
+    console.log(productInfo.description)
   }
   return (
     <>
@@ -106,14 +110,16 @@ const EditProduct = () => {
 
           <div className="form-group">
             <label htmlFor="desc">Mô tả</label>
-            <textarea
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, description: event.target.value }: productInfo)}
-              name="description" id="desc"
-              className="textarea-mce outline-none"
-              rows={5}
-            >
-              {stripHTML(productInfo.description)}
-            </textarea>
+            <Editor
+              apiKey={API_KEY}
+              init={{
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+              }}
+              value={productInfo.description}
+              onEditorChange={(newValue) => setProductInfo(productInfo ? { ...productInfo, description: newValue }: productInfo)}
+              id="desc"
+            />
           </div>
 
           <div className="form-group">
