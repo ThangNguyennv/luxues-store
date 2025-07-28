@@ -14,7 +14,7 @@ export const requireAuth = async (
     }).select('-password')
     if (!user) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'Token không hợp lệ!'
       })
       return
@@ -23,7 +23,7 @@ export const requireAuth = async (
     next()
   } else {
     res.json({
-      code: 400,
+      code: 401,
       message: 'Vui lòng gửi kèm token!'
     })
   }

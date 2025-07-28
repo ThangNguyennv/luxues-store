@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@tinymce/tinymce-react": "^6.2.1",
     "@types/multer": "^2.0.0",
     "body-parser": "^2.2.0",
     "cloudinary": "^2.7.0",

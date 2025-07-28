@@ -16,7 +16,7 @@ export const requireAuth = async (
 
     if (!accountAdmin) {
       res.json({
-        code: 404,
+        code: 401,
         message: 'Token không hợp lệ!'
       })
       return
@@ -25,7 +25,7 @@ export const requireAuth = async (
     next()
   } else {
     res.json({
-      code: 405,
+      code: 401,
       message: 'Vui lòng gửi kèm token!',
     })
     return
