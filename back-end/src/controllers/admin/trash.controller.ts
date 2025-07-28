@@ -74,7 +74,7 @@ export const changeMulti = async (req: Request, res: Response) => {
       case Key.DELETEALL:
         await Product.deleteMany({ _id: { $in: ids } })
         res.json({
-          code: 200,
+          code: 204,
           message: `Đã xóa vĩnh viễn thành công ${ids.length} sản phẩm!`
         })
         break
@@ -90,7 +90,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         break
       default:
         res.json({
-          code: 400,
+          code: 404,
           message: 'Không tồn tại!'
         })
         break
@@ -110,7 +110,7 @@ export const permanentlyDeleteItem = async (req: Request, res: Response) => {
     const id = req.params.id
     await Product.deleteOne({ _id: id })
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công sản phẩm!'
     })
   } catch (error) {

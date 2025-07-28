@@ -11,13 +11,6 @@ export const loginPost = async (req: Request, res: Response) => {
       email: email,
       deleted: false
     })
-    if (!accountAdmin) {
-      res.json({
-        code: 400,
-        message: 'Email không tồn tại!'
-      })
-      return
-    }
     if (md5(password) != accountAdmin.password) {
       res.json({
         code: 401,
@@ -27,7 +20,7 @@ export const loginPost = async (req: Request, res: Response) => {
     }
     if (accountAdmin.status == 'inactive') {
       res.json({
-        code: 402,
+        code: 403,
         message: 'Tài khoản đã bị khóa!'
       })
       return
@@ -46,7 +39,7 @@ export const loginPost = async (req: Request, res: Response) => {
     })
   } catch (error) {
     res.json({
-      code: 403,
+      code: 400,
       message: 'Lỗi!',
       error: error
     })

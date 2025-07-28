@@ -52,7 +52,7 @@ export const editPatch = async (req: Request, res: Response) => {
     })
     if (isEmailExist) {
       res.json({
-        code: 400,
+        code: 409,
         message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
       })
     } else {
@@ -104,7 +104,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     const id = req.params.id
     await User.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công người dùng!'
     })
   } catch (error) {

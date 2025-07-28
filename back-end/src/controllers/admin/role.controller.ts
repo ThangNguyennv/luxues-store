@@ -41,7 +41,7 @@ export const createPost = async (req: Request, res: Response) => {
     const record = new Role(req.body)
     await record.save()
     res.json({
-      code: 200,
+      code: 201,
       message: 'Tạo thành công nhóm quyền!'
     })
   } catch (error) {
@@ -97,7 +97,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       }
     )
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công sản phẩm!'
     })
   } catch (error) {

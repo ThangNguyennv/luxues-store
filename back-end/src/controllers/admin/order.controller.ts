@@ -134,7 +134,7 @@ export const changeStatus = async (req: Request, res: Response) => {
       }
     )
     res.json({
-      code: 400,
+      code: 200,
       message: 'Cập nhật trạng thái thành công!'
     })
   } catch (error) {
@@ -188,13 +188,13 @@ export const changeMulti = async (req: Request, res: Response) => {
           { deleted: 'true', deletedAt: new Date() }
         )
         res.json({
-          code: 200,
+          code: 204,
           message: `Đã hủy thành công ${ids.length} đơn hàng!`
         })
         break
       default:
         res.json({
-          code: 400,
+          code: 404,
           message: 'Không tồn tại!'
         })
         break
@@ -223,7 +223,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       }
     )
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công đơn hàng!'
     })
   } catch (error) {
@@ -282,7 +282,7 @@ export const recoverPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: '`Đã khôi phục thành công đơn hàng!`!'
+      message: 'Đã khôi phục thành công đơn hàng!'
     })
   } catch (error) {
     res.json({

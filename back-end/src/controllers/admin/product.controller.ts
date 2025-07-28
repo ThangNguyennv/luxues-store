@@ -159,7 +159,7 @@ export const changeMulti = async (req: Request, res: Response) => {
           { deleted: 'true', deletedAt: new Date() }
         )
         res.json({
-          code: 200,
+          code: 204,
           message: `Đã xóa thành công ${ids.length} sản phẩm!`
         })
         break
@@ -178,7 +178,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         break
       default:
         res.json({
-          code: 400,
+          code: 404,
           message: 'Không tồn tại!'
         })
         break
@@ -207,7 +207,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       }
     )
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công sản phẩm!'
     })
   } catch (error) {
@@ -237,7 +237,7 @@ export const createPost = async (req: Request, res: Response) => {
     const records = new Product(req.body)
     await records.save()
     res.json({
-      code: 200,
+      code: 201,
       message: 'Đã thêm thành công sản phẩm!',
       data: req.body
     })

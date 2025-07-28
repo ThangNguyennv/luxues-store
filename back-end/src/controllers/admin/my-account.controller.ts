@@ -35,7 +35,7 @@ export const editPatch = async (req: Request, res: Response) => {
     })
     if (isEmailExist) {
       res.json({
-        code: 401,
+        code: 409,
         message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
       })
     } else {
@@ -52,7 +52,7 @@ export const editPatch = async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.json({
-      code: 402,
+      code: 400,
       message: 'Lỗi!',
       error: error
     })

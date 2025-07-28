@@ -34,24 +34,24 @@ export const index = async (req: Request, res: Response) => {
 // [POST] /admin/accounts/create
 export const createPost = async (req: Request, res: Response) => {
   try {
+    const email = req.body.email
     const isEmailExist = await Account.findOne({
-      email: req.body.email,
+      email: email,
       deleted: false
     })
     if (isEmailExist) {
       res.json({
-        code: 400,
-        message: 'Email đã tồn tại, vui lòng chọn email khác!'
+        code: 409,
+        message: `Email ${email} đã tồn tại, vui lòng chọn email khác!`
       })
       return
     } else {
-      // md5() -> Mật khẩu sẽ bị mã hóa khi gửi lên db
       req.body.password = md5(req.body.password)
 
       const record = new Account(req.body)
       await record.save()
       res.json({
-        code: 200,
+        code: 201,
         message: 'Thêm tài khoản thành công!'
       })
     }
@@ -72,7 +72,7 @@ export const changeStatus = async (req: Request, res: Response) => {
     await Account.updateOne({ _id: id }, { status: status })
     res.json({
       code: 200,
-      message: ' Cập nhật trạng thái thành công!'
+      message: 'Cập nhật trạng thái thành công!'
     })
   } catch (error) {
     res.json({
@@ -93,7 +93,7 @@ export const editPatch = async (req: Request, res: Response) => {
     })
     if (isEmailExist) {
       res.json({
-        code: 400,
+        code: 409,
         message: `Email ${req.body.email} đã tồn tại, vui lòng chọn email khác!`
       })
       return
@@ -158,7 +158,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       { deleted: true, deletedAt: new Date() }
     )
     res.json({
-      code: 200,
+      code: 204,
       message: 'Đã xóa thành công tài khoản!'
     })
   } catch (error) {
