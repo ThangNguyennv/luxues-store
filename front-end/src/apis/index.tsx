@@ -84,3 +84,11 @@ export const fetchEditProductAPI = async (id: string, formData: FormData) => {
   )
   return response.data
 }
+
+export const fetchDeleteProductAPI = async (id: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/admin/products/delete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}

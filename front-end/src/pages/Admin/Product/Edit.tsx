@@ -55,9 +55,6 @@ const EditProduct = () => {
       }, 2000)
     }
   }
-  if (productInfo) {
-    console.log(productInfo.description)
-  }
   return (
     <>
       <AlertToast

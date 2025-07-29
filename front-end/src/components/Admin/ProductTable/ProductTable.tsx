@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import type { ProductDetailInterface } from '../Types/Interface'
-import { fetchChangeStatusAPI } from '~/apis'
+import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis'
 import { useEffect, useState } from 'react'
 import { AlertToast } from '~/components/Alert/Alert'
 import { Link } from 'react-router-dom'
@@ -35,6 +35,23 @@ const ProductTableProps = ({ listProducts }: Props) => {
       setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
       setAlertSeverity('success')
       setAlertOpen(true)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
+  const handleDeleteProduct = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này')
+    const response = await fetchDeleteProductAPI(_id)
+    if (response.code === 204) {
+      if (isConfirm) {
+        setProducts((prevProducts) =>
+          prevProducts.filter((product) => product._id !== _id)
+        )
+        setAlertMessage('Đã xóa thành công sản phẩm!')
+        setAlertSeverity('success')
+        setAlertOpen(true)
+      }
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -81,7 +98,7 @@ const ProductTableProps = ({ listProducts }: Props) => {
                 <TableCell align="center">${product.price.toLocaleString()}</TableCell>
                 <TableCell align='center'><input type='number' value={product.position} min={'1'} name='position' className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'/></TableCell>
                 <TableCell align='center'>
-                  {product.status === 'active' ? (
+                  {product.status === 'active' ? (  
                     <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">Hoạt động</button>
                   ) : (
                     <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Ngừng hoạt động</button>
@@ -92,7 +109,7 @@ const ProductTableProps = ({ listProducts }: Props) => {
                 <TableCell align='center'>
                   <Link to={`/admin/products/detail/${product._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
                   <Link to={`/admin/products/edit/${product._id}`} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</Link>
-                  <a href='#' className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</a>
+                  <button onClick={() => handleDeleteProduct(product._id)} className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
                 </TableCell>
               </TableRow>
             ))}
