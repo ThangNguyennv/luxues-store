@@ -1,6 +1,6 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Navigate } from 'react-router-dom'
-import { fetchMyAccountAPI } from '~/apis'
+import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
 import type { AccountInterface } from '../Types/Interface'
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {

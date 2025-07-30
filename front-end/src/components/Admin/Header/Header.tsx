@@ -1,37 +1,18 @@
-import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { fetchLogoutAPI, fetchMyAccountAPI } from '~/apis'
+import { Link } from 'react-router-dom'
 import { AlertToast } from '~/components/Alert/Alert'
 import { FaRegUserCircle } from 'react-icons/fa'
-import type { AccountInfoInterface, AccountInterface } from '../Types/Interface'
+import { useHeaderAdmin } from '~/hooks/Admin/Header/useHeader'
 
 const Header = () => {
-  const navigate = useNavigate()
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
-  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
+  const {
+    alertOpen,
+    setAlertOpen,
+    alertMessage,
+    alertSeverity,
+    accountInfo,
+    handleLogout
+  } = useHeaderAdmin()
 
-  useEffect(() => {
-    fetchMyAccountAPI().then((response: AccountInterface) => {
-      setAccountInfo(response.account)
-    })
-  }, [])
-
-  const handleLogout = async (): Promise<void> => {
-    const response = await fetchLogoutAPI()
-    if (response.code === 200) {
-      setAlertMessage('Đăng xuất thành công!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
-      setTimeout(() => {
-        navigate('/admin/auth/login')
-      })
-    } else if (response.code === 400) {
-      alert('error: ' + response.error)
-      return
-    }
-  }
   return (
     <>
       <AlertToast

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
-import type { AccountInterface, DashboardInterface, LogoutResponseInterface, ProductInterface } from '~/components/Admin/Types/Interface'
-import type { LoginResponseInterface } from '~/components/Admin/Types/Interface'
+import type { ProductInterface } from '~/components/Admin/Types/Interface'
 import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
 
 export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string): Promise<ProductAllResponseInterface> => {
@@ -12,48 +11,6 @@ export const fetchProductAllAPI = async (status: string, page: number, currentKe
 
   const response = await axios.get(
     `${API_ROOT}/admin/products?${queryParams.toString()}`,
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchLoginAPI = async (email: string, password: string): Promise<LoginResponseInterface> => {
-  const response = await axios.post(
-    `${API_ROOT}/admin/auth/login`,
-    { email, password },
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchLogoutAPI = async (): Promise<LogoutResponseInterface> => {
-  const response = await axios.get(
-    `${API_ROOT}/admin/auth/logout`,
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchDashboardAPI = async (): Promise<DashboardInterface> => {
-  const response = await axios.get(
-    `${API_ROOT}/admin/dashboard`,
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchMyAccountAPI = async (): Promise<AccountInterface> => {
-  const response = await axios.get(
-    `${API_ROOT}/admin/my-account`,
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchUpdateMyAccountAPI = async (formData: FormData) => {
-  const response = await axios.patch(
-    `${API_ROOT}/admin/my-account/edit`,
-    formData,
     { withCredentials: true }
   )
   return response.data

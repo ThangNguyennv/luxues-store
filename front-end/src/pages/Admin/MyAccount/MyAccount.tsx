@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { fetchMyAccountAPI } from '~/apis'
-import type { AccountInfoInterface, AccountInterface, RoleInterface } from '~/components/Admin/Types/Interface'
+import { useMyAccount } from '~/hooks/Admin/MyAccount/useMyAccount'
 
 const MyAccountAdmin = () => {
-  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
-  const [role, setRole] = useState<RoleInterface | null>(null)
-
-  useEffect(() => {
-    fetchMyAccountAPI().then((data: AccountInterface) => {
-      setAccountInfo(data.account)
-      setRole(data.role)
-    })
-  }, [])
+  const {
+    accountInfo,
+    role
+  } = useMyAccount()
 
   return (
     <>

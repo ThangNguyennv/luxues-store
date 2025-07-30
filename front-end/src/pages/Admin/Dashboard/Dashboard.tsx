@@ -1,28 +1,9 @@
-import { useEffect, useState } from 'react'
-import { fetchDashboardAPI } from '~/apis'
-import type { DashboardInterface } from '~/components/Admin/Types/Interface'
+import { useDashboard } from '~/hooks/Admin/Dashboard/useDashboard'
 
 const Dashboard = () => {
-  const [statistic, setStatistic] = useState({
-    categoryProduct: {
-      total: 0, active: 0, inactive: 0
-    },
-    product: {
-      total: 0, active: 0, inactive: 0
-    },
-    account: {
-      total: 0, active: 0, inactive: 0
-    },
-    user: {
-      total: 0, active: 0, inactive: 0
-    }
-  })
-
-  useEffect(() => {
-    fetchDashboardAPI().then((data: DashboardInterface) => {
-      setStatistic(data.statistic)
-    })
-  }, [])
+  const {
+    statistic
+  } = useDashboard()
 
   return (
     <>

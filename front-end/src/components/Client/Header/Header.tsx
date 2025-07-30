@@ -33,6 +33,7 @@ const Header = () => {
                 <li><a href="">Trang phục</a></li>
                 <li><a href="">Giày</a></li>
                 <li><a href="">Phụ kiện</a></li>
+                <li><a href="">Thương hiệu</a></li>
                 <li><a href="">Bài Viết</a></li>
               </ul>
             </nav>
