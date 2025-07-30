@@ -4,6 +4,7 @@ import ProductTableProps from '~/components/Admin/ItemTable/ItemTable'
 import SearchProps from '~/components/Admin/Search/Search'
 import { AlertToast } from '~/components/Alert/Alert'
 import { useProductAdmin } from '~/hooks/Admin/Product/useProduct'
+import { Link } from 'react-router-dom'
 
 const ProductAdmin = () => {
   const {
@@ -70,6 +71,12 @@ const ProductAdmin = () => {
                 Áp dụng
             </button>
           </form>
+          <div>
+            <button>sort</button>
+          </div>
+          <div>
+            <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+          </div>
         </div>
         <ProductTableProps
           listProducts={products}

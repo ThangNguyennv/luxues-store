@@ -1,0 +1,181 @@
+import { Editor } from '@tinymce/tinymce-react'
+import { AlertToast } from '~/components/Alert/Alert'
+import { useCreate } from '~/hooks/Admin/Product/useCreate'
+import { API_KEY } from '~/utils/constants'
+
+const CreateProduct = () => {
+  const {
+    productInfo,
+    setProductInfo,
+    alertOpen,
+    setAlertOpen,
+    alertMessage,
+    alertSeverity,
+    uploadImageInputRef,
+    uploadImagePreviewRef,
+    handleChange,
+    handleSubmit
+  } = useCreate()
+  return (
+    <>
+      <AlertToast
+        open={alertOpen}
+        message={alertMessage}
+        onClose={() => setAlertOpen(false)}
+        severity={alertSeverity}
+      />
+      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
+      <form onSubmit={(event) => handleSubmit(event)} id="form-create-product" className="flex flex-col gap-[10px]" encType="multipart/form-data">
+        <div className="form-group">
+          <label htmlFor="title">Tiêu đề</label>
+          <input
+            onChange={(event) => setProductInfo({ ...productInfo, title: event.target.value })}
+            type="text"
+            id="title"
+            name="title"/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="product_category_id">Danh mục</label>
+          <select name="product_category_id" id="product_category_id" className="border rounded-[5px] border-[#00171F]">
+            <option value={''}>-- Chọn danh mục</option>
+          </select>
+        </div>
+
+        <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex gap-[5px]">
+            <input
+              onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
+              type="radio"
+              className="border rounded-[5px] border-[#192335]"
+              id="featured1"
+              name="featured"
+              value={1}
+              checked={productInfo.featured === '1' ? true : false}
+            />
+            <label htmlFor="featured1">Nổi bật</label>
+          </div>
+          <div className="flex gap-[5px]">
+            <input
+              onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
+              type="radio"
+              className="border rounded-[5px] border-[#192335]"
+              id="featured0"
+              name="featured"
+              value={0}
+              checked={productInfo.featured === '0' ? true : false}
+            />
+            <label htmlFor="featured0">Không nổi bật</label>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="desc">Mô tả</label>
+          <Editor
+            apiKey={API_KEY}
+            init={{
+              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+            }}
+            onEditorChange={(newValue) => setProductInfo({ ...productInfo, description: newValue })}
+            id="desc"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="price">Giá</label>
+          <input
+            onChange={(event) => setProductInfo({ ...productInfo, price: Number(event.target.value) })}
+            type="number"
+            id="price"
+            name="price"
+            defaultValue={0}
+            min={0}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="discount">% Giảm giá</label>
+          <input
+            onChange={(event) => setProductInfo({ ...productInfo, discountPercentage: Number(event.target.value) })}
+            type="number"
+            id="discount"
+            name="discountPercentage"
+            defaultValue={0}
+            min={0}/>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="stock">Số lượng</label>
+          <input
+            onChange={(event) => setProductInfo({ ...productInfo, stock: Number(event.target.value) })}
+            type="number"
+            id="stock"
+            name="stock"
+            defaultValue={0}
+            min={0}/>
+        </div>
+
+        <div className="flex flex-col gap-[5px]">
+          <label htmlFor="thumbnail">Ảnh</label>
+          <input
+            onChange={(event) => handleChange(event)}
+            ref={uploadImageInputRef}
+            type="file"
+            id="thumbnail"
+            name="thumbnail"
+            accept="image/*"
+          />
+          <img
+            ref={uploadImagePreviewRef}
+            className="w-[150px] h-auto"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="position">Vị trí</label>
+          <input
+            onChange={(event) => setProductInfo({ ...productInfo, position: Number(event.target.value) })}
+            type="number"
+            id="position"
+            name="position"
+            placeholder="Tự động tăng"
+            min={1}
+          />
+        </div>
+
+        <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex gap-[5px]">
+            <input
+              onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
+              type="radio"
+              className="border rounded-[5px] border-[#192335]"
+              id="statusActove"
+              name="status"
+              value={'active'}
+              checked={productInfo.status === 'active' ? true : false}
+            />
+            <label htmlFor="statusActove">Hoạt động</label>
+          </div>
+
+          <div className="flex gap-[5px]">
+            <input
+              onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
+              type="radio"
+              className="border rounded-[5px] border-[#192335]"
+              id="statusInActive"
+              name="status"
+              value={'inactive'}
+              checked={productInfo.status === 'inactive' ? true : false}
+            />
+            <label htmlFor="statusInActive">Dừng hoạt động</label>
+          </div>
+        </div>
+
+        <button type="submit" className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Tạo mới</button>
+      </form>
+
+    </>
+  )
+}
+
+export default CreateProduct

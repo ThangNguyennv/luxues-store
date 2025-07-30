@@ -58,3 +58,12 @@ export const fetchChangeMultiAPI = async (data: { ids: string[], type: string })
   )
   return response.data
 }
+
+export const fetchCreateProductAPI = async (formData: FormData) => {
+  const response = await axios.post(
+    `${API_ROOT}/admin/products/create`,
+    formData,
+    { withCredentials: true }
+  )
+  return response.data
+}
