@@ -8,12 +8,16 @@ import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis'
 import { useEffect, useState } from 'react'
 import { AlertToast } from '~/components/Alert/Alert'
 import { Link } from 'react-router-dom'
+import Checkbox from '@mui/material/Checkbox'
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
 interface Props {
   listProducts: ProductDetailInterface[]
+  selectedIds: string[],
+  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-const ProductTableProps = ({ listProducts }: Props) => {
+const ProductTableProps = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
   const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
@@ -57,6 +61,23 @@ const ProductTableProps = ({ listProducts }: Props) => {
       return
     }
   }
+  const handleCheckbox = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedIds((prev) => [...prev, id])
+    } else {
+      setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
+    }
+  }
+  const handleCheckAll = (checked: boolean) => {
+    if (checked) {
+      const allIds = products.map((product) => product._id)
+      setSelectedIds(allIds)
+    } else {
+      setSelectedIds([])
+    }
+  }
+  const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+
   return (
     <>
       <AlertToast
@@ -73,6 +94,15 @@ const ProductTableProps = ({ listProducts }: Props) => {
       }}>
         <TableHead>
           <TableRow>
+            <TableCell align='center'>
+              <Checkbox
+                checked={isCheckAll}
+                onChange={(event) => handleCheckAll(event.target.checked)}
+                {...label}
+                size="small"
+                sx={{ padding: 0 }}
+              />
+            </TableCell>
             <TableCell align='center'>STT</TableCell>
             <TableCell align='center'>Tên sản phẩm</TableCell>
             <TableCell align='center'>Hình ảnh</TableCell>
@@ -88,6 +118,16 @@ const ProductTableProps = ({ listProducts }: Props) => {
           <TableBody>
             {products.map((product, index) => (
               <TableRow key={product._id}>
+                <TableCell align='center'>
+                  <Checkbox
+                    checked={selectedIds.includes(product._id)}
+                    onChange={(event) => handleCheckbox(product._id, event.target.checked)}
+                    {...label}
+                    size="small"
+                    sx={{ padding: 0 }}
+                    value={product._id}
+                  />
+                </TableCell>
                 <TableCell align='center'>{index + 1}</TableCell>
                 <TableCell align='center'>{product.title}</TableCell>
                 <TableCell align='center'>
@@ -96,20 +136,56 @@ const ProductTableProps = ({ listProducts }: Props) => {
                   </div>
                 </TableCell>
                 <TableCell align="center">${product.price.toLocaleString()}</TableCell>
-                <TableCell align='center'><input type='number' value={product.position} min={'1'} name='position' className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'/></TableCell>
                 <TableCell align='center'>
-                  {product.status === 'active' ? (  
-                    <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">Hoạt động</button>
+                  <input
+                    onChange={(event) => {
+                      const newPosition = parseInt(event.target.value, 10)
+                      const updatedProducts = products.map((item) =>
+                        item._id === product._id ? { ...item, position: newPosition } : item
+                      )
+                      setProducts(updatedProducts)
+                    }}
+                    type='number'
+                    value={product.position}
+                    min={'1'}
+                    data-id={product._id}
+                    name='position'
+                    className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
+                  />
+                </TableCell>
+                <TableCell align='center'>
+                  {product.status === 'active' ? (
+                    <button
+                      onClick={() => handleToggleStatus(product._id, product.status)}
+                      className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">
+                        Hoạt động
+                    </button>
                   ) : (
-                    <button onClick={() => handleToggleStatus(product._id, product.status)} className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Ngừng hoạt động</button>
+                    <button
+                      onClick={() => handleToggleStatus(product._id, product.status)}
+                      className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">
+                        Ngừng hoạt động
+                    </button>
                   )}
                 </TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>{product.accountFullName}</TableCell>
                 <TableCell align='center'>
-                  <Link to={`/admin/products/detail/${product._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
-                  <Link to={`/admin/products/edit/${product._id}`} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</Link>
-                  <button onClick={() => handleDeleteProduct(product._id)} className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
+                  <Link
+                    to={`/admin/products/detail/${product._id}`}
+                    className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>
+                      Chi tiết
+                  </Link>
+                  <Link
+                    to={`/admin/products/edit/${product._id}`}
+                    className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>
+                      Sửa
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteProduct(product._id)}
+                    className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>
+                      Xóa
+                  </button>
                 </TableCell>
               </TableRow>
             ))}
