@@ -4,7 +4,7 @@ import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
 import type { AccountInfoInterface, AccountInterface } from '~/components/Admin/Types/Interface'
 import { fetchLogoutAPI } from '~/apis/admin/auth.api'
 
-export const useHeaderAdmin = () => {
+export const useHeader = () => {
   const navigate = useNavigate()
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')

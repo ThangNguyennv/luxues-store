@@ -3,7 +3,7 @@ import PaginationProps from '~/components/Admin/Pagination/Pagination'
 import ProductTableProps from '~/components/Admin/ItemTable/ItemTable'
 import SearchProps from '~/components/Admin/Search/Search'
 import { AlertToast } from '~/components/Alert/Alert'
-import { useProductAdmin } from '~/hooks/Admin/Product/useProduct'
+import { useProduct } from '~/hooks/Admin/Product/useProduct'
 import { Link } from 'react-router-dom'
 
 const ProductAdmin = () => {
@@ -13,6 +13,8 @@ const ProductAdmin = () => {
     pagination,
     keyword,
     setKeyword,
+    sortKey,
+    sortValue,
     selectedIds,
     setSelectedIds,
     alertOpen,
@@ -23,8 +25,10 @@ const ProductAdmin = () => {
     setActionType,
     currentStatus,
     updateSearchParams,
-    handleSubmit
-  } = useProductAdmin()
+    handleSubmit,
+    handleSort,
+    clearSortParams
+  } = useProduct()
 
   return (
     <>
@@ -72,8 +76,12 @@ const ProductAdmin = () => {
             </button>
           </form>
           <div className='flex gap-[10px] items-center'>
-            <select className='border rounded-[5px] border-[#9D9995] p-[5px] outline-none'>
-              <option>-- Sắp xếp --</option>
+            <select
+              onChange={(event) => handleSort(event)}
+              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] outline-none'
+              value={sortKey && sortValue ? `${sortKey}-${sortValue}` : ''}
+            >
+              <option disabled value={''}>-- Sắp xếp --</option>
               <option value="position-asc">Vị trí tăng dần</option>
               <option value="position-desc">Vị trí giảm dần</option>
               <option value="price-asc">Giá tăng dần</option>
@@ -81,6 +89,12 @@ const ProductAdmin = () => {
               <option value="title-asc">Tiêu đề A - Z</option>
               <option value="title-desc">Tiêu đề Z - A</option>
             </select>
+            <button
+              onClick={clearSortParams}
+              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
+            >
+              Clear
+            </button>
           </div>
           <div>
             <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>

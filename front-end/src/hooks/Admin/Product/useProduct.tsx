@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI, fetchProductAllAPI } from '~/apis/admin/product.api'
 import type {
@@ -8,7 +8,7 @@ import type {
   PaginationInterface
 } from '~/components/Admin/Types/Interface'
 
-export const useProductAdmin = () => {
+export const useProduct = () => {
   const [products, setProducts] = useState<ProductDetailInterface[]>([])
   const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])
   const [pagination, setPagination] = useState<PaginationInterface | null>(null)
@@ -23,15 +23,17 @@ export const useProductAdmin = () => {
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
+  const currentSortKey = searchParams.get('sortKey') || ''
+  const currentSortValue = searchParams.get('sortValue') || ''
 
   useEffect(() => {
-    fetchProductAllAPI(currentStatus, currentPage, currentKeyword).then((res: ProductAllResponseInterface) => {
+    fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue).then((res: ProductAllResponseInterface) => {
       setProducts(res.products)
       setPagination(res.pagination)
       setFilterStatus(res.filterStatus)
       setKeyword(res.currentKeyword)
     })
-  }, [currentStatus, currentPage, currentKeyword])
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue])
 
   const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
@@ -39,6 +41,13 @@ export const useProductAdmin = () => {
       newParams.set(key, value)
     } else {
       newParams.delete(key)
+    }
+    // Xoá liên quan nếu clear cả 2
+    if (key === 'sortKey' || key === 'sortValue') {
+      if (!value) {
+        newParams.delete('sortKey')
+        newParams.delete('sortValue')
+      }
     }
     setSearchParams(newParams)
   }
@@ -91,11 +100,28 @@ export const useProductAdmin = () => {
     setActionType('')
 
     // Refetch
-    const res = await fetchProductAllAPI(currentStatus, currentPage, currentKeyword)
+    const res = await fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue)
     setProducts(res.products)
     setPagination(res.pagination)
     setFilterStatus(res.filterStatus)
     setKeyword(res.currentKeyword)
+  }
+
+  const handleSort = async (event: ChangeEvent<HTMLSelectElement>) => {
+    const value = event.currentTarget.value
+    const [sortKey, sortValue] = value.split('-')
+    if (sortKey && sortValue) {
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('sortKey', sortKey)
+      newParams.set('sortValue', sortValue)
+      setSearchParams(newParams)
+    }
+  }
+  const clearSortParams = () => {
+    const newParams = new URLSearchParams(searchParams)
+    newParams.delete('sortKey')
+    newParams.delete('sortValue')
+    setSearchParams(newParams)
   }
 
   const showAlert = (message: string, severity: 'success' | 'error') => {
@@ -110,6 +136,8 @@ export const useProductAdmin = () => {
     pagination,
     keyword,
     setKeyword,
+    sortKey: currentSortKey,
+    sortValue: currentSortValue,
     selectedIds,
     setSelectedIds,
     alertOpen,
@@ -122,6 +150,8 @@ export const useProductAdmin = () => {
     currentPage,
     currentKeyword,
     updateSearchParams,
-    handleSubmit
+    handleSubmit,
+    handleSort,
+    clearSortParams
   }
 }

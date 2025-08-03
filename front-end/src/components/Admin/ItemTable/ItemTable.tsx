@@ -6,7 +6,7 @@ import TableRow from '@mui/material/TableRow'
 import { AlertToast } from '~/components/Alert/Alert'
 import { Link } from 'react-router-dom'
 import Checkbox from '@mui/material/Checkbox'
-import { useTableAdmin } from '~/hooks/Admin/Product/useTable'
+import { useTable } from '~/hooks/Admin/Product/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/Admin/Product/useTable'
 
@@ -23,7 +23,7 @@ const ProductTableProps = ({ listProducts, selectedIds, setSelectedIds }: Props)
     handleCheckbox,
     handleCheckAll,
     isCheckAll
-  } = useTableAdmin({ listProducts, selectedIds, setSelectedIds })
+  } = useTable({ listProducts, selectedIds, setSelectedIds })
 
   return (
     <>

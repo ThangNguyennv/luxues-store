@@ -8,7 +8,7 @@ export interface Props {
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export const useTableAdmin = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
+export const useTable = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
   const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')

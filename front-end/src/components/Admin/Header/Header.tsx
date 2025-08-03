@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { AlertToast } from '~/components/Alert/Alert'
 import { FaRegUserCircle } from 'react-icons/fa'
-import { useHeaderAdmin } from '~/hooks/Admin/Header/useHeader'
+import { useHeader } from '~/hooks/Admin/Header/useHeader'
 
 const Header = () => {
   const {
@@ -11,7 +11,7 @@ const Header = () => {
     alertSeverity,
     accountInfo,
     handleLogout
-  } = useHeaderAdmin()
+  } = useHeader()
 
   return (
     <>

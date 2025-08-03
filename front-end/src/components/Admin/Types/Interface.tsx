@@ -29,7 +29,9 @@ export interface ProductAllResponseInterface {
   products: ProductDetailInterface[];
   filterStatus: FilterStatusInterface[];
   pagination: PaginationInterface;
-  currentKeyword: string
+  currentKeyword: string,
+  currentSortKey: string,
+  currentSortValue: string
 }
 
 export interface LoginResponseInterface {

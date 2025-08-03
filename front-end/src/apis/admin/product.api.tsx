@@ -3,11 +3,13 @@ import { API_ROOT } from '~/utils/constants'
 import type { ProductInterface } from '~/components/Admin/Types/Interface'
 import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
 
-export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string): Promise<ProductAllResponseInterface> => {
+export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())
   if (currentKeyword) queryParams.set('keyword', currentKeyword)
+  if (currentSortKey) queryParams.set('sortKey', currentSortKey)
+  if (currentSortValue) queryParams.set('sortValue', currentSortValue)
 
   const response = await axios.get(
     `${API_ROOT}/admin/products?${queryParams.toString()}`,
@@ -67,3 +69,4 @@ export const fetchCreateProductAPI = async (formData: FormData) => {
   )
   return response.data
 }
+
