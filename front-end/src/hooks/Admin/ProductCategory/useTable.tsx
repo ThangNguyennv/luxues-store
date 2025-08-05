@@ -1,33 +1,30 @@
-import type { AccountInfoInterface, ProductDetailInterface } from '~/components/Admin/Types/Interface'
+import type { ProductDetailInterface } from '~/components/Admin/Types/Interface'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
 
 export interface Props {
-  listProducts: ProductDetailInterface[],
-  listAccounts: AccountInfoInterface[],
+  listProducts: ProductDetailInterface[]
   selectedIds: string[],
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+export const useTable = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
   const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
     setProducts(listProducts)
-    setAccounts(listAccounts)
-  }, [listProducts, listAccounts])
+  }, [listProducts])
 
-  const handleToggleStatus = async (_id: string, currentStatus: string, updatedBy: { length: number; account_id: string; updatedAt: Date }): Promise<void> => {
+  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
       setProducts((prevProducts: ProductDetailInterface[]) =>
         prevProducts.map((product) =>
-          product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
+          product._id === _id ? { ...product, status: newStatus } : product
         )
       )
       setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
@@ -70,12 +67,10 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
       setSelectedIds([])
     }
   }
-
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
   return {
     products,
     setProducts,
-    accounts,
     alertOpen,
     setAlertOpen,
     alertMessage,

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 const ProductAdmin = () => {
   const {
     products,
+    accounts,
     filterStatus,
     pagination,
     keyword,
@@ -102,6 +103,7 @@ const ProductAdmin = () => {
         </div>
         <ProductTableProps
           listProducts={products}
+          listAccounts={accounts}
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />

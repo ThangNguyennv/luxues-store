@@ -9,7 +9,7 @@ import type {
   AccountInfoInterface
 } from '~/components/Admin/Types/Interface'
 
-export const useProduct = () => {
+export const useProductCategory = () => {
   const [products, setProducts] = useState<ProductDetailInterface[]>([])
   const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
   const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])

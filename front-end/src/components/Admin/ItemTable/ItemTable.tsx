@@ -9,11 +9,13 @@ import Checkbox from '@mui/material/Checkbox'
 import { useTable } from '~/hooks/Admin/Product/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/Admin/Product/useTable'
+import FormatDateTime from '../Moment/Moment'
 
-const ProductTableProps = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
+const ProductTableProps = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
   const {
     products,
     setProducts,
+    accounts,
     alertOpen,
     setAlertOpen,
     alertMessage,
@@ -23,8 +25,7 @@ const ProductTableProps = ({ listProducts, selectedIds, setSelectedIds }: Props)
     handleCheckbox,
     handleCheckAll,
     isCheckAll
-  } = useTable({ listProducts, selectedIds, setSelectedIds })
-
+  } = useTable({ listProducts, listAccounts, selectedIds, setSelectedIds })
   return (
     <>
       <AlertToast
@@ -103,20 +104,52 @@ const ProductTableProps = ({ listProducts, selectedIds, setSelectedIds }: Props)
                 <TableCell align='center'>
                   {product.status === 'active' ? (
                     <button
-                      onClick={() => handleToggleStatus(product._id, product.status)}
+                      onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
                       className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">
                         Hoạt động
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleToggleStatus(product._id, product.status)}
+                      onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
                       className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">
                         Ngừng hoạt động
                     </button>
                   )}
                 </TableCell>
-                <TableCell align='center'>{product.accountFullName}</TableCell>
-                <TableCell align='center'>{product.accountFullName}</TableCell>
+                <TableCell align='center' className='font-[700] '>{(() => {
+                  const creator = accounts.find(
+                    (account) => account._id === product.createdBy?.account_id
+                  )
+                  return creator ? (
+                    <span className="text-sm font-medium text-gray-800">
+                      {creator.fullName}
+                    </span>
+                  ) : (
+                    <span className="text-sm italic text-gray-400">Không xác định</span>
+                  )
+                })()}
+                <FormatDateTime time={product.createdBy.createdAt}/>
+                </TableCell>
+                <TableCell align='center'>{(() => {
+                  const updatedBy = product.updatedBy?.[product.updatedBy.length - 1]
+                  if (!updatedBy) {
+                    return (
+                      <>
+                        <p className="text-xs italic text-gray-400">Chưa có ai cập nhật</p>
+                      </>
+                    )
+                  }
+                  const creator = accounts.find((account) => account._id === updatedBy.account_id)
+                  return creator ? (
+                    <span className="text-sm font-medium text-gray-800">
+                      {creator.fullName}
+                    </span>
+                  ) : (
+                    <span className="text-sm italic text-gray-400">Không xác định</span>
+                  )
+                })()}
+                <FormatDateTime time={product.updatedBy?.[product.updatedBy.length - 1]?.updatedAt}/>
+                </TableCell>
                 <TableCell align='center'>
                   <Link
                     to={`/admin/products/detail/${product._id}`}

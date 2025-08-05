@@ -1,14 +1,23 @@
 export interface ProductDetailInterface {
-  _id: string;
-  title: string;
-  price: number;
+  createdBy: {
+    account_id: string,
+    createdAt: Date
+  },
+  updatedBy: {
+    length: number
+    account_id: string,
+    updatedAt: Date
+  }[],
+  _id: string,
+  title: string,
+  price: number,
   discountPercentage: number,
   thumbnail: string,
   stock: number,
   position: number,
-  accountFullName: string
-  status: string
-  description: string
+  accountFullName: string,
+  status: string,
+  description: string,
   featured: string
 }
 
@@ -26,16 +35,17 @@ export interface PaginationInterface {
 }
 
 export interface ProductAllResponseInterface {
-  products: ProductDetailInterface[];
-  filterStatus: FilterStatusInterface[];
-  pagination: PaginationInterface;
+  products: ProductDetailInterface[],
+  filterStatus: FilterStatusInterface[],
+  pagination: PaginationInterface,
+  account: AccountInfoInterface[],
   currentKeyword: string,
   currentSortKey: string,
   currentSortValue: string
 }
 
 export interface LoginResponseInterface {
-  code: number;
+  code: number,
   email: string,
   password: string,
   token: string
@@ -43,20 +53,20 @@ export interface LoginResponseInterface {
 
 export interface LogoutResponseInterface {
   error: Error,
-  code: number;
+  code: number,
 }
 
 interface StatisticGroup {
-  total: number;
-  active: number;
-  inactive: number;
+  total: number,
+  active: number,
+  inactive: number,
 }
 
 interface Statistic {
-  categoryProduct: StatisticGroup;
-  product: StatisticGroup;
-  account: StatisticGroup;
-  user: StatisticGroup;
+  categoryProduct: StatisticGroup,
+  product: StatisticGroup,
+  account: StatisticGroup,
+  user: StatisticGroup,
 }
 
 export interface DashboardInterface {
@@ -64,21 +74,22 @@ export interface DashboardInterface {
 }
 
 export interface RoleInterface {
-  title: string;
+  title: string,
 }
 
 export interface AccountInfoInterface {
-  avatar: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  status: string;
+  _id: string,
+  avatar: string,
+  fullName: string,
+  email: string,
+  phone: string,
+  status: string,
   token: string
-};
+}
 
 export interface AccountInterface {
-  account: AccountInfoInterface
-  role: RoleInterface;
+  account: AccountInfoInterface,
+  role: RoleInterface
 }
 
 export interface ProductInterface {
