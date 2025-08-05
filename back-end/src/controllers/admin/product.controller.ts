@@ -4,6 +4,7 @@ import Account from '~/models/account.model'
 import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
 import paginationHelpers from '~/helpers/pagination'
+import { log } from 'console'
 
 // [GET] /admin/products
 export const product = async (req: Request, res: Response) => {
@@ -70,13 +71,17 @@ export const product = async (req: Request, res: Response) => {
         updatedBy['accountFullName'] = userUpdated.fullName
       }
     }
+    const account = await Account.find({
+      deleted: false
+    })
     res.json({
       code: 200,
       message: 'Thành công!',
       products: products,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
-      pagination: objectPagination
+      pagination: objectPagination,
+      account: account
     })
   } catch (error) {
     res.json({
