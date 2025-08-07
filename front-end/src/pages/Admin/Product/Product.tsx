@@ -1,6 +1,6 @@
 import FilterStatusProps from '~/components/Admin/FilterStatus/FilterStatus'
 import PaginationProps from '~/components/Admin/Pagination/Pagination'
-import ProductTableProps from '~/components/Admin/ItemTable/ItemTable'
+import ProductTableProps from '~/components/Admin/ItemTable/ProductTableProps'
 import SearchProps from '~/components/Admin/Search/Search'
 import { AlertToast } from '~/components/Alert/Alert'
 import { useProduct } from '~/hooks/Admin/Product/useProduct'

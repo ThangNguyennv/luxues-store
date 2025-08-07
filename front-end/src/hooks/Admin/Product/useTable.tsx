@@ -70,8 +70,8 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
       setSelectedIds([])
     }
   }
-
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+
   return {
     products,
     setProducts,

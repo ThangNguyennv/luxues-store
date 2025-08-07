@@ -1,30 +1,33 @@
-import type { ProductDetailInterface } from '~/components/Admin/Types/Interface'
+import type { AccountInfoInterface, ProductCategoryDetailInterface } from '~/components/Admin/Types/Interface'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
 
 export interface Props {
-  listProducts: ProductDetailInterface[]
+  listProducts: ProductCategoryDetailInterface[] | [],
+  listAccounts: AccountInfoInterface[],
   selectedIds: string[],
-  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
+  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
-export const useTable = ({ listProducts, selectedIds, setSelectedIds }: Props) => {
-  const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
+export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+  const [products, setProducts] = useState<ProductCategoryDetailInterface[]>(listProducts)
+  const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
     setProducts(listProducts)
-  }, [listProducts])
+    setAccounts(listAccounts)
+  }, [listProducts, listAccounts])
 
-  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+  const handleToggleStatus = async (_id: string, currentStatus: string, updatedBy: { length: number; account_id: string; updatedAt: Date }): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
-      setProducts((prevProducts: ProductDetailInterface[]) =>
+      setProducts((prevProducts: ProductCategoryDetailInterface[]) =>
         prevProducts.map((product) =>
-          product._id === _id ? { ...product, status: newStatus } : product
+          product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
         )
       )
       setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
@@ -68,8 +71,10 @@ export const useTable = ({ listProducts, selectedIds, setSelectedIds }: Props) =
     }
   }
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+
   return {
     products,
+    accounts,
     setProducts,
     alertOpen,
     setAlertOpen,

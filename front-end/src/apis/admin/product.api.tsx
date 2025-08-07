@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
-import type { ProductInterface } from '~/components/Admin/Types/Interface'
+import type { ProductCategoryAllResponseInterface, ProductInterface } from '~/components/Admin/Types/Interface'
 import type { ProductAllResponseInterface } from '~/components/Admin/Types/Interface'
 
 export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
@@ -13,6 +13,21 @@ export const fetchProductAllAPI = async (status: string, page: number, currentKe
 
   const response = await axios.get(
     `${API_ROOT}/admin/products?${queryParams.toString()}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchProductCategoryAllAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductCategoryAllResponseInterface> => {
+  const queryParams = new URLSearchParams()
+  if (status) queryParams.set('status', status)
+  if (page) queryParams.set('page', page.toString())
+  if (currentKeyword) queryParams.set('keyword', currentKeyword)
+  if (currentSortKey) queryParams.set('sortKey', currentSortKey)
+  if (currentSortValue) queryParams.set('sortValue', currentSortValue)
+
+  const response = await axios.get(
+    `${API_ROOT}/admin/products-category?${queryParams.toString()}`,
     { withCredentials: true }
   )
   return response.data

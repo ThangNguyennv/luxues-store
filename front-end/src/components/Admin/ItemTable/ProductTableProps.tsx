@@ -26,6 +26,7 @@ const ProductTableProps = ({ listProducts, listAccounts, selectedIds, setSelecte
     handleCheckAll,
     isCheckAll
   } = useTable({ listProducts, listAccounts, selectedIds, setSelectedIds })
+
   return (
     <>
       <AlertToast

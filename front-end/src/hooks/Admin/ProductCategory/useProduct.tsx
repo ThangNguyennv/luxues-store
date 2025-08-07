@@ -1,16 +1,16 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI, fetchProductAllAPI } from '~/apis/admin/product.api'
+import { fetchChangeMultiAPI, fetchProductCategoryAllAPI } from '~/apis/admin/product.api'
 import type {
-  ProductAllResponseInterface,
-  ProductDetailInterface,
   FilterStatusInterface,
   PaginationInterface,
-  AccountInfoInterface
+  AccountInfoInterface,
+  ProductCategoryDetailInterface,
+  ProductCategoryAllResponseInterface
 } from '~/components/Admin/Types/Interface'
 
 export const useProductCategory = () => {
-  const [products, setProducts] = useState<ProductDetailInterface[]>([])
+  const [products, setProducts] = useState<ProductCategoryDetailInterface[]>([])
   const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
   const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])
   const [pagination, setPagination] = useState<PaginationInterface | null>(null)
@@ -29,8 +29,8 @@ export const useProductCategory = () => {
   const currentSortValue = searchParams.get('sortValue') || ''
 
   useEffect(() => {
-    fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue).then((res: ProductAllResponseInterface) => {
-      setProducts(res.products)
+    fetchProductCategoryAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue).then((res: ProductCategoryAllResponseInterface) => {
+      setProducts(res.records)
       setAccounts(res.account)
       setPagination(res.pagination)
       setFilterStatus(res.filterStatus)
@@ -103,8 +103,8 @@ export const useProductCategory = () => {
     setActionType('')
 
     // Refetch
-    const res = await fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue)
-    setProducts(res.products)
+    const res = await fetchProductCategoryAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue)
+    setProducts(res.records)
     setPagination(res.pagination)
     setFilterStatus(res.filterStatus)
     setKeyword(res.currentKeyword)
