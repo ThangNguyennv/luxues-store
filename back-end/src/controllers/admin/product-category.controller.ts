@@ -4,6 +4,7 @@ import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
 import { tree, TreeItem } from '~/helpers/createTree'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
+import Account from '~/models/account.model'
 
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
@@ -42,10 +43,14 @@ export const index = async (req: Request, res: Response) => {
 
     // Add log info to all nodes (parent and children)
     await addLogInfoToTree(newRecords as LogNode[])
+    const account = await Account.find({
+      deleted: false
+    })
     res.json({
       code: 200,
       message: 'Thành công!',
       records: newRecords,
+      account: account,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword
     })
