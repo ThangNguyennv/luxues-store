@@ -4,8 +4,9 @@ import Account from '~/models/account.model'
 import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
 import paginationHelpers from '~/helpers/pagination'
-import { log } from 'console'
-
+import ProductCategory from '~/models/product-category.model'
+import * as createTreeHelpers   from '~/helpers/createTree'
+import { TreeItem } from '~/helpers/createTree'
 // [GET] /admin/products
 export const product = async (req: Request, res: Response) => {
   try {
@@ -244,7 +245,7 @@ export const createPost = async (req: Request, res: Response) => {
     res.json({
       code: 201,
       message: 'Đã thêm thành công sản phẩm!',
-      data: req.body
+      data: req.body,
     })
   } catch (error) {
     res.json({
