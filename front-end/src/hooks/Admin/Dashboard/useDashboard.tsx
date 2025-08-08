@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchDashboardAPI } from '~/apis/admin/dashboard.api'
-import type { DashboardInterface } from '~/components/Admin/Types/Interface'
+import type { DashboardInterface } from '~/types'
 
 export const useDashboard = () => {
   const [statistic, setStatistic] = useState({

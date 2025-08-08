@@ -1,4 +1,4 @@
-const SortProps = () => {
+const Sort = () => {
   return (
     <>
       <div className='flex gap-[10px] items-center'>
@@ -17,4 +17,4 @@ const SortProps = () => {
   )
 }
 
-export default SortProps
+export default Sort

@@ -1,6 +1,6 @@
 
-import { AlertToast } from '~/components/Alert/Alert'
-import { useEditMyAccount } from '~/hooks/Admin/MyAccount/useEdit'
+import { AlertToast } from '~/components/alert/Alert'
+import { useEditMyAccount } from '~/hooks/admin/myAccount/useEdit'
 
 const EditMyAccount = () => {
   const {

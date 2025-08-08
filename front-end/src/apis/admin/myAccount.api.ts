@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { AccountInterface } from '~/components/Admin/Types/Interface'
+import type { AccountInterface } from '~/types'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchMyAccountAPI = async (): Promise<AccountInterface> => {

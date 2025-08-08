@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchCreateProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface } from '~/components/Admin/Types/Interface'
+import type { ProductDetailInterface } from '~/types'
 
 export const useCreate = () => {
   const initialProduct: ProductDetailInterface = {
@@ -15,7 +15,13 @@ export const useCreate = () => {
     description: '',
     featured: '1',
     thumbnail: '',
-    accountFullName: ''
+    accountFullName: '',
+    createdBy: {
+      account_id: '',
+      createdAt: new Date()
+    },
+    updatedBy: [],
+    productCategoryId: ''
   }
   const [productInfo, setProductInfo] = useState<ProductDetailInterface>(initialProduct)
   const [alertOpen, setAlertOpen] = useState(false)

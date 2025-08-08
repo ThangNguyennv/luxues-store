@@ -3,15 +3,15 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { AlertToast } from '~/components/Alert/Alert'
+import { AlertToast } from '~/components/alert/Alert'
 import { Link } from 'react-router-dom'
 import Checkbox from '@mui/material/Checkbox'
-import { useTable } from '~/hooks/Admin/Product/useTable'
+import { useTable } from '~/hooks/admin/product/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-import type { Props } from '~/hooks/Admin/Product/useTable'
-import FormatDateTime from '../Moment/Moment'
+import type { Props } from '~/hooks/admin/product/useTable'
+import FormatDateTime from '../Moment/FormatDateTime'
 
-const ProductTableProps = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
   const {
     products,
     setProducts,
@@ -177,4 +177,4 @@ const ProductTableProps = ({ listProducts, listAccounts, selectedIds, setSelecte
   )
 }
 
-export default ProductTableProps
+export default ProductTable

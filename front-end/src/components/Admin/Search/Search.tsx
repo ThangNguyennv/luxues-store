@@ -5,7 +5,7 @@ interface Props {
     handleSearch: (keyword: string) => void
 }
 
-const SearchProps = ({ keyword, setKeyword, handleSearch }: Props) => {
+const Search = ({ keyword, setKeyword, handleSearch }: Props) => {
   return (
     <>
       <div className='border rounded-[5px] p-[5px] flex items-center justify-between'>
@@ -21,4 +21,4 @@ const SearchProps = ({ keyword, setKeyword, handleSearch }: Props) => {
   )
 }
 
-export default SearchProps
+export default Search

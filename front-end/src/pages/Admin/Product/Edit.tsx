@@ -1,7 +1,7 @@
-import { AlertToast } from '~/components/Alert/Alert'
+import { AlertToast } from '~/components/alert/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
-import { useEdit } from '~/hooks/Admin/Product/useEdit'
+import { useEdit } from '~/hooks/admin/product/useEdit'
 
 const EditProduct = () => {
   const {

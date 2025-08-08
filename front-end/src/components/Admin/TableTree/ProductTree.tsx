@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { TableRow, TableCell, Checkbox } from '@mui/material'
-import FormatDateTime from '../Moment/Moment'
 import { Link } from 'react-router-dom'
-import type { AccountInfoInterface, ProductCategoryDetailInterface } from '../Types/Interface'
+import type { AccountInfoInterface, ProductCategoryDetailInterface } from '~/types'
+import FormatDateTime from '../Moment/FormatDateTime'
 
-interface ProductRowProps {
+interface Props {
   product: ProductCategoryDetailInterface
   level: number
   selectedIds: string[]
@@ -17,7 +17,7 @@ interface ProductRowProps {
   products: ProductCategoryDetailInterface[]
 }
 
-const ProductRow = ({
+const ProductTree = ({
   product,
   level,
   selectedIds,
@@ -27,7 +27,7 @@ const ProductRow = ({
   handleDeleteProduct,
   setProducts,
   products
-}: ProductRowProps) => {
+}: Props) => {
   const prefix = '— '.repeat(level)
 
   const updated = product.updatedBy?.at(-1)
@@ -45,8 +45,7 @@ const ProductRow = ({
             sx={{ padding: 0 }}
           />
         </TableCell>
-        <TableCell align="center">{/* STT sẽ xử lý ngoài */}</TableCell>
-        <TableCell align="center">{prefix}{product.title}</TableCell>
+        <TableCell align="left">{prefix}{product.title}</TableCell>
         <TableCell align="center">
           <div className="flex justify-center items-center">
             <img src={product.thumbnail} alt={product.title} className="w-[150px] h-[150px]" />
@@ -105,7 +104,7 @@ const ProductRow = ({
         </TableCell>
       </TableRow>
       {product.children?.map((child) => (
-        <ProductRow
+        <ProductTree
           key={child._id}
           product={child}
           level={level + 1}
@@ -122,4 +121,4 @@ const ProductRow = ({
   )
 }
 
-export default ProductRow
+export default ProductTree

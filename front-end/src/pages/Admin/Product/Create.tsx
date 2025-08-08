@@ -1,6 +1,6 @@
 import { Editor } from '@tinymce/tinymce-react'
-import { AlertToast } from '~/components/Alert/Alert'
-import { useCreate } from '~/hooks/Admin/Product/useCreate'
+import { AlertToast } from '~/components/alert/Alert'
+import { useCreate } from '~/hooks/admin/product/useCreate'
 import { API_KEY } from '~/utils/constants'
 
 const CreateProduct = () => {
@@ -37,7 +37,7 @@ const CreateProduct = () => {
 
         <div className="form-group">
           <label htmlFor="product_category_id">Danh mục</label>
-          <select name="product_category_id" id="product_category_id" className="border rounded-[5px] border-[#00171F]">
+          <select name="product_category_id" id="product_category_id" className="outline-none border rounded-[5px] border-[#00171F]">
             <option value={''}>-- Chọn danh mục</option>
           </select>
         </div>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
-import { AlertToast } from '~/components/Alert/Alert'
+import { AlertToast } from '~/components/alert/Alert'
 import { FaRegUserCircle } from 'react-icons/fa'
-import { useHeader } from '~/hooks/Admin/Header/useHeader'
+import { useHeader } from '~/hooks/admin/header/useHeader'
 
 const Header = () => {
   const {

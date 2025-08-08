@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { PiGreaterThan } from 'react-icons/pi'
 import { PiLessThan } from 'react-icons/pi'
-import type { PaginationInterface } from '../Types/Interface'
+import type { PaginationInterface } from '../../../types'
 
 interface Props {
   pagination: PaginationInterface | null
@@ -10,7 +10,7 @@ interface Props {
   handlePaginationNext: (page: number) => void
 }
 
-const PaginationProps = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext }: Props) => {
+const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext }: Props) => {
   return (
     <>
       {pagination && (
@@ -41,4 +41,4 @@ const PaginationProps = ({ pagination, handlePagination, handlePaginationPreviou
   )
 }
 
-export default PaginationProps
+export default Pagination

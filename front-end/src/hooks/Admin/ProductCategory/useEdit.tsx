@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface, ProductInterface } from '~/components/Admin/Types/Interface'
+import type { ProductDetailInterface, ProductInterface } from '~/types'
 
 export const useEdit = () => {
   const [productInfo, setProductInfo] = useState<ProductDetailInterface | null>(null)

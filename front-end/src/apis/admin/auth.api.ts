@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { LoginResponseInterface, LogoutResponseInterface } from '~/components/Admin/Types/Interface'
+import type { LoginResponseInterface, LogoutResponseInterface } from '~/types'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchLoginAPI = async (email: string, password: string): Promise<LoginResponseInterface> => {

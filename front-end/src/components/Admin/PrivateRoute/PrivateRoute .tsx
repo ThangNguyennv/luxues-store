@@ -1,7 +1,7 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Navigate } from 'react-router-dom'
 import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
-import type { AccountInterface } from '../Types/Interface'
+import type { AccountInterface } from '../../../types'
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const [token, setToken] = useState<string | null>(null)

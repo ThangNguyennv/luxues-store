@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import type { FilterStatusInterface } from '../Types/Interface'
+import type { FilterStatusInterface } from '../../../types'
 
 interface Props {
   filterStatus: FilterStatusInterface[]
@@ -7,7 +7,7 @@ interface Props {
   handleFilterStatus: (status: string) => void
 }
 
-const FilterStatusProps = ({ filterStatus, currentStatus, handleFilterStatus }: Props) => {
+const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus }: Props) => {
   return (
     <>
       {filterStatus && (
@@ -30,4 +30,4 @@ const FilterStatusProps = ({ filterStatus, currentStatus, handleFilterStatus }: 
   )
 }
 
-export default FilterStatusProps
+export default FilterStatus

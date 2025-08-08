@@ -1,4 +1,4 @@
-import type { AccountInfoInterface, ProductDetailInterface } from '~/components/Admin/Types/Interface'
+import type { AccountInfoInterface, ProductDetailInterface } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
 

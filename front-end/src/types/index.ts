@@ -18,7 +18,8 @@ export interface ProductDetailInterface {
   accountFullName: string,
   status: string,
   description: string,
-  featured: string
+  featured: string,
+  productCategoryId: string
 }
 
 export interface ProductCategoryDetailInterface {

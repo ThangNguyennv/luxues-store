@@ -1,12 +1,12 @@
-import FilterStatusProps from '~/components/Admin/FilterStatus/FilterStatus'
-import PaginationProps from '~/components/Admin/Pagination/Pagination'
-import ProductTableProps from '~/components/Admin/ItemTable/ProductTableProps'
-import SearchProps from '~/components/Admin/Search/Search'
-import { AlertToast } from '~/components/Alert/Alert'
-import { useProduct } from '~/hooks/Admin/Product/useProduct'
 import { Link } from 'react-router-dom'
+import FilterStatusProps from '~/components/admin/FilterStatus/FilterStatus'
+import ProductCategoryTableProps from '~/components/admin/ItemTable/ProductCategoryTable'
+import PaginationProps from '~/components/admin/Pagination/Pagination'
+import SearchProps from '~/components/admin/Search/Search'
+import { AlertToast } from '~/components/alert/Alert'
+import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
 
-const ProductAdmin = () => {
+const ProductCategoryAdmin = () => {
   const {
     products,
     accounts,
@@ -29,7 +29,7 @@ const ProductAdmin = () => {
     handleSubmit,
     handleSort,
     clearSortParams
-  } = useProduct()
+  } = useProductCategory()
 
   return (
     <>
@@ -39,8 +39,8 @@ const ProductAdmin = () => {
         onClose={() => setAlertOpen(false)}
         severity={alertSeverity}
       />
+      <h1 className="text-[30px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
       <div className='flex flex-col gap-[15px]'>
-        <h1 className='text-[30px] font-[700] text-[#000000]'>Danh sách sản phẩm</h1>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
@@ -101,7 +101,7 @@ const ProductAdmin = () => {
             <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductTableProps
+        <ProductCategoryTableProps
           listProducts={products}
           listAccounts={accounts}
           selectedIds={selectedIds}
@@ -118,4 +118,4 @@ const ProductAdmin = () => {
   )
 }
 
-export default ProductAdmin
+export default ProductCategoryAdmin

@@ -7,7 +7,7 @@ import type {
   AccountInfoInterface,
   ProductCategoryDetailInterface,
   ProductCategoryAllResponseInterface
-} from '~/components/Admin/Types/Interface'
+} from '~/types'
 
 export const useProductCategory = () => {
   const [products, setProducts] = useState<ProductCategoryDetailInterface[]>([])

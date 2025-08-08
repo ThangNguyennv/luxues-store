@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
-import type { AccountInfoInterface, AccountInterface } from '~/components/Admin/Types/Interface'
+import type { AccountInfoInterface, AccountInterface } from '~/types'
 import { fetchLogoutAPI } from '~/apis/admin/auth.api'
 
 export const useHeader = () => {

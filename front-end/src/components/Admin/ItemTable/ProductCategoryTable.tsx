@@ -3,14 +3,14 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { AlertToast } from '~/components/Alert/Alert'
+import { AlertToast } from '~/components/alert/Alert'
 import Checkbox from '@mui/material/Checkbox'
-import { useTable } from '~/hooks/Admin/ProductCategory/useTable'
+import { useTable } from '~/hooks/admin/productCategory/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-import type { Props } from '~/hooks/Admin/ProductCategory/useTable'
-import ProductRow from '../TableTree/TableTree'
+import type { Props } from '~/hooks/admin/productCategory/useTable'
+import ProductTree from '../TableTree/ProductTree'
 
-const ProductCategoryTableProps = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+const ProductCategoryTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
   const {
     products,
     setProducts,
@@ -51,7 +51,6 @@ const ProductCategoryTableProps = ({ listProducts, listAccounts, selectedIds, se
                 sx={{ padding: 0 }}
               />
             </TableCell>
-            <TableCell align='center'>STT</TableCell>
             <TableCell align='center'>Tiêu đề</TableCell>
             <TableCell align='center'>Hình ảnh</TableCell>
             <TableCell align='center'>Vị trí</TableCell>
@@ -63,7 +62,7 @@ const ProductCategoryTableProps = ({ listProducts, listAccounts, selectedIds, se
         </TableHead>
         <TableBody>
           {products.map(product => (
-            <ProductRow
+            <ProductTree
               key={product._id}
               product={product}
               level={1}
@@ -82,4 +81,4 @@ const ProductCategoryTableProps = ({ listProducts, listAccounts, selectedIds, se
   )
 }
 
-export default ProductCategoryTableProps
+export default ProductCategoryTable

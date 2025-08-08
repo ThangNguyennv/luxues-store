@@ -1,4 +1,4 @@
-import { useDashboard } from '~/hooks/Admin/Dashboard/useDashboard'
+import { useDashboard } from '~/hooks/admin/dashboard/useDashboard'
 
 const Dashboard = () => {
   const {

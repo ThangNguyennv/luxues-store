@@ -7,7 +7,7 @@ import type {
   FilterStatusInterface,
   PaginationInterface,
   AccountInfoInterface
-} from '~/components/Admin/Types/Interface'
+} from '~/types'
 
 export const useProduct = () => {
   const [products, setProducts] = useState<ProductDetailInterface[]>([])

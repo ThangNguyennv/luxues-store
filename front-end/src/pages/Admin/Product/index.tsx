@@ -1,12 +1,12 @@
+import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
+import PaginationProps from '~/components/admin/Pagination/Pagination'
+import ProductTableProps from '~/components/admin/ItemTable/ProductTable'
+import SearchProps from '~/components/admin/Search/Search'
+import { AlertToast } from '~/components/alert/Alert'
+import { useProduct } from '~/hooks/admin/product/useProduct'
 import { Link } from 'react-router-dom'
-import FilterStatusProps from '~/components/Admin/FilterStatus/FilterStatus'
-import ProductCategoryTableProps from '~/components/Admin/ItemTable/ProductCategoryTableProps'
-import PaginationProps from '~/components/Admin/Pagination/Pagination'
-import SearchProps from '~/components/Admin/Search/Search'
-import { AlertToast } from '~/components/Alert/Alert'
-import { useProductCategory } from '~/hooks/Admin/ProductCategory/useProduct'
 
-const ProductCategoryAdmin = () => {
+const ProductAdmin = () => {
   const {
     products,
     accounts,
@@ -29,7 +29,7 @@ const ProductCategoryAdmin = () => {
     handleSubmit,
     handleSort,
     clearSortParams
-  } = useProductCategory()
+  } = useProduct()
 
   return (
     <>
@@ -39,12 +39,12 @@ const ProductCategoryAdmin = () => {
         onClose={() => setAlertOpen(false)}
         severity={alertSeverity}
       />
-      <h1 className="text-[30px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
       <div className='flex flex-col gap-[15px]'>
+        <h1 className='text-[30px] font-[700] text-[#000000]'>Danh sách sản phẩm</h1>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
-            <FilterStatusProps
+            <FilterStatus
               filterStatus={filterStatus}
               currentStatus={currentStatus}
               handleFilterStatus={(status) => updateSearchParams('status', status)}
@@ -101,7 +101,7 @@ const ProductCategoryAdmin = () => {
             <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductCategoryTableProps
+        <ProductTableProps
           listProducts={products}
           listAccounts={accounts}
           selectedIds={selectedIds}
@@ -118,4 +118,4 @@ const ProductCategoryAdmin = () => {
   )
 }
 
-export default ProductCategoryAdmin
+export default ProductAdmin

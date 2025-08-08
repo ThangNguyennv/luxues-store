@@ -1,6 +1,6 @@
 import backgroundLogin from '~/assets/images/Home/image-login.png'
-import { AlertToast } from '~/components/Alert/Alert'
-import { useLoginAdmin } from '~/hooks/Admin/Auth/useLogin'
+import { AlertToast } from '~/components/alert/Alert'
+import { useLoginAdmin } from '~/hooks/admin/auth/useLogin'
 
 const Login = () => {
   const {
