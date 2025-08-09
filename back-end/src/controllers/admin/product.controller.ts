@@ -72,7 +72,7 @@ export const product = async (req: Request, res: Response) => {
         updatedBy['accountFullName'] = userUpdated.fullName
       }
     }
-    const account = await Account.find({
+    const accounts = await Account.find({
       deleted: false
     })
     res.json({
@@ -82,7 +82,7 @@ export const product = async (req: Request, res: Response) => {
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
       pagination: objectPagination,
-      account: account
+      accounts: accounts
     })
   } catch (error) {
     res.json({

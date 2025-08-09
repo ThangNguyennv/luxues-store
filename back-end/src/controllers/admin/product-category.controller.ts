@@ -37,20 +37,20 @@ export const index = async (req: Request, res: Response) => {
     }
     // // End Sort
 
-    const records = await ProductCategory.find(find).sort(sort)
+    const productCategories = await ProductCategory.find(find).sort(sort)
 
-    const newRecords = tree(records as unknown as TreeItem[])
+    const newProductCategories = tree(productCategories as unknown as TreeItem[])
 
     // Add log info to all nodes (parent and children)
-    await addLogInfoToTree(newRecords as LogNode[])
-    const account = await Account.find({
+    await addLogInfoToTree(newProductCategories as LogNode[])
+    const accounts = await Account.find({
       deleted: false
     })
     res.json({
       code: 200,
       message: 'Thành công!',
-      records: newRecords,
-      account: account,
+      productCategories: newProductCategories,
+      accounts: accounts,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword
     })
@@ -256,11 +256,11 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
       _id: req.params.id
     }
-    const record = await ProductCategory.findOne(find)
+    const productCategory = await ProductCategory.findOne(find)
     res.json({
       code: 200,
       message: 'Thành công!',
-      record: record
+      productCategory: productCategory
     })
   } catch (error) {
     res.json({
