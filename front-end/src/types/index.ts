@@ -4,7 +4,7 @@ export interface ProductDetailInterface {
     createdAt: Date
   },
   updatedBy: {
-    length: number
+    length: number,
     account_id: string,
     updatedAt: Date
   }[],
@@ -28,7 +28,7 @@ export interface ProductCategoryDetailInterface {
     createdAt: Date
   },
   updatedBy: {
-    length: number
+    length: number,
     account_id: string,
     updatedAt: Date
   }[],
@@ -126,3 +126,29 @@ export interface AccountInterface {
 export interface ProductInterface {
   product: ProductDetailInterface
 }
+
+export interface ProductCategoryState {
+  products: ProductCategoryDetailInterface[],
+  accounts: AccountInfoInterface[],
+  filterStatus: FilterStatusInterface[],
+  pagination: PaginationInterface | null,
+  keyword: string,
+  sortKey: string,
+  sortValue: string,
+  loading: boolean
+}
+
+export type ProductCategoryAction =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DATA'; payload: Partial<ProductCategoryState> }
+  | { type: 'RESET' }
+
+export type AlertState = {
+  open: boolean
+  message: string
+  severity: 'success' | 'error'
+}
+
+export type AlertAction =
+  | { type: 'SHOW_ALERT', payload: { message: string; severity: 'success' | 'error' } }
+  | { type: 'HIDE_ALERT' }

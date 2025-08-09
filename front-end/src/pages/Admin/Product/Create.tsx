@@ -1,29 +1,27 @@
 import { Editor } from '@tinymce/tinymce-react'
+import SelectTree from '~/components/admin/TableTree/SelectTree'
 import { AlertToast } from '~/components/alert/Alert'
 import { useCreate } from '~/hooks/admin/product/useCreate'
 import { API_KEY } from '~/utils/constants'
 
 const CreateProduct = () => {
   const {
+    loading,
+    products,
     productInfo,
     setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
+    // alertOpen,
+    // setAlertOpen,
+    // alertMessage,
+    // alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
     handleSubmit
   } = useCreate()
+  // if (!loading) return <p>Đang tải...</p>
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
       <form onSubmit={(event) => handleSubmit(event)} id="form-create-product" className="flex flex-col gap-[10px]" encType="multipart/form-data">
         <div className="form-group">
@@ -39,6 +37,15 @@ const CreateProduct = () => {
           <label htmlFor="product_category_id">Danh mục</label>
           <select name="product_category_id" id="product_category_id" className="outline-none border rounded-[5px] border-[#00171F]">
             <option value={''}>-- Chọn danh mục</option>
+            {products.map(product => (
+              <SelectTree
+                key={product._id}
+                product={product}
+                level={1}
+                products={products}
+                parent_id={''}
+              />
+            ))}
           </select>
         </div>
 

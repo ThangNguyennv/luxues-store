@@ -1,22 +1,22 @@
-import { Snackbar, Alert, type AlertColor } from '@mui/material'
+import { Snackbar, Alert } from '@mui/material'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
 
-interface ToastAlertProps {
-  open: boolean
-  message: string
-  severity?: AlertColor
-  onClose: () => void
-}
-
-export const AlertToast = ({ open, message, severity, onClose }: ToastAlertProps) => {
+export const AlertToast = () => {
+  const { state, dispatch } = useAlertContext()
+  const { open, message, severity } = state
   return (
     <>
       <Snackbar
         open={open}
         autoHideDuration={2000}
-        onClose={onClose}
+        onClose={() => dispatch({ type: 'HIDE_ALERT' })}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={onClose} severity={severity} variant="filled" sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => dispatch({ type: 'HIDE_ALERT' })}
+          severity={severity}
+          variant="filled"
+          sx={{ width: '100%' }}>
           {message}
         </Alert>
       </Snackbar>

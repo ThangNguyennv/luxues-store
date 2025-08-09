@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchCreateProductAPI } from '~/apis/admin/product.api'
-import type { ProductCategoryDetailInterface, ProductDetailInterface } from '~/types'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
+import type { ProductDetailInterface } from '~/types'
 
 export const useCreate = () => {
   const initialProduct: ProductDetailInterface = {
@@ -23,13 +25,15 @@ export const useCreate = () => {
     updatedBy: [],
     productCategoryId: ''
   }
-  const [productInfo, setProductInfo] = useState<ProductDetailInterface>(initialProduct)
-  const [listCategories, setListCategories] = useState<ProductCategoryDetailInterface[]>([])
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
-  const navigate = useNavigate()
 
+  const [productInfo, setProductInfo] = useState<ProductDetailInterface>(initialProduct)
+  // const [alertOpen, setAlertOpen] = useState(false)
+  // const [alertMessage, setAlertMessage] = useState('')
+  // const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const navigate = useNavigate()
+  const { stateProductCategory, fetchData } = useProductCategoryContext()
+  const { state, dispatch } = useAlertContext()
+  const { products, loading } = stateProductCategory
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
@@ -49,9 +53,13 @@ export const useCreate = () => {
     const response = await fetchCreateProductAPI(formData)
     if (response.code === 201) {
       setProductInfo(response.data)
-      setAlertMessage('Đã tạo thành công sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      // setAlertMessage('Đã tạo thành công sản phẩm!')
+      // setAlertSeverity('success')
+      // setAlertOpen(true)
+      dispatch({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Tạo mới sản phẩm thành công!', severity: 'success' }
+      })
       setTimeout(() => {
         navigate('/admin/products')
       }, 2000)
@@ -59,16 +67,18 @@ export const useCreate = () => {
   }
 
   useEffect(() => {
-
-  }, [])
+    fetchData() // gọi API khi component mount
+  }, [fetchData])
 
   return {
+    loading,
+    products,
     productInfo,
     setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
+    // alertOpen,
+    // setAlertOpen,
+    // alertMessage,
+    // alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

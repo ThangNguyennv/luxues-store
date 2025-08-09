@@ -1,145 +1,136 @@
-import { useEffect, useState, type ChangeEvent } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI, fetchProductCategoryAllAPI } from '~/apis/admin/product.api'
-import type {
-  FilterStatusInterface,
-  PaginationInterface,
-  AccountInfoInterface,
-  ProductCategoryDetailInterface,
-  ProductCategoryAllResponseInterface
-} from '~/types'
+import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 
 export const useProductCategory = () => {
-  const [products, setProducts] = useState<ProductCategoryDetailInterface[]>([])
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
-  const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])
-  const [pagination, setPagination] = useState<PaginationInterface | null>(null)
-  const [keyword, setKeyword] = useState('')
-  const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [alertOpen, setAlertOpen] = useState(false)
   const [alertMessage, setAlertMessage] = useState('')
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
   const [actionType, setActionType] = useState('')
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
 
-  useEffect(() => {
-    fetchProductCategoryAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue).then((res: ProductCategoryAllResponseInterface) => {
-      setProducts(res.records)
-      setAccounts(res.account)
-      setPagination(res.pagination)
-      setFilterStatus(res.filterStatus)
-      setKeyword(res.currentKeyword)
-    })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue])
+  const { state, fetchData, dispatch } = useProductCategoryContext()
+  const { products, accounts, filterStatus, pagination, keyword, loading } = state
 
-  const updateSearchParams = (key: string, value: string): void => {
-    const newParams = new URLSearchParams(searchParams)
-    if (value) {
-      newParams.set(key, value)
-    } else {
-      newParams.delete(key)
-    }
-    // Xoá liên quan nếu clear cả 2
-    if (key === 'sortKey' || key === 'sortValue') {
-      if (!value) {
+  useEffect(() => {
+    fetchData({
+      status: currentStatus,
+      page: currentPage,
+      keyword: currentKeyword,
+      sortKey: currentSortKey,
+      sortValue: currentSortValue
+    })
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchData])
+
+  const updateSearchParams = useCallback(
+    (key: string, value: string) => {
+      const newParams = new URLSearchParams(searchParams)
+      if (value) {
+        newParams.set(key, value)
+      } else {
+        newParams.delete(key)
+      }
+
+      // Nếu xóa sortKey hoặc sortValue → xóa cả 2
+      if ((key === 'sortKey' || key === 'sortValue') && !value) {
         newParams.delete('sortKey')
         newParams.delete('sortValue')
       }
-    }
-    setSearchParams(newParams)
-  }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const typeChange = actionType
-    if (selectedIds.length === 0) {
-      showAlert('Vui lòng chọn ít nhất một bản ghi!', 'error')
-      return
-    }
-
-    if (!typeChange) {
-      showAlert('Vui lòng chọn hành động', 'error')
-      return
-    }
-
-    if (typeChange === 'delete-all') {
-      const isConfirm = confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')
-      if (!isConfirm) return
-    }
-
-    const selectedProducts = products.filter(product =>
-      selectedIds.includes(product._id)
-    )
-
-    let result: string[] = []
-    if (typeChange === 'change-position') {
-      result = selectedProducts.map(product => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${product._id}"]`
-        )
-        const position = positionInput?.value || ''
-        return `${product._id}-${position}`
-      })
-    } else {
-      result = selectedProducts.map(product => product._id)
-    }
-
-    const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
-
-    if ([200, 204].includes(response.code)) {
-      showAlert(response.message, 'success')
-    } else {
-      showAlert(response.message, 'error')
-    }
-
-    setSelectedIds([])
-    setActionType('')
-
-    // Refetch
-    const res = await fetchProductCategoryAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue)
-    setProducts(res.records)
-    setPagination(res.pagination)
-    setFilterStatus(res.filterStatus)
-    setKeyword(res.currentKeyword)
-  }
-
-  const handleSort = async (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.currentTarget.value
-    const [sortKey, sortValue] = value.split('-')
-    if (sortKey && sortValue) {
-      const newParams = new URLSearchParams(searchParams)
-      newParams.set('sortKey', sortKey)
-      newParams.set('sortValue', sortValue)
       setSearchParams(newParams)
-    }
-  }
-  const clearSortParams = () => {
-    const newParams = new URLSearchParams(searchParams)
-    newParams.delete('sortKey')
-    newParams.delete('sortValue')
-    setSearchParams(newParams)
-  }
+    },
+    [searchParams, setSearchParams]
+  )
 
-  const showAlert = (message: string, severity: 'success' | 'error') => {
+  const showAlert = useCallback((message: string, severity: 'success' | 'error') => {
     setAlertMessage(message)
     setAlertSeverity(severity)
     setAlertOpen(true)
-  }
+  }, [])
+
+  const reloadData = useCallback(() => {
+    fetchData({
+      status: currentStatus,
+      page: currentPage,
+      keyword: currentKeyword,
+      sortKey: currentSortKey,
+      sortValue: currentSortValue
+    })
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchData])
+
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+
+      if (!selectedIds.length) {
+        showAlert('Vui lòng chọn ít nhất một bản ghi!', 'error')
+        return
+      }
+      if (!actionType) {
+        showAlert('Vui lòng chọn hành động', 'error')
+        return
+      }
+      if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')) {
+        return
+      }
+
+      const selectedProducts = products.filter(p => selectedIds.includes(p._id))
+      let result: string[] = []
+
+      if (actionType === 'change-position') {
+        result = selectedProducts.map(p => {
+          const positionInput = document.querySelector<HTMLInputElement>(
+            `input[name="position"][data-id="${p._id}"]`
+          )
+          return `${p._id}-${positionInput?.value || ''}`
+        })
+      } else {
+        result = selectedProducts.map(p => p._id)
+      }
+
+      const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
+
+      showAlert(response.message, [200, 204].includes(response.code) ? 'success' : 'error')
+
+      setSelectedIds([])
+      setActionType('')
+      reloadData()
+    },
+    [selectedIds, actionType, products, reloadData, showAlert]
+  )
+
+  const handleSort = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      const [sortKey, sortValue] = event.currentTarget.value.split('-')
+      if (sortKey && sortValue) {
+        updateSearchParams('sortKey', sortKey)
+        updateSearchParams('sortValue', sortValue)
+      }
+    },
+    [updateSearchParams]
+  )
+
+  const clearSortParams = useCallback(() => {
+    updateSearchParams('sortKey', '')
+    updateSearchParams('sortValue', '')
+  }, [updateSearchParams])
 
   return {
+    dispatch,
+    loading,
     products,
     accounts,
     filterStatus,
     pagination,
     keyword,
-    setKeyword,
     sortKey: currentSortKey,
     sortValue: currentSortValue,
     selectedIds,

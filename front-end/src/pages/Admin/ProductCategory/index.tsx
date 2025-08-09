@@ -8,12 +8,12 @@ import { useProductCategory } from '~/hooks/admin/productCategory/useProductCate
 
 const ProductCategoryAdmin = () => {
   const {
+    dispatch,
     products,
     accounts,
     filterStatus,
     pagination,
     keyword,
-    setKeyword,
     sortKey,
     sortValue,
     selectedIds,
@@ -51,7 +51,7 @@ const ProductCategoryAdmin = () => {
             />
             <SearchProps
               keyword={keyword}
-              setKeyword={setKeyword}
+              handleChangeKeyword={(value) => dispatch({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
