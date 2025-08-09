@@ -1,20 +1,19 @@
-import type { AccountInfoInterface, ProductDetailInterface } from '~/types'
+import type { AccountInfoInterface, ProductInfoInterface } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
 
 export interface Props {
-  listProducts: ProductDetailInterface[],
+  listProducts: ProductInfoInterface[],
   listAccounts: AccountInfoInterface[],
   selectedIds: string[],
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
-  const [products, setProducts] = useState<ProductDetailInterface[]>(listProducts)
+  const [products, setProducts] = useState<ProductInfoInterface[]>(listProducts)
   const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
     setProducts(listProducts)
@@ -25,14 +24,15 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
-      setProducts((prevProducts: ProductDetailInterface[]) =>
+      setProducts((prevProducts: ProductInfoInterface[]) =>
         prevProducts.map((product) =>
           product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
         )
       )
-      setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
+      })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -46,9 +46,10 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product._id !== _id)
         )
-        setAlertMessage('Đã xóa thành công sản phẩm!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
+        })
       }
     } else if (response.code === 400) {
       alert('error: ' + response.error)
@@ -70,18 +71,13 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
       setSelectedIds([])
     }
   }
+
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
 
   return {
     products,
     setProducts,
     accounts,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    setAlertMessage,
-    alertSeverity,
-    setAlertSeverity,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,

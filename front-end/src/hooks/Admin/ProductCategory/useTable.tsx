@@ -1,38 +1,38 @@
-import type { AccountInfoInterface, ProductCategoryDetailInterface } from '~/types'
+import type { AccountInfoInterface, ProductCategoryInfoInterface } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
 
 export interface Props {
-  listProducts: ProductCategoryDetailInterface[] | [],
+  listProductCategories: ProductCategoryInfoInterface[] | [],
   listAccounts: AccountInfoInterface[],
   selectedIds: string[],
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
-export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
-  const [products, setProducts] = useState<ProductCategoryDetailInterface[]>(listProducts)
+export const useTable = ({ listProductCategories, listAccounts, selectedIds, setSelectedIds }: Props) => {
+  const [productCategories, setProductCategories] = useState<ProductCategoryInfoInterface[]>(listProductCategories)
   const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
-    setProducts(listProducts)
+    setProductCategories(listProductCategories)
     setAccounts(listAccounts)
-  }, [listProducts, listAccounts])
+  }, [listProductCategories, listAccounts])
 
   const handleToggleStatus = async (_id: string, currentStatus: string, updatedBy: { length: number; account_id: string; updatedAt: Date }): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
-      setProducts((prevProducts: ProductCategoryDetailInterface[]) =>
-        prevProducts.map((product) =>
-          product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
+      setProductCategories((prevProductCategories: ProductCategoryInfoInterface[]) =>
+        prevProductCategories.map((productCategory) =>
+          productCategory._id === _id ? { ...productCategory, status: newStatus, updatedBy: [...(productCategory.updatedBy || []), updatedBy!] } : productCategory
         )
       )
-      setAlertMessage('Đã cập nhật thành công trạng thái sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
+      })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -43,12 +43,13 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
     const response = await fetchDeleteProductAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== _id)
+        setProductCategories((prevProductCategories) =>
+          prevProductCategories.filter((productCategory) => productCategory._id !== _id)
         )
-        setAlertMessage('Đã xóa thành công sản phẩm!')
-        setAlertSeverity('success')
-        setAlertOpen(true)
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
+        })
       }
     } else if (response.code === 400) {
       alert('error: ' + response.error)
@@ -64,24 +65,18 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
   }
   const handleCheckAll = (checked: boolean) => {
     if (checked) {
-      const allIds = products.map((product) => product._id)
+      const allIds = productCategories.map((productCategory) => productCategory._id)
       setSelectedIds(allIds)
     } else {
       setSelectedIds([])
     }
   }
-  const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+  const isCheckAll = (productCategories.length > 0) && (selectedIds.length === productCategories.length)
 
   return {
-    products,
+    productCategories,
     accounts,
-    setProducts,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    setAlertMessage,
-    alertSeverity,
-    setAlertSeverity,
+    setProductCategories,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,

@@ -2,26 +2,21 @@ import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
 import PaginationProps from '~/components/admin/Pagination/Pagination'
 import ProductTableProps from '~/components/admin/ItemTable/ProductTable'
 import SearchProps from '~/components/admin/Search/Search'
-import { AlertToast } from '~/components/alert/Alert'
 import { useProduct } from '~/hooks/admin/product/useProduct'
 import { Link } from 'react-router-dom'
 
 const ProductAdmin = () => {
   const {
+    dispatchProduct,
     products,
     accounts,
     filterStatus,
     pagination,
     keyword,
-    setKeyword,
     sortKey,
     sortValue,
     selectedIds,
     setSelectedIds,
-    alertOpen,
-    alertMessage,
-    alertSeverity,
-    setAlertOpen,
     actionType,
     setActionType,
     currentStatus,
@@ -33,12 +28,6 @@ const ProductAdmin = () => {
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <div className='flex flex-col gap-[15px]'>
         <h1 className='text-[30px] font-[700] text-[#000000]'>Danh sách sản phẩm</h1>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
@@ -51,7 +40,7 @@ const ProductAdmin = () => {
             />
             <SearchProps
               keyword={keyword}
-              setKeyword={setKeyword}
+              handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>

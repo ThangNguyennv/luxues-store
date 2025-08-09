@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface, ProductInterface } from '~/types'
+import type { ProductDetailInterface, ProductInfoInterface } from '~/types'
 
 export const useEdit = () => {
-  const [productInfo, setProductInfo] = useState<ProductDetailInterface | null>(null)
+  const [productInfo, setProductInfo] = useState<ProductInfoInterface | null>(null)
   const params = useParams()
   const id = params.id as string
   const [alertOpen, setAlertOpen] = useState(false)
@@ -15,7 +15,7 @@ export const useEdit = () => {
   useEffect(() => {
     if (!id) return
     fetchDetailProductAPI(id)
-      .then((response: ProductInterface) => {
+      .then((response: ProductDetailInterface) => {
         setProductInfo(response.product)
       })
   }, [id])

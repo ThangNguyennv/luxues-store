@@ -1,13 +1,12 @@
 import { Editor } from '@tinymce/tinymce-react'
 import SelectTree from '~/components/admin/TableTree/SelectTree'
-import { AlertToast } from '~/components/alert/Alert'
 import { useCreate } from '~/hooks/admin/product/useCreate'
 import { API_KEY } from '~/utils/constants'
 
 const CreateProduct = () => {
   const {
     loading,
-    products,
+    productCategories,
     productInfo,
     setProductInfo,
     // alertOpen,
@@ -37,12 +36,12 @@ const CreateProduct = () => {
           <label htmlFor="product_category_id">Danh mục</label>
           <select name="product_category_id" id="product_category_id" className="outline-none border rounded-[5px] border-[#00171F]">
             <option value={''}>-- Chọn danh mục</option>
-            {products.map(product => (
+            {productCategories.map(productCategory => (
               <SelectTree
-                key={product._id}
-                product={product}
+                key={productCategory._id}
+                productCategory={productCategory}
                 level={1}
-                products={products}
+                productCategories={productCategories}
                 parent_id={''}
               />
             ))}

@@ -1,28 +1,28 @@
 /* eslint-disable no-unused-vars */
 // ProductCategoryContext.tsx
-import { createContext, useContext, useReducer, useCallback } from 'react'
+import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
 import { fetchProductCategoryAllAPI } from '~/apis/admin/product.api'
 import { initialState, productCategoryReducer } from '~/reducers/admin/productCategoryReducer'
-import type { ProductCategoryAction, ProductCategoryAllResponseInterface, ProductCategoryState } from '~/types'
+import type { ProductCategoryActions, ProductCategoryAllResponseInterface, ProductCategoryStates } from '~/types'
 
 interface ProductCategoryContextType {
-  stateProductCategory: ProductCategoryState
-  fetchData: (params?: {
+  stateProductCategory: ProductCategoryStates
+  fetchProductCategory: (params?: {
     status?: string
     page?: number
     keyword?: string
     sortKey?: string
     sortValue?: string
   }) => Promise<void>
-  dispatch: React.Dispatch<ProductCategoryAction>
+  dispatchProductCategory: React.Dispatch<ProductCategoryActions>
 }
 
 const ProductCategoryContext = createContext<ProductCategoryContextType | null>(null)
 
 export const ProductCategoryProvider = ({ children }: { children: React.ReactNode }) => {
-  const [stateProductCategory, dispatch] = useReducer(productCategoryReducer, initialState)
+  const [stateProductCategory, dispatchProductCategory] = useReducer(productCategoryReducer, initialState)
 
-  const fetchData = useCallback(
+  const fetchProductCategory = useCallback(
     async ({
       status = '',
       page = 1,
@@ -30,7 +30,7 @@ export const ProductCategoryProvider = ({ children }: { children: React.ReactNod
       sortKey = '',
       sortValue = ''
     } = {}) => {
-      dispatch({ type: 'SET_LOADING', payload: true })
+      dispatchProductCategory({ type: 'SET_LOADING', payload: true })
       try {
         const res: ProductCategoryAllResponseInterface = await fetchProductCategoryAllAPI(
           status,
@@ -39,27 +39,27 @@ export const ProductCategoryProvider = ({ children }: { children: React.ReactNod
           sortKey,
           sortValue
         )
-        dispatch({
+        dispatchProductCategory({
           type: 'SET_DATA',
           payload: {
-            products: res.records,
-            accounts: res.account,
+            productCategories: res.productCategories,
+            accounts: res.accounts,
             pagination: res.pagination,
             filterStatus: res.filterStatus,
-            keyword: res.currentKeyword,
+            keyword: res.keyword,
             sortKey,
             sortValue
           }
         })
       } finally {
-        dispatch({ type: 'SET_LOADING', payload: false })
+        dispatchProductCategory({ type: 'SET_LOADING', payload: false })
       }
-    },
-    []
-  )
-
+    }, [])
+  useEffect(() => {
+    fetchProductCategory()
+  }, [fetchProductCategory])
   return (
-    <ProductCategoryContext.Provider value={{ stateProductCategory, fetchData, dispatch }}>
+    <ProductCategoryContext.Provider value={{ stateProductCategory, fetchProductCategory, dispatchProductCategory }}>
       {children}
     </ProductCategoryContext.Provider>
   )

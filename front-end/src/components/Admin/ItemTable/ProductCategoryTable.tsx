@@ -3,37 +3,26 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { AlertToast } from '~/components/alert/Alert'
 import Checkbox from '@mui/material/Checkbox'
 import { useTable } from '~/hooks/admin/productCategory/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/admin/productCategory/useTable'
 import ProductTree from '../TableTree/ProductTree'
 
-const ProductCategoryTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+const ProductCategoryTable = ({ listProductCategories, listAccounts, selectedIds, setSelectedIds }: Props) => {
   const {
-    products,
-    setProducts,
+    productCategories,
+    setProductCategories,
     accounts,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,
     handleCheckAll,
     isCheckAll
-  } = useTable({ listProducts, listAccounts, selectedIds, setSelectedIds })
+  } = useTable({ listProductCategories, listAccounts, selectedIds, setSelectedIds })
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <Table sx={{
         borderCollapse: 'collapse',
         '& th, & td': {
@@ -61,18 +50,18 @@ const ProductCategoryTable = ({ listProducts, listAccounts, selectedIds, setSele
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map(product => (
+          {productCategories.map(productCategory => (
             <ProductTree
-              key={product._id}
-              product={product}
+              key={productCategory._id}
+              productCategory={productCategory}
               level={1}
               selectedIds={selectedIds}
               accounts={accounts}
               handleCheckbox={handleCheckbox}
               handleToggleStatus={handleToggleStatus}
               handleDeleteProduct={handleDeleteProduct}
-              setProducts={setProducts}
-              products={products}
+              setProductCategories={setProductCategories}
+              productCategories={productCategories}
             />
           ))}
         </TableBody>

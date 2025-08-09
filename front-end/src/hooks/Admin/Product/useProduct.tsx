@@ -1,25 +1,16 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI, fetchProductAllAPI } from '~/apis/admin/product.api'
-import type {
-  ProductAllResponseInterface,
-  ProductDetailInterface,
-  FilterStatusInterface,
-  PaginationInterface,
-  AccountInfoInterface
-} from '~/types'
+import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductContext } from '~/contexts/admin/ProductContext'
 
 export const useProduct = () => {
-  const [products, setProducts] = useState<ProductDetailInterface[]>([])
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
-  const [filterStatus, setFilterStatus] = useState<FilterStatusInterface[]>([])
-  const [pagination, setPagination] = useState<PaginationInterface | null>(null)
-  const [keyword, setKeyword] = useState('')
+  const { stateProduct, fetchProduct, dispatchProduct } = useProductContext()
+  const { products, accounts, pagination, filterStatus, keyword } = stateProduct
+  const { dispatchAlert } = useAlertContext()
+
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
   const [actionType, setActionType] = useState('')
 
   const currentStatus = searchParams.get('status') || ''
@@ -29,30 +20,40 @@ export const useProduct = () => {
   const currentSortValue = searchParams.get('sortValue') || ''
 
   useEffect(() => {
-    fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue).then((res: ProductAllResponseInterface) => {
-      setProducts(res.products)
-      setAccounts(res.account)
-      setPagination(res.pagination)
-      setFilterStatus(res.filterStatus)
-      setKeyword(res.currentKeyword)
+    fetchProduct({
+      status: currentStatus,
+      page: currentPage,
+      keyword: currentKeyword,
+      sortKey: currentSortKey,
+      sortValue: currentSortValue
     })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue])
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchProduct])
 
-  const updateSearchParams = (key: string, value: string): void => {
+  const updateSearchParams = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams)
     if (value) {
       newParams.set(key, value)
     } else {
       newParams.delete(key)
     }
-    // Xoá liên quan nếu clear cả 2
-    if (key === 'sortKey' || key === 'sortValue') {
-      if (!value) {
-        newParams.delete('sortKey')
-        newParams.delete('sortValue')
-      }
+
+    // Nếu xóa sortKey hoặc sortValue → xóa cả 2
+    if ((key === 'sortKey' || key === 'sortValue') && !value) {
+      newParams.delete('sortKey')
+      newParams.delete('sortValue')
     }
+
     setSearchParams(newParams)
+  }
+
+  const reloadData = () => {
+    fetchProduct({
+      status: currentStatus,
+      page: currentPage,
+      keyword: currentKeyword,
+      sortKey: currentSortKey,
+      sortValue: currentSortValue
+    })
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -60,12 +61,18 @@ export const useProduct = () => {
 
     const typeChange = actionType
     if (selectedIds.length === 0) {
-      showAlert('Vui lòng chọn ít nhất một bản ghi!', 'error')
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Vui lòng chọn ít nhất một bản ghi!', severity: 'error' }
+      })
       return
     }
 
     if (!typeChange) {
-      showAlert('Vui lòng chọn hành động', 'error')
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Vui lòng chọn hành động!', severity: 'error' }
+      })
       return
     }
 
@@ -94,23 +101,25 @@ export const useProduct = () => {
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
     if ([200, 204].includes(response.code)) {
-      showAlert(response.message, 'success')
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
     } else {
-      showAlert(response.message, 'error')
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'error' }
+      })
     }
 
     setSelectedIds([])
     setActionType('')
 
     // Refetch
-    const res = await fetchProductAllAPI(currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue)
-    setProducts(res.products)
-    setPagination(res.pagination)
-    setFilterStatus(res.filterStatus)
-    setKeyword(res.currentKeyword)
+    reloadData()
   }
 
-  const handleSort = async (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.currentTarget.value
     const [sortKey, sortValue] = value.split('-')
     if (sortKey && sortValue) {
@@ -127,27 +136,17 @@ export const useProduct = () => {
     setSearchParams(newParams)
   }
 
-  const showAlert = (message: string, severity: 'success' | 'error') => {
-    setAlertMessage(message)
-    setAlertSeverity(severity)
-    setAlertOpen(true)
-  }
-
   return {
+    dispatchProduct,
     products,
     accounts,
     filterStatus,
     pagination,
     keyword,
-    setKeyword,
     sortKey: currentSortKey,
     sortValue: currentSortValue,
     selectedIds,
     setSelectedIds,
-    alertOpen,
-    alertMessage,
-    alertSeverity,
-    setAlertOpen,
     actionType,
     setActionType,
     currentStatus,

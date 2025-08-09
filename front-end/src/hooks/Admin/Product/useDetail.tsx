@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchDetailProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface, ProductInterface } from '~/types'
+import type { ProductDetailInterface, ProductInfoInterface } from '~/types'
 
 export const useDetail = () => {
-  const [productDetail, setProductDetail] = useState<ProductDetailInterface | null>(null)
+  const [productDetail, setProductDetail] = useState<ProductInfoInterface | null>(null)
   const params = useParams()
   const id = params.id
 
   useEffect(() => {
     if (!id) return
     fetchDetailProductAPI(id)
-      .then((response: ProductInterface) => {
+      .then((response: ProductDetailInterface) => {
         setProductDetail(response.product)
       })
   }, [id])

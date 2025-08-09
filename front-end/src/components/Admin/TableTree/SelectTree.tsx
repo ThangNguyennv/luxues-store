@@ -1,26 +1,25 @@
-import type { ProductCategoryDetailInterface } from '~/types'
-
+import type { ProductCategoryInfoInterface } from '~/types'
 
 interface Props {
-  product: ProductCategoryDetailInterface
+  productCategory: ProductCategoryInfoInterface
   level: number
-  products: ProductCategoryDetailInterface[]
+  productCategories: ProductCategoryInfoInterface[]
   parent_id: string
 }
 
-const SelectTree = ({ product, level, products, parent_id }: Props) => {
+const SelectTree = ({ productCategory, level, productCategories, parent_id }: Props) => {
   const prefix = '- '.repeat(level)
   return (
     <>
-      <option value={product._id} selected={product._id === parent_id ? true : false}>
-        {prefix}{product.title}
+      <option value={productCategory._id} selected={productCategory._id === parent_id ? true : false}>
+        {prefix}{productCategory.title}
       </option>
-      {product.children?.map((child) => (
+      {productCategory.children?.map((child) => (
         <SelectTree
           key={child._id}
           level={level + 1}
-          product={child}
-          products={products}
+          productCategory={child}
+          productCategories={productCategories}
           parent_id={parent_id}
         />
       ))}

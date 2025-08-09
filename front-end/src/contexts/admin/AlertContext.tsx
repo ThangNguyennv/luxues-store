@@ -3,16 +3,16 @@ import { alertReducer, initialState } from '~/reducers/admin/alertReducer'
 import type { AlertAction, AlertState } from '~/types'
 
 interface AlertContextType {
-  state: AlertState
-  dispatch: React.Dispatch<AlertAction>
+  stateAlert: AlertState
+  dispatchAlert: React.Dispatch<AlertAction>
 }
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined)
 
 export function AlertProvider({ children }: {children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(alertReducer, initialState)
+  const [stateAlert, dispatchAlert] = useReducer(alertReducer, initialState)
   return (
-    <AlertContext.Provider value={{ state, dispatch }}>
+    <AlertContext.Provider value={{ stateAlert, dispatchAlert }}>
       {children}
     </AlertContext.Provider>
   )

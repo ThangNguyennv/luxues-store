@@ -1,11 +1,16 @@
 /* eslint-disable indent */
-import type { ProductCategoryAction, ProductCategoryState } from '~/types'
+import type { ProductCategoryActions, ProductCategoryStates } from '~/types'
 
-export const initialState: ProductCategoryState = {
-  products: [],
+export const initialState: ProductCategoryStates = {
+  productCategories: [],
   accounts: [],
   filterStatus: [],
-  pagination: null,
+  pagination:  {
+    currentPage: 1,
+    limitItems: 3,
+    skip: 0,
+    totalPage: 0
+  },
   keyword: '',
   sortKey: '',
   sortValue: '',
@@ -13,12 +18,12 @@ export const initialState: ProductCategoryState = {
 }
 
 export function productCategoryReducer(
-  stateProductCategory: ProductCategoryState,
-  actionProductCategory: ProductCategoryAction
-): ProductCategoryState {
+  stateProductCategory: ProductCategoryStates,
+  actionProductCategory: ProductCategoryActions
+): ProductCategoryStates {
   switch (actionProductCategory.type) {
     case 'SET_LOADING':
-        return { ...stateProductCategory, loading: actionProductCategory.payload }
+      return { ...stateProductCategory, loading: actionProductCategory.payload }
     case 'SET_DATA':
       return { ...stateProductCategory, ...actionProductCategory.payload }
     case 'RESET':

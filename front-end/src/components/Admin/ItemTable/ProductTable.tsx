@@ -3,7 +3,6 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import { AlertToast } from '~/components/alert/Alert'
 import { Link } from 'react-router-dom'
 import Checkbox from '@mui/material/Checkbox'
 import { useTable } from '~/hooks/admin/product/useTable'
@@ -16,10 +15,6 @@ const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds 
     products,
     setProducts,
     accounts,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,
@@ -29,12 +24,6 @@ const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds 
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <Table sx={{
         borderCollapse: 'collapse',
         '& th, & td': {
@@ -103,19 +92,12 @@ const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds 
                   />
                 </TableCell>
                 <TableCell align='center'>
-                  {product.status === 'active' ? (
-                    <button
-                      onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
-                      className="cursor-pointer border rounded-[5px] bg-[#607D00] p-[5px] text-white">
-                        Hoạt động
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
-                      className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">
-                        Ngừng hoạt động
-                    </button>
-                  )}
+                  <button
+                    onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
+                    className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${product.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                  >
+                    {product.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
+                  </button>
                 </TableCell>
                 <TableCell align='center' className='font-[700] '>{(() => {
                   const creator = accounts.find(

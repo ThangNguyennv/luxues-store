@@ -1,13 +1,15 @@
-import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 
 export const useProductCategory = () => {
+  const { stateProductCategory, fetchProductCategory, dispatchProductCategory } = useProductCategoryContext()
+  const { productCategories, accounts, filterStatus, pagination, keyword, loading } = stateProductCategory
+  const { dispatchAlert } = useAlertContext()
+
   const [selectedIds, setSelectedIds] = useState<string[]>([])
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
   const [actionType, setActionType] = useState('')
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -17,116 +19,114 @@ export const useProductCategory = () => {
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
 
-  const { state, fetchData, dispatch } = useProductCategoryContext()
-  const { products, accounts, filterStatus, pagination, keyword, loading } = state
-
   useEffect(() => {
-    fetchData({
+    fetchProductCategory({
       status: currentStatus,
       page: currentPage,
       keyword: currentKeyword,
       sortKey: currentSortKey,
       sortValue: currentSortValue
     })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchData])
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchProductCategory])
 
-  const updateSearchParams = useCallback(
-    (key: string, value: string) => {
-      const newParams = new URLSearchParams(searchParams)
-      if (value) {
-        newParams.set(key, value)
-      } else {
-        newParams.delete(key)
-      }
+  const updateSearchParams = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value) {
+      newParams.set(key, value)
+    } else {
+      newParams.delete(key)
+    }
 
-      // Nếu xóa sortKey hoặc sortValue → xóa cả 2
-      if ((key === 'sortKey' || key === 'sortValue') && !value) {
-        newParams.delete('sortKey')
-        newParams.delete('sortValue')
-      }
+    // Nếu xóa sortKey hoặc sortValue → xóa cả 2
+    if ((key === 'sortKey' || key === 'sortValue') && !value) {
+      newParams.delete('sortKey')
+      newParams.delete('sortValue')
+    }
 
-      setSearchParams(newParams)
-    },
-    [searchParams, setSearchParams]
-  )
+    setSearchParams(newParams)
+  }
 
-  const showAlert = useCallback((message: string, severity: 'success' | 'error') => {
-    setAlertMessage(message)
-    setAlertSeverity(severity)
-    setAlertOpen(true)
-  }, [])
-
-  const reloadData = useCallback(() => {
-    fetchData({
+  const reloadData = () => {
+    fetchProductCategory({
       status: currentStatus,
       page: currentPage,
       keyword: currentKeyword,
       sortKey: currentSortKey,
       sortValue: currentSortValue
     })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchData])
+  }
 
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-      if (!selectedIds.length) {
-        showAlert('Vui lòng chọn ít nhất một bản ghi!', 'error')
-        return
-      }
-      if (!actionType) {
-        showAlert('Vui lòng chọn hành động', 'error')
-        return
-      }
-      if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')) {
-        return
-      }
+    if (!selectedIds.length) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Vui lòng chọn ít nhất một bản ghi!', severity: 'error' }
+      })
+      return
+    }
+    if (!actionType) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Vui lòng chọn hành động!', severity: 'error' }
+      })
+      return
+    }
+    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')) {
+      return
+    }
 
-      const selectedProducts = products.filter(p => selectedIds.includes(p._id))
-      let result: string[] = []
+    const selectedProducts = productCategories.filter(productCategory => selectedIds.includes(productCategory._id))
+    let result: string[] = []
 
-      if (actionType === 'change-position') {
-        result = selectedProducts.map(p => {
-          const positionInput = document.querySelector<HTMLInputElement>(
-            `input[name="position"][data-id="${p._id}"]`
-          )
-          return `${p._id}-${positionInput?.value || ''}`
-        })
-      } else {
-        result = selectedProducts.map(p => p._id)
-      }
+    if (actionType === 'change-position') {
+      result = selectedProducts.map(productCategory => {
+        const positionInput = document.querySelector<HTMLInputElement>(
+          `input[name="position"][data-id="${productCategory._id}"]`
+        )
+        return `${productCategory._id}-${positionInput?.value || ''}`
+      })
+    } else {
+      result = selectedProducts.map(productCategory => productCategory._id)
+    }
 
-      const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
+    const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
 
-      showAlert(response.message, [200, 204].includes(response.code) ? 'success' : 'error')
+    if ([200, 204].includes(response.code)) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+    } else {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'error' }
+      })
+    }
 
-      setSelectedIds([])
-      setActionType('')
-      reloadData()
-    },
-    [selectedIds, actionType, products, reloadData, showAlert]
-  )
+    setSelectedIds([])
+    setActionType('')
+    reloadData()
+  }
 
-  const handleSort = useCallback(
-    (event: ChangeEvent<HTMLSelectElement>) => {
-      const [sortKey, sortValue] = event.currentTarget.value.split('-')
-      if (sortKey && sortValue) {
-        updateSearchParams('sortKey', sortKey)
-        updateSearchParams('sortValue', sortValue)
-      }
-    },
-    [updateSearchParams]
-  )
+  const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
+    const [sortKey, sortValue] = event.currentTarget.value.split('-')
+    if (sortKey && sortValue) {
+      updateSearchParams('sortKey', sortKey)
+      updateSearchParams('sortValue', sortValue)
+    }
+  }
 
-  const clearSortParams = useCallback(() => {
+  const clearSortParams = () => {
     updateSearchParams('sortKey', '')
     updateSearchParams('sortValue', '')
-  }, [updateSearchParams])
+  }
 
   return {
-    dispatch,
+    dispatchProductCategory,
     loading,
-    products,
+    productCategories,
     accounts,
     filterStatus,
     pagination,
@@ -135,10 +135,6 @@ export const useProductCategory = () => {
     sortValue: currentSortValue,
     selectedIds,
     setSelectedIds,
-    alertOpen,
-    alertMessage,
-    alertSeverity,
-    setAlertOpen,
     actionType,
     setActionType,
     currentStatus,

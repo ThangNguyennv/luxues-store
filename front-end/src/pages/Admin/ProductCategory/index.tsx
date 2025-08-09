@@ -3,13 +3,12 @@ import FilterStatusProps from '~/components/admin/FilterStatus/FilterStatus'
 import ProductCategoryTableProps from '~/components/admin/ItemTable/ProductCategoryTable'
 import PaginationProps from '~/components/admin/Pagination/Pagination'
 import SearchProps from '~/components/admin/Search/Search'
-import { AlertToast } from '~/components/alert/Alert'
 import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
 
 const ProductCategoryAdmin = () => {
   const {
-    dispatch,
-    products,
+    dispatchProductCategory,
+    productCategories,
     accounts,
     filterStatus,
     pagination,
@@ -18,10 +17,6 @@ const ProductCategoryAdmin = () => {
     sortValue,
     selectedIds,
     setSelectedIds,
-    alertOpen,
-    alertMessage,
-    alertSeverity,
-    setAlertOpen,
     actionType,
     setActionType,
     currentStatus,
@@ -33,12 +28,6 @@ const ProductCategoryAdmin = () => {
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <h1 className="text-[30px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
       <div className='flex flex-col gap-[15px]'>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
@@ -51,7 +40,7 @@ const ProductCategoryAdmin = () => {
             />
             <SearchProps
               keyword={keyword}
-              handleChangeKeyword={(value) => dispatch({ type: 'SET_DATA', payload: { keyword: value } })}
+              handleChangeKeyword={(value) => dispatchProductCategory({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
@@ -102,7 +91,7 @@ const ProductCategoryAdmin = () => {
           </div>
         </div>
         <ProductCategoryTableProps
-          listProducts={products}
+          listProductCategories={productCategories}
           listAccounts={accounts}
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}

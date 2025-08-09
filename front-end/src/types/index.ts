@@ -1,4 +1,4 @@
-export interface ProductDetailInterface {
+export interface ProductGeneralInfoInterface {
   createdBy: {
     account_id: string,
     createdAt: Date
@@ -10,36 +10,24 @@ export interface ProductDetailInterface {
   }[],
   _id: string,
   title: string,
-  price: number,
-  discountPercentage: number,
   thumbnail: string,
-  stock: number,
   position: number,
-  accountFullName: string,
   status: string,
   description: string,
+  slug: string,
+}
+
+export interface ProductInfoInterface extends ProductGeneralInfoInterface {
+  price: number,
+  discountPercentage: number,
+  stock: number,
+  accountFullName: string,
   featured: string,
   productCategoryId: string
 }
 
-export interface ProductCategoryDetailInterface {
-  createdBy: {
-    account_id: string,
-    createdAt: Date
-  },
-  updatedBy: {
-    length: number,
-    account_id: string,
-    updatedAt: Date
-  }[],
-  _id: string,
-  title: string,
-  thumbnail: string,
-  position: number,
-  status: string,
-  description: string,
-  slug: string
-  children: ProductCategoryDetailInterface[] | []
+export interface ProductCategoryInfoInterface extends ProductGeneralInfoInterface {
+  children: ProductCategoryInfoInterface[] | []
 }
 
 export interface FilterStatusInterface {
@@ -55,34 +43,70 @@ export interface PaginationInterface {
   totalPage: number
 }
 
-export interface ProductAllResponseInterface {
-  products: ProductDetailInterface[],
+export interface ProductHelperInterface {
+  accounts: AccountInfoInterface[],
   filterStatus: FilterStatusInterface[],
   pagination: PaginationInterface,
-  account: AccountInfoInterface[],
-  currentKeyword: string,
-  currentSortKey: string,
+}
+
+export interface ProductCurrentParamsInterface {
+  keyword: string,
+  currentSortkey: string,
   currentSortValue: string
 }
 
-export interface ProductCategoryAllResponseInterface {
-  records: ProductCategoryDetailInterface[],
-  filterStatus: FilterStatusInterface[],
-  pagination: PaginationInterface,
-  account: AccountInfoInterface[],
-  currentKeyword: string,
-  currentSortKey: string,
-  currentSortValue: string
+export interface ProductParamsInterface {
+  keyword: string,
+  sortKey: string,
+  sortValue: string
+  loading: boolean
 }
 
-export interface LoginResponseInterface {
+export interface ProductAllResponseInterface extends ProductHelperInterface, ProductCurrentParamsInterface {
+  products: ProductInfoInterface[],
+}
+
+export interface ProductCategoryAllResponseInterface extends ProductHelperInterface, ProductCurrentParamsInterface {
+  productCategories: ProductCategoryInfoInterface[],
+}
+
+export interface ProductStates extends ProductHelperInterface, ProductParamsInterface {
+  products: ProductInfoInterface[],
+}
+
+export type ProductActions =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DATA'; payload: Partial<ProductStates> }
+  | { type: 'RESET' }
+
+export interface ProductCategoryStates extends ProductHelperInterface, ProductParamsInterface {
+  productCategories: ProductCategoryInfoInterface[],
+}
+
+export type ProductCategoryActions =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DATA'; payload: Partial<ProductCategoryStates> }
+  | { type: 'RESET' }
+
+
+export type AlertStates = {
+  open: boolean
+  message: string
+  severity: 'success' | 'error'
+}
+
+export type AlertActions =
+  | { type: 'SHOW_ALERT', payload: { message: string; severity: 'success' | 'error' } }
+  | { type: 'HIDE_ALERT' }
+
+export interface LoginInterface {
   code: number,
   email: string,
   password: string,
   token: string
 }
 
-export interface LogoutResponseInterface {
+export interface LogoutInterface {
   error: Error,
   code: number,
 }
@@ -92,19 +116,14 @@ interface StatisticGroup {
   active: number,
   inactive: number,
 }
-
-interface Statistic {
-  categoryProduct: StatisticGroup,
-  product: StatisticGroup,
-  account: StatisticGroup,
-  user: StatisticGroup,
-}
+type StatisticKey = 'categoryProduct' | 'product' | 'account' | 'user';
+type Statistic = Record<StatisticKey, StatisticGroup>;
 
 export interface DashboardInterface {
   statistic: Statistic
 }
 
-export interface RoleInterface {
+export interface RoleInfoInterface {
   title: string,
 }
 
@@ -118,37 +137,12 @@ export interface AccountInfoInterface {
   token: string
 }
 
-export interface AccountInterface {
+export interface AccountDetailInterface {
   account: AccountInfoInterface,
-  role: RoleInterface
+  role: RoleInfoInterface
 }
 
-export interface ProductInterface {
-  product: ProductDetailInterface
+export interface ProductDetailInterface {
+  product: ProductInfoInterface
 }
 
-export interface ProductCategoryState {
-  products: ProductCategoryDetailInterface[],
-  accounts: AccountInfoInterface[],
-  filterStatus: FilterStatusInterface[],
-  pagination: PaginationInterface | null,
-  keyword: string,
-  sortKey: string,
-  sortValue: string,
-  loading: boolean
-}
-
-export type ProductCategoryAction =
-  | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_DATA'; payload: Partial<ProductCategoryState> }
-  | { type: 'RESET' }
-
-export type AlertState = {
-  open: boolean
-  message: string
-  severity: 'success' | 'error'
-}
-
-export type AlertAction =
-  | { type: 'SHOW_ALERT', payload: { message: string; severity: 'success' | 'error' } }
-  | { type: 'HIDE_ALERT' }
