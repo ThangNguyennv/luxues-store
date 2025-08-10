@@ -13,6 +13,7 @@ const CreateProduct = () => {
     handleChange,
     handleSubmit
   } = useCreate()
+
   return (
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>

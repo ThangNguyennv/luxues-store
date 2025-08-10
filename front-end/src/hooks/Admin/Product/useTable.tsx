@@ -1,8 +1,8 @@
-import type { AccountInfoInterface, ProductInfoInterface } from '~/types'
+import type { UpdatedBy } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
-import { useEffect, useState } from 'react'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductContext } from '~/contexts/admin/ProductContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
 
 export interface Props {
@@ -11,27 +11,30 @@ export interface Props {
 }
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
-  const { stateProduct, fetchProduct } = useProductContext()
-  const [products, setProducts] = useState<ProductInfoInterface[]>([])
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
+  const { stateProduct, dispatchProduct } = useProductContext()
+  const { products, accounts } = stateProduct
+  const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams] = useSearchParams()
-
   const currentStatus = searchParams.get('status') || ''
 
-  useEffect(() => {
-    setProducts(stateProduct.products)
-    setAccounts(stateProduct.accounts)
-  }, [stateProduct])
-
   const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+    const currentUser: UpdatedBy = {
+      account_id: myAccount!._id,
+      updatedAt: new Date()
+    }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
-    setProducts((prevProducts: ProductInfoInterface[]) =>
-      prevProducts.map((product) =>
-        product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
-      )
-    )
+    dispatchProduct({
+      type: 'SET_DATA',
+      payload: {
+        products:  products.map((product) => product._id === _id ? {
+          ...product,
+          status: newStatus,
+          updatedBy: [...(product.updatedBy || []), currentUser]
+        }: product)
+      }
+    })
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
@@ -48,9 +51,12 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     const response = await fetchDeleteProductAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== _id)
-        )
+        dispatchProduct({
+          type: 'SET_DATA',
+          payload: {
+            products: products.filter((product) => product._id != _id)
+          }
+        })
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
@@ -68,6 +74,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
     }
   }
+
   const handleCheckAll = (checked: boolean) => {
     if (checked) {
       const allIds = products.map((product) => product._id)
@@ -76,12 +83,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       setSelectedIds([])
     }
   }
+  // const filteredProducts = products.filter(product => {
+  //   if (!currentStatus) return true // nút "Tất cả"
+  //   return product.status === currentStatus
+  // })
 
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
 
   return {
+    // filteredProducts,
+    currentStatus,
     products,
-    setProducts,
+    dispatchProduct,
     accounts,
     handleToggleStatus,
     handleDeleteProduct,

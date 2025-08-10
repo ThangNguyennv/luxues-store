@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// ProductCategoryContext.tsx
 import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchProductAllAPI } from '~/apis/admin/product.api'
 import { initialState } from '~/reducers/admin/productReducer'

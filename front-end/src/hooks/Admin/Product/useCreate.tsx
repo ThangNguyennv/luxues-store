@@ -47,7 +47,7 @@ export const useCreate = () => {
     const formData = new FormData(event.currentTarget)
     const file = uploadImageInputRef.current?.files?.[0]
     if (file) {
-      formData.set('thumbnail', file) // hoặc append nếu bạn chưa có key
+      formData.set('thumbnail', file)
     }
     const response = await fetchCreateProductAPI(formData)
     if (response.code === 201) {
@@ -61,10 +61,6 @@ export const useCreate = () => {
       }, 2000)
     }
   }
-
-  // useEffect(() => {
-  //   fetchData() // gọi API khi component mount
-  // }, [fetchData])
 
   return {
     productCategories,

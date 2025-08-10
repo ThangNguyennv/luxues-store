@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import type { FilterStatusInterface } from '../../../types'
+import type { FilterStatusInterface } from '~/types'
 
 interface Props {
   filterStatus: FilterStatusInterface[]

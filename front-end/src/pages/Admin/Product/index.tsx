@@ -21,7 +21,8 @@ const ProductAdmin = () => {
     updateSearchParams,
     handleSubmit,
     handleSort,
-    clearSortParams
+    clearSortParams,
+    handleFilterStatus
   } = useProduct()
 
   return (
@@ -34,7 +35,7 @@ const ProductAdmin = () => {
             <FilterStatus
               filterStatus={filterStatus}
               currentStatus={currentStatus}
-              handleFilterStatus={(status) => updateSearchParams('status', status)}
+              handleFilterStatus={handleFilterStatus}
             />
             <SearchProps
               keyword={keyword}

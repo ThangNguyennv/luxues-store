@@ -135,6 +135,16 @@ export const useProduct = () => {
     newParams.delete('sortValue')
     setSearchParams(newParams)
   }
+  const handleFilterStatus = (status: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (status) {
+      newParams.set('status', status)
+      newParams.set('page', '1')
+    } else {
+      newParams.delete('status')
+    }
+    setSearchParams(newParams)
+  }
 
   return {
     dispatchProduct,
@@ -153,6 +163,7 @@ export const useProduct = () => {
     updateSearchParams,
     handleSubmit,
     handleSort,
-    clearSortParams
+    clearSortParams,
+    handleFilterStatus
   }
 }

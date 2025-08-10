@@ -1,13 +1,14 @@
+export interface UpdatedBy {
+  account_id: string,
+  updatedAt: Date
+}
+
 export interface ProductGeneralInfoInterface {
   createdBy: {
     account_id: string,
     createdAt: Date
   },
-  updatedBy: {
-    length: number,
-    account_id: string,
-    updatedAt: Date
-  }[],
+  updatedBy: UpdatedBy[],
   _id: string,
   title: string,
   thumbnail: string,
