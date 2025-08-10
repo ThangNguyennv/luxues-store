@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchCreateProductAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
@@ -23,18 +23,15 @@ export const useCreate = () => {
       createdAt: new Date()
     },
     updatedBy: [],
-    productCategoryId: '',
+    product_category_id: '',
     slug: ''
   }
 
   const [productInfo, setProductInfo] = useState<ProductInfoInterface>(initialProduct)
-  // const [alertOpen, setAlertOpen] = useState(false)
-  // const [alertMessage, setAlertMessage] = useState('')
-  // const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
   const navigate = useNavigate()
   const { stateProductCategory } = useProductCategoryContext()
   const { dispatchAlert } = useAlertContext()
-  const { productCategories, loading } = stateProductCategory
+  const { productCategories } = stateProductCategory
 
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
@@ -70,7 +67,6 @@ export const useCreate = () => {
   // }, [fetchData])
 
   return {
-    loading,
     productCategories,
     productInfo,
     setProductInfo,

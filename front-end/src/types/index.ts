@@ -23,7 +23,7 @@ export interface ProductInfoInterface extends ProductGeneralInfoInterface {
   stock: number,
   accountFullName: string,
   featured: string,
-  productCategoryId: string
+  product_category_id: string
 }
 
 export interface ProductCategoryInfoInterface extends ProductGeneralInfoInterface {
@@ -137,8 +137,8 @@ export interface AccountInfoInterface {
   token: string
 }
 
-export interface AccountDetailInterface {
-  account: AccountInfoInterface,
+export interface MyAccountDetailInterface {
+  myAccount: AccountInfoInterface,
   role: RoleInfoInterface
 }
 

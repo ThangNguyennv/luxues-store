@@ -5,20 +5,14 @@ import { API_KEY } from '~/utils/constants'
 
 const CreateProduct = () => {
   const {
-    loading,
     productCategories,
     productInfo,
     setProductInfo,
-    // alertOpen,
-    // setAlertOpen,
-    // alertMessage,
-    // alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
     handleSubmit
   } = useCreate()
-  // if (!loading) return <p>Đang tải...</p>
   return (
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>

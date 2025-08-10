@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types'
 
 export const useEdit = () => {
   const [productInfo, setProductInfo] = useState<ProductInfoInterface | null>(null)
   const params = useParams()
   const id = params.id as string
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const { stateProductCategory } = useProductCategoryContext()
+  const { productCategories } = stateProductCategory
+  const { dispatchAlert } = useAlertContext()
+
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -44,21 +47,19 @@ export const useEdit = () => {
 
     const response = await fetchEditProductAPI(id, formData)
     if (response.code === 200) {
-      setAlertMessage('Đã cập nhật thành công sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Đã cập nhật thành công sản phẩm!', severity: 'success' }
+      })
       setTimeout(() => {
         navigate(`/admin/products/detail/${id}`)
       }, 2000)
     }
   }
   return {
+    productCategories,
     productInfo,
     setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

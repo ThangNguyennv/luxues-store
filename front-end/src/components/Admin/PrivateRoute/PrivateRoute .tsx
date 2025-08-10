@@ -1,24 +1,25 @@
 import { useEffect, useState, type JSX } from 'react'
 import { Navigate } from 'react-router-dom'
 import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
-import type { AccountInterface } from '../../../types'
+import type { MyAccountDetailInterface } from '../../../types'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  const [token, setToken] = useState<string | null>(null)
+  const { myAccount, setMyAccount } = useAuth()
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    fetchMyAccountAPI().then((response: AccountInterface) => {
-      setToken(response.account.token)
+    fetchMyAccountAPI().then((response: MyAccountDetailInterface) => {
+      setMyAccount(response.myAccount)
     })
       .catch(() => {
-        setToken(null) // nếu lỗi thì vẫn set null
+        setMyAccount(null) // nếu lỗi thì vẫn set null
       })
       .finally(() => {
         setLoading(false) // kết thúc loading
       })
-  }, [])
+  }, [setMyAccount])
   if (loading) return null // hoặc một loader
-  if (!token) return <Navigate to="/admin/auth/login" replace />
+  if (!myAccount?.token) return <Navigate to="/admin/auth/login" replace />
 
   return children
 }

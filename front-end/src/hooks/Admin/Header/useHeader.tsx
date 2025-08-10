@@ -1,28 +1,21 @@
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
-import type { AccountInfoInterface, AccountInterface } from '~/types'
 import { fetchLogoutAPI } from '~/apis/admin/auth.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useHeader = () => {
   const navigate = useNavigate()
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
-  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
-
-  useEffect(() => {
-    fetchMyAccountAPI().then((response: AccountInterface) => {
-      setAccountInfo(response.account)
-    })
-  }, [])
+  const { dispatchAlert } = useAlertContext()
+  const { myAccount, setMyAccount } = useAuth()
 
   const handleLogout = async (): Promise<void> => {
     const response = await fetchLogoutAPI()
     if (response.code === 200) {
-      setAlertMessage('Đăng xuất thành công!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Đăng xuất thành công!', severity: 'success' }
+      })
+      setMyAccount(null)
       setTimeout(() => {
         navigate('/admin/auth/login')
       })
@@ -32,14 +25,7 @@ export const useHeader = () => {
     }
   }
   return {
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    setAlertMessage,
-    alertSeverity,
-    setAlertSeverity,
-    accountInfo,
-    setAccountInfo,
+    myAccount,
     handleLogout
   }
 }

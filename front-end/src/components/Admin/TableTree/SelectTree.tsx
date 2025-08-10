@@ -7,7 +7,7 @@ interface Props {
   parent_id: string
 }
 
-const SelectTree = ({ productCategory, level, productCategories, parent_id }: Props) => {
+const SelectTree = ({ productCategory, level, productCategories, parent_id = '' }: Props) => {
   const prefix = '- '.repeat(level)
   return (
     <>
@@ -17,8 +17,8 @@ const SelectTree = ({ productCategory, level, productCategories, parent_id }: Pr
       {productCategory.children?.map((child) => (
         <SelectTree
           key={child._id}
-          level={level + 1}
           productCategory={child}
+          level={level + 1}
           productCategories={productCategories}
           parent_id={parent_id}
         />

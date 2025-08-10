@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // ProductCategoryContext.tsx
-import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
+import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchProductAllAPI } from '~/apis/admin/product.api'
 import { initialState } from '~/reducers/admin/productReducer'
 import { productReducer } from '~/reducers/admin/productReducer'
@@ -56,9 +56,6 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
         dispatchProduct({ type: 'SET_LOADING', payload: false })
       }
     }, [])
-  useEffect(() => {
-    fetchProduct()
-  }, [fetchProduct])
   return (
     <ProductContext.Provider value={{ stateProduct, fetchProduct, dispatchProduct }}>
       {children}

@@ -1,24 +1,13 @@
 import backgroundLogin from '~/assets/images/Home/image-login.png'
-import { AlertToast } from '~/components/alert/Alert'
 import { useLoginAdmin } from '~/hooks/admin/auth/useLogin'
 
 const Login = () => {
   const {
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     handleSubmit
   } = useLoginAdmin()
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <div className="w-screen h-screen bg-[#9D9995] p-[25px] text-[#ECECEC] flex items-center justify-center">
         <div className='flex items-center gap-[10px] justify-center border rounded-[15px] border-[#231F40] p-[25px] bg-[#827385]'>
           <div className='w-[50%]'>

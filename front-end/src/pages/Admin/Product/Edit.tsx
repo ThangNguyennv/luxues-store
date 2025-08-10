@@ -1,29 +1,21 @@
-import { AlertToast } from '~/components/alert/Alert'
 import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
 import { useEdit } from '~/hooks/admin/product/useEdit'
+import SelectTree from '~/components/admin/TableTree/SelectTree'
 
 const EditProduct = () => {
   const {
+    productCategories,
     productInfo,
     setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
     handleSubmit
   } = useEdit()
+
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
       {productInfo && (
         <form onSubmit={(event) => handleSubmit(event)} action="" className="flex flex-col gap-[10px]" encType="multipart/form-data">
@@ -36,6 +28,15 @@ const EditProduct = () => {
             <label htmlFor="product_category_id">Danh mục</label>
             <select name="product_category_id" id="product_category_id" className="border rounded-[5px] border-[#00171F]">
               <option value={''}>-- Chọn danh mục</option>
+              {productCategories.map(productCategory => (
+                <SelectTree
+                  key={productCategory._id}
+                  productCategory={productCategory}
+                  level={1}
+                  productCategories={productCategories}
+                  parent_id={productInfo.product_category_id}
+                />
+              ))}
             </select>
           </div>
 

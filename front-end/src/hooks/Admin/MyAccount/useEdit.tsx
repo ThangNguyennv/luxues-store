@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { fetchMyAccountAPI, fetchUpdateMyAccountAPI } from '~/apis/admin/myAccount.api'
-import type { AccountInfoInterface, AccountInterface } from '~/types'
+import type { AccountInfoInterface, MyAccountDetailInterface } from '~/types'
 
 export const useEditMyAccount = () => {
   const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
@@ -10,8 +10,8 @@ export const useEditMyAccount = () => {
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
 
   useEffect(() => {
-    fetchMyAccountAPI().then((res: AccountInterface) => {
-      setAccountInfo(res.account)
+    fetchMyAccountAPI().then((res: MyAccountDetailInterface) => {
+      setAccountInfo(res.myAccount)
     })
   }, [])
 

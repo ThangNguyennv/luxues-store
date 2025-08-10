@@ -10,7 +10,7 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/admin/product/useTable'
 import FormatDateTime from '../Moment/FormatDateTime'
 
-const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
+const ProductTable = ({selectedIds, setSelectedIds }: Props) => {
   const {
     products,
     setProducts,
@@ -20,7 +20,7 @@ const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds 
     handleCheckbox,
     handleCheckAll,
     isCheckAll
-  } = useTable({ listProducts, listAccounts, selectedIds, setSelectedIds })
+  } = useTable({ selectedIds, setSelectedIds })
 
   return (
     <>
@@ -93,7 +93,7 @@ const ProductTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds 
                 </TableCell>
                 <TableCell align='center'>
                   <button
-                    onClick={() => handleToggleStatus(product._id, product.status, product.updatedBy?.[product.updatedBy.length - 1])}
+                    onClick={() => handleToggleStatus(product._id, product.status)}
                     className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${product.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
                   >
                     {product.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}

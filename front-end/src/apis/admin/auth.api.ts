@@ -1,8 +1,8 @@
 import axios from 'axios'
-import type { LoginResponseInterface, LogoutResponseInterface } from '~/types'
+import type { LoginInterface, LogoutInterface } from '~/types'
 import { API_ROOT } from '~/utils/constants'
 
-export const fetchLoginAPI = async (email: string, password: string): Promise<LoginResponseInterface> => {
+export const fetchLoginAPI = async (email: string, password: string): Promise<LoginInterface> => {
   const response = await axios.post(
     `${API_ROOT}/admin/auth/login`,
     { email, password },
@@ -11,7 +11,7 @@ export const fetchLoginAPI = async (email: string, password: string): Promise<Lo
   return response.data
 }
 
-export const fetchLogoutAPI = async (): Promise<LogoutResponseInterface> => {
+export const fetchLogoutAPI = async (): Promise<LogoutInterface> => {
   const response = await axios.get(
     `${API_ROOT}/admin/auth/logout`,
     { withCredentials: true }

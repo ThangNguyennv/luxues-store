@@ -6,7 +6,7 @@ import { useProductContext } from '~/contexts/admin/ProductContext'
 
 export const useProduct = () => {
   const { stateProduct, fetchProduct, dispatchProduct } = useProductContext()
-  const { products, accounts, pagination, filterStatus, keyword } = stateProduct
+  const { products, pagination, filterStatus, keyword } = stateProduct
   const { dispatchAlert } = useAlertContext()
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -138,8 +138,6 @@ export const useProduct = () => {
 
   return {
     dispatchProduct,
-    products,
-    accounts,
     filterStatus,
     pagination,
     keyword,

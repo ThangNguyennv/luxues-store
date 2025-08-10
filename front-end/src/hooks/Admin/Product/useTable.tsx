@@ -2,33 +2,37 @@ import type { AccountInfoInterface, ProductInfoInterface } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useEffect, useState } from 'react'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductContext } from '~/contexts/admin/ProductContext'
+import { useSearchParams } from 'react-router-dom'
 
 export interface Props {
-  listProducts: ProductInfoInterface[],
-  listAccounts: AccountInfoInterface[],
   selectedIds: string[],
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedIds }: Props) => {
-  const [products, setProducts] = useState<ProductInfoInterface[]>(listProducts)
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
+export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
+  const { stateProduct, fetchProduct } = useProductContext()
+  const [products, setProducts] = useState<ProductInfoInterface[]>([])
+  const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
   const { dispatchAlert } = useAlertContext()
+  const [searchParams] = useSearchParams()
+
+  const currentStatus = searchParams.get('status') || ''
 
   useEffect(() => {
-    setProducts(listProducts)
-    setAccounts(listAccounts)
-  }, [listProducts, listAccounts])
+    setProducts(stateProduct.products)
+    setAccounts(stateProduct.accounts)
+  }, [stateProduct])
 
-  const handleToggleStatus = async (_id: string, currentStatus: string, updatedBy: { length: number; account_id: string; updatedAt: Date }): Promise<void> => {
+  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
-    if (response.code === 200) {
-      setProducts((prevProducts: ProductInfoInterface[]) =>
-        prevProducts.map((product) =>
-          product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
-        )
+    setProducts((prevProducts: ProductInfoInterface[]) =>
+      prevProducts.map((product) =>
+        product._id === _id ? { ...product, status: newStatus, updatedBy: [...(product.updatedBy || []), updatedBy!] } : product
       )
+    )
+    if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
@@ -38,6 +42,7 @@ export const useTable = ({ listProducts, listAccounts, selectedIds, setSelectedI
       return
     }
   }
+
   const handleDeleteProduct = async (_id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này')
     const response = await fetchDeleteProductAPI(_id)

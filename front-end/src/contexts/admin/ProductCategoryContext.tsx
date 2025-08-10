@@ -55,6 +55,7 @@ export const ProductCategoryProvider = ({ children }: { children: React.ReactNod
         dispatchProductCategory({ type: 'SET_LOADING', payload: false })
       }
     }, [])
+  // Gọi APi của product-category bên các trang khác
   useEffect(() => {
     fetchProductCategory()
   }, [fetchProductCategory])

@@ -9,16 +9,19 @@ import { ProductCategoryProvider } from './contexts/admin/ProductCategoryContext
 import { AlertProvider } from './contexts/admin/AlertContext.tsx'
 import { AlertToast } from './components/alert/Alert.tsx'
 import { ProductProvider } from './contexts/admin/ProductContext.tsx'
+import { AuthProvider } from './contexts/admin/AuthContext.tsx'
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <AlertProvider>
-        <ProductCategoryProvider>
-          <ProductProvider>
-            {children}
-          </ProductProvider>
-        </ProductCategoryProvider>
+        <AuthProvider>
+          <ProductCategoryProvider>
+            <ProductProvider>
+              {children}
+            </ProductProvider>
+          </ProductCategoryProvider>
+        </AuthProvider>
       </AlertProvider>
     </ThemeProvider>
   )
@@ -30,4 +33,4 @@ createRoot(document.getElementById('root')!).render(
     <App />
     <AlertToast />
   </Providers>
-);
+)
