@@ -8,7 +8,7 @@ import ProductCategory from '~/models/product-category.model'
 import * as createTreeHelpers   from '~/helpers/createTree'
 import { TreeItem } from '~/helpers/createTree'
 // [GET] /admin/products
-export const product = async (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   try {
     interface Find {
       deleted: boolean;

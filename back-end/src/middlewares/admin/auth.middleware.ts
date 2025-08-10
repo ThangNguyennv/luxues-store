@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import Account from '~/models/account.model'
-import systemConfig from '~/config/system'
 
 export const requireAuth = async (
   req: Request,
