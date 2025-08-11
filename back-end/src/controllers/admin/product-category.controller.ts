@@ -5,18 +5,24 @@ import searchHelpers from '~/helpers/search'
 import { tree, TreeItem } from '~/helpers/createTree'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
 import Account from '~/models/account.model'
+import paginationHelpers from '~/helpers/pagination'
 
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
   try {
     interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
+      deleted: boolean,
+      status?: string,
+      title?: RegExp,
+      parent_id?: string
     }
     const find: Find = {
-      deleted: false
+      deleted: false,
+      parent_id: ''
     }
+    // Lấy danh sách cha
+    const parentFind = { ...find }
+    const countParents = await ProductCategory.countDocuments(parentFind)
 
     if (req.query.status) {
       find.status = req.query.status.toString()
@@ -27,6 +33,17 @@ export const index = async (req: Request, res: Response) => {
       find.title = objectSearch.regex
     }
 
+    // Pagination
+    const objectPagination = paginationHelpers(
+      {
+        currentPage: 1,
+        limitItems: 1
+      },
+      req.query,
+      countParents
+    )
+    // End Pagination
+
     // Sort
     const sort = {}
     if (req.query.sortKey && req.query.sortValue) {
@@ -36,23 +53,41 @@ export const index = async (req: Request, res: Response) => {
       sort['position'] = 'desc'
     }
     // // End Sort
-
-    const productCategories = await ProductCategory.find(find).sort(sort)
-
-    const newProductCategories = tree(productCategories as unknown as TreeItem[])
+  
+    const parentCategories = await ProductCategory
+      .find(parentFind)
+      .sort(sort)
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip)
+  
+    // Lấy Id của cha
+    const parentIds = parentCategories.map(productCategory => productCategory._id)
+    console.log("🚀 ~ product-category.controller.ts ~ index ~ parentIds:", parentIds);
+    // Lấy toàn bộ con của những cha này
+    const childrenCategories = await ProductCategory.find({
+      ...find,
+      parent_id: { $in: parentIds }
+    })
+  
+    // Ghép chung rồi build cây
+    const allCategories = [...parentCategories, ...childrenCategories]
+    const newProductCategories = tree(allCategories as unknown as TreeItem[])
 
     // Add log info to all nodes (parent and children)
     await addLogInfoToTree(newProductCategories as LogNode[])
+
     const accounts = await Account.find({
       deleted: false
     })
+
     res.json({
       code: 200,
       message: 'Thành công!',
       productCategories: newProductCategories,
       accounts: accounts,
       filterStatus: filterStatusHelpers(req.query),
-      keyword: objectSearch.keyword
+      keyword: objectSearch.keyword,
+      pagination: objectPagination,
     })
   } catch (error) {
     res.json({

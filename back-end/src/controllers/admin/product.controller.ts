@@ -50,10 +50,12 @@ export const index = async (req: Request, res: Response) => {
     }
     // End Sort
 
-    const products = await Product.find(find)
+    const products = await Product
+      .find(find)
       .sort(sort)
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip)
+
     // products trả về 1 mảng các object => Duyệt for of bình thường
     for (const product of products) {
       // Lấy ra thông tin người tạo
