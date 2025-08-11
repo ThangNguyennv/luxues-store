@@ -112,17 +112,20 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                       (account) => account._id === product.createdBy?.account_id
                     )
                     return creator ? (
-                      <span className="text-sm font-medium text-gray-800">
-                        {creator.fullName}
-                      </span>
+                      <>
+                        <span className="text-sm font-medium text-gray-800">
+                          {creator.fullName}
+                        </span>
+                        <FormatDateTime time={product.createdBy.createdAt}/>
+                      </>
                     ) : (
                       <span className="text-sm italic text-gray-400">Không xác định</span>
                     )
                   })()}
-                  <FormatDateTime time={product.createdBy.createdAt}/>
+
                   </TableCell>
                   <TableCell align='center'>{(() => {
-                    const updatedBy = product.updatedBy?.[(product.updatedBy).length - 1]
+                    const updatedBy = product.updatedBy?.[(product.updatedBy as UpdatedBy[]).length - 1]
                     if (!updatedBy) {
                       return (
                         <>
@@ -131,17 +134,19 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                       )
                     }
                     if (Array.isArray(product.updatedBy) && product.updatedBy.length > 0) {
-                      const creator = accounts.find((account) => account._id === updatedBy.account_id)
-                      return creator ? (
-                        <span className="text-sm font-medium text-gray-800">
-                          {creator.fullName}
-                        </span>
+                      const updater = accounts.find((account) => account._id === updatedBy.account_id)
+                      return updater ? (
+                        <>
+                          <span className="text-sm font-medium text-gray-800">
+                            {updater.fullName}
+                          </span>
+                          <FormatDateTime time={updatedBy.updatedAt}/>
+                        </>
                       ) : (
                         <span className="text-sm italic text-gray-400">Không xác định</span>
                       )
                     }
                   })()}
-                  <FormatDateTime time={product.updatedBy?.[(product.updatedBy as UpdatedBy[]).length - 1]?.updatedAt}/>
                   </TableCell>
                   <TableCell align='center'>
                     <Link

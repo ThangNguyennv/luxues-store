@@ -6,13 +6,13 @@ import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryConte
 
 export const useProductCategory = () => {
   const { stateProductCategory, fetchProductCategory, dispatchProductCategory } = useProductCategoryContext()
-  const { productCategories, accounts, filterStatus, pagination, keyword, loading } = stateProductCategory
+  const { productCategories, filterStatus, pagination, keyword, loading } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
 
-  const [searchParams, setSearchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
@@ -107,27 +107,41 @@ export const useProductCategory = () => {
 
     setSelectedIds([])
     setActionType('')
+
     reloadData()
   }
 
   const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
     const [sortKey, sortValue] = event.currentTarget.value.split('-')
     if (sortKey && sortValue) {
-      updateSearchParams('sortKey', sortKey)
-      updateSearchParams('sortValue', sortValue)
+      const newParams = new URLSearchParams(searchParams)
+      newParams.set('sortKey', sortKey)
+      newParams.set('sortValue', sortValue)
+      setSearchParams(newParams)
     }
   }
 
   const clearSortParams = () => {
-    updateSearchParams('sortKey', '')
-    updateSearchParams('sortValue', '')
+    const newParams = new URLSearchParams(searchParams)
+    newParams.delete('sortKey')
+    newParams.delete('sortValue')
+    setSearchParams(newParams)
+  }
+
+  const handleFilterStatus = (status: string) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (status) {
+      newParams.set('status', status)
+      newParams.set('page', '1')
+    } else {
+      newParams.delete('status')
+    }
+    setSearchParams(newParams)
   }
 
   return {
     dispatchProductCategory,
     loading,
-    productCategories,
-    accounts,
     filterStatus,
     pagination,
     keyword,
@@ -143,6 +157,7 @@ export const useProductCategory = () => {
     updateSearchParams,
     handleSubmit,
     handleSort,
-    clearSortParams
+    clearSortParams,
+    handleFilterStatus
   }
 }

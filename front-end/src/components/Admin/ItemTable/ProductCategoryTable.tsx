@@ -9,17 +9,17 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/admin/productCategory/useTable'
 import ProductTree from '../TableTree/ProductTree'
 
-const ProductCategoryTable = ({ listProductCategories, listAccounts, selectedIds, setSelectedIds }: Props) => {
+const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
+    dispatchProductCategory,
     productCategories,
-    setProductCategories,
     accounts,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,
     handleCheckAll,
     isCheckAll
-  } = useTable({ listProductCategories, listAccounts, selectedIds, setSelectedIds })
+  } = useTable({ selectedIds, setSelectedIds })
 
   return (
     <>
@@ -60,8 +60,8 @@ const ProductCategoryTable = ({ listProductCategories, listAccounts, selectedIds
               handleCheckbox={handleCheckbox}
               handleToggleStatus={handleToggleStatus}
               handleDeleteProduct={handleDeleteProduct}
-              setProductCategories={setProductCategories}
               productCategories={productCategories}
+              dispatchProductCategory={dispatchProductCategory}
             />
           ))}
         </TableBody>

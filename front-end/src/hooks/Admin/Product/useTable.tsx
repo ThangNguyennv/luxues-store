@@ -25,17 +25,17 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
-    dispatchProduct({
-      type: 'SET_DATA',
-      payload: {
-        products:  products.map((product) => product._id === _id ? {
-          ...product,
-          status: newStatus,
-          updatedBy: [...(product.updatedBy || []), currentUser]
-        }: product)
-      }
-    })
     if (response.code === 200) {
+      dispatchProduct({
+        type: 'SET_DATA',
+        payload: {
+          products:  products.map((product) => product._id === _id ? {
+            ...product,
+            status: newStatus,
+            updatedBy: [...(product.updatedBy || []), currentUser]
+          }: product)
+        }
+      })
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }

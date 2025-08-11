@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom'
-import FilterStatusProps from '~/components/admin/FilterStatus/FilterStatus'
-import ProductCategoryTableProps from '~/components/admin/ItemTable/ProductCategoryTable'
-import PaginationProps from '~/components/admin/Pagination/Pagination'
-import SearchProps from '~/components/admin/Search/Search'
+import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
+import ProductCategoryTable from '~/components/admin/ItemTable/ProductCategoryTable'
+import Pagination from '~/components/admin/Pagination/Pagination'
+import Search from '~/components/admin/Search/Search'
 import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
 
 const ProductCategoryAdmin = () => {
   const {
     dispatchProductCategory,
-    productCategories,
-    accounts,
     filterStatus,
     pagination,
     keyword,
@@ -23,7 +21,8 @@ const ProductCategoryAdmin = () => {
     updateSearchParams,
     handleSubmit,
     handleSort,
-    clearSortParams
+    clearSortParams,
+    handleFilterStatus
   } = useProductCategory()
 
   return (
@@ -33,12 +32,12 @@ const ProductCategoryAdmin = () => {
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
-            <FilterStatusProps
+            <FilterStatus
               filterStatus={filterStatus}
               currentStatus={currentStatus}
-              handleFilterStatus={(status) => updateSearchParams('status', status)}
+              handleFilterStatus={handleFilterStatus}
             />
-            <SearchProps
+            <Search
               keyword={keyword}
               handleChangeKeyword={(value) => dispatchProductCategory({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
@@ -74,8 +73,6 @@ const ProductCategoryAdmin = () => {
               <option disabled value={''}>-- Sắp xếp --</option>
               <option value="position-asc">Vị trí tăng dần</option>
               <option value="position-desc">Vị trí giảm dần</option>
-              <option value="price-asc">Giá tăng dần</option>
-              <option value="price-desc">Giá giảm dần</option>
               <option value="title-asc">Tiêu đề A - Z</option>
               <option value="title-desc">Tiêu đề Z - A</option>
             </select>
@@ -90,13 +87,11 @@ const ProductCategoryAdmin = () => {
             <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductCategoryTableProps
-          listProductCategories={productCategories}
-          listAccounts={accounts}
+        <ProductCategoryTable
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />
-        <PaginationProps
+        <Pagination
           pagination={pagination}
           handlePagination={(page) => updateSearchParams('page', page)}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { TableRow, TableCell, Checkbox } from '@mui/material'
 import { Link } from 'react-router-dom'
-import type { AccountInfoInterface, ProductCategoryInfoInterface } from '~/types'
+import type { AccountInfoInterface, ProductCategoryActions, ProductCategoryInfoInterface } from '~/types'
 import FormatDateTime from '../Moment/FormatDateTime'
 
 interface Props {
@@ -11,9 +11,9 @@ interface Props {
   selectedIds: string[]
   accounts: AccountInfoInterface[]
   handleCheckbox: (id: string, checked: boolean) => void
-  handleToggleStatus: (id: string, status: string, updatedBy: { length: number; account_id: string; updatedAt: Date }) => void
+  handleToggleStatus: (id: string, status: string) => void
   handleDeleteProduct: (id: string) => void
-  setProductCategories: React.Dispatch<React.SetStateAction<ProductCategoryInfoInterface[]>>
+  dispatchProductCategory: React.Dispatch<ProductCategoryActions>
   productCategories: ProductCategoryInfoInterface[]
 }
 
@@ -25,14 +25,14 @@ const ProductTree = ({
   handleCheckbox,
   handleToggleStatus,
   handleDeleteProduct,
-  setProductCategories,
+  dispatchProductCategory,
   productCategories
 }: Props) => {
   const prefix = '— '.repeat(level)
 
-  const updated = productCategory.updatedBy?.at(-1)
-  const creator = accounts.find((acc) => acc._id === productCategory.createdBy?.account_id)
-  const updater = accounts.find((acc) => acc._id === updated?.account_id)
+  const updatedBy = productCategory.updatedBy?.at(-1)
+  const creator = accounts.find((account) => account._id === productCategory.createdBy?.account_id)
+  const updater = accounts.find((account) => account._id === updatedBy?.account_id)
 
   return (
     <>
@@ -58,16 +58,21 @@ const ProductTree = ({
             min="1"
             onChange={(e) => {
               const newPosition = parseInt(e.target.value, 10)
-              setProductCategories(productCategories.map((p) =>
-                p._id === productCategory._id ? { ...p, position: newPosition } : p
-              ))
+              dispatchProductCategory({
+                type: 'SET_DATA',
+                payload: {
+                  productCategories: productCategories.map((p) =>
+                    p._id === productCategory._id ? { ...p, position: newPosition } : p
+                  )
+                }
+              })
             }}
             className="border rounded-[5px] border-[#00171F] w-[50px] p-[2px]"
           />
         </TableCell>
         <TableCell align="center">
           <button
-            onClick={() => handleToggleStatus(productCategory._id, productCategory.status, productCategory.updatedBy?.[productCategory.updatedBy.length - 1])}
+            onClick={() => handleToggleStatus(productCategory._id, productCategory.status)}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${productCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
           >
             {productCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
@@ -84,11 +89,11 @@ const ProductTree = ({
           )}
         </TableCell>
         <TableCell align="center">
-          {updated ? (
+          {updatedBy ? (
             updater ? (
               <>
                 <p className="text-sm font-medium text-gray-800">{updater.fullName}</p>
-                <FormatDateTime time={updated.updatedAt} />
+                <FormatDateTime time={updatedBy.updatedAt} />
               </>
             ) : (
               <p className="text-sm italic text-gray-400">Không xác định</p>
@@ -113,8 +118,8 @@ const ProductTree = ({
           handleCheckbox={handleCheckbox}
           handleToggleStatus={handleToggleStatus}
           handleDeleteProduct={handleDeleteProduct}
-          setProductCategories={setProductCategories}
           productCategories={productCategories}
+          dispatchProductCategory={dispatchProductCategory}
         />
       ))}
     </>

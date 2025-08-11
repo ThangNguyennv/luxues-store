@@ -1,34 +1,38 @@
-import type { AccountInfoInterface, ProductCategoryInfoInterface } from '~/types'
+import type { UpdatedBy } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
-import { useEffect, useState } from 'react'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export interface Props {
-  listProductCategories: ProductCategoryInfoInterface[] | [],
-  listAccounts: AccountInfoInterface[],
   selectedIds: string[],
   setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
-export const useTable = ({ listProductCategories, listAccounts, selectedIds, setSelectedIds }: Props) => {
-  const [productCategories, setProductCategories] = useState<ProductCategoryInfoInterface[]>(listProductCategories)
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>(listAccounts)
+export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
+  const { stateProductCategory, dispatchProductCategory } = useProductCategoryContext()
+  const { productCategories, accounts } = stateProductCategory
+  const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
 
-  useEffect(() => {
-    setProductCategories(listProductCategories)
-    setAccounts(listAccounts)
-  }, [listProductCategories, listAccounts])
-
-  const handleToggleStatus = async (_id: string, currentStatus: string, updatedBy: { length: number; account_id: string; updatedAt: Date }): Promise<void> => {
+  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+    const currentUser: UpdatedBy = {
+      account_id: myAccount!._id,
+      updatedAt: new Date()
+    }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
-      setProductCategories((prevProductCategories: ProductCategoryInfoInterface[]) =>
-        prevProductCategories.map((productCategory) =>
-          productCategory._id === _id ? { ...productCategory, status: newStatus, updatedBy: [...(productCategory.updatedBy || []), updatedBy!] } : productCategory
-        )
-      )
+      dispatchProductCategory({
+        type: 'SET_DATA',
+        payload: {
+          productCategories:  productCategories.map((productCategory) => productCategory._id === _id ? {
+            ...productCategory,
+            status: newStatus,
+            updatedBy: [...(productCategory.updatedBy || []), currentUser]
+          }: productCategory)
+        }
+      })
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
@@ -43,9 +47,12 @@ export const useTable = ({ listProductCategories, listAccounts, selectedIds, set
     const response = await fetchDeleteProductAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        setProductCategories((prevProductCategories) =>
-          prevProductCategories.filter((productCategory) => productCategory._id !== _id)
-        )
+        dispatchProductCategory({
+          type: 'SET_DATA',
+          payload: {
+            productCategories: productCategories.filter((productCategory) => productCategory._id != _id)
+          }
+        })
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
@@ -74,9 +81,9 @@ export const useTable = ({ listProductCategories, listAccounts, selectedIds, set
   const isCheckAll = (productCategories.length > 0) && (selectedIds.length === productCategories.length)
 
   return {
+    dispatchProductCategory,
     productCategories,
     accounts,
-    setProductCategories,
     handleToggleStatus,
     handleDeleteProduct,
     handleCheckbox,

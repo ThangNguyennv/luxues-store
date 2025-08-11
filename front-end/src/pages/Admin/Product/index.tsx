@@ -1,9 +1,10 @@
 import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
-import PaginationProps from '~/components/admin/Pagination/Pagination'
-import ProductTableProps from '~/components/admin/ItemTable/ProductTable'
-import SearchProps from '~/components/admin/Search/Search'
+import Pagination from '~/components/admin/Pagination/Pagination'
+import ProductTable from '~/components/admin/ItemTable/ProductTable'
+import Search from '~/components/admin/Search/Search'
 import { useProduct } from '~/hooks/admin/product/useProduct'
 import { Link } from 'react-router-dom'
+import SortProduct from '~/components/admin/Sort/SortProduct'
 
 const ProductAdmin = () => {
   const {
@@ -37,7 +38,7 @@ const ProductAdmin = () => {
               currentStatus={currentStatus}
               handleFilterStatus={handleFilterStatus}
             />
-            <SearchProps
+            <Search
               keyword={keyword}
               handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
@@ -64,36 +65,21 @@ const ProductAdmin = () => {
                 Áp dụng
             </button>
           </form>
-          <div className='flex gap-[10px] items-center'>
-            <select
-              onChange={(event) => handleSort(event)}
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] outline-none'
-              value={sortKey && sortValue ? `${sortKey}-${sortValue}` : ''}
-            >
-              <option disabled value={''}>-- Sắp xếp --</option>
-              <option value="position-asc">Vị trí tăng dần</option>
-              <option value="position-desc">Vị trí giảm dần</option>
-              <option value="price-asc">Giá tăng dần</option>
-              <option value="price-desc">Giá giảm dần</option>
-              <option value="title-asc">Tiêu đề A - Z</option>
-              <option value="title-desc">Tiêu đề Z - A</option>
-            </select>
-            <button
-              onClick={clearSortParams}
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
-            >
-              Clear
-            </button>
-          </div>
+          <SortProduct
+            handleSort={handleSort}
+            sortKey={sortKey}
+            sortValue={sortValue}
+            clearSortParams={clearSortParams}
+          />
           <div>
             <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductTableProps
+        <ProductTable
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />
-        <PaginationProps
+        <Pagination
           pagination={pagination}
           handlePagination={(page) => updateSearchParams('page', page)}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}

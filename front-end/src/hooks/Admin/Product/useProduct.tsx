@@ -29,7 +29,7 @@ export const useProduct = () => {
     })
   }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchProduct])
 
-  const updateSearchParams = (key: string, value: string) => {
+  const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (value) {
       newParams.set(key, value)
@@ -46,7 +46,7 @@ export const useProduct = () => {
     setSearchParams(newParams)
   }
 
-  const reloadData = () => {
+  const reloadData = (): void => {
     fetchProduct({
       status: currentStatus,
       page: currentPage,
@@ -56,7 +56,7 @@ export const useProduct = () => {
     })
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
 
     const typeChange = actionType
@@ -119,9 +119,8 @@ export const useProduct = () => {
     reloadData()
   }
 
-  const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.currentTarget.value
-    const [sortKey, sortValue] = value.split('-')
+  const handleSort = (event: ChangeEvent<HTMLSelectElement>): void => {
+    const [sortKey, sortValue] = event.currentTarget.value.split('-')
     if (sortKey && sortValue) {
       const newParams = new URLSearchParams(searchParams)
       newParams.set('sortKey', sortKey)
@@ -129,13 +128,13 @@ export const useProduct = () => {
       setSearchParams(newParams)
     }
   }
-  const clearSortParams = () => {
+  const clearSortParams = (): void => {
     const newParams = new URLSearchParams(searchParams)
     newParams.delete('sortKey')
     newParams.delete('sortValue')
     setSearchParams(newParams)
   }
-  const handleFilterStatus = (status: string) => {
+  const handleFilterStatus = (status: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {
       newParams.set('status', status)
