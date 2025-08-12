@@ -28,13 +28,13 @@ export const useCreate = () => {
   }
 
   const [productInfo, setProductInfo] = useState<ProductInfoInterface>(initialProduct)
-  const navigate = useNavigate()
   const { stateProductCategory } = useProductCategoryContext()
+  const { allProductCategories } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
-  const { productCategories } = stateProductCategory
-
+  const navigate = useNavigate()
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
@@ -63,7 +63,7 @@ export const useCreate = () => {
   }
 
   return {
-    productCategories,
+    allProductCategories,
     productInfo,
     setProductInfo,
     uploadImageInputRef,

@@ -1,22 +1,25 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface, ProductInterface } from '~/types'
+import { fetchEditProductAPI } from '~/apis/admin/product.api'
+import { fetchDetailProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
+import type { ProductCategoryDetailInterface, ProductCategoryInfoInterface } from '~/types'
 
 export const useEdit = () => {
-  const [productInfo, setProductInfo] = useState<ProductDetailInterface | null>(null)
+  const [productCategoryInfo, setProductCategoryInfo] = useState<ProductCategoryInfoInterface | null>(null)
   const params = useParams()
   const id = params.id as string
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const { stateProductCategory } = useProductCategoryContext()
+  const { allProductCategories } = stateProductCategory
+  const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!id) return
-    fetchDetailProductAPI(id)
-      .then((response: ProductInterface) => {
-        setProductInfo(response.product)
+    fetchDetailProductCategoryAPI(id)
+      .then((response: ProductCategoryDetailInterface) => {
+        setProductCategoryInfo(response.productCategory)
       })
   }, [id])
 
@@ -31,34 +34,28 @@ export const useEdit = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (!productInfo) return
+    if (!productCategoryInfo) return
 
     const formData = new FormData(event.currentTarget)
-    formData.set('title', productInfo.title)
-    formData.set('featured', productInfo.featured)
-    formData.set('description', productInfo.description)
-    formData.set('price', productInfo.price.toString())
-    formData.set('discountPercentage', productInfo.discountPercentage.toString())
-    formData.set('stock', productInfo.stock.toString())
-    formData.set('position', productInfo.position.toString())
+    formData.set('title', productCategoryInfo.title)
+    formData.set('description', productCategoryInfo.description)
+    formData.set('position', productCategoryInfo.position.toString())
 
     const response = await fetchEditProductAPI(id, formData)
     if (response.code === 200) {
-      setAlertMessage('Đã cập nhật thành công sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Đã cập nhật thành công sản phẩm!', severity: 'success' }
+      })
       setTimeout(() => {
-        navigate(`/admin/products/detail/${id}`)
+        navigate(`/admin/products-category/detail/${id}`)
       }, 2000)
     }
   }
   return {
-    productInfo,
-    setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
+    allProductCategories,
+    productCategoryInfo,
+    setProductCategoryInfo,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

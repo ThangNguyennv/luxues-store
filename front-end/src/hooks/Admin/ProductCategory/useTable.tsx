@@ -1,5 +1,5 @@
 import type { UpdatedBy } from '~/types'
-import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
+import { fetchChangeStatusAPI, fetchDeleteProductCategoryAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
@@ -44,7 +44,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   }
   const handleDeleteProduct = async (_id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này')
-    const response = await fetchDeleteProductAPI(_id)
+    const response = await fetchDeleteProductCategoryAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
         dispatchProductCategory({

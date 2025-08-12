@@ -1,32 +1,33 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchCreateProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface } from '~/types'
+import { fetchCreateProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
+import type { ProductCategoryInfoInterface } from '~/types'
 
 export const useCreate = () => {
-  const initialProduct: ProductDetailInterface = {
+  const initialProductCategory: ProductCategoryInfoInterface = {
     _id: '',
     title: '',
-    price: 0,
-    discountPercentage: 0,
-    stock: 0,
     position: 0,
     status: 'active',
     description: '',
-    featured: '1',
     thumbnail: '',
-    accountFullName: '',
     createdBy: {
       account_id: '',
       createdAt: new Date()
     },
     updatedBy: [],
-    productCategoryId: ''
+    children: [],
+    slug: '',
+    parent_id: ''
   }
-  const [productInfo, setProductInfo] = useState<ProductDetailInterface>(initialProduct)
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+
+  const [productCategoryInfo, setProductCategoryInfo] = useState<ProductCategoryInfoInterface>(initialProductCategory)
+  const { stateProductCategory } = useProductCategoryContext()
+  const { dispatchAlert } = useAlertContext()
+  const { allProductCategories } = stateProductCategory
+
   const navigate = useNavigate()
 
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
@@ -45,24 +46,22 @@ export const useCreate = () => {
     if (file) {
       formData.set('thumbnail', file) // hoặc append nếu bạn chưa có key
     }
-    const response = await fetchCreateProductAPI(formData)
+    const response = await fetchCreateProductCategoryAPI(formData)
     if (response.code === 201) {
-      setProductInfo(response.data)
-      setAlertMessage('Đã tạo thành công sản phẩm!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      setProductCategoryInfo(response.data)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Tạo mới sản phẩm thành công!', severity: 'success' }
+      })
       setTimeout(() => {
-        navigate('/admin/products')
+        navigate('/admin/products-category')
       }, 2000)
     }
   }
   return {
-    productInfo,
-    setProductInfo,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
+    allProductCategories,
+    productCategoryInfo,
+    setProductCategoryInfo,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

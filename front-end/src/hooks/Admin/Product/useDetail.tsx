@@ -17,7 +17,6 @@ export const useDetail = () => {
   }, [id])
   return {
     productDetail,
-    setProductDetail,
     id
   }
 }

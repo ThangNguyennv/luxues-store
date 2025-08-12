@@ -3,6 +3,7 @@ import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
 import ProductCategoryTable from '~/components/admin/ItemTable/ProductCategoryTable'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
+import SortProductCategory from '~/components/admin/Sort/SortProductCategory'
 import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
 
 const ProductCategoryAdmin = () => {
@@ -64,27 +65,14 @@ const ProductCategoryAdmin = () => {
                 Áp dụng
             </button>
           </form>
-          <div className='flex gap-[10px] items-center'>
-            <select
-              onChange={(event) => handleSort(event)}
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] outline-none'
-              value={sortKey && sortValue ? `${sortKey}-${sortValue}` : ''}
-            >
-              <option disabled value={''}>-- Sắp xếp --</option>
-              <option value="position-asc">Vị trí tăng dần</option>
-              <option value="position-desc">Vị trí giảm dần</option>
-              <option value="title-asc">Tiêu đề A - Z</option>
-              <option value="title-desc">Tiêu đề Z - A</option>
-            </select>
-            <button
-              onClick={clearSortParams}
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
-            >
-              Clear
-            </button>
-          </div>
+          <SortProductCategory
+            handleSort={handleSort}
+            sortKey={sortKey}
+            sortValue={sortValue}
+            clearSortParams={clearSortParams}
+          />
           <div>
-            <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+            <Link to={'/admin/products-category/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
         <ProductCategoryTable

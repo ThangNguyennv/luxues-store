@@ -6,7 +6,7 @@ import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryConte
 
 export const useProductCategory = () => {
   const { stateProductCategory, fetchProductCategory, dispatchProductCategory } = useProductCategoryContext()
-  const { productCategories, filterStatus, pagination, keyword, loading } = stateProductCategory
+  const { productCategories, filterStatus, pagination, keyword } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -141,7 +141,6 @@ export const useProductCategory = () => {
 
   return {
     dispatchProductCategory,
-    loading,
     filterStatus,
     pagination,
     keyword,
@@ -152,8 +151,6 @@ export const useProductCategory = () => {
     actionType,
     setActionType,
     currentStatus,
-    currentPage,
-    currentKeyword,
     updateSearchParams,
     handleSubmit,
     handleSort,

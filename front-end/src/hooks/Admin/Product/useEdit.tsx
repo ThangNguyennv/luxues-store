@@ -10,9 +10,8 @@ export const useEdit = () => {
   const params = useParams()
   const id = params.id as string
   const { stateProductCategory } = useProductCategoryContext()
-  const { productCategories } = stateProductCategory
+  const { allProductCategories } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
-
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -25,6 +24,7 @@ export const useEdit = () => {
 
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
@@ -35,7 +35,6 @@ export const useEdit = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     if (!productInfo) return
-
     const formData = new FormData(event.currentTarget)
     formData.set('title', productInfo.title)
     formData.set('featured', productInfo.featured)
@@ -58,7 +57,7 @@ export const useEdit = () => {
   }
 
   return {
-    productCategories,
+    allProductCategories,
     productInfo,
     setProductInfo,
     uploadImageInputRef,

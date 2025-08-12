@@ -28,6 +28,9 @@ import PrivateRoute from './components/admin/PrivateRoute/PrivateRoute '
 import DetailProduct from './pages/admin/Product/Detail'
 import EditProduct from './pages/admin/Product/Edit'
 import CreateProduct from './pages/admin/Product/Create'
+import CreateProductCategory from './pages/admin/ProductCategory/Create'
+import DetailProductCategory from './pages/admin/ProductCategory/Detail'
+import EditProductCategory from './pages/admin/ProductCategory/Edit'
 
 function App() {
   useEffect(() => {
@@ -60,6 +63,9 @@ function App() {
             <Route path='products/edit/:id' element={<EditProduct />}/>
             <Route path='products/create' element={<CreateProduct />}/>
             <Route path='products-category' element={<ProductCategoryAdmin />}/>
+            <Route path='products-category/detail/:id' element={ <DetailProductCategory />}/>
+            <Route path='products-category/edit/:id' element={<EditProductCategory />}/>
+            <Route path='products-category/create' element={<CreateProductCategory />}/>
             <Route path='roles' element={ <Role />} />
             <Route path='roles/permissions' element={<Permission />} />
             <Route path='settings' element={<LayoutSetting />}>

@@ -103,8 +103,8 @@ const ProductTree = ({
           )}
         </TableCell>
         <TableCell align="center">
-          <Link to={`/admin/products/detail/${productCategory._id}`} className="border rounded-[5px] bg-[#757575] p-[5px] text-white">Chi tiết</Link>
-          <Link to={`/admin/products/edit/${productCategory._id}`} className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white">Sửa</Link>
+          <Link to={`/admin/products-category/detail/${productCategory._id}`} className="border rounded-[5px] bg-[#757575] p-[5px] text-white">Chi tiết</Link>
+          <Link to={`/admin/products-category/edit/${productCategory._id}`} className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white">Sửa</Link>
           <button onClick={() => handleDeleteProduct(productCategory._id)} className="border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Xóa</button>
         </TableCell>
       </TableRow>

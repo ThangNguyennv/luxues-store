@@ -1,23 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchDetailProductAPI } from '~/apis/admin/product.api'
-import type { ProductDetailInterface, ProductInterface } from '~/types'
+import { fetchDetailProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import type { ProductCategoryDetailInterface, ProductCategoryInfoInterface } from '~/types'
 
 export const useDetail = () => {
-  const [productDetail, setProductDetail] = useState<ProductDetailInterface | null>(null)
+  const [productCategoryDetail, setProductCategoryDetail] = useState<ProductCategoryInfoInterface | null>(null)
   const params = useParams()
   const id = params.id
 
   useEffect(() => {
     if (!id) return
-    fetchDetailProductAPI(id)
-      .then((response: ProductInterface) => {
-        setProductDetail(response.product)
+    fetchDetailProductCategoryAPI(id)
+      .then((response: ProductCategoryDetailInterface) => {
+        setProductCategoryDetail(response.productCategory)
       })
   }, [id])
   return {
-    productDetail,
-    setProductDetail,
+    productCategoryDetail,
     id
   }
 }

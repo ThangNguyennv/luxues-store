@@ -28,7 +28,8 @@ export interface ProductInfoInterface extends ProductGeneralInfoInterface {
 }
 
 export interface ProductCategoryInfoInterface extends ProductGeneralInfoInterface {
-  children: ProductCategoryInfoInterface[] | []
+  children: ProductCategoryInfoInterface[] | [],
+  parent_id: string
 }
 
 export interface FilterStatusInterface {
@@ -69,6 +70,7 @@ export interface ProductAllResponseInterface extends ProductHelperInterface, Pro
 
 export interface ProductCategoryAllResponseInterface extends ProductHelperInterface, ProductCurrentParamsInterface {
   productCategories: ProductCategoryInfoInterface[],
+  allProductCategories: ProductCategoryInfoInterface[]
 }
 
 export interface ProductStates extends ProductHelperInterface, ProductParamsInterface {
@@ -82,6 +84,7 @@ export type ProductActions =
 
 export interface ProductCategoryStates extends ProductHelperInterface, ProductParamsInterface {
   productCategories: ProductCategoryInfoInterface[],
+  allProductCategories: ProductCategoryInfoInterface[],
 }
 
 export type ProductCategoryActions =
@@ -147,3 +150,6 @@ export interface ProductDetailInterface {
   product: ProductInfoInterface
 }
 
+export interface ProductCategoryDetailInterface {
+  productCategory: ProductCategoryInfoInterface
+}

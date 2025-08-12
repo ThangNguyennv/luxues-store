@@ -157,8 +157,6 @@ export const useProduct = () => {
     actionType,
     setActionType,
     currentStatus,
-    currentPage,
-    currentKeyword,
     updateSearchParams,
     handleSubmit,
     handleSort,

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
-import { fetchProductCategoryAllAPI } from '~/apis/admin/product.api'
+import { fetchProductCategoryAllAPI } from '~/apis/admin/productCategory.api'
 import { initialState, productCategoryReducer } from '~/reducers/admin/productCategoryReducer'
 import type { ProductCategoryActions, ProductCategoryAllResponseInterface, ProductCategoryStates } from '~/types'
 
@@ -42,6 +42,7 @@ export const ProductCategoryProvider = ({ children }: { children: React.ReactNod
           type: 'SET_DATA',
           payload: {
             productCategories: res.productCategories,
+            allProductCategories: res.allProductCategories,
             accounts: res.accounts,
             pagination: res.pagination,
             filterStatus: res.filterStatus,
