@@ -77,6 +77,7 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
+
     res.json({
       code: 200,
       message: 'Thành công!',

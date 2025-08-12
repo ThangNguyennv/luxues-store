@@ -10,16 +10,14 @@ export interface TreeItem extends Document {
 
 let count = 0
 
-export const createTree = (
-  arr: TreeItem[],
-  parentId: string = ''
-): TreeItem[] => {
+export const createTree = (parentItems: TreeItem[], parentId: string = ''): TreeItem[] => {
   const tree: TreeItem[] = []
-  arr.forEach((item) => {
+
+  parentItems.forEach((item) => {
     if (item.parent_id === parentId) {
       count++
       const newItem = { ...item.toObject(), index: count } as TreeItem
-      const children = createTree(arr, item.id)
+      const children = createTree(parentItems, item.id)
       if (children.length > 0) {
         newItem.children = children
       }
@@ -29,7 +27,7 @@ export const createTree = (
   return tree
 }
 
-export const tree = (arr: TreeItem[], parentId: string = ''): TreeItem[] => {
+export const buildTree = (parentItems: TreeItem[], parentId: string = ''): TreeItem[] => {
   count = 0
-  return createTree(arr, parentId)
+  return createTree(parentItems, parentId)
 }

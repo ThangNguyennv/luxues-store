@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import ArticleCategory from '~/models/article-category.model'
 import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
-import { tree, TreeItem } from '~/helpers/createTree'
+import { buildTree, TreeItem } from '~/helpers/createTree'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
 
 // [GET] /admin/articles-category
@@ -34,7 +34,7 @@ export const index = async (req: Request, res: Response) => {
     // // End Sort
     const records = await ArticleCategory.find(find).sort(sort)
     // Tạo cây phân cấp
-    const newRecords = tree(records as unknown as TreeItem[])
+    const newRecords = buildTree(records as unknown as TreeItem[])
     // Thêm thông tin log
     await addLogInfoToTree(newRecords as LogNode[])
     res.json({
