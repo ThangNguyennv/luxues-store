@@ -29,10 +29,10 @@ const CreateProductCategory = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category_id">Danh mục</label>
+            <label htmlFor="parent_id">Danh mục</label>
             <select
-              name="product_category_id"
-              id="product_category_id"
+              name="parent_id"
+              id="parent_id"
               className="outline-none border rounded-[5px] border-[#00171F]"
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}
