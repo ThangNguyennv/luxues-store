@@ -271,7 +271,8 @@ export const createPost = async (req: Request, res: Response) => {
     await records.save()
     res.json({
       code: 201,
-      message: 'Thêm thành công danh mục sản phẩm!'
+      message: 'Thêm thành công danh mục sản phẩm!',
+      data: req.body
     })
   } catch (error) {
     res.json({
