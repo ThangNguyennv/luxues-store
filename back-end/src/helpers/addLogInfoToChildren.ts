@@ -12,7 +12,7 @@ export interface LogNode extends TreeItem {
   accountFullName?: string;
 }
 
-// Second helper: add log info to each node
+//  Add thông tin cho mỗi node
 export const addLogInfoToTree = async (nodes: LogNode[]): Promise<void> => {
   for (const node of nodes) {
     // Lấy thông tin người tạo

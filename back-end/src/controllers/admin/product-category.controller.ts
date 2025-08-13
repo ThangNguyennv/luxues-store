@@ -7,6 +7,7 @@ import { buildTreeForPagedItems } from '~/helpers/createChildForParent'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
 import Account from '~/models/account.model'
 import paginationHelpers from '~/helpers/pagination'
+import { updateStatusRecursive } from '~/helpers/updateStatusRecursive'
 
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
@@ -37,7 +38,7 @@ export const index = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 1
+        limitItems: 2
       },
       req.query,
       countParents
@@ -80,7 +81,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Thành công!',
+      message: 'Lấy thành công!',
       productCategories: newProductCategories,
       allProductCategories: newAllProductCategories,
       accounts: accounts,
@@ -97,23 +98,51 @@ export const index = async (req: Request, res: Response) => {
   }
 }
 
-// [PATCH] /admin/products-category/change-status/:status/:id
-export const changeStatus = async (req: Request, res: Response) => {
-  try {
-    const status = req.params.status
-    const id = req.params.id
-    const updatedBy = {
+// // [PATCH] /admin/products-category/change-status/:status/:id
+// export const changeStatus = async (req: Request, res: Response) => {
+//   try {
+//     const status = req.params.status
+//     const id = req.params.id
+//     const updatedBy = {
+//       account_id: req['accountAdmin'].id,
+//       updatedAt: new Date()
+//     }
+//     await ProductCategory.updateOne(
+//       { _id: id },
+//       { status: status, $push: { updatedBy: updatedBy } }
+//     )
+//     res.json({
+//       code: 200,
+//       message: 'Cập nhật trạng thái danh mục sản phẩm thành công !'
+//     })
+//   } catch (error) {
+//     res.json({
+//       code: 400,
+//       message: 'Lỗi!',
+//       error: error
+//     })
+//   }
+// }
+
+export interface UpdatedBy {
+  account_id: string,
+  updatedAt: Date
+}
+
+export const changeStatusWithChildren = async (req: Request, res: Response) => {
+   try {
+    const { status, id } = req.params;
+    const updatedBy: UpdatedBy = {
       account_id: req['accountAdmin'].id,
       updatedAt: new Date()
     }
-    await ProductCategory.updateOne(
-      { _id: id },
-      { status: status, $push: { updatedBy: updatedBy } }
-    )
-    res.json({
-      code: 200,
-      message: 'Cập nhật trạng thái thành công!'
-    })
+
+    await updateStatusRecursive(status, id, updatedBy);
+
+    return res.json({ 
+      code: 200, 
+      message: "Cập nhật thành công trạng thái danh mục sản phẩm!" 
+    });
   } catch (error) {
     res.json({
       code: 400,
@@ -147,7 +176,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
+          message: `Cập nhật thành công trạng thái ${ids.length} danh mục sản phẩm!`
         })
         break
       case Key.INACTIVE:
@@ -157,7 +186,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
+          message: `Cập nhật thành công trạng thái ${ids.length} danh mục sản phẩm!`
         })
         break
       case Key.DELETEALL:
@@ -167,7 +196,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 204,
-          message: `Đã xóa thành công ${ids.length} sản phẩm!`
+          message: `Xóa thành công ${ids.length} danh mục sản phẩm!`
         })
         break
       case Key.CHANGEPOSITION:
@@ -180,13 +209,13 @@ export const changeMulti = async (req: Request, res: Response) => {
         }
         res.json({
           code: 200,
-          message: `Đã đổi vị trí thành công ${ids.length} sản phẩm!`
+          message: `Đổi vị trí thành công ${ids.length} danh mục sản phẩm!`
         })
         break
       default:
         res.json({
           code: 404,
-          message: 'Không tồn tại!'
+          message: 'Không tồn tại danh mục sản phẩm!'
         })
         break
     }
@@ -215,7 +244,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công sản phẩm!'
+      message: 'Xóa thành công danh mục sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -242,7 +271,7 @@ export const createPost = async (req: Request, res: Response) => {
     await records.save()
     res.json({
       code: 201,
-      message: 'Đã thêm thành công sản phẩm!'
+      message: 'Thêm thành công danh mục sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -272,7 +301,7 @@ export const editPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã cập nhật thành công sản phẩm!'
+      message: 'Cập nhật thành công danh mục sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -293,7 +322,7 @@ export const detail = async (req: Request, res: Response) => {
     const productCategory = await ProductCategory.findOne(find)
     res.json({
       code: 200,
-      message: 'Thành công!',
+      message: 'Lấy Thành công chi tiết danh mục sản phẩm!',
       productCategory: productCategory
     })
   } catch (error) {

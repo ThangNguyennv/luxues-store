@@ -80,7 +80,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Thành công!',
+      message: 'Lấy thành công!',
       products: products,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
@@ -114,7 +114,7 @@ export const changeStatus = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Cập nhật trạng thái thành công!'
+      message: 'Cập nhật thành công trạng thái sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -149,7 +149,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
+          message: `Cập nhật thành công trạng thái ${ids.length} sản phẩm!`
         })
         break
       case Key.INACTIVE:
@@ -159,7 +159,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
+          message: `Cập nhật thành công trạng thái ${ids.length} sản phẩm!`
         })
         break
       case Key.DELETEALL:
@@ -169,7 +169,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 204,
-          message: `Đã xóa thành công ${ids.length} sản phẩm!`
+          message: `Xóa thành công ${ids.length} sản phẩm!`
         })
         break
       case Key.CHANGEPOSITION:
@@ -182,13 +182,13 @@ export const changeMulti = async (req: Request, res: Response) => {
         }
         res.json({
           code: 200,
-          message: `Đã đổi vị trí thành công ${ids.length} sản phẩm!`
+          message: `Đổi vị trí thành công ${ids.length} sản phẩm!`
         })
         break
       default:
         res.json({
           code: 404,
-          message: 'Không tồn tại!'
+          message: 'Không tồn tại sản phẩm!'
         })
         break
     }
@@ -217,7 +217,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công sản phẩm!'
+      message: 'Xóa thành công sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -247,7 +247,7 @@ export const createPost = async (req: Request, res: Response) => {
     await records.save()
     res.json({
       code: 201,
-      message: 'Đã thêm thành công sản phẩm!',
+      message: 'Thêm thành công sản phẩm!',
       data: req.body,
     })
   } catch (error) {
@@ -281,7 +281,7 @@ export const editPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã cập nhật thành công sản phẩm!'
+      message: 'Cập nhật thành công sản phẩm!'
     })
   } catch (error) {
     res.json({
@@ -302,7 +302,7 @@ export const detail = async (req: Request, res: Response) => {
     const product = await Product.findOne(find)
     res.json({
       code: 200,
-      message: 'Thành công!',
+      message: 'Lấy thành công chi tiết sản phẩm!',
       product: product
     })
   } catch (error) {
