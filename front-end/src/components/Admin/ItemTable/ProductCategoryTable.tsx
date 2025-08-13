@@ -8,6 +8,7 @@ import { useTable } from '~/hooks/admin/productCategory/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/admin/productCategory/useTable'
 import ProductTree from '../TableTree/ProductTree'
+import TableContainer from '@mui/material/TableContainer'
 
 const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
@@ -15,7 +16,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
     productCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteProduct,
+    handleDeleteProductCategory,
     handleCheckbox,
     handleCheckAll,
     isCheckAll
@@ -23,49 +24,53 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   return (
     <>
-      <Table sx={{
-        borderCollapse: 'collapse',
-        '& th, & td': {
-          border: '1px solid #ccc' // đường kẻ
-        }
-      }}>
-        <TableHead>
-          <TableRow>
-            <TableCell align='center'>
-              <Checkbox
-                checked={isCheckAll}
-                onChange={(event) => handleCheckAll(event.target.checked)}
-                {...label}
-                size="small"
-                sx={{ padding: 0 }}
-              />
-            </TableCell>
-            <TableCell align='center'>Tiêu đề</TableCell>
-            <TableCell align='center'>Hình ảnh</TableCell>
-            <TableCell align='center'>Vị trí</TableCell>
-            <TableCell align='center'>Trạng thái</TableCell>
-            <TableCell align='center'>Người tạo</TableCell>
-            <TableCell align='center'>Cập nhật lần cuối</TableCell>
-            <TableCell align='center'>Hành động</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {productCategories.map(productCategory => (
-            <ProductTree
-              key={productCategory._id}
-              productCategory={productCategory}
-              level={1}
-              selectedIds={selectedIds}
-              accounts={accounts}
-              handleCheckbox={handleCheckbox}
-              handleToggleStatus={handleToggleStatus}
-              handleDeleteProduct={handleDeleteProduct}
-              productCategories={productCategories}
-              dispatchProductCategory={dispatchProductCategory}
-            />
-          ))}
-        </TableBody>
-      </Table>
+      <TableContainer sx={{ maxHeight: 600 }}>
+        <Table stickyHeader sx={{
+          borderCollapse: 'collapse',
+          '& th, & td': {
+            border: '1px solid #000000' // đường kẻ
+          }
+        }}>
+          <TableHead>
+            <TableRow>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>
+                <Checkbox
+                  checked={isCheckAll}
+                  onChange={(event) => handleCheckAll(event.target.checked)}
+                  {...label}
+                  size="small"
+                  sx={{ padding: 0 }}
+                />
+              </TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Tiêu đề</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Vị trí</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Người tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {productCategories && productCategories.length > 0 && (
+              productCategories.map(productCategory => (
+                <ProductTree
+                  key={productCategory._id}
+                  productCategory={productCategory}
+                  level={1}
+                  selectedIds={selectedIds}
+                  accounts={accounts}
+                  handleCheckbox={handleCheckbox}
+                  handleToggleStatus={handleToggleStatus}
+                  handleDeleteProductCategory={handleDeleteProductCategory}
+                  productCategories={productCategories}
+                  dispatchProductCategory={dispatchProductCategory}
+                />
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   )
 }

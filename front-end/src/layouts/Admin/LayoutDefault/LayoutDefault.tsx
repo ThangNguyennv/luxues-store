@@ -9,7 +9,7 @@ const LayoutDefaultAdmin = () => {
       <Header />
       <div className='flex'>
         <Sidebar />
-        <div className='flex justify-center w-[90%]'>
+        <div className='flex justify-center flex-1 ml-[200px] mt-[82px]'>
           <div className='container flex flex-col gap-[15px] p-[15px]'>
             <Outlet />
           </div>

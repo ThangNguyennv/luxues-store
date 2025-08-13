@@ -16,7 +16,7 @@ const EditProductCategory = () => {
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
+      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
       {productCategoryInfo && (
         <form onSubmit={(event) => handleSubmit(event)} action="" className="flex flex-col gap-[10px]" encType="multipart/form-data">
           <div className="form-group">
@@ -25,10 +25,10 @@ const EditProductCategory = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category_id">Danh mục</label>
+            <label htmlFor="parent_id">Danh mục</label>
             <select
-              name="product_category_id"
-              id="product_category_id"
+              name="parent_id"
+              id="parent_id"
               className="outline-none border rounded-[5px] border-[#00171F]"
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}

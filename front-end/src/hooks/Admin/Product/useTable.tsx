@@ -38,7 +38,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       })
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
+        payload: { message: response.message, severity: 'success' }
       })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
@@ -47,7 +47,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   }
 
   const handleDeleteProduct = async (_id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này')
+    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này?')
     const response = await fetchDeleteProductAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
@@ -59,7 +59,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
         })
         dispatchAlert({
           type: 'SHOW_ALERT',
-          payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
+          payload: { message: response.message, severity: 'success' }
         })
       }
     } else if (response.code === 400) {
@@ -67,6 +67,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
+
   const handleCheckbox = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedIds((prev) => [...prev, id])

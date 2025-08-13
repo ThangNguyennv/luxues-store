@@ -2,7 +2,7 @@ import axios from 'axios'
 import { API_ROOT } from '~/utils/constants'
 import type { ProductAllResponseInterface, ProductDetailInterface } from '~/types'
 
-export const fetchProductAllAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
+export const fetchAllProductsAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())

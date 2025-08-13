@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchEditProductAPI } from '~/apis/admin/product.api'
-import { fetchDetailProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import { fetchDetailProductCategoryAPI, fetchEditProductCategoryAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import type { ProductCategoryDetailInterface, ProductCategoryInfoInterface } from '~/types'
@@ -41,7 +40,7 @@ export const useEdit = () => {
     formData.set('description', productCategoryInfo.description)
     formData.set('position', productCategoryInfo.position.toString())
 
-    const response = await fetchEditProductAPI(id, formData)
+    const response = await fetchEditProductCategoryAPI(id, formData)
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',

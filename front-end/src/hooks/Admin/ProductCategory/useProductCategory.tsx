@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
+import { fetchChangeMultiAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 
@@ -73,7 +73,7 @@ export const useProductCategory = () => {
       })
       return
     }
-    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')) {
+    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những danh mục sản phẩm này?')) {
       return
     }
 

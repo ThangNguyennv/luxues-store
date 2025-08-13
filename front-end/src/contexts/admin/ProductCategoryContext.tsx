@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
-import { fetchProductCategoryAllAPI } from '~/apis/admin/productCategory.api'
+import { fetchAllProductCategoriesAPI } from '~/apis/admin/productCategory.api'
 import { initialState, productCategoryReducer } from '~/reducers/admin/productCategoryReducer'
 import type { ProductCategoryActions, ProductCategoryAllResponseInterface, ProductCategoryStates } from '~/types'
 
@@ -31,7 +31,7 @@ export const ProductCategoryProvider = ({ children }: { children: React.ReactNod
     } = {}) => {
       dispatchProductCategory({ type: 'SET_LOADING', payload: true })
       try {
-        const res: ProductCategoryAllResponseInterface = await fetchProductCategoryAllAPI(
+        const res: ProductCategoryAllResponseInterface = await fetchAllProductCategoriesAPI(
           status,
           page,
           keyword,

@@ -1,8 +1,9 @@
 import type { UpdatedBy } from '~/types'
-import { fetchChangeStatusAPI, fetchDeleteProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import { fetchChangeStatusWithChildren, fetchDeleteProductCategoryAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
+import { updateStatusRecursively } from '~/helpers/updateStatusRecursively'
 
 export interface Props {
   selectedIds: string[],
@@ -15,35 +16,31 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
 
-  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+  const handleToggleStatus = async (currentStatus: string, _id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount!._id,
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusAPI(newStatus, _id)
+    const response = await fetchChangeStatusWithChildren(newStatus, _id)
     if (response.code === 200) {
       dispatchProductCategory({
         type: 'SET_DATA',
         payload: {
-          productCategories:  productCategories.map((productCategory) => productCategory._id === _id ? {
-            ...productCategory,
-            status: newStatus,
-            updatedBy: [...(productCategory.updatedBy || []), currentUser]
-          }: productCategory)
+          productCategories: updateStatusRecursively(productCategories, _id, newStatus, currentUser)
         }
       })
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Đã cập nhật thành công trạng thái sản phẩm!', severity: 'success' }
+        payload: { message: response.message, severity: 'success' }
       })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
     }
   }
-  const handleDeleteProduct = async (_id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này')
+  const handleDeleteProductCategory = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa danh mục sản phẩm này?')
     const response = await fetchDeleteProductCategoryAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
@@ -55,7 +52,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
         })
         dispatchAlert({
           type: 'SHOW_ALERT',
-          payload: { message: 'Đã xóa thành công sản phẩm!', severity: 'success' }
+          payload: { message: response.message, severity: 'success' }
         })
       }
     } else if (response.code === 400) {
@@ -85,9 +82,10 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     productCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteProduct,
+    handleDeleteProductCategory,
     handleCheckbox,
     handleCheckAll,
     isCheckAll
   }
 }
+

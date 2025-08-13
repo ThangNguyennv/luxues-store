@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
-    <div className="sider w-[10%] bg-[#192335] p-[20px] text-[15px] font-[600] text-[#EFF2F2] h-screen">
+    <div className="sider w-[200px] bg-[#192335] p-[20px] text-[15px] font-[600] text-[#EFF2F2] h-screen fixed top-[80px] left-0 z-40">
       <div className="inner-menu">
         <ul className="flex flex-col gap-[10px] text-[#F9F9FF] font-[500]">
           <li className="border-b border-[#9D9995] pb-[7px]">
