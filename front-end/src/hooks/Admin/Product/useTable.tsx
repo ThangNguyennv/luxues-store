@@ -84,15 +84,10 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       setSelectedIds([])
     }
   }
-  // const filteredProducts = products.filter(product => {
-  //   if (!currentStatus) return true // nút "Tất cả"
-  //   return product.status === currentStatus
-  // })
 
   const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
 
   return {
-    // filteredProducts,
     currentStatus,
     products,
     dispatchProduct,

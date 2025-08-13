@@ -13,7 +13,7 @@ export const useHeader = () => {
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Đăng xuất thành công!', severity: 'success' }
+        payload: { message: response.message, severity: 'success' }
       })
       setMyAccount(null)
       setTimeout(() => {

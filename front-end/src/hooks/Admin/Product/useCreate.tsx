@@ -54,7 +54,7 @@ export const useCreate = () => {
       setProductInfo(response.data)
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Tạo mới sản phẩm thành công!', severity: 'success' }
+        payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
         navigate('/admin/products')

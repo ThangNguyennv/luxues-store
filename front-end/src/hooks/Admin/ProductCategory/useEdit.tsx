@@ -44,7 +44,7 @@ export const useEdit = () => {
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Đã cập nhật thành công sản phẩm!', severity: 'success' }
+        payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
         navigate(`/admin/products-category/detail/${id}`)

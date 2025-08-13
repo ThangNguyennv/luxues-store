@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { fetchMyAccountAPI, fetchUpdateMyAccountAPI } from '~/apis/admin/myAccount.api'
+import { useAlertContext } from '~/contexts/admin/AlertContext'
 import type { AccountInfoInterface, MyAccountDetailInterface } from '~/types'
 
 export const useEditMyAccount = () => {
   const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
   const [password, setPassword] = useState<string>('')
-  const [alertOpen, setAlertOpen] = useState(false)
-  const [alertMessage, setAlertMessage] = useState('')
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error'>('success')
+  const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
     fetchMyAccountAPI().then((res: MyAccountDetailInterface) => {
@@ -36,16 +35,18 @@ export const useEditMyAccount = () => {
 
     const response = await fetchUpdateMyAccountAPI(formData)
     if (response.code === 200) {
-      setAlertMessage('Đã cập nhật thành công tài khoản!')
-      setAlertSeverity('success')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
       setTimeout(() => {
         window.location.href = '/admin/my-account' // Fix load lại trang sau!
       }, 2000)
     } else if (response.code === 409) {
-      setAlertMessage(`Email ${response.account.email} đã tồn tại, vui lòng chọn email khác!`)
-      setAlertSeverity('error')
-      setAlertOpen(true)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'error' }
+      })
     }
   }
 
@@ -54,10 +55,7 @@ export const useEditMyAccount = () => {
     setAccountInfo,
     password,
     setPassword,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
+
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

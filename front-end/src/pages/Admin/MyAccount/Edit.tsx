@@ -1,5 +1,4 @@
 
-import { AlertToast } from '~/components/alert/Alert'
 import { useEditMyAccount } from '~/hooks/admin/myAccount/useEdit'
 
 const EditMyAccount = () => {
@@ -8,10 +7,6 @@ const EditMyAccount = () => {
     setAccountInfo,
     password,
     setPassword,
-    alertOpen,
-    setAlertOpen,
-    alertMessage,
-    alertSeverity,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
@@ -20,12 +15,6 @@ const EditMyAccount = () => {
 
   return (
     <>
-      <AlertToast
-        open={alertOpen}
-        message={alertMessage}
-        onClose={() => setAlertOpen(false)}
-        severity={alertSeverity}
-      />
       <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa thông tin cá nhân</h1>
       {accountInfo && (
         <form onSubmit={(event) => handleSubmit(event)} className="flex flex-col gap-[5px]" encType="multipart/form-data">
@@ -35,7 +24,7 @@ const EditMyAccount = () => {
               onChange={(event) => handleChange(event)}
               ref={uploadImageInputRef}
               type="file"
-              className="border rounded-[5px] w-[5%] bg-[#DDDDDD] p-[5px]"
+              className=""
               name="avatar"
               accept="image/*"
             />

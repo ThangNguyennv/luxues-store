@@ -14,7 +14,6 @@ import TableContainer from '@mui/material/TableContainer'
 
 const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
-    // filteredProducts,
     products,
     dispatchProduct,
     accounts,
