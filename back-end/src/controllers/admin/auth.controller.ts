@@ -11,6 +11,13 @@ export const loginPost = async (req: Request, res: Response) => {
       email: email,
       deleted: false
     })
+    if (!accountAdmin) {
+      res.json({
+        code: 401,
+        message: 'Tài khoản hoặc mật khẩu không chính xác'
+      })
+      return
+    }
     if (md5(password) != accountAdmin.password) {
       res.json({
         code: 401,
