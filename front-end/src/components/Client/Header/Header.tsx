@@ -29,9 +29,9 @@ const Header = () => {
             </button>
             <a className="font-[700] sm:text-[32px] text-[25px] text-primary lg:flex-none flex-1" href="">CODE.SHOP</a>
             <nav className="md:block hidden">
-              <ul className="flex gap-x-[24px] font-[400] text-[16px] text-black">
+              <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
+                <li><a href="/">Trang chủ</a></li>
                 <li><a href="">Trang phục</a></li>
-                <li><a href="">Giày</a></li>
                 <li><a href="">Phụ kiện</a></li>
                 <li><a href="">Thương hiệu</a></li>
                 <li><a href="">Bài Viết</a></li>

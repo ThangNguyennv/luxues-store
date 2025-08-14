@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { MyAccountDetailInterface } from '~/types'
+import type { MyAccountDetailInterface } from '~/types/account.type'
 
 interface AuthContextType {
     myAccount: MyAccountDetailInterface['myAccount'] | null

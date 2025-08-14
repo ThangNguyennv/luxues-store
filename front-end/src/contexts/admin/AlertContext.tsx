@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from 'react'
 import { alertReducer, initialState } from '~/reducers/admin/alertReducer'
-import type { AlertActions, AlertStates } from '~/types'
+import type { AlertActions, AlertStates } from '~/types/alert.type'
 
 interface AlertContextType {
   stateAlert: AlertStates

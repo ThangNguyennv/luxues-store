@@ -1,4 +1,5 @@
-import type { ProductCategoryInfoInterface, UpdatedBy } from '~/types'
+import type { UpdatedBy } from '~/types/helper.type'
+import type { ProductCategoryInfoInterface } from '~/types/productCategory.type'
 
 export const updateStatusRecursively = (
   categories: ProductCategoryInfoInterface[],

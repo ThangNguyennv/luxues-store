@@ -35,3 +35,7 @@ input {
     border-radius: 5px;
     padding-left: 5px;
 }
+
+.menu li:hover {
+    text-decoration: underline;
+}

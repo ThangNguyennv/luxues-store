@@ -9,8 +9,8 @@ import { useTable } from '~/hooks/admin/product/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import type { Props } from '~/hooks/admin/product/useTable'
 import FormatDateTime from '../Moment/FormatDateTime'
-import type { UpdatedBy } from '~/types'
 import TableContainer from '@mui/material/TableContainer'
+import type { UpdatedBy } from '~/types/helper.type'
 
 const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {

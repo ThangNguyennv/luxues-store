@@ -1,9 +1,9 @@
-import type { UpdatedBy } from '~/types'
 import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductContext } from '~/contexts/admin/ProductContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
+import type { UpdatedBy } from '~/types/helper.type'
 
 export interface Props {
   selectedIds: string[],

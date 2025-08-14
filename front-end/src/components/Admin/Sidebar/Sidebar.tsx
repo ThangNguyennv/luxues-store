@@ -9,22 +9,31 @@ const Sidebar = () => {
             <NavLink to={'/admin/dashboard'}>Tổng quan</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/products-category'}>Danh mục sản phẩm</NavLink>
-          </li>
-          <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/products'}>Danh sách Sản phẩm</NavLink>
-          </li>
-          <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/orders'}>Danh sách đơn hàng</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/products-category'}>Danh mục trang phục</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/products'}>Danh sách trang phục</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/accessories-category'}>Danh mục phụ kiện</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/accessories'}>Danh sách phụ kiện</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/brands-category'}>Danh mục thương hiệu</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/brands'}>Danh sách thương hiệu</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/articles-category'}>Danh mục bài viết</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/articles'}>Danh sách bài viết</NavLink>
-          </li>
-          <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/trash'}>Thùng rác</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/roles'}>Nhóm quyền</NavLink>
@@ -36,13 +45,16 @@ const Sidebar = () => {
             <NavLink to={'/admin/accounts'}>Tài khoản Admin</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/users'}>Người dùng</NavLink>
+            <NavLink to={'/admin/users'}>Tài khoản người dùng</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/general'}>Cài đặt chung</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/dvance'}>Cài đặt nâng cao</NavLink>
+          </li>
+          <li className="border-b border-[#9D9995] pb-[7px]">
+            <NavLink to={'/admin/trash'}>Thùng rác</NavLink>
           </li>
         </ul>
       </div>

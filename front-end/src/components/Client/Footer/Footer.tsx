@@ -103,7 +103,7 @@ function Footer() {
           </div>
           <div className="flex flex-wrap justify-between mt-[30px]">
             <div className="md:w-auto w-[100%] text-[14px] font-[400] text-[#00000099] flex items-center justify-center md:mb-[0] mb-[20px]">
-              CODE.SHOP © 2025, All Rights Reserved
+              Bản quyền thuộc về Code Craf. Bảo lưu mọi quyền.
             </div>
             <div className="md:w-auto w-[100%] flex justify-center items-center gap-[12px]">
               <img className="bg-[#FFFFFF] p-[8px] w-[47px] rounded-[5.38px] object-contain" src={ visa }/>

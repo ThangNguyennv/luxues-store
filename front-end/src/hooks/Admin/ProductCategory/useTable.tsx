@@ -1,9 +1,9 @@
-import type { UpdatedBy } from '~/types'
 import { fetchChangeStatusWithChildren, fetchDeleteProductCategoryAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursively } from '~/helpers/updateStatusRecursively'
+import type { UpdatedBy } from '~/types/helper.type'
 
 export interface Props {
   selectedIds: string[],

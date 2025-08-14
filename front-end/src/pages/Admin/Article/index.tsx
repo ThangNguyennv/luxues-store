@@ -1,0 +1,93 @@
+import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
+import Pagination from '~/components/admin/Pagination/Pagination'
+import ProductTable from '~/components/admin/ItemTable/ProductTable'
+import Search from '~/components/admin/Search/Search'
+import { Link } from 'react-router-dom'
+import SortProduct from '~/components/admin/Sort/SortProduct'
+import { useArticle } from '~/hooks/admin/article/useArticle'
+
+const ArticleAdmin = () => {
+  const {
+    dispatchProduct,
+    filterStatus,
+    pagination,
+    keyword,
+    sortKey,
+    sortValue,
+    selectedIds,
+    setSelectedIds,
+    actionType,
+    setActionType,
+    currentStatus,
+    updateSearchParams,
+    handleSubmit,
+    handleSort,
+    clearSortParams,
+    handleFilterStatus
+  } = useArticle()
+
+  return (
+    <>
+      <div className='flex flex-col gap-[15px]'>
+        <h1 className='text-[30px] font-[700] text-[#000000]'>Danh sách bài viết</h1>
+        <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
+          <div>Bộ lọc và tìm kiếm</div>
+          <div className='flex items-center justify-between text-[15px]'>
+            <FilterStatus
+              filterStatus={filterStatus}
+              currentStatus={currentStatus}
+              handleFilterStatus={handleFilterStatus}
+            />
+            <Search
+              keyword={keyword}
+              handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
+              handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
+          </div>
+        </div>
+        <div className='flex items-center justify-between'>
+          <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
+            <select
+              name="type"
+              id=""
+              value={actionType}
+              onChange={(e) => setActionType(e.target.value)}
+              className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
+            >
+              <option disabled value={''}>-- Chọn hành động --</option>
+              <option value="active">Hoạt động</option>
+              <option value="inactive">Dừng hoạt động</option>
+              <option value="delete-all">Xóa tất cả</option>
+              <option value="change-position">Thay đổi vị trí</option>
+            </select>
+            <button
+              type='submit'
+              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
+                Áp dụng
+            </button>
+          </form>
+          <SortProduct
+            handleSort={handleSort}
+            sortKey={sortKey}
+            sortValue={sortValue}
+            clearSortParams={clearSortParams}
+          />
+          <div>
+            <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+          </div>
+        </div>
+        <ProductTable
+          selectedIds={selectedIds}
+          setSelectedIds={setSelectedIds}
+        />
+        <Pagination
+          pagination={pagination}
+          handlePagination={(page) => updateSearchParams('page', page)}
+          handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
+          handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+        />
+      </div>
+    </>
+  )
+}
+
+export default ArticleAdmin

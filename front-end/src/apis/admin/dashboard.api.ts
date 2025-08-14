@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { DashboardInterface } from '~/types'
+import type { DashboardInterface } from '~/types/dashboard.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchDashboardAPI = async (): Promise<DashboardInterface> => {

@@ -1,6 +1,6 @@
 import axios from 'axios'
+import type { ProductCategoryAllResponseInterface, ProductCategoryDetailInterface } from '~/types/productCategory.type'
 import { API_ROOT } from '~/utils/constants'
-import type { ProductCategoryAllResponseInterface, ProductCategoryDetailInterface } from '~/types'
 
 export const fetchAllProductCategoriesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductCategoryAllResponseInterface> => {
   const queryParams = new URLSearchParams()

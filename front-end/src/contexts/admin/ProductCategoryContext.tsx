@@ -2,7 +2,7 @@
 import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
 import { fetchAllProductCategoriesAPI } from '~/apis/admin/productCategory.api'
 import { initialState, productCategoryReducer } from '~/reducers/admin/productCategoryReducer'
-import type { ProductCategoryActions, ProductCategoryAllResponseInterface, ProductCategoryStates } from '~/types'
+import type { ProductCategoryActions, ProductCategoryAllResponseInterface, ProductCategoryStates } from '~/types/productCategory.type'
 
 interface ProductCategoryContextType {
   stateProductCategory: ProductCategoryStates

@@ -1,8 +1,8 @@
 import axios from 'axios'
-import type { ProductAllResponseInterface, ProductDetailInterface } from '~/types/product.type'
 import { API_ROOT } from '~/utils/constants'
+import type { ProductAllResponseInterface, ProductDetailInterface } from '~/types'
 
-export const fetchAllProductsAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
+export const fetchAllArticlesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())
@@ -26,7 +26,7 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
   return response.data
 }
 
-export const fetchDetailProductAPI = async (id: string): Promise<ProductDetailInterface> => {
+export const fetchDetailAAPI = async (id: string): Promise<ProductDetailInterface> => {
   const response = await axios.get(
     `${API_ROOT}/admin/products/detail/${id}`,
     { withCredentials: true }

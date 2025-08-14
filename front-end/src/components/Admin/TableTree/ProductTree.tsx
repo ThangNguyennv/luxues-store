@@ -2,8 +2,9 @@
 /* eslint-disable react/prop-types */
 import { TableRow, TableCell, Checkbox } from '@mui/material'
 import { Link } from 'react-router-dom'
-import type { AccountInfoInterface, ProductCategoryActions, ProductCategoryInfoInterface } from '~/types'
 import FormatDateTime from '../Moment/FormatDateTime'
+import type { ProductCategoryActions, ProductCategoryInfoInterface } from '~/types/productCategory.type'
+import type { AccountInfoInterface } from '~/types/account.type'
 
 interface Props {
   productCategory: ProductCategoryInfoInterface

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
-import type { ProductDetailInterface, ProductInfoInterface } from '~/types'
+import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
 
 export const useEdit = () => {
   const [productInfo, setProductInfo] = useState<ProductInfoInterface | null>(null)

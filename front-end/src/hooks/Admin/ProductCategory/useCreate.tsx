@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { fetchCreateProductCategoryAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/admin/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
-import type { ProductCategoryInfoInterface } from '~/types'
+import type { ProductCategoryInfoInterface } from '~/types/productCategory.type'
 
 export const useCreate = () => {
   const initialProductCategory: ProductCategoryInfoInterface = {

@@ -1,11 +1,12 @@
 /* eslint-disable indent */
-import type { ProductCategoryActions, ProductCategoryStates } from '~/types'
+
+import type { ProductCategoryActions, ProductCategoryStates } from '~/types/productCategory.type'
 
 export const initialState: ProductCategoryStates = {
   productCategories: [],
   accounts: [],
   filterStatus: [],
-  pagination:  {
+  pagination: {
     currentPage: 1,
     limitItems: 3,
     skip: 0,
@@ -14,7 +15,8 @@ export const initialState: ProductCategoryStates = {
   keyword: '',
   sortKey: '',
   sortValue: '',
-  loading: false
+  loading: false,
+  allProductCategories: []
 }
 
 export function productCategoryReducer(

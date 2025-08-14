@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchAllProductsAPI } from '~/apis/admin/product.api'
 import { initialState } from '~/reducers/admin/productReducer'
 import { productReducer } from '~/reducers/admin/productReducer'
-import type { ProductActions, ProductAllResponseInterface, ProductStates } from '~/types'
+import type { ProductActions, ProductAllResponseInterface, ProductStates } from '~/types/product.type'
 
 interface ProductContextType {
   stateProduct: ProductStates
