@@ -7,7 +7,7 @@ import { buildTreeForPagedItems } from '~/helpers/createChildForParent'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
 import Account from '~/models/account.model'
 import paginationHelpers from '~/helpers/pagination'
-import { updateStatusRecursive } from '~/helpers/updateStatusRecursive'
+import { updateStatusRecursiveForProduct } from '~/helpers/updateStatusRecursiveForProduct'
 
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
@@ -83,7 +83,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Lấy thành công!',
+      message: 'Thành công!',
       productCategories: newProductCategories,
       allProductCategories: newAllProductCategories,
       accounts: accounts,
@@ -139,7 +139,7 @@ export const changeStatusWithChildren = async (req: Request, res: Response) => {
       updatedAt: new Date()
     }
 
-    await updateStatusRecursive(status, id, updatedBy);
+    await updateStatusRecursiveForProduct(status, id, updatedBy);
 
     return res.json({ 
       code: 200, 

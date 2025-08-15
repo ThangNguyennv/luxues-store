@@ -7,6 +7,7 @@ import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
 import paginationHelpers from '~/helpers/pagination'
 import { buildTreeForPagedItems } from '~/helpers/createChildForParent'
 import Account from '~/models/account.model'
+import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursiveForArticle'
 
 // [GET] /admin/articles-category
 export const index = async (req: Request, res: Response) => {
@@ -66,7 +67,6 @@ export const index = async (req: Request, res: Response) => {
 
     // Tạo cây phân cấp
     const newArticleCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], articleCategories as unknown as TreeItem[])
-
     const newAllArticleCategories = buildTree(articleCategories as unknown as TreeItem[])
 
     // Thêm thông tin log
@@ -76,15 +76,15 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
-
     res.json({
       code: 200,
       message: 'Thành công!',
-      accounts: accounts,
-      articleCategories: articleCategories,
-      filterStatus: filterStatusHelpers(req.query),
+      articleCategories: newArticleCategories,
       allArticleCategories: newAllArticleCategories,
-      keyword: objectSearch.keyword
+      accounts: accounts,
+      filterStatus: filterStatusHelpers(req.query),
+      keyword: objectSearch.keyword,
+      pagination: objectPagination
     })
   } catch (error) {
     res.json({
@@ -95,24 +95,52 @@ export const index = async (req: Request, res: Response) => {
   }
 }
 
-// [PATCH] /admin/articles-category/change-status/:status/:id
-export const changeStatus = async (req: Request, res: Response) => {
-  try {
-    const status: string = req.params.status
-    const id: string = req.params.id
-    const updatedBy = {
+// // [PATCH] /admin/articles-category/change-status/:status/:id
+// export const changeStatus = async (req: Request, res: Response) => {
+//   try {
+//     const status: string = req.params.status
+//     const id: string = req.params.id
+//     const updatedBy = {
+//       account_id: req['accountAdmin'].id,
+//       updatedAt: new Date()
+//     }
+//     await ArticleCategory.updateOne(
+//       { _id: id },
+//       { status: status, $push: { updatedBy: updatedBy } }
+//     )
+
+//     res.json({
+//       code: 200,
+//       message: 'Cập nhật thành công trạng thái danh mục bài viết!'
+//     })
+//   } catch (error) {
+//     res.json({
+//       code: 400,
+//       message: 'Lỗi!',
+//       error: error
+//     })
+//   }
+// }
+
+export interface UpdatedBy {
+  account_id: string,
+  updatedAt: Date
+}
+
+export const changeStatusWithChildren = async (req: Request, res: Response) => {
+   try {
+    const { status, id } = req.params;
+    const updatedBy: UpdatedBy = {
       account_id: req['accountAdmin'].id,
       updatedAt: new Date()
     }
-    await ArticleCategory.updateOne(
-      { _id: id },
-      { status: status, $push: { updatedBy: updatedBy } }
-    )
 
-    res.json({
-      code: 200,
-      message: 'Cập nhật thành công trạng thái danh mục bài viết!'
-    })
+    await updateStatusRecursiveForArticle(status, id, updatedBy);
+
+    return res.json({ 
+      code: 200, 
+      message: "Cập nhật thành công trạng thái danh mục sản phẩm!" 
+    });
   } catch (error) {
     res.json({
       code: 400,
@@ -244,7 +272,8 @@ export const createPost = async (req: Request, res: Response) => {
 
     res.json({
       code: 201,
-      message: 'Thêm thành công danh mục bài viết!'
+      message: 'Thêm thành công danh mục bài viết!',
+      data: req.body
     })
   } catch (error) {
     res.json({
@@ -293,11 +322,11 @@ export const detail = async (req: Request, res: Response) => {
       _id: req.params.id
     }
 
-    const record = await ArticleCategory.findOne(find)
+    const articleCategory = await ArticleCategory.findOne(find)
     res.json({
       code: 200,
       message: 'Thành công!',
-      record: record
+      articleCategory: articleCategory
     })
   } catch (error) {
     res.json({

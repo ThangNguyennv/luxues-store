@@ -1,7 +1,7 @@
 import ProductCategory from "~/models/product-category.model"
 import { UpdatedBy } from "~/controllers/admin/product-category.controller"
 
-export const updateStatusRecursive = async (status: string, id: string, currentUser: UpdatedBy): Promise<void> => {
+export const updateStatusRecursiveForProduct = async (status: string, id: string, currentUser: UpdatedBy): Promise<void> => {
   await ProductCategory.updateOne(
     { _id: id },
     { 
@@ -17,6 +17,6 @@ export const updateStatusRecursive = async (status: string, id: string, currentU
   const children = await ProductCategory.find({ parent_id: id })
 
   for (let child of children) {
-    await updateStatusRecursive(status, child._id.toString(), currentUser)
+    await updateStatusRecursiveForProduct(status, child._id.toString(), currentUser)
   }
 }
