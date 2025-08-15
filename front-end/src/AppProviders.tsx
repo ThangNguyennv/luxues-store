@@ -7,7 +7,7 @@ import { ProductCategoryProvider } from './contexts/admin/ProductCategoryContext
 import { ProductProvider } from './contexts/admin/ProductContext'
 import { composeProviders } from './composeProviders'
 import { ArticleProvider } from './contexts/admin/ArticleContext'
-import { ArticleCategoryProvider } from './contexts/admin/ArticleCategoryContext'
+import { ArticleCategoryProvider } from './contexts/admin/ArticleCategory'
 
 function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>

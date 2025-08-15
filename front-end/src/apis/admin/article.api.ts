@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { ArticleAllResponseInterface } from '~/types/article.type'
-import type { ProductDetailInterface } from '~/types/product.type'
+import type { ArticleDetailInterface } from '~/types/article.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchAllArticlesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ArticleAllResponseInterface> => {
@@ -27,7 +27,7 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
   return response.data
 }
 
-export const fetchDetailAAPI = async (id: string): Promise<ProductDetailInterface> => {
+export const fetchDetailArticleAPI = async (id: string): Promise<ArticleDetailInterface> => {
   const response = await axios.get(
     `${API_ROOT}/admin/articles/detail/${id}`,
     { withCredentials: true }

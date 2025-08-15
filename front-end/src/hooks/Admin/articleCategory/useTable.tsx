@@ -1,6 +1,6 @@
 import { fetchChangeStatusWithChildren, fetchDeleteArticleCategoryAPI } from '~/apis/admin/articleCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursiveForArticle'
 import type { UpdatedBy } from '~/types/helper.type'
@@ -39,6 +39,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
+
   const handleDeleteArticleCategory = async (_id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa danh mục bài viết này?')
     const response = await fetchDeleteArticleCategoryAPI(_id)

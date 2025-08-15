@@ -23,5 +23,5 @@ export type ArticleCategoryActions =
   | { type: 'RESET' }
 
 export interface ArticleCategoryDetailInterface {
-    articleCategory: ArticleCategoryInfoInterface
+  articleCategory: ArticleCategoryInfoInterface
 }

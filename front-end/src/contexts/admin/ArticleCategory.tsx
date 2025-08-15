@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
 import { fetchAllArticleCategoriesAPI } from '~/apis/admin/articleCategory.api'
-import { initialState, articleCategoryReducer } from '~/reducers/admin/articleCategoryReducer'
+import { initialState, articleCategoryReducer } from '~/reducers/admin/articleCategory'
 import type { ArticleCategoryActions, ArticleCategoryAllResponseInterface, ArticleCategoryStates } from '~/types/articleCategory.type'
 
 interface ArticleCategoryContextType {

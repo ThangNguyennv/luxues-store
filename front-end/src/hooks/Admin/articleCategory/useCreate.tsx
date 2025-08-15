@@ -1,38 +1,38 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchCreateArticleAPI } from '~/apis/admin/article.api'
-import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import { fetchCreateArticleCategoryAPI } from '~/apis/admin/articleCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { ArticleInfoInterface } from '~/types/article.type'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import type { ArticleCategoryInfoInterface } from '~/types/articleCategory.type'
 
 export const useCreate = () => {
-  const initialArticle: ArticleInfoInterface = {
+  const initialArticleCategory: ArticleCategoryInfoInterface = {
     _id: '',
     title: '',
     position: 0,
     status: 'active',
     descriptionShort: '',
     descriptionDetail: '',
-    featured: '1',
     thumbnail: '',
-    accountFullName: '',
     createdBy: {
       account_id: '',
       createdAt: new Date()
     },
     updatedBy: [],
-    article_category_id: '',
-    slug: ''
+    children: [],
+    slug: '',
+    parent_id: ''
   }
 
-  const [articleInfo, setArticleInfo] = useState<ArticleInfoInterface>(initialArticle)
+  const [articleCategoryInfo, setArticleCategoryInfo] = useState<ArticleCategoryInfoInterface>(initialArticleCategory)
   const { stateArticleCategory } = useArticleCategoryContext()
-  const { allArticleCategories } = stateArticleCategory
   const { dispatchAlert } = useAlertContext()
+  const { allArticleCategories } = stateArticleCategory
+
   const navigate = useNavigate()
+
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
-
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
@@ -45,25 +45,24 @@ export const useCreate = () => {
     const formData = new FormData(event.currentTarget)
     const file = uploadImageInputRef.current?.files?.[0]
     if (file) {
-      formData.set('thumbnail', file)
+      formData.set('thumbnail', file) // hoặc append nếu bạn chưa có key
     }
-    const response = await fetchCreateArticleAPI(formData)
+    const response = await fetchCreateArticleCategoryAPI(formData)
     if (response.code === 201) {
-      setArticleInfo(response.data)
+      setArticleCategoryInfo(response.data)
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/admin/articles')
+        navigate('/admin/articles-category')
       }, 2000)
     }
   }
-
   return {
     allArticleCategories,
-    articleInfo,
-    setArticleInfo,
+    articleCategoryInfo,
+    setArticleCategoryInfo,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

@@ -32,6 +32,11 @@ import CreateProductCategory from './pages/admin/ProductCategory/Create'
 import DetailProductCategory from './pages/admin/ProductCategory/Detail'
 import EditProductCategory from './pages/admin/ProductCategory/Edit'
 import CreateArticle from './pages/admin/Article/Create'
+import DetailArticle from './pages/admin/Article/Detail'
+import EditArticle from './pages/admin/Article/Edit'
+import DetailArticleCategory from './pages/admin/ArticleCategory/Detail'
+import EditArticleCategory from './pages/admin/ArticleCategory/Edit'
+import CreateArticleCategory from './pages/admin/ArticleCategory/Create'
 
 function App() {
   useEffect(() => {
@@ -54,8 +59,13 @@ function App() {
             <Route index element={ <Dashboard />} />
             <Route path='accounts' element={ <Account />}/>
             <Route path='articles' element={ <ArticleAdmin />}/>
+            <Route path='articles/detail/:id' element={ <DetailArticle />}/>
+            <Route path='articles/edit/:id' element={ <EditArticle />}/>
             <Route path='articles/create' element={ <CreateArticle />}/>
             <Route path='articles-category' element={ <ArticleCategoryAdmin />}/>
+            <Route path='articles-category/detail/:id' element={ <DetailArticleCategory />}/>
+            <Route path='articles-category/edit/:id' element={ <EditArticleCategory />}/>
+            <Route path='articles-category/create' element={ <CreateArticleCategory />}/>
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='my-account' element={ <MyAccountAdmin />}/>
             <Route path='my-account/edit' element={ <EditMyAccount />}/>

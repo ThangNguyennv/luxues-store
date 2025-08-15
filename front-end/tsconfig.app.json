@@ -33,6 +33,7 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "src/components/admin/TableTree/ArticleTree.tsx"
   ]
 }
