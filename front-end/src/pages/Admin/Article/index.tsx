@@ -1,14 +1,14 @@
 import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
 import Pagination from '~/components/admin/Pagination/Pagination'
-import ProductTable from '~/components/admin/ItemTable/ProductTable'
 import Search from '~/components/admin/Search/Search'
 import { Link } from 'react-router-dom'
-import SortProduct from '~/components/admin/Sort/SortProduct'
 import { useArticle } from '~/hooks/admin/article/useArticle'
+import ArticleTable from '~/components/admin/ItemTable/ArticleTable'
+import SortRecords from '~/components/admin/Sort/SortRecords'
 
 const ArticleAdmin = () => {
   const {
-    dispatchProduct,
+    dispatchArticle,
     filterStatus,
     pagination,
     keyword,
@@ -40,7 +40,7 @@ const ArticleAdmin = () => {
             />
             <Search
               keyword={keyword}
-              handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
+              handleChangeKeyword={(value) => dispatchArticle({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
@@ -65,17 +65,17 @@ const ArticleAdmin = () => {
                 Áp dụng
             </button>
           </form>
-          <SortProduct
+          <SortRecords
             handleSort={handleSort}
             sortKey={sortKey}
             sortValue={sortValue}
             clearSortParams={clearSortParams}
           />
           <div>
-            <Link to={'/admin/products/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+            <Link to={'/admin/articles/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductTable
+        <ArticleTable
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />

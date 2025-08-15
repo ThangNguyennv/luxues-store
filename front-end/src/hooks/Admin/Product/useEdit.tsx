@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product.api'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
 

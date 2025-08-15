@@ -1,16 +1,17 @@
-import type { ProductCurrentParamsInterface, ProductGeneralInfoInterface, ProductHelperInterface, ProductParamsInterface } from './product.type'
+import type { CurrentParamsInterface, GeneralInfoInterface, HelperInterface, ParamsInterface } from './helper.type'
 
-export interface ProductCategoryInfoInterface extends ProductGeneralInfoInterface {
+export interface ProductCategoryInfoInterface extends GeneralInfoInterface {
   children: ProductCategoryInfoInterface[] | [],
-  parent_id: string
+  parent_id: string,
+  description: string,
 }
 
-export interface ProductCategoryAllResponseInterface extends ProductHelperInterface, ProductCurrentParamsInterface {
+export interface ProductCategoryAllResponseInterface extends HelperInterface, CurrentParamsInterface {
   productCategories: ProductCategoryInfoInterface[],
   allProductCategories: ProductCategoryInfoInterface[]
 }
 
-export interface ProductCategoryStates extends ProductHelperInterface, ProductParamsInterface {
+export interface ProductCategoryStates extends HelperInterface, ParamsInterface {
   productCategories: ProductCategoryInfoInterface[],
   allProductCategories: ProductCategoryInfoInterface[],
 }

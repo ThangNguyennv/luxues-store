@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
 import FilterStatus from '~/components/admin/FilterStatus/FilterStatus'
-import ProductCategoryTable from '~/components/admin/ItemTable/ProductCategoryTable'
+import ArticleCategoryTable from '~/components/admin/ItemTable/ArticleCategoryTable'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortRecords from '~/components/admin/Sort/SortRecords'
-import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
+import { useArticleCategory } from '~/hooks/admin/articleCategory/useArticleCategory'
 
-const ProductCategoryAdmin = () => {
+const ArticleCategoryAdmin = () => {
   const {
-    dispatchProductCategory,
+    dispatchArticleCategory,
     filterStatus,
     pagination,
     keyword,
@@ -24,7 +24,7 @@ const ProductCategoryAdmin = () => {
     handleSort,
     clearSortParams,
     handleFilterStatus
-  } = useProductCategory()
+  } = useArticleCategory()
 
   return (
     <>
@@ -40,7 +40,7 @@ const ProductCategoryAdmin = () => {
             />
             <Search
               keyword={keyword}
-              handleChangeKeyword={(value) => dispatchProductCategory({ type: 'SET_DATA', payload: { keyword: value } })}
+              handleChangeKeyword={(value) => dispatchArticleCategory({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
@@ -72,10 +72,10 @@ const ProductCategoryAdmin = () => {
             clearSortParams={clearSortParams}
           />
           <div>
-            <Link to={'/admin/products-category/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+            <Link to={'/admin/articles-category/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
           </div>
         </div>
-        <ProductCategoryTable
+        <ArticleCategoryTable
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />
@@ -90,4 +90,4 @@ const ProductCategoryAdmin = () => {
   )
 }
 
-export default ProductCategoryAdmin
+export default ArticleCategoryAdmin

@@ -1,13 +1,13 @@
 import { Editor } from '@tinymce/tinymce-react'
-import SelectTreeProduct from '~/components/admin/TableTree/SelectTreeProduct'
-import { useCreate } from '~/hooks/admin/product/useCreate'
+import SelectTreeArticle from '~/components/admin/TableTree/SelectTreeArticle'
+import { useCreate } from '~/hooks/admin/article/useCreate'
 import { API_KEY } from '~/utils/constants'
 
-const CreateProduct = () => {
+const CreateArticle = () => {
   const {
-    allProductCategories,
-    productInfo,
-    setProductInfo,
+    allArticleCategories,
+    articleInfo,
+    setArticleInfo,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
@@ -16,35 +16,35 @@ const CreateProduct = () => {
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
-      {productInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} id="form-create-product" className="flex flex-col gap-[10px]" encType="multipart/form-data">
+      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới bài viết</h1>
+      {articleInfo && (
+        <form onSubmit={(event) => handleSubmit(event)} id="form-create-article" className="flex flex-col gap-[10px]" encType="multipart/form-data">
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
-              onChange={(event) => setProductInfo({ ...productInfo, title: event.target.value })}
+              onChange={(event) => setArticleInfo({ ...articleInfo, title: event.target.value })}
               type="text"
               id="title"
               name="title"/>
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category_id">Danh mục</label>
+            <label htmlFor="article_category_id">Danh mục</label>
             <select
-              name="product_category_id"
-              id="product_category_id"
+              name="article_category_id"
+              id="article_category_id"
               className="outline-none border rounded-[5px] border-[#00171F]"
-              value={productInfo.product_category_id}
-              onChange={(event) => setProductInfo({ ...productInfo, product_category_id: event.target.value })}
+              value={articleInfo.article_category_id}
+              onChange={(event) => setArticleInfo({ ...articleInfo, article_category_id: event.target.value })}
             >
               <option value={''}>-- Chọn danh mục</option>
-              {allProductCategories && allProductCategories.length > 0 && (
-                allProductCategories.map(productCategory => (
-                  <SelectTreeProduct
-                    key={productCategory._id}
-                    productCategory={productCategory}
+              {allArticleCategories && allArticleCategories.length > 0 && (
+                allArticleCategories.map(articleCategory => (
+                  <SelectTreeArticle
+                    key={articleCategory._id}
+                    articleCategory={articleCategory}
                     level={1}
-                    allProductCategories={allProductCategories}
+                    allArticleCategories={allArticleCategories}
                     parent_id={''}
                   />
                 ))
@@ -55,74 +55,54 @@ const CreateProduct = () => {
           <div className="flex items-center justify-start gap-[5px]">
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
+                onChange={(event) => setArticleInfo({ ...articleInfo, featured: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="featured1"
                 name="featured"
                 value={1}
-                checked={productInfo.featured === '1' ? true : false}
+                checked={articleInfo.featured === '1' ? true : false}
               />
               <label htmlFor="featured1">Nổi bật</label>
             </div>
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
+                onChange={(event) => setArticleInfo({ ...articleInfo, featured: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="featured0"
                 name="featured"
                 value={0}
-                checked={productInfo.featured === '0' ? true : false}
+                checked={articleInfo.featured === '0' ? true : false}
               />
               <label htmlFor="featured0">Không nổi bật</label>
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="desc">Mô tả</label>
+            <label htmlFor="descriptionShort">Mô tả ngắn</label>
             <Editor
               apiKey={API_KEY}
               init={{
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
               }}
-              onEditorChange={(newValue) => setProductInfo({ ...productInfo, description: newValue })}
-              id="desc"
+              onEditorChange={(newValue) => setArticleInfo({ ...articleInfo, descriptionShort: newValue })}
+              id="descriptionShort"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="price">Giá</label>
-            <input
-              onChange={(event) => setProductInfo({ ...productInfo, price: Number(event.target.value) })}
-              type="number"
-              id="price"
-              name="price"
-              defaultValue={0}
-              min={0}/>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="discount">% Giảm giá</label>
-            <input
-              onChange={(event) => setProductInfo({ ...productInfo, discountPercentage: Number(event.target.value) })}
-              type="number"
-              id="discount"
-              name="discountPercentage"
-              defaultValue={0}
-              min={0}/>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="stock">Số lượng</label>
-            <input
-              onChange={(event) => setProductInfo({ ...productInfo, stock: Number(event.target.value) })}
-              type="number"
-              id="stock"
-              name="stock"
-              defaultValue={0}
-              min={0}/>
+            <label htmlFor="descriptionDetail">Mô tả chi tiết</label>
+            <Editor
+              apiKey={API_KEY}
+              init={{
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+              }}
+              onEditorChange={(newValue) => setArticleInfo({ ...articleInfo, descriptionDetail: newValue })}
+              id="descriptionDetail"
+            />
           </div>
 
           <div className="flex flex-col gap-[5px]">
@@ -144,7 +124,7 @@ const CreateProduct = () => {
           <div className="form-group">
             <label htmlFor="position">Vị trí</label>
             <input
-              onChange={(event) => setProductInfo({ ...productInfo, position: Number(event.target.value) })}
+              onChange={(event) => setArticleInfo({ ...articleInfo, position: Number(event.target.value) })}
               type="number"
               id="position"
               name="position"
@@ -156,26 +136,26 @@ const CreateProduct = () => {
           <div className="flex items-center justify-start gap-[5px]">
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
+                onChange={(event) => setArticleInfo({ ...articleInfo, status: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="statusActive"
                 name="status"
                 value={'active'}
-                checked={productInfo.status === 'active' ? true : false}
+                checked={articleInfo.status === 'active' ? true : false}
               />
               <label htmlFor="statusActive">Hoạt động</label>
             </div>
 
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
+                onChange={(event) => setArticleInfo({ ...articleInfo, status: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="statusInActive"
                 name="status"
                 value={'inactive'}
-                checked={productInfo.status === 'inactive' ? true : false}
+                checked={articleInfo.status === 'inactive' ? true : false}
               />
               <label htmlFor="statusInActive">Dừng hoạt động</label>
             </div>
@@ -189,4 +169,4 @@ const CreateProduct = () => {
   )
 }
 
-export default CreateProduct
+export default CreateArticle

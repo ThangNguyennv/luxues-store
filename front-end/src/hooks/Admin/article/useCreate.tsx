@@ -1,37 +1,38 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { fetchCreateProductCategoryAPI } from '~/apis/admin/productCategory.api'
+import { fetchCreateArticleAPI } from '~/apis/admin/article.api'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
-import type { ProductCategoryInfoInterface } from '~/types/productCategory.type'
+import type { ArticleInfoInterface } from '~/types/article.type'
 
 export const useCreate = () => {
-  const initialProductCategory: ProductCategoryInfoInterface = {
+  const initialArticle: ArticleInfoInterface = {
     _id: '',
     title: '',
     position: 0,
     status: 'active',
-    description: '',
+    descriptionShort: '',
+    descriptionDetail: '',
+    featured: '1',
     thumbnail: '',
+    accountFullName: '',
     createdBy: {
       account_id: '',
       createdAt: new Date()
     },
     updatedBy: [],
-    children: [],
-    slug: '',
-    parent_id: ''
+    article_category_id: '',
+    slug: ''
   }
 
-  const [productCategoryInfo, setProductCategoryInfo] = useState<ProductCategoryInfoInterface>(initialProductCategory)
-  const { stateProductCategory } = useProductCategoryContext()
+  const [articleInfo, setArticleInfo] = useState<ArticleInfoInterface>(initialArticle)
+  const { stateArticleCategory } = useArticleCategoryContext()
+  const { allArticleCategories } = stateArticleCategory
   const { dispatchAlert } = useAlertContext()
-  const { allProductCategories } = stateProductCategory
-
   const navigate = useNavigate()
-
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
@@ -44,24 +45,25 @@ export const useCreate = () => {
     const formData = new FormData(event.currentTarget)
     const file = uploadImageInputRef.current?.files?.[0]
     if (file) {
-      formData.set('thumbnail', file) // hoặc append nếu bạn chưa có key
+      formData.set('thumbnail', file)
     }
-    const response = await fetchCreateProductCategoryAPI(formData)
+    const response = await fetchCreateArticleAPI(formData)
     if (response.code === 201) {
-      setProductCategoryInfo(response.data)
+      setArticleInfo(response.data)
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/admin/products-category')
+        navigate('/admin/articles')
       }, 2000)
     }
   }
+
   return {
-    allProductCategories,
-    productCategoryInfo,
-    setProductCategoryInfo,
+    allArticleCategories,
+    articleInfo,
+    setArticleInfo,
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,

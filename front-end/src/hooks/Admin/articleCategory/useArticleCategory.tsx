@@ -1,12 +1,12 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI } from '~/apis/admin/article.api'
+import { fetchChangeMultiAPI } from '~/apis/admin/articleCategory.api'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useArticleContext } from '~/contexts/admin/ArticleContext'
 
-export const useArticle = () => {
-  const { stateArticle, fetchArticle, dispatchArticle } = useArticleContext()
-  const { articles, pagination, filterStatus, keyword } = stateArticle
+export const useArticleCategory = () => {
+  const { stateArticleCategory, fetchArticleCategory, dispatchArticleCategory } = useArticleCategoryContext()
+  const { articleCategories, filterStatus, pagination, keyword } = stateArticleCategory
   const { dispatchAlert } = useAlertContext()
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -20,16 +20,16 @@ export const useArticle = () => {
   const currentSortValue = searchParams.get('sortValue') || ''
 
   useEffect(() => {
-    fetchArticle({
+    fetchArticleCategory({
       status: currentStatus,
       page: currentPage,
       keyword: currentKeyword,
       sortKey: currentSortKey,
       sortValue: currentSortValue
     })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchArticle])
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchArticleCategory])
 
-  const updateSearchParams = (key: string, value: string): void => {
+  const updateSearchParams = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams)
     if (value) {
       newParams.set(key, value)
@@ -46,8 +46,8 @@ export const useArticle = () => {
     setSearchParams(newParams)
   }
 
-  const reloadData = (): void => {
-    fetchArticle({
+  const reloadData = () => {
+    fetchArticleCategory({
       status: currentStatus,
       page: currentPage,
       keyword: currentKeyword,
@@ -56,49 +56,42 @@ export const useArticle = () => {
     })
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const typeChange = actionType
-    if (selectedIds.length === 0) {
+    if (!selectedIds.length) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Vui lòng chọn ít nhất một bản ghi!', severity: 'error' }
       })
       return
     }
-
-    if (!typeChange) {
+    if (!actionType) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Vui lòng chọn hành động!', severity: 'error' }
       })
       return
     }
-
-    if (typeChange === 'delete-all') {
-      const isConfirm = confirm('Bạn có chắc muốn xóa tất cả những bài viết này?')
-      if (!isConfirm) return
+    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những danh mục bài viết này?')) {
+      return
     }
 
-    const selectedArticles = articles.filter(article =>
-      selectedIds.includes(article._id)
-    )
-
+    const selectedArticles = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id))
     let result: string[] = []
-    if (typeChange === 'change-position') {
-      result = selectedArticles.map(article => {
+
+    if (actionType === 'change-position') {
+      result = selectedArticles.map(articleCategory => {
         const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${article._id}"]`
+          `input[name="position"][data-id="${articleCategory._id}"]`
         )
-        const position = positionInput?.value || ''
-        return `${article._id}-${position}`
+        return `${articleCategory._id}-${positionInput?.value || ''}`
       })
     } else {
-      result = selectedArticles.map(article => article._id)
+      result = selectedArticles.map(articleCategory => articleCategory._id)
     }
 
-    const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
+    const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
 
     if ([200, 204].includes(response.code)) {
       dispatchAlert({
@@ -115,11 +108,10 @@ export const useArticle = () => {
     setSelectedIds([])
     setActionType('')
 
-    // Refetch
     reloadData()
   }
 
-  const handleSort = (event: ChangeEvent<HTMLSelectElement>): void => {
+  const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
     const [sortKey, sortValue] = event.currentTarget.value.split('-')
     if (sortKey && sortValue) {
       const newParams = new URLSearchParams(searchParams)
@@ -128,13 +120,15 @@ export const useArticle = () => {
       setSearchParams(newParams)
     }
   }
-  const clearSortParams = (): void => {
+
+  const clearSortParams = () => {
     const newParams = new URLSearchParams(searchParams)
     newParams.delete('sortKey')
     newParams.delete('sortValue')
     setSearchParams(newParams)
   }
-  const handleFilterStatus = (status: string): void => {
+
+  const handleFilterStatus = (status: string) => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {
       newParams.set('status', status)
@@ -146,7 +140,7 @@ export const useArticle = () => {
   }
 
   return {
-    dispatchArticle,
+    dispatchArticleCategory,
     filterStatus,
     pagination,
     keyword,

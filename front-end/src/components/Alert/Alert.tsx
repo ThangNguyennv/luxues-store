@@ -1,5 +1,5 @@
 import { Snackbar, Alert } from '@mui/material'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 export const AlertToast = () => {
   const { stateAlert, dispatchAlert } = useAlertContext()

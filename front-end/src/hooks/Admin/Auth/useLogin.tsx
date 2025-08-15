@@ -1,7 +1,7 @@
 import { type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/admin/auth.api'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 export const useLoginAdmin = () => {
   const navigate = useNavigate()

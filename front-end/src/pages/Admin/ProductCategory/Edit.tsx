@@ -1,7 +1,7 @@
 import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
 import { useEdit } from '~/hooks/admin/productCategory/useEdit'
-import SelectTree from '~/components/admin/TableTree/SelectTree'
+import SelectTree from '~/components/admin/TableTree/SelectTreeProduct'
 
 const EditProductCategory = () => {
   const {
@@ -98,12 +98,12 @@ const EditProductCategory = () => {
                 onChange={(event) => setProductCategoryInfo(productCategoryInfo ? { ...productCategoryInfo, status: event.target.value }: productCategoryInfo)}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
-                id="statusActove"
+                id="statusActive"
                 name="status"
                 value={'active'}
                 checked={productCategoryInfo.status === 'active' ? true : false}
               />
-              <label htmlFor="statusActove">Hoạt động</label>
+              <label htmlFor="statusActive">Hoạt động</label>
             </div>
 
             <div className="flex gap-[5px]">

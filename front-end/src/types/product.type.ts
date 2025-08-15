@@ -1,54 +1,20 @@
-import type { AccountInfoInterface } from './account.type'
-import type { FilterStatusInterface, PaginationInterface, UpdatedBy } from './helper.type'
+import type { CurrentParamsInterface, GeneralInfoInterface, HelperInterface, ParamsInterface } from './helper.type'
 
-export interface ProductGeneralInfoInterface {
-  createdBy: {
-    account_id: string,
-    createdAt: Date
-  },
-  updatedBy: UpdatedBy[],
-  _id: string,
-  title: string,
-  thumbnail: string,
-  position: number,
-  status: string,
-  description: string,
-  slug: string,
-}
-
-export interface ProductInfoInterface extends ProductGeneralInfoInterface {
+export interface ProductInfoInterface extends GeneralInfoInterface {
   price: number,
   discountPercentage: number,
   stock: number,
   accountFullName: string,
   featured: string,
-  product_category_id: string
+  product_category_id: string,
+  description: string,
 }
 
-export interface ProductHelperInterface {
-  accounts: AccountInfoInterface[],
-  filterStatus: FilterStatusInterface[],
-  pagination: PaginationInterface,
-}
-
-export interface ProductCurrentParamsInterface {
-  keyword: string,
-  currentSortkey: string,
-  currentSortValue: string
-}
-
-export interface ProductParamsInterface {
-  keyword: string,
-  sortKey: string,
-  sortValue: string
-  loading: boolean
-}
-
-export interface ProductAllResponseInterface extends ProductHelperInterface, ProductCurrentParamsInterface {
+export interface ProductAllResponseInterface extends HelperInterface, CurrentParamsInterface {
   products: ProductInfoInterface[],
 }
 
-export interface ProductStates extends ProductHelperInterface, ProductParamsInterface {
+export interface ProductStates extends HelperInterface, ParamsInterface {
   products: ProductInfoInterface[],
 }
 
@@ -58,6 +24,6 @@ export type ProductActions =
   | { type: 'RESET' }
 
 export interface ProductDetailInterface {
-product: ProductInfoInterface
+  product: ProductInfoInterface
 }
 

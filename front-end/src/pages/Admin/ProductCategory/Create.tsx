@@ -1,5 +1,5 @@
 import { Editor } from '@tinymce/tinymce-react'
-import SelectTree from '~/components/admin/TableTree/SelectTree'
+import SelectTree from '~/components/admin/TableTree/SelectTreeProduct'
 import { useCreate } from '~/hooks/admin/productCategory/useCreate'
 import { API_KEY } from '~/utils/constants'
 
@@ -99,12 +99,12 @@ const CreateProductCategory = () => {
                 onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, status: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
-                id="statusActove"
+                id="statusActive"
                 name="status"
                 value={'active'}
                 checked={productCategoryInfo.status === 'active' ? true : false}
               />
-              <label htmlFor="statusActove">Hoạt động</label>
+              <label htmlFor="statusActive">Hoạt động</label>
             </div>
 
             <div className="flex gap-[5px]">

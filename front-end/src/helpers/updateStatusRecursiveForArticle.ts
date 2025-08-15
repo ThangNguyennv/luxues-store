@@ -1,12 +1,12 @@
+import type { ArticleCategoryInfoInterface } from '~/types/articleCategory.type'
 import type { UpdatedBy } from '~/types/helper.type'
-import type { ProductCategoryInfoInterface } from '~/types/productCategory.type'
 
-export const updateStatusRecursively = (
-  categories: ProductCategoryInfoInterface[],
+export const updateStatusRecursiveForArticle = (
+  categories: ArticleCategoryInfoInterface[],
   parentId: string,
   newStatus: string,
   currentUser: UpdatedBy
-): ProductCategoryInfoInterface[] => {
+): ArticleCategoryInfoInterface[] => {
   return categories.map(category => {
     if (category._id === parentId) {
       // Cập nhật chính nó
@@ -15,7 +15,7 @@ export const updateStatusRecursively = (
         status: newStatus,
         updatedBy: [...(category.updatedBy || []), currentUser],
         children: category.children
-          ? updateStatusRecursively(category.children, parentId, newStatus, currentUser)
+          ? updateStatusRecursiveForArticle(category.children, parentId, newStatus, currentUser)
           : []
       }
     }
@@ -24,7 +24,7 @@ export const updateStatusRecursively = (
     return {
       ...category,
       children: category.children
-        ? updateStatusRecursively(category.children, parentId, newStatus, currentUser)
+        ? updateStatusRecursiveForArticle(category.children, parentId, newStatus, currentUser)
         : []
     }
   })

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/productCategory.api'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 
 export const useProductCategory = () => {

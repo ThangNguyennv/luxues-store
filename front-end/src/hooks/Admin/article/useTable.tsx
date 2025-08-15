@@ -1,9 +1,9 @@
-import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
+import { fetchChangeStatusAPI, fetchDeleteArticleAPI } from '~/apis/admin/article.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useProductContext } from '~/contexts/admin/ProductContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
 import type { UpdatedBy } from '~/types/helper.type'
+import { useArticleContext } from '~/contexts/admin/ArticleContext'
 
 export interface Props {
   selectedIds: string[],
@@ -11,8 +11,8 @@ export interface Props {
 }
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
-  const { stateProduct, dispatchProduct } = useProductContext()
-  const { products, accounts } = stateProduct
+  const { stateArticle, dispatchArticle } = useArticleContext()
+  const { articles, accounts } = stateArticle
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams] = useSearchParams()
@@ -26,14 +26,14 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
     if (response.code === 200) {
-      dispatchProduct({
+      dispatchArticle({
         type: 'SET_DATA',
         payload: {
-          products:  products.map((product) => product._id === _id ? {
-            ...product,
+          articles:  articles.map((article) => article._id === _id ? {
+            ...article,
             status: newStatus,
-            updatedBy: [...(product.updatedBy || []), currentUser]
-          }: product)
+            updatedBy: [...(article.updatedBy || []), currentUser]
+          }: article)
         }
       })
       dispatchAlert({
@@ -46,15 +46,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteProduct = async (_id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này?')
-    const response = await fetchDeleteProductAPI(_id)
+  const handleDeleteArticle = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa bài viết này?')
+    const response = await fetchDeleteArticleAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        dispatchProduct({
+        dispatchArticle({
           type: 'SET_DATA',
           payload: {
-            products: products.filter((product) => product._id != _id)
+            articles: articles.filter((article) => article._id != _id)
           }
         })
         dispatchAlert({
@@ -78,22 +78,22 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const handleCheckAll = (checked: boolean) => {
     if (checked) {
-      const allIds = products.map((product) => product._id)
+      const allIds = articles.map((article) => article._id)
       setSelectedIds(allIds)
     } else {
       setSelectedIds([])
     }
   }
 
-  const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+  const isCheckAll = (articles.length > 0) && (selectedIds.length === articles.length)
 
   return {
     currentStatus,
-    products,
-    dispatchProduct,
+    articles,
+    dispatchArticle,
     accounts,
     handleToggleStatus,
-    handleDeleteProduct,
+    handleDeleteArticle,
     handleCheckbox,
     handleCheckAll,
     isCheckAll

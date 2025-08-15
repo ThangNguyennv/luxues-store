@@ -1,8 +1,8 @@
 import { fetchChangeStatusWithChildren, fetchDeleteProductCategoryAPI } from '~/apis/admin/productCategory.api'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
-import { updateStatusRecursively } from '~/helpers/updateStatusRecursively'
+import { updateStatusRecursiveForProduct } from '~/helpers/updateStatusRecursiveForProduct'
 import type { UpdatedBy } from '~/types/helper.type'
 
 export interface Props {
@@ -27,7 +27,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       dispatchProductCategory({
         type: 'SET_DATA',
         payload: {
-          productCategories: updateStatusRecursively(productCategories, _id, newStatus, currentUser)
+          productCategories: updateStatusRecursiveForProduct(productCategories, _id, newStatus, currentUser)
         }
       })
       dispatchAlert({

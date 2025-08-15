@@ -1,39 +1,33 @@
-import { fetchChangeStatusAPI, fetchDeleteProductAPI } from '~/apis/admin/product.api'
+import { fetchChangeStatusWithChildren, fetchDeleteArticleCategoryAPI } from '~/apis/admin/articleCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useProductContext } from '~/contexts/admin/ProductContext'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
-import { useSearchParams } from 'react-router-dom'
+import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursiveForArticle'
 import type { UpdatedBy } from '~/types/helper.type'
 
 export interface Props {
   selectedIds: string[],
-  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>
+  setSelectedIds: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
-  const { stateProduct, dispatchProduct } = useProductContext()
-  const { products, accounts } = stateProduct
+  const { stateArticleCategory, dispatchArticleCategory } = useArticleCategoryContext()
+  const { articleCategories, accounts } = stateArticleCategory
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
-  const [searchParams] = useSearchParams()
-  const currentStatus = searchParams.get('status') || ''
 
-  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+  const handleToggleStatus = async (currentStatus: string, _id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount!._id,
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusAPI(newStatus, _id)
+    const response = await fetchChangeStatusWithChildren(newStatus, _id)
     if (response.code === 200) {
-      dispatchProduct({
+      dispatchArticleCategory({
         type: 'SET_DATA',
         payload: {
-          products:  products.map((product) => product._id === _id ? {
-            ...product,
-            status: newStatus,
-            updatedBy: [...(product.updatedBy || []), currentUser]
-          }: product)
+          articleCategories: updateStatusRecursiveForArticle(articleCategories, _id, newStatus, currentUser)
         }
       })
       dispatchAlert({
@@ -45,16 +39,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
-
-  const handleDeleteProduct = async (_id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này?')
-    const response = await fetchDeleteProductAPI(_id)
+  const handleDeleteArticleCategory = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa danh mục bài viết này?')
+    const response = await fetchDeleteArticleCategoryAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        dispatchProduct({
+        dispatchArticleCategory({
           type: 'SET_DATA',
           payload: {
-            products: products.filter((product) => product._id != _id)
+            articleCategories: articleCategories.filter((articleCategory) => articleCategory._id != _id)
           }
         })
         dispatchAlert({
@@ -67,7 +60,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
-
   const handleCheckbox = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedIds((prev) => [...prev, id])
@@ -75,27 +67,25 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
     }
   }
-
   const handleCheckAll = (checked: boolean) => {
     if (checked) {
-      const allIds = products.map((product) => product._id)
+      const allIds = articleCategories.map((articleCategory) => articleCategory._id)
       setSelectedIds(allIds)
     } else {
       setSelectedIds([])
     }
   }
-
-  const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+  const isCheckAll = (articleCategories.length > 0) && (selectedIds.length === articleCategories.length)
 
   return {
-    currentStatus,
-    products,
-    dispatchProduct,
+    dispatchArticleCategory,
+    articleCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteProduct,
+    handleDeleteArticleCategory,
     handleCheckbox,
     handleCheckAll,
     isCheckAll
   }
 }
+

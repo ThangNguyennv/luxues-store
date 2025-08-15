@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { fetchLogoutAPI } from '~/apis/admin/auth.api'
-import { useAlertContext } from '~/contexts/admin/AlertContext'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useHeader = () => {

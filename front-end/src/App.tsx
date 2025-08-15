@@ -10,7 +10,7 @@ import Dashboard from './pages/admin/Dashboard/Dashboard'
 import Account from './pages/admin/Account/Account'
 import AuthAdmin from './pages/admin/Auth'
 import ArticleAdmin from './pages/admin/Article'
-import ArticleCategoryAdmin from './pages/admin/ArticleCategory/ArticleCategory'
+import ArticleCategoryAdmin from './pages/admin/ArticleCategory'
 import MyAccountAdmin from './pages/admin/MyAccount'
 import OrderAdmin from './pages/admin/Order/Order'
 import ProductAdmin from './pages/admin/Product'
@@ -31,6 +31,7 @@ import CreateProduct from './pages/admin/Product/Create'
 import CreateProductCategory from './pages/admin/ProductCategory/Create'
 import DetailProductCategory from './pages/admin/ProductCategory/Detail'
 import EditProductCategory from './pages/admin/ProductCategory/Edit'
+import CreateArticle from './pages/admin/Article/Create'
 
 function App() {
   useEffect(() => {
@@ -53,6 +54,7 @@ function App() {
             <Route index element={ <Dashboard />} />
             <Route path='accounts' element={ <Account />}/>
             <Route path='articles' element={ <ArticleAdmin />}/>
+            <Route path='articles/create' element={ <CreateArticle />}/>
             <Route path='articles-category' element={ <ArticleCategoryAdmin />}/>
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='my-account' element={ <MyAccountAdmin />}/>
