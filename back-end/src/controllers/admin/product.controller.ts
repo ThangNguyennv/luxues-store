@@ -4,9 +4,7 @@ import Account from '~/models/account.model'
 import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
 import paginationHelpers from '~/helpers/pagination'
-import ProductCategory from '~/models/product-category.model'
-import * as createTreeHelpers   from '~/helpers/createTree'
-import { TreeItem } from '~/helpers/createTree'
+
 // [GET] /admin/products
 export const index = async (req: Request, res: Response) => {
   try {
@@ -80,7 +78,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Lấy thành công!',
+      message: 'Thành công!',
       products: products,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,

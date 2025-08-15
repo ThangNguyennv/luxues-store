@@ -28,7 +28,7 @@ export const index = async (req: Request, res: Response) => {
     }
 
     // Pagination
-    const countArticles = await Article.countDocuments(find) // Đứng trước model, ở đây là 'article' là thêm await
+    const countArticles = await Article.countDocuments(find)
 
     const objectPagination = paginationHelpers(
       {
@@ -50,8 +50,9 @@ export const index = async (req: Request, res: Response) => {
     }
     // End Sort
 
-    const articles = await Article.find(find)
-      .sort(sort.toString())
+    const articles = await Article
+      .find(find)
+      .sort(sort)
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip)
 
@@ -72,10 +73,15 @@ export const index = async (req: Request, res: Response) => {
         updatedBy['accountFullName'] = userUpdated.fullName
       }
     }
+    const accounts = await Account.find({
+      deleted: false
+    })
+
     res.json({
       code: 200,
       message: 'Thành công!',
       articles: articles,
+      accounts: accounts,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
       pagination: objectPagination
@@ -105,7 +111,8 @@ export const createPost = async (req: Request, res: Response) => {
     await article.save()
     res.json({
       code: 201,
-      message: 'Đã thêm thành công bài viết!'
+      message: 'Thêm thành công bài viết!',
+      data: req.body,
     })
   } catch (error) {
     res.json({
@@ -158,7 +165,7 @@ export const editPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã cập nhật thành công bài viết!'
+      message: 'Cập nhật thành công bài viết!'
     })
   } catch (error) {
     res.json({
@@ -172,7 +179,6 @@ export const editPatch = async (req: Request, res: Response) => {
 // [PATCH] /admin/articles/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
   try {
-    console.log('accountAdmin:', req['accountAdmin'])
     const status: string = req.params.status
     const id: string = req.params.id
 
@@ -189,7 +195,7 @@ export const changeStatus = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Cập nhật trạng thái thành công!'
+      message: 'Cập nhật thành công trạng thái bài viết!'
     })
   } catch (error) {
     res.json({
@@ -224,7 +230,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} bài viết!`
+          message: `Cập nhật thành công trạng thái ${ids.length} bài viết!`
         })
         break
       case Key.INACTIVE:
@@ -234,7 +240,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} bài viết!`
+          message: `Cập nhật thành công trạng thái ${ids.length} bài viết!`
         })
         break
       case Key.DELETEALL:
@@ -244,7 +250,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 204,
-          message: `Đã xóa thành công ${ids.length} bài viết!`
+          message: `Xóa thành công ${ids.length} bài viết!`
         })
         break
       case Key.CHANGEPOSITION:
@@ -257,13 +263,13 @@ export const changeMulti = async (req: Request, res: Response) => {
         }
         res.json({
           code: 200,
-          message: `Đã đổi vị trí thành công ${ids.length} bài viết!`
+          message: `Đổi vị trí thành công ${ids.length} bài viết!`
         })
         break
       default:
         res.json({
           code: 404,
-          message: 'Không tồn tại!'
+          message: 'Không tồn tại bài viết!'
         })
         break
     }
@@ -292,7 +298,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công bài viết!'
+      message: 'Xóa thành công bài viết!'
     })
   } catch (error) {
     res.json({

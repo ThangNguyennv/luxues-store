@@ -13,13 +13,15 @@ import { updateStatusRecursive } from '~/helpers/updateStatusRecursive'
 export const index = async (req: Request, res: Response) => {
   try {
     interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
-      parent_id?: string; 
+      deleted: boolean,
+      status?: string,
+      title?: RegExp,
+      parent_id?: string
     }
 
-    const find: Find = { deleted: false };
+    const find: Find = { 
+      deleted: false
+    }
 
     if (req.query.status) {
       find.status = req.query.status.toString()

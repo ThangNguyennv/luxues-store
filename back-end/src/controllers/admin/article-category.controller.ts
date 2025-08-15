@@ -4,14 +4,18 @@ import filterStatusHelpers from '~/helpers/filterStatus'
 import searchHelpers from '~/helpers/search'
 import { buildTree, TreeItem } from '~/helpers/createTree'
 import { addLogInfoToTree, LogNode } from '~/helpers/addLogInfoToChildren'
+import paginationHelpers from '~/helpers/pagination'
+import { buildTreeForPagedItems } from '~/helpers/createChildForParent'
+import Account from '~/models/account.model'
 
 // [GET] /admin/articles-category
 export const index = async (req: Request, res: Response) => {
   try {
     interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
+      deleted: boolean,
+      status?: string,
+      title?: RegExp,
+      parent_id?: string
     }
     const find: Find = {
       deleted: false
@@ -19,10 +23,27 @@ export const index = async (req: Request, res: Response) => {
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
+
+    // Search
     const objectSearch = searchHelpers(req.query)
     if (objectSearch.regex) {
       find.title = objectSearch.regex
     }
+    // End search
+
+    // Pagination
+    const parentFind: Find = { ...find, parent_id: '' }
+    const countParents = await ArticleCategory.countDocuments(parentFind)
+    const objectPagination = paginationHelpers(
+      {
+        currentPage: 1,
+        limitItems: 2
+      },
+      req.query,
+      countParents
+    )
+    // End Pagination
+    
     // Sort
     const sort = {}
     if (req.query.sortKey && req.query.sortValue) {
@@ -32,16 +53,37 @@ export const index = async (req: Request, res: Response) => {
       sort['position'] = 'desc'
     }
     // // End Sort
-    const records = await ArticleCategory.find(find).sort(sort)
+
+    const articleCategories = await ArticleCategory
+      .find(find)
+      .sort(sort)
+
+    const parentCategories = await ArticleCategory
+      .find(parentFind)
+      .sort(sort)
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip)
+
     // Tạo cây phân cấp
-    const newRecords = buildTree(records as unknown as TreeItem[])
+    const newArticleCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], articleCategories as unknown as TreeItem[])
+
+    const newAllArticleCategories = buildTree(articleCategories as unknown as TreeItem[])
+
     // Thêm thông tin log
-    await addLogInfoToTree(newRecords as LogNode[])
+    await addLogInfoToTree(newArticleCategories as LogNode[])
+    await addLogInfoToTree(newAllArticleCategories as LogNode[])
+
+    const accounts = await Account.find({
+      deleted: false
+    })
+
     res.json({
       code: 200,
       message: 'Thành công!',
-      records: newRecords,
+      accounts: accounts,
+      articleCategories: articleCategories,
       filterStatus: filterStatusHelpers(req.query),
+      allArticleCategories: newAllArticleCategories,
       keyword: objectSearch.keyword
     })
   } catch (error) {
@@ -69,7 +111,7 @@ export const changeStatus = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Cập nhật trạng thái thành công!'
+      message: 'Cập nhật thành công trạng thái danh mục bài viết!'
     })
   } catch (error) {
     res.json({
@@ -104,7 +146,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} bài viết!`
+          message: `Cập nhật thành công trạng thái ${ids.length} danh mục bài viết!`
         })
         break
       case Key.INACTIVE:
@@ -114,7 +156,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 200,
-          message: `Cập nhật trạng thái thành công ${ids.length} bài viết!`
+          message: `Cập nhật thành công trạng thái ${ids.length} danh mục bài viết!`
         })
         break
       case Key.DELETEALL:
@@ -124,7 +166,7 @@ export const changeMulti = async (req: Request, res: Response) => {
         )
         res.json({
           code: 204,
-          message: `Đã xóa thành công ${ids.length} bài viết!`
+          message: `Xóa thành công ${ids.length} danh mục bài viết!`
         })
         break
       case Key.CHANGEPOSITION:
@@ -137,13 +179,13 @@ export const changeMulti = async (req: Request, res: Response) => {
         }
         res.json({
           code: 200,
-          message: `Đã đổi vị trí thành công ${ids.length} bài viết!`
+          message: `Đổi vị trí thành công ${ids.length} danh mục bài viết!`
         })
         break
       default:
         res.json({
           code: 404,
-          message: 'Không tồn tại!'
+          message: 'Không tồn tại danh mục bài viết!'
         })
         break
     }
@@ -173,7 +215,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công bài viết!'
+      message: 'Xóa thành công danh mục bài viết!'
     })
   } catch (error) {
     res.json({
@@ -202,7 +244,7 @@ export const createPost = async (req: Request, res: Response) => {
 
     res.json({
       code: 201,
-      message: 'Đã thêm thành công bài viết!'
+      message: 'Thêm thành công danh mục bài viết!'
     })
   } catch (error) {
     res.json({
@@ -232,7 +274,7 @@ export const editPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã cập nhật thành công bài viết!'
+      message: 'Cập nhật thành công danh mục bài viết!'
     })
   } catch (error) {
     res.json({
