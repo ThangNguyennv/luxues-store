@@ -10,8 +10,8 @@ export const index = async (req: Request, res: Response) => {
       deleted: false
     }
 
-    const records = await Role.find(find)
-    for (const record of records) {
+    const roles = await Role.find(find)
+    for (const record of roles) {
       // Lấy ra thông tin người cập nhật
       const updatedBy = record.updatedBy[record.updatedBy.length - 1] // Lấy phần tử cuối của mảng updatedBy
       if (updatedBy) {
@@ -24,7 +24,7 @@ export const index = async (req: Request, res: Response) => {
     res.json({
       code: 200,
       message: 'Thành công!',
-      records: records
+      roles: roles
     })
   } catch (error) {
     res.json({
