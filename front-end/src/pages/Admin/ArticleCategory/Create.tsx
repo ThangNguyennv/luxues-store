@@ -18,14 +18,20 @@ const CreateArticleCategory = () => {
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới danh mục bài viết</h1>
       {articleCategoryInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} id="form-create-article" className="flex flex-col gap-[10px]" encType="multipart/form-data">
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex flex-col gap-[10px]"
+          encType="multipart/form-data"
+        >
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
               onChange={(event) => setArticleCategoryInfo({ ...articleCategoryInfo, title: event.target.value })}
               type="text"
               id="title"
-              name="title"/>
+              name="title"
+              required
+            />
           </div>
 
           <div className="form-group">
@@ -134,7 +140,12 @@ const CreateArticleCategory = () => {
             </div>
           </div>
 
-          <button type="submit" className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Tạo mới</button>
+          <button
+            type="submit"
+            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          >
+            Tạo mới
+          </button>
         </form>
       )}
     </>

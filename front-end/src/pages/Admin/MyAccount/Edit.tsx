@@ -17,7 +17,11 @@ const EditMyAccount = () => {
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa thông tin cá nhân</h1>
       {accountInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} className="flex flex-col gap-[5px]" encType="multipart/form-data">
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex flex-col gap-[5px]"
+          encType="multipart/form-data"
+        >
           <div className="flex flex-col gap-[5px]">
             <label htmlFor="avatar"><b>Avatar</b></label>
             <input
@@ -87,7 +91,12 @@ const EditMyAccount = () => {
               />
             </div>
           </div>
-          <button type="submit" className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Cập nhật</button>
+          <button
+            type="submit"
+            className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          >
+            Cập nhật
+          </button>
         </form>
       )}
     </>

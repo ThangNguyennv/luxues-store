@@ -3,7 +3,13 @@ import type { ArticleAllResponseInterface } from '~/types/article.type'
 import type { ArticleDetailInterface } from '~/types/article.type'
 import { API_ROOT } from '~/utils/constants'
 
-export const fetchAllArticlesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ArticleAllResponseInterface> => {
+export const fetchAllArticlesAPI = async (
+  status: string,
+  page: number,
+  currentKeyword: string,
+  currentSortKey: string,
+  currentSortValue: string
+): Promise<ArticleAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())

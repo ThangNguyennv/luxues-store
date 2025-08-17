@@ -21,7 +21,13 @@ const EditProduct = () => {
         <form onSubmit={(event) => handleSubmit(event)} action="" className="flex flex-col gap-[10px]" encType="multipart/form-data">
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
-            <input onChange={(event) => setProductInfo(productInfo ? { ...productInfo, title: event.target.value } : productInfo)} type="text" id="title" name="title" value={productInfo.title}/>
+            <input
+              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, title: event.target.value } : productInfo)}
+              type="text"
+              id="title"
+              name="title"
+              value={productInfo.title}
+            />
           </div>
 
           <div className="form-group">
@@ -180,7 +186,12 @@ const EditProduct = () => {
             </div>
           </div>
 
-          <button type="submit" className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Cập nhật</button>
+          <button
+            type="submit"
+            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          >
+            Cập nhật
+          </button>
         </form>
       )}
     </>

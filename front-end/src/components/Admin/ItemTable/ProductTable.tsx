@@ -103,7 +103,8 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                     <TableCell align='center'>
                       <button
                         onClick={() => handleToggleStatus(product._id, product.status)}
-                        className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${product.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                        className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
+                          ${product.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
                       >
                         {product.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                       </button>

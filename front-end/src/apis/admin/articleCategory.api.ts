@@ -2,7 +2,13 @@ import axios from 'axios'
 import type { ArticleCategoryAllResponseInterface, ArticleCategoryDetailInterface } from '~/types/articleCategory.type'
 import { API_ROOT } from '~/utils/constants'
 
-export const fetchAllArticleCategoriesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ArticleCategoryAllResponseInterface> => {
+export const fetchAllArticleCategoriesAPI = async (
+  status: string,
+  page: number,
+  currentKeyword: string,
+  currentSortKey: string,
+  currentSortValue: string
+): Promise<ArticleCategoryAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())

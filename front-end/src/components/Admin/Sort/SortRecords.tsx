@@ -27,7 +27,7 @@ const SortRecords = ({ handleSort, sortKey, sortValue, clearSortParams }:SortPro
           onClick={clearSortParams}
           className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
         >
-              Clear
+          Clear
         </button>
       </div>
     </>

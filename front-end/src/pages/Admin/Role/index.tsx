@@ -6,7 +6,6 @@ import FormatDateTime from '~/components/admin/Moment/FormatDateTime'
 import type { AccountInfoInterface } from '~/types/account.type'
 import type { UpdatedBy } from '~/types/helper.type'
 import type { RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
-import { API_ROOT } from '~/utils/constants'
 
 const Role = () => {
   const [roles, setRoles] = useState<RolesInfoInterface[]>([])
@@ -24,7 +23,12 @@ const Role = () => {
 
       <div className="text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]">Danh sách nhóm quyền</div>
       <div className="flex items-center justify-end">
-        <Link to={`${API_ROOT}/roles/create`} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+        <Link
+          to={'/admin/roles/create'}
+          className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+        >
+          + Thêm mới
+        </Link>
       </div>
       <TableContainer sx={{ maxHeight: 600 }}>
         <Table sx={{

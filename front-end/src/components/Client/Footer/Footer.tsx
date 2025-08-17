@@ -16,18 +16,56 @@ function Footer() {
           <div className="flex flex-wrap justify-between pb-[48px] border-b border-[#0000001A]">
             <div className="flex flex-col lg:gap-[25px] gap-[15px] lg:w-[248px] w-[100%] lg:mb-[0] mb-[40px]">
               <h3 className="sm:text-[34px] text-[28px] text-primary font-[700]">CODE.SHOP</h3>
-              <p className="text-[14px] font-[400] text-[#00000099]">Chúng tôi có những bộ quần áo phù hợp với phong cách của bạn và bạn có thể tự hào khi mặc.</p>
+              <p className="text-[14px] font-[400] text-[#00000099]">
+                Chúng tôi có những bộ quần áo phù hợp với phong cách của bạn và bạn có thể tự hào khi mặc.
+              </p>
               <div className="flex flex-wrap gap-[12px]">
-                <a className="w-[28px] h-[28px] bg-white hover:bg-black border border-[#00000033] hover:border-black rounded-[50%] text-[12px] hover:text-white text-black inline-flex items-center justify-center" href="#" target="_blank">
+                <a
+                  className="
+                    w-[28px] h-[28px]
+                    bg-white hover:bg-black border
+                    border-[#00000033] hover:border-black rounded-[50%]
+                    text-[12px] hover:text-white text-black
+                    inline-flex items-center justify-center"
+                  href="#"
+                  target="_blank"
+                >
                   <FaTwitter />
                 </a>
-                <a className="w-[28px] h-[28px] bg-white hover:bg-black border border-[#00000033] hover:border-black rounded-[50%] text-[12px] hover:text-white text-black inline-flex items-center justify-center" href="#" target="_blank">
+                <a
+                  className="
+                    w-[28px] h-[28px]
+                    bg-white hover:bg-black
+                    border border-[#00000033] hover:border-black rounded-[50%]
+                    text-[12px] hover:text-white text-black
+                    inline-flex items-center justify-center"
+                  href="#"
+                  target="_blank"
+                >
                   <FaFacebook />
                 </a>
-                <a className="w-[28px] h-[28px] bg-white hover:bg-black border border-[#00000033] hover:border-black rounded-[50%] text-[12px] hover:text-white text-black inline-flex items-center justify-center" href="#" target="_blank">
+                <a
+                  className="
+                    w-[28px] h-[28px]
+                    bg-white hover:bg-black
+                    border border-[#00000033] hover:border-black rounded-[50%]
+                    text-[12px] hover:text-white text-black
+                    inline-flex items-center justify-center"
+                  href="#"
+                  target="_blank"
+                >
                   <FaInstagram />
                 </a>
-                <a className="w-[28px] h-[28px] bg-white hover:bg-black border border-[#00000033] hover:border-black rounded-[50%] text-[12px] hover:text-white text-black inline-flex items-center justify-center" href="#" target="_blank">
+                <a
+                  className="
+                    w-[28px] h-[28px]
+                    bg-white hover:bg-black
+                    border border-[#00000033] hover:border-black rounded-[50%]
+                    text-[12px] hover:text-white text-black
+                    inline-flex items-center justify-center"
+                  href="#"
+                  target="_blank"
+                >
                   <FaGithub />
                 </a>
               </div>

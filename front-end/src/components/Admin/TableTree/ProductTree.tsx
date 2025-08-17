@@ -49,7 +49,11 @@ const ProductTree = ({
         <TableCell align="left">{prefix}{productCategory.title}</TableCell>
         <TableCell align="center">
           <div className="flex justify-center items-center">
-            <img src={productCategory.thumbnail} alt={productCategory.title} className="w-[100px] h-[100px]" />
+            <img
+              src={productCategory.thumbnail}
+              alt={productCategory.title}
+              className="w-[100px] h-[100px]"
+            />
           </div>
         </TableCell>
         <TableCell align="center">
@@ -74,7 +78,8 @@ const ProductTree = ({
         <TableCell align="center">
           <button
             onClick={() => handleToggleStatus(productCategory.status, productCategory._id)}
-            className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${productCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+            className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
+              ${productCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
           >
             {productCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
@@ -104,9 +109,24 @@ const ProductTree = ({
           )}
         </TableCell>
         <TableCell align="center">
-          <Link to={`/admin/products-category/detail/${productCategory._id}`} className="border rounded-[5px] bg-[#757575] p-[5px] text-white">Chi tiết</Link>
-          <Link to={`/admin/products-category/edit/${productCategory._id}`} className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white">Sửa</Link>
-          <button onClick={() => handleDeleteProductCategory(productCategory._id)} className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Xóa</button>
+          <Link
+            to={`/admin/products-category/detail/${productCategory._id}`}
+            className="border rounded-[5px] bg-[#757575] p-[5px] text-white"
+          >
+            Chi tiết
+          </Link>
+          <Link
+            to={`/admin/products-category/edit/${productCategory._id}`}
+            className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white"
+          >
+            Sửa
+          </Link>
+          <button
+            onClick={() => handleDeleteProductCategory(productCategory._id)}
+            className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
+          >
+            Xóa
+          </button>
         </TableCell>
       </TableRow>
       {productCategory.children?.map((child) => (

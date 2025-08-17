@@ -16,7 +16,14 @@ const DetailProductCategory = () => {
             <img src={productCategoryDetail.thumbnail} alt={productCategoryDetail.title} className='w-[150px] h-[150px]'/>
           </div>
           <div>
-            Trạng thái: <b>{productCategoryDetail.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}</b>
+            Trạng thái:
+            <b>
+              {
+                productCategoryDetail.status === 'active' ?
+                  <span className="text-green-500">Hoạt động</span> :
+                  <span className="text-red-500"> Dừng hoạt động</span>
+              }
+            </b>
           </div>
           <div>
             Vị trí: <b>{productCategoryDetail.position}</b>
@@ -24,7 +31,12 @@ const DetailProductCategory = () => {
           <div>
             Mô tả: <div dangerouslySetInnerHTML={{ __html: productCategoryDetail.description }} />
           </div>
-          <Link to={`/admin/products-category/edit/${id}`} className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</Link>
+          <Link
+            to={`/admin/products-category/edit/${id}`}
+            className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'
+          >
+            Chỉnh sửa
+          </Link>
         </div>
       )}
     </>

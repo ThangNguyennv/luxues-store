@@ -18,7 +18,8 @@ const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus }: Props
               <button
                 key={index}
                 onClick={() => handleFilterStatus(item.status)}
-                className={`cursor-pointer p-[10px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] ${isActive ? 'bg-[#525FE1] border-[#525FE1]' : 'bg-white'}`}
+                className={`cursor-pointer p-[10px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] 
+                  ${isActive ? 'bg-[#525FE1] border-[#525FE1]' : 'bg-white'}`}
               >
                 {item.name}
               </button>

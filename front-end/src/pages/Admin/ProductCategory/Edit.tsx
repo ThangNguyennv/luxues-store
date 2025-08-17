@@ -18,10 +18,20 @@ const EditProductCategory = () => {
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
       {productCategoryInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} action="" className="flex flex-col gap-[10px]" encType="multipart/form-data">
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex flex-col gap-[10px]"
+          encType="multipart/form-data"
+        >
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
-            <input onChange={(event) => setProductCategoryInfo(productCategoryInfo ? { ...productCategoryInfo, title: event.target.value } : productCategoryInfo)} type="text" id="title" name="title" value={productCategoryInfo.title}/>
+            <input
+              onChange={(event) => setProductCategoryInfo(productCategoryInfo ? { ...productCategoryInfo, title: event.target.value } : productCategoryInfo)}
+              type="text"
+              id="title"
+              name="title"
+              value={productCategoryInfo.title}
+            />
           </div>
 
           <div className="form-group">
@@ -120,7 +130,12 @@ const EditProductCategory = () => {
             </div>
           </div>
 
-          <button type="submit" className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]">Cập nhật</button>
+          <button
+            type="submit"
+            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          >
+            Cập nhật
+          </button>
         </form>
       )}
     </>

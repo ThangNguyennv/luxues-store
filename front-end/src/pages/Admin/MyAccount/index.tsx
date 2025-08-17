@@ -23,9 +23,16 @@ const MyAccountAdmin = () => {
           )}
           <p className='text-[35px] font-[600] text-[#00171F]'>
             <b>Trạng thái:</b>
-            {accountInfo.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}
+            {
+              accountInfo.status === 'active' ?
+                <span className="text-green-500">Hoạt động</span> :
+                <span className="text-red-500"> Dừng hoạt động</span>
+            }
           </p>
-          <Link to={'/admin/my-account/edit'} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[15%] text-center'>
+          <Link
+            to={'/admin/my-account/edit'}
+            className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[15%] text-center'
+          >
             Chỉnh sửa thông tin
           </Link>
         </div>

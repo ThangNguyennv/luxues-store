@@ -17,3 +17,12 @@ export const fetchDetailRoleAPI = async (id: string): Promise<RolesDetailInterfa
   )
   return response.data
 }
+
+export const fetchCreateRoleAPI = async (formData: FormData) => {
+  const response = await axios.post(
+    `${API_ROOT}/admin/roles/create`,
+    formData,
+    { withCredentials: true }
+  )
+  return response.data
+}

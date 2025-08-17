@@ -2,7 +2,13 @@ import axios from 'axios'
 import type { ProductCategoryAllResponseInterface, ProductCategoryDetailInterface } from '~/types/productCategory.type'
 import { API_ROOT } from '~/utils/constants'
 
-export const fetchAllProductCategoriesAPI = async (status: string, page: number, currentKeyword: string, currentSortKey: string, currentSortValue: string): Promise<ProductCategoryAllResponseInterface> => {
+export const fetchAllProductCategoriesAPI = async (
+  status: string,
+  page: number,
+  currentKeyword: string,
+  currentSortKey: string,
+  currentSortValue: string
+): Promise<ProductCategoryAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
   if (page) queryParams.set('page', page.toString())
@@ -25,6 +31,15 @@ export const fetchAllProductCategoriesAPI = async (status: string, page: number,
 //   )
 //   return response.data
 // }
+
+export const fetchChangeStatusWithChildren = async (status: string, id: string) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/products-category/change-status-with-children/${status}/${id}`,
+    {},
+    { withCredentials: true }
+  )
+  return response.data
+}
 
 export const fetchDeleteProductCategoryAPI = async (id: string) => {
   const response = await axios.delete(
@@ -55,15 +70,6 @@ export const fetchCreateProductCategoryAPI = async (formData: FormData) => {
   const response = await axios.post(
     `${API_ROOT}/admin/products-category/create`,
     formData,
-    { withCredentials: true }
-  )
-  return response.data
-}
-
-export const fetchChangeStatusWithChildren = async (status: string, id: string) => {
-  const response = await axios.patch(
-    `${API_ROOT}/admin/products-category/change-status-with-children/${status}/${id}`,
-    {},
     { withCredentials: true }
   )
   return response.data

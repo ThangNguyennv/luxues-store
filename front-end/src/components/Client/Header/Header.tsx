@@ -37,7 +37,14 @@ const Header = () => {
                 <li><a href="">Bài Viết</a></li>
               </ul>
             </nav>
-            <form className="flex-1 lg:flex hidden items-center gap-x-[12px] px-[16px] py-[12px] bg-[#F0F0F0] rounded-[62px] text-[16px]" action="#">
+            <form
+              className="
+                flex-1 lg:flex
+                hidden items-center
+                gap-x-[12px] px-[16px] py-[12px]
+                bg-[#F0F0F0] rounded-[62px] text-[16px]"
+              action="#"
+            >
               <button className="text-[#00000066]">
                 <IoSearch />
               </button>

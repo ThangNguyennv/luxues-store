@@ -16,7 +16,8 @@ export const AlertToast = () => {
           onClose={() => dispatchAlert({ type: 'HIDE_ALERT' })}
           severity={severity}
           variant="filled"
-          sx={{ width: '100%' }}>
+          sx={{ width: '100%' }}
+        >
           {message}
         </Alert>
       </Snackbar>

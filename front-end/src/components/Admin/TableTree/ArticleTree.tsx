@@ -49,7 +49,11 @@ const ArticleTree = ({
         <TableCell align="left">{prefix}{articleCategory.title}</TableCell>
         <TableCell align="center">
           <div className="flex justify-center items-center">
-            <img src={articleCategory.thumbnail} alt={articleCategory.title} className="w-[100px] h-[100px]" />
+            <img
+              src={articleCategory.thumbnail}
+              alt={articleCategory.title}
+              className="w-[100px] h-[100px]"
+            />
           </div>
         </TableCell>
         <TableCell align="center">
@@ -74,7 +78,8 @@ const ArticleTree = ({
         <TableCell align="center">
           <button
             onClick={() => handleToggleStatus(articleCategory.status, articleCategory._id)}
-            className={`cursor-pointer border rounded-[5px] p-[5px] text-white ${articleCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+            className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
+              ${articleCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
           >
             {articleCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
@@ -104,9 +109,24 @@ const ArticleTree = ({
           )}
         </TableCell>
         <TableCell align="center">
-          <Link to={`/admin/articles-category/detail/${articleCategory._id}`} className="border rounded-[5px] bg-[#757575] p-[5px] text-white">Chi tiết</Link>
-          <Link to={`/admin/articles-category/edit/${articleCategory._id}`} className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white">Sửa</Link>
-          <button onClick={() => handleDeleteArticleCategory(articleCategory._id)} className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white">Xóa</button>
+          <Link
+            to={`/admin/articles-category/detail/${articleCategory._id}`}
+            className="border rounded-[5px] bg-[#757575] p-[5px] text-white"
+          >
+            Chi tiết
+          </Link>
+          <Link
+            to={`/admin/articles-category/edit/${articleCategory._id}`}
+            className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white"
+          >
+            Sửa
+          </Link>
+          <button
+            onClick={() => handleDeleteArticleCategory(articleCategory._id)}
+            className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
+          >
+            Xóa
+          </button>
         </TableCell>
       </TableRow>
       {articleCategory.children?.map((child) => (

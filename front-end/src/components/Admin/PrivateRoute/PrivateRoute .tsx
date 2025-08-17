@@ -7,6 +7,7 @@ import type { MyAccountDetailInterface } from '~/types/account.type'
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   const { myAccount, setMyAccount } = useAuth()
   const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     fetchMyAccountAPI().then((response: MyAccountDetailInterface) => {
       setMyAccount(response.myAccount)

@@ -72,7 +72,12 @@ const ArticleCategoryAdmin = () => {
             clearSortParams={clearSortParams}
           />
           <div>
-            <Link to={'/admin/articles-category/create'} className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'>+ Thêm mới</Link>
+            <Link
+              to={'/admin/articles-category/create'}
+              className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+            >
+              + Thêm mới
+            </Link>
           </div>
         </div>
         <ArticleCategoryTable

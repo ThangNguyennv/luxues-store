@@ -16,7 +16,14 @@ const DetailArticle = () => {
             <img src={articleDetail.thumbnail} alt={articleDetail.title} className='w-[150px] h-[150px]'/>
           </div>
           <div>
-            Trạng thái: <b>{articleDetail.status === 'active' ? <span className="text-green-500"> Hoạt động</span> : <span className="text-red-500"> Dừng hoạt động</span>}</b>
+            Trạng thái:
+            <b>
+              {
+                articleDetail.status === 'active' ?
+                  <span className="text-green-500">Hoạt động</span> :
+                  <span className="text-red-500"> Dừng hoạt động</span>
+              }
+            </b>
           </div>
           <div>
             Vị trí: <b>{articleDetail.position}</b>
@@ -27,7 +34,12 @@ const DetailArticle = () => {
           <div>
             Mô tả chi tiết: <div dangerouslySetInnerHTML={{ __html: articleDetail.descriptionDetail }} />
           </div>
-          <Link to={`/admin/articles/edit/${id}`} className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'>Chỉnh sửa</Link>
+          <Link
+            to={`/admin/articles/edit/${id}`}
+            className='cursor-pointer border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'
+          >
+            Chỉnh sửa
+          </Link>
         </div>
       )}
     </>
