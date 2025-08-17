@@ -144,7 +144,9 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                             <FormatDateTime time={updatedBy.updatedAt}/>
                           </>
                         ) : (
-                          <span className="text-sm italic text-gray-400">Không xác định</span>
+                          <span className="text-sm italic text-gray-400">
+                            Không xác định
+                          </span>
                         )
                       }
                     })()}

@@ -37,6 +37,9 @@ import EditArticle from './pages/admin/Article/Edit'
 import DetailArticleCategory from './pages/admin/ArticleCategory/Detail'
 import EditArticleCategory from './pages/admin/ArticleCategory/Edit'
 import CreateArticleCategory from './pages/admin/ArticleCategory/Create'
+import DetailRole from './pages/admin/Role/Detail'
+import EditRole from './pages/admin/Role/Edit'
+import CreateRole from './pages/admin/Role/Create'
 
 function App() {
   useEffect(() => {
@@ -79,6 +82,9 @@ function App() {
             <Route path='products-category/edit/:id' element={<EditProductCategory />}/>
             <Route path='products-category/create' element={<CreateProductCategory />}/>
             <Route path='roles' element={ <Role />} />
+            <Route path='roles/detail/:id' element={ <DetailRole />} />
+            <Route path='roles/edit/:id' element={ <EditRole />} />
+            <Route path='roles/create' element={ <CreateRole />} />
             <Route path='roles/permissions' element={<Permission />} />
             <Route path='settings' element={<LayoutSetting />}>
               <Route path='general' element={<General />}/>
