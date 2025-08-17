@@ -122,11 +122,11 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
       _id: req.params.id
     }
-    const record = await Role.findOne(find)
+    const role = await Role.findOne(find)
     res.json({
       code: 200,
       message: 'Thành công!',
-      record: record
+      role: role
     })
   } catch (error) {
     res.json({
