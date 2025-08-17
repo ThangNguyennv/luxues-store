@@ -21,10 +21,16 @@ export const index = async (req: Request, res: Response) => {
         updatedBy['accountFullName'] = userUpdated.fullName
       }
     }
+
+    const accounts = await Account.find({
+      deleted: false
+    })
+    
     res.json({
       code: 200,
       message: 'Thành công!',
-      roles: roles
+      roles: roles,
+      accounts: accounts
     })
   } catch (error) {
     res.json({
