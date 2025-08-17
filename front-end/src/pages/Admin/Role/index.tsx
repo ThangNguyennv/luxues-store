@@ -75,8 +75,8 @@ const Role = () => {
                     }
                   })()}</TableCell>
                   <TableCell>
-                    <Link to={`admin/roles/detail/${role._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
-                    <Link to={`admin/roles/edit/${role._id}`} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</Link>
+                    <Link to={`/admin/roles/detail/${role._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
+                    <Link to={`/admin/roles/edit/${role._id}`} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</Link>
                     <button className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
                   </TableCell>
                 </TableRow>
