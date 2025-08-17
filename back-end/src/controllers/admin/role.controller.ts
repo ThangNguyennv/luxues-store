@@ -44,8 +44,8 @@ export const index = async (req: Request, res: Response) => {
 // [POST] /admin/roles/create
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const record = new Role(req.body)
-    await record.save()
+    const role = new Role(req.body)
+    await role.save()
     res.json({
       code: 201,
       message: 'Tạo thành công nhóm quyền!',
