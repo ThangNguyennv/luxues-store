@@ -1,8 +1,9 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { fetchRoleAPI } from '~/apis/admin/role.api'
+import { fetchDeleteRoleAPI, fetchRoleAPI } from '~/apis/admin/role.api'
 import FormatDateTime from '~/components/admin/Moment/FormatDateTime'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { AccountInfoInterface } from '~/types/account.type'
 import type { UpdatedBy } from '~/types/helper.type'
 import type { RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
@@ -10,6 +11,8 @@ import type { RolesInfoInterface, RolesResponseInterface } from '~/types/role.ty
 const Role = () => {
   const [roles, setRoles] = useState<RolesInfoInterface[]>([])
   const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
+  const { dispatchAlert } = useAlertContext()
+
   useEffect(() => {
     fetchRoleAPI().then((res: RolesResponseInterface) => {
       setRoles(res.roles)
@@ -17,10 +20,25 @@ const Role = () => {
     })
   }, [])
 
+  const handleDelete = async (id: string): Promise<void> => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa nhóm quyền này?')
+    const response = await fetchDeleteRoleAPI(id)
+    if (response.code === 204) {
+      if (isConfirm) {
+        setRoles((prev) => prev.filter((role) => role._id !== id))
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: response.message, severity: 'success' }
+        })
+      }
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
   return (
     <>
       <h1 className="text-[30px] font-[700] text-[#000000]">Nhóm quyền</h1>
-
       <div className="text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]">Danh sách nhóm quyền</div>
       <div className="flex items-center justify-end">
         <Link
@@ -52,7 +70,9 @@ const Role = () => {
                 <TableRow key={role._id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{role.title}</TableCell>
-                  <TableCell><div dangerouslySetInnerHTML={{ __html: role.description }} /></TableCell>
+                  <TableCell>
+                    <div dangerouslySetInnerHTML={{ __html: role.description }}/>
+                  </TableCell>
                   <TableCell>{(() => {
                     const updatedBy = role.updatedBy?.[(role.updatedBy as UpdatedBy[]).length - 1]
                     if (!updatedBy) {
@@ -79,9 +99,24 @@ const Role = () => {
                     }
                   })()}</TableCell>
                   <TableCell>
-                    <Link to={`/admin/roles/detail/${role._id}`} className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>Chi tiết</Link>
-                    <Link to={`/admin/roles/edit/${role._id}`} className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>Sửa</Link>
-                    <button className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
+                    <Link
+                      to={`/admin/roles/detail/${role._id}`}
+                      className='border rounded-[5px] bg-[#757575] p-[5px] text-white'
+                    >
+                      Chi tiết
+                    </Link>
+                    <Link
+                      to={`/admin/roles/edit/${role._id}`}
+                      className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'
+                    >
+                      Sửa
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(String(role._id))}
+                      className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
+                    >
+                      Xóa
+                    </button>
                   </TableCell>
                 </TableRow>
               ))

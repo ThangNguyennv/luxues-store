@@ -35,3 +35,11 @@ export const fetchEditRoleAPI = async (id: string, payload: RolesInfoInterface) 
   )
   return response.data
 }
+
+export const fetchDeleteRoleAPI = async (id: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/admin/roles/delete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
