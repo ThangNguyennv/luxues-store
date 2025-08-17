@@ -2,7 +2,7 @@ import type { AccountInfoInterface } from './account.type'
 import type { UpdatedBy } from './helper.type'
 
 export interface RolesInfoInterface {
-  _id: string,
+  _id?: string,
   title: string,
   description: string,
   permissions: [],

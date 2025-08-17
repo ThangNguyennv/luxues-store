@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { RolesDetailInterface, RolesResponseInterface } from '~/types/role.type'
+import type { RolesDetailInterface, RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchRoleAPI = async (): Promise<RolesResponseInterface> => {
@@ -18,10 +18,10 @@ export const fetchDetailRoleAPI = async (id: string): Promise<RolesDetailInterfa
   return response.data
 }
 
-export const fetchCreateRoleAPI = async (formData: FormData) => {
+export const fetchCreateRoleAPI = async (data: RolesInfoInterface) => {
   const response = await axios.post(
     `${API_ROOT}/admin/roles/create`,
-    formData,
+    data,
     { withCredentials: true }
   )
   return response.data

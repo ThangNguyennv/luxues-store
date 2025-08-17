@@ -52,7 +52,7 @@ const Role = () => {
                 <TableRow key={role._id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{role.title}</TableCell>
-                  <TableCell>{role.description}</TableCell>
+                  <TableCell><div dangerouslySetInnerHTML={{ __html: role.description }} /></TableCell>
                   <TableCell>{(() => {
                     const updatedBy = role.updatedBy?.[(role.updatedBy as UpdatedBy[]).length - 1]
                     if (!updatedBy) {

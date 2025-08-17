@@ -8,7 +8,6 @@ import { API_KEY } from '~/utils/constants'
 
 const CreateRole = () => {
   const initialRole: RolesInfoInterface = {
-    _id: '',
     title: '',
     description: '',
     permissions: [],
@@ -19,8 +18,7 @@ const CreateRole = () => {
   const navigate = useNavigate()
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const response = await fetchCreateRoleAPI(formData)
+    const response = await fetchCreateRoleAPI(roleInfo)
     if (response.code === 201) {
       setRoleInfo(response.data)
       dispatchAlert({
@@ -35,7 +33,10 @@ const CreateRole = () => {
   return (
     <>
       <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới nhóm quyền</h1>
-      <form onSubmit={(event) => handleSubmit(event)} className='flex flex-col gap-[10px]'>
+      <form
+        onSubmit={(event) => handleSubmit(event)}
+        className='flex flex-col gap-[10px]'
+      >
         <div className="form-group">
           <label htmlFor="title">Tiêu đề</label>
           <input

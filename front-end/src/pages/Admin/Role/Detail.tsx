@@ -26,11 +26,11 @@ const DetailRole = () => {
           <h1 className='text-[20px] font-[700] text-[#0A033C]'>
             Mô tả ngắn:
             <span className='-[700] text-[#0A033C]") Mô tả ngắn: <span class="'>
-              {roleDetail.description}
+              <div dangerouslySetInnerHTML={{ __html: roleDetail.description }} />
             </span>
           </h1>
           <Link
-            to={`/admin/roles/edit/${roleDetail._id}`} 
+            to={`/admin/roles/edit/${id}`}
             className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'
           >
             Chỉnh sửa

@@ -45,6 +45,7 @@ export const useCreate = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
+    formData.append('description', productInfo.description)
     const file = uploadImageInputRef.current?.files?.[0]
     if (file) {
       formData.set('thumbnail', file)
