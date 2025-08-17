@@ -48,7 +48,8 @@ export const createPost = async (req: Request, res: Response) => {
     await record.save()
     res.json({
       code: 201,
-      message: 'Tạo thành công nhóm quyền!'
+      message: 'Tạo thành công nhóm quyền!',
+      data: req.body
     })
   } catch (error) {
     res.json({
@@ -77,7 +78,7 @@ export const editPatch = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã cập nhật thành công sản phẩm!'
+      message: 'Cập nhật thành công nhóm quyền!'
     })
   } catch (error) {
     res.json({
@@ -104,7 +105,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công sản phẩm!'
+      message: 'Xóa thành công nhóm quyền!'
     })
   } catch (error) {
     res.json({
@@ -151,14 +152,12 @@ export const permissionsPatch = async (req: Request, res: Response) => {
       )
       await Role.updateOne(
         { _id: item.id },
-        {
-          permissions: mergedPermissions
-        }
+        { permissions: mergedPermissions }
       )
     }
     res.json({
       code: 200,
-      message: 'Cập nhật phân quyền thành công',
+      message: 'Cập nhật phân quyền thành công!',
       body: req.body
     })
   } catch (error) {
