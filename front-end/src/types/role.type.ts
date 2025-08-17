@@ -5,8 +5,8 @@ export interface RolesInfoInterface {
   _id?: string,
   title: string,
   description: string,
-  permissions: [],
-  updatedBy: UpdatedBy[],
+  permissions?: [],
+  updatedBy?: UpdatedBy[],
 }
 
 export interface RolesResponseInterface {

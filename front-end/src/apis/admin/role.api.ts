@@ -26,3 +26,12 @@ export const fetchCreateRoleAPI = async (data: RolesInfoInterface) => {
   )
   return response.data
 }
+
+export const fetchEditRoleAPI = async (id: string, payload: RolesInfoInterface) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/roles/edit/${id}`,
+    payload,
+    { withCredentials: true }
+  )
+  return response.data
+}
