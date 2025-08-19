@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAccountsAPI, fetchChangeStatusAPI } from '~/apis/admin/account.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { AccountDetailInterface, AccountInfoInterface } from '~/types/account.type'
+import type { AccountsDetailInterface, AccountInfoInterface } from '~/types/account.type'
 import type { RolesInfoInterface } from '~/types/role.type'
 
 const Account = () => {
@@ -12,11 +12,12 @@ const Account = () => {
   const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
-    fetchAccountsAPI().then((response: AccountDetailInterface) => {
+    fetchAccountsAPI().then((response: AccountsDetailInterface) => {
       setAccounts(response.accounts)
       setRoles(response.roles)
     })
   }, [])
+
   const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, _id)
@@ -58,7 +59,7 @@ const Account = () => {
             <TableRow className='bg-gray-100'>
               <TableCell>STT</TableCell>
               <TableCell>Avatar</TableCell>
-              <TableCell>Họ tên</TableCell>
+              <TableCell>Họ và tên</TableCell>
               <TableCell>Phân quyền</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Số điện thoại</TableCell>

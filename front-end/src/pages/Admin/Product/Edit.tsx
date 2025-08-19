@@ -22,7 +22,7 @@ const EditProduct = () => {
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, title: event.target.value } : productInfo)}
+              onChange={(event) => setProductInfo({ ...productInfo, title: event.target.value })}
               type="text"
               id="title"
               name="title"
@@ -39,7 +39,7 @@ const EditProduct = () => {
               value={productInfo.product_category_id}
               onChange={(event) => setProductInfo({ ...productInfo, product_category_id: event.target.value })}
             >
-              <option value={''}>-- Chọn danh mục</option>
+              <option value={''}>-- Chọn danh mục --</option>
               {allProductCategories && allProductCategories.length > 0 && (
                 allProductCategories.map(productCategory => (
                   <SelectTree

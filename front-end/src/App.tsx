@@ -42,6 +42,7 @@ import EditRole from './pages/admin/Role/Edit'
 import CreateRole from './pages/admin/Role/Create'
 import CreateAccount from './pages/admin/Account/Create'
 import DetailAccount from './pages/admin/Account/Detail'
+import EditAccount from './pages/admin/Account/Edit'
 
 function App() {
   useEffect(() => {
@@ -65,6 +66,7 @@ function App() {
             <Route path='accounts' element={ <Account />}/>
             <Route path='accounts/create' element={ <CreateAccount />}/>
             <Route path='accounts/detail/:id' element={ <DetailAccount />}/>
+            <Route path='accounts/edit/:id' element={ <EditAccount />}/>
             <Route path='articles' element={ <ArticleAdmin />}/>
             <Route path='articles/detail/:id' element={ <DetailArticle />}/>
             <Route path='articles/edit/:id' element={ <EditArticle />}/>

@@ -21,7 +21,12 @@ export interface MyAccountDetailInterface {
   role: RoleInfoInterface
 }
 
-export interface AccountDetailInterface {
+export interface AccountsDetailInterface {
   accounts: AccountInfoInterface[],
+  roles: RolesInfoInterface[]
+}
+
+export interface AccountDetailInterface {
+  account: AccountInfoInterface,
   roles: RolesInfoInterface[]
 }

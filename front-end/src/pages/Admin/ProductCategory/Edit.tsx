@@ -43,7 +43,7 @@ const EditProductCategory = () => {
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}
             >
-              <option value={''}>-- Chọn danh mục</option>
+              <option value={''}>-- Chọn danh mục --</option>
               {allProductCategories && allProductCategories.length > 0 && (
                 allProductCategories.map(productCategory => (
                   <SelectTree

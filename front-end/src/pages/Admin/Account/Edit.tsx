@@ -1,33 +1,29 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { fetchAccountsAPI, fetchCreateAccountAPI } from '~/apis/admin/account.api'
+import { useNavigate, useParams } from 'react-router-dom'
+import { fetchDetailAccountAPI, fetchEditAccountAPI } from '~/apis/admin/account.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { AccountInfoInterface, AccountsDetailInterface } from '~/types/account.type'
+import type { AccountDetailInterface, AccountInfoInterface } from '~/types/account.type'
 import type { RolesInfoInterface } from '~/types/role.type'
 
-const CreateAccount = () => {
-  const initialAccount: AccountInfoInterface = {
-    _id: '',
-    avatar: '',
-    fullName: '',
-    email: '',
-    phone: '',
-    status: 'active',
-    password: '',
-    token: '',
-    role_id: ''
-  }
-  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface>(initialAccount)
+const EditAccount = () => {
+  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
   const [roles, setRoles] = useState<RolesInfoInterface[]>([])
+  const params = useParams()
+  const id = params.id as string
   const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
-  const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
-  const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+
   useEffect(() => {
-    fetchAccountsAPI().then((response: AccountsDetailInterface) => {
+    if (!id) return
+    fetchDetailAccountAPI(id).then((response: AccountDetailInterface) => {
+      setAccountInfo(response.account)
       setRoles(response.roles)
     })
-  }, [])
+  }, [id])
+
+  const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
+  const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
     if (file && uploadImagePreviewRef.current) {
@@ -37,68 +33,31 @@ const CreateAccount = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
+    if (!accountInfo) return
     const formData = new FormData(event.currentTarget)
-    const file = uploadImageInputRef.current?.files?.[0]
-    if (file) {
-      formData.set('avatar', file)
-    }
-    const response = await fetchCreateAccountAPI(formData)
-    if (response.code === 201) {
-      setAccountInfo(response.data)
+    formData.set('fullName', accountInfo.fullName)
+    formData.set('email', accountInfo.email)
+    formData.set('phone', accountInfo.phone)
+    formData.set('password', accountInfo.password)
+
+    const response = await fetchEditAccountAPI(id, formData)
+    if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/admin/accounts')
+        navigate(`/admin/accounts/detail/${id}`)
       }, 2000)
     }
   }
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới tài khoản</h1>
-
+      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa tài khoản</h1>
       {accountInfo && (
         <form onSubmit={(event) => handleSubmit(event)} className="flex flex-col gap-[10px]" encType="multipart/form-data">
-          <div className="form-group">
-            <label htmlFor="fullName">Họ và tên</label>
-            <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, fullName: event.target.value })}
-              type="text"
-              id="fullName"
-              name="fullName"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, email: event.target.value })}
-              type="email"
-              id="email"
-              name="email"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Mật khẩu</label>
-            <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, password: event.target.value })}
-              type="password"
-              id="password"
-              name="password"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="phone">Số điện thoại</label>
-            <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, phone: event.target.value })}
-              type="text"
-              id="phone"
-              name="phone"
-            />
-          </div>
-          <div className="form-group">
+          <div className="flex flex-col gap-[5px]">
             <label htmlFor="avatar">Avatar</label>
             <input
               onChange={(event) => handleChange(event)}
@@ -110,24 +69,67 @@ const CreateAccount = () => {
             />
             <img
               ref={uploadImagePreviewRef}
-              className="w-[150px] h-[150px]"
+              src={accountInfo.avatar}
+              className="w-[150px] h-auto"
             />
           </div>
 
-          <div className='form-group'>
-            <label htmlFor='role_id'>Phân quyền</label>
+          <div className="form-group">
+            <label htmlFor="fullName">Họ và tên</label>
+            <input
+              onChange={(event) => setAccountInfo({ ...accountInfo, fullName: event.target.value })}
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={accountInfo.fullName}/>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              onChange={(event) => setAccountInfo({ ...accountInfo, email: event.target.value })}
+              type="email"
+              id="email"
+              name="email"
+              value={accountInfo.email}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">Số điện thoại</label>
+            <input
+              onChange={(event) => setAccountInfo({ ...accountInfo, phone: event.target.value })}
+              type="phone"
+              id="phone"
+              name="phone"
+              value={accountInfo.phone}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Mật khẩu</label>
+            <input
+              onChange={(event) => setAccountInfo({ ...accountInfo, password: event.target.value })}
+              type="text"
+              id="password"
+              name="password"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role_id">Phân quyền</label>
             <select
-              name='role_id'
-              id='role_id'
-              className='outline-none border rounded-[5px] border-[#192335]'
               value={accountInfo.role_id}
+              name="role_id"
+              id="role_id"
+              className="outline-none border rounded-[5px] border-[#192335]"
               onChange={(event) => setAccountInfo({ ...accountInfo, role_id: event.target.value })}
             >
-              <option disabled> -- Chọn --</option>
+              <option value={''}> -- Chọn quyền-- </option>
               {roles && (
-                roles.map((role, key) => (
+                roles.map((role, index) => (
                   <option
-                    key={key}
+                    key={index}
                     value={role._id}
                   >
                     {role.title}
@@ -136,6 +138,7 @@ const CreateAccount = () => {
               )}
             </select>
           </div>
+
           <div className="flex gap-[5px]">
             <input
               onChange={(event) => setAccountInfo({ ...accountInfo, status: event.target.value })}
@@ -148,6 +151,7 @@ const CreateAccount = () => {
             />
             <label htmlFor="statusActive">Hoạt động</label>
           </div>
+
           <div className="flex gap-[5px]">
             <input
               onChange={(event) => setAccountInfo({ ...accountInfo, status: event.target.value })}
@@ -160,18 +164,17 @@ const CreateAccount = () => {
             />
             <label htmlFor="statusInActive">Dừng hoạt động</label>
           </div>
-          <div>
-            <button
-              type="submit"
-              className="cursor-pointer p-[5px] border rounded-[5px] border-[#00171F] bg-[#00A7E6] text-white"
-            >
-            Tạo mới
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            className="cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          >
+            Cập nhật
+          </button>
         </form>
       )}
     </>
   )
 }
 
-export default CreateAccount
+export default EditAccount
