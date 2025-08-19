@@ -147,18 +147,14 @@ export const permissionsPatch = async (req: Request, res: Response) => {
       if (!existing) {
         continue
       }
-      const mergedPermissions = Array.from(
-        new Set([...(existing.permissions || []), ...item.permissions])
-      )
       await Role.updateOne(
         { _id: item.id },
-        { permissions: mergedPermissions }
+        { permissions: item.permissions }
       )
     }
     res.json({
       code: 200,
       message: 'Cập nhật phân quyền thành công!',
-      body: req.body
     })
   } catch (error) {
     res.json({
