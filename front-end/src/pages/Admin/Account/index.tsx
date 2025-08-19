@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { fetchAccountsAPI, fetchChangeStatusAPI } from '~/apis/admin/account.api'
+import { fetchAccountsAPI, fetchChangeStatusAPI, fetchDeleteAccountAPI } from '~/apis/admin/account.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { AccountsDetailInterface, AccountInfoInterface } from '~/types/account.type'
 import type { RolesInfoInterface } from '~/types/role.type'
@@ -30,6 +30,23 @@ const Account = () => {
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
+
+  const handleDeleteAccount = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa tài khoản này?')
+    const response = await fetchDeleteAccountAPI(_id)
+    if (response.code === 204) {
+      if (isConfirm) {
+        setAccounts((prev) => prev.filter((item) => item._id != _id))
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: response.message, severity: 'success' }
+        })
+      }
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -105,7 +122,9 @@ const Account = () => {
                     >
                       Sửa
                     </Link>
-                    <button className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
+                    <button
+                      onClick={() => handleDeleteAccount(account._id)}
+                      className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
                   </TableCell>
                 </TableRow>
               ))

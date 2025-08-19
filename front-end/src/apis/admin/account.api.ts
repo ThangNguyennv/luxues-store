@@ -44,3 +44,11 @@ export const fetchEditAccountAPI = async (id: string, formData: FormData) => {
   )
   return response.data
 }
+
+export const fetchDeleteAccountAPI = async (id: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/admin/accounts/delete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
