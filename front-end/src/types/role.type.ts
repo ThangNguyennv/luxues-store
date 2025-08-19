@@ -5,10 +5,14 @@ export interface RolesInfoInterface {
   _id?: string,
   title: string,
   description: string,
-  permissions?: [],
+  permissions?: string[],
   updatedBy?: UpdatedBy[],
 }
 
+export interface PermissionsInterface {
+  id: string,
+  permissions: string[]
+}
 export interface RolesResponseInterface {
   roles: RolesInfoInterface[],
   accounts: AccountInfoInterface[]

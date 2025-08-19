@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { RolesDetailInterface, RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
+import type { PermissionsInterface, RolesDetailInterface, RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchRoleAPI = async (): Promise<RolesResponseInterface> => {
@@ -39,6 +39,15 @@ export const fetchEditRoleAPI = async (id: string, payload: RolesInfoInterface) 
 export const fetchDeleteRoleAPI = async (id: string) => {
   const response = await axios.delete(
     `${API_ROOT}/admin/roles/delete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchPermissions = async (permissions: PermissionsInterface[]) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/roles/permissions`,
+    { permissions },
     { withCredentials: true }
   )
   return response.data
