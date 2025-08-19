@@ -9,18 +9,23 @@ export const index = async (req: Request, res: Response) => {
     const find = {
       deleted: false
     }
-    const records = await Account.find(find).select('-password -token')
-    for (const record of records) {
+    const accounts = await Account.find(find).select('-password -token')
+    for (const account of accounts) {
       const role = await Role.findOne({
         deleted: false,
-        _id: record.role_id
+        _id: account.role_id
       })
-      record['role'] = role
+      account['role'] = role
     }
+    const roles = await Role.find({
+      deleted: false
+    })
+  
     res.json({
       code: 200,
       message: 'Thành công!',
-      records: records
+      accounts: accounts,
+      roles: roles
     })
   } catch (error) {
     res.json({
@@ -106,7 +111,7 @@ export const editPatch = async (req: Request, res: Response) => {
       await Account.updateOne({ _id: req.params.id }, req.body)
       res.json({
         code: 200,
-        message: 'Đã cập nhật thành công tài khoản!'
+        message: 'Cập nhật thành công tài khoản!'
       })
     }
   } catch (error) {
@@ -159,7 +164,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     )
     res.json({
       code: 204,
-      message: 'Đã xóa thành công tài khoản!'
+      message: 'Xóa thành công tài khoản!'
     })
   } catch (error) {
     res.json({
