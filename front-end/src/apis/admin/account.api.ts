@@ -18,3 +18,12 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
   )
   return response.data
 }
+
+export const fetchCreateAccountAPI = async (formData: FormData) => {
+  const response = await axios.post(
+    `${API_ROOT}/admin/accounts/create`,
+    formData,
+    { withCredentials: true }
+  )
+  return response.data
+}

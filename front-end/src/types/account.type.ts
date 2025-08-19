@@ -9,6 +9,7 @@ export interface AccountInfoInterface {
   avatar: string,
   fullName: string,
   email: string,
+  password: string,
   phone: string,
   status: string,
   token: string,

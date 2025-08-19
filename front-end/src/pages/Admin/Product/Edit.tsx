@@ -57,7 +57,7 @@ const EditProduct = () => {
           <div className="flex items-center justify-start gap-[5px]">
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo(productInfo ? { ...productInfo, featured: event.target.value }: productInfo)}
+                onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="featured1"
@@ -69,7 +69,7 @@ const EditProduct = () => {
             </div>
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo(productInfo ? { ...productInfo, featured: event.target.value }: productInfo)}
+                onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="featured0"
@@ -90,7 +90,7 @@ const EditProduct = () => {
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
               }}
               value={productInfo.description}
-              onEditorChange={(newValue) => setProductInfo(productInfo ? { ...productInfo, description: newValue }: productInfo)}
+              onEditorChange={(newValue) => setProductInfo({ ...productInfo, description: newValue })}
               id="desc"
             />
           </div>
@@ -98,7 +98,7 @@ const EditProduct = () => {
           <div className="form-group">
             <label htmlFor="price">Giá</label>
             <input
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, price: Number(event.target.value) }: productInfo)}
+              onChange={(event) => setProductInfo({ ...productInfo, price: Number(event.target.value) })}
               type="number"
               id="price"
               name="price"
@@ -109,7 +109,7 @@ const EditProduct = () => {
           <div className="form-group">
             <label htmlFor="discount">% Giảm giá</label>
             <input
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, discountPercentage: Number(event.target.value) }: productInfo)}
+              onChange={(event) => setProductInfo({ ...productInfo, discountPercentage: Number(event.target.value) })}
               type="number"
               id="discount"
               name="discountPercentage"
@@ -120,7 +120,7 @@ const EditProduct = () => {
           <div className="form-group">
             <label htmlFor="stock">Số lượng</label>
             <input
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, stock: Number(event.target.value) }: productInfo)}
+              onChange={(event) => setProductInfo({ ...productInfo, stock: Number(event.target.value) })}
               type="number"
               id="stock"
               name="stock"
@@ -148,7 +148,7 @@ const EditProduct = () => {
           <div className="form-group">
             <label htmlFor="position">Vị trí</label>
             <input
-              onChange={(event) => setProductInfo(productInfo ? { ...productInfo, position: Number(event.target.value) }: productInfo)}
+              onChange={(event) => setProductInfo({ ...productInfo, position: Number(event.target.value) })}
               type="number"
               id="position"
               name="position"
@@ -161,7 +161,7 @@ const EditProduct = () => {
           <div className="flex items-center justify-start gap-[5px]">
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo(productInfo ? { ...productInfo, status: event.target.value }: productInfo)}
+                onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="statusActive"
@@ -174,7 +174,7 @@ const EditProduct = () => {
 
             <div className="flex gap-[5px]">
               <input
-                onChange={(event) => setProductInfo(productInfo ? { ...productInfo, status: event.target.value }: productInfo)}
+                onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
                 type="radio"
                 className="border rounded-[5px] border-[#192335]"
                 id="statusInActive"

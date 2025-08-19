@@ -43,7 +43,7 @@ const EditMyAccount = () => {
             <label htmlFor="fullName"><b>Họ và tên</b></label>
             <input
               onChange={(event) =>
-                setAccountInfo(accountInfo ? { ...accountInfo, fullName: event.target.value } : accountInfo)
+                setAccountInfo({ ...accountInfo, fullName: event.target.value })
               }
               type="text"
               className=""
@@ -56,8 +56,7 @@ const EditMyAccount = () => {
           <div className="form-group">
             <label htmlFor="email"><b>Email</b></label>
             <input onChange={(event) =>
-              setAccountInfo(accountInfo ? { ...accountInfo, email: event.target.value }
-                : accountInfo)
+              setAccountInfo({ ...accountInfo, email: event.target.value })
             }
             type="email"
             className=""
@@ -70,8 +69,7 @@ const EditMyAccount = () => {
           <div className="form-group">
             <label htmlFor="phone"><b>Số điện thoại</b></label>
             <input onChange={(event) =>
-              setAccountInfo(accountInfo ? { ...accountInfo, phone: event.target.value }
-                : accountInfo)
+              setAccountInfo({ ...accountInfo, phone: event.target.value })
             }
             type="phone"
             className=""
