@@ -168,7 +168,15 @@ const Permission = () => {
             <Table stickyHeader sx={{
               borderCollapse: 'collapse',
               '& th, & td': {
-                border: '1px solid #000000' // đường kẻ
+                border: '1px solid #000000', // đường kẻ,
+                zIndex: 1
+              },
+              '& th': {
+                backgroundColor: '#00A7E6', // nền header
+                color: '#fff',
+                zIndex: 2,
+                borderTop: '1px solid #000000 !important',
+                borderBottom: '1px solid #000000 !important'
               }
             }}>
               <TableHead>
@@ -183,7 +191,7 @@ const Permission = () => {
                 {permissionsData.length > 0 && permissionSections.map((section, index) => (
                   <React.Fragment key={index}>
                     <TableRow>
-                      <TableCell><b>{section.title}</b></TableCell>
+                      <TableCell sx={{ background: '#FFAB19' }}><b>{section.title}</b></TableCell>
                     </TableRow>
                     {section.permissions.map((permission, index) => (
                       <TableRow key={index}>
