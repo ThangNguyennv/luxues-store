@@ -53,11 +53,13 @@ export const createPost = async (req: Request, res: Response) => {
     } else {
       req.body.password = md5(req.body.password)
 
-      const record = new Account(req.body)
-      await record.save()
+      const account = new Account(req.body)
+      await account.save()
+
       res.json({
         code: 201,
-        message: 'Thêm tài khoản thành công!'
+        message: 'Thêm tài khoản thành công!',
+        data: req.body,
       })
     }
   } catch (error) {
@@ -133,16 +135,16 @@ export const detail = async (req: Request, res: Response) => {
     const roles = await Role.find({
       deleted: false
     })
-    const record = await Account.findOne(find)
+    const account = await Account.findOne(find)
     const role = await Role.findOne({
       deleted: false,
-      _id: record.role_id
+      _id: account.role_id
     })
-    record['role'] = role
+    account['role'] = role
     res.json({
       code: 200,
       message: 'Thành công!',
-      record: record,
+      account: account,
       roles: roles
     })
   } catch (error) {

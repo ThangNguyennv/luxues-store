@@ -47,7 +47,7 @@ export const editPatch = async (req: Request, res: Response) => {
       await Account.updateOne({ _id: req['accountAdmin'].id }, req.body)
       res.json({
         code: 200,
-        message: 'Đã cập nhật thành công tài khoản!'
+        message: 'Cập nhật thành công tài khoản!'
       })
     }
   } catch (error) {
