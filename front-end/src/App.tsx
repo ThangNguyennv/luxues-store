@@ -20,7 +20,7 @@ import LayoutSetting from './layouts/admin/layoutSetting/LayoutSetting'
 import General from './pages/admin/Setting/General'
 import Advance from './pages/admin/Setting/Advance'
 import Trash from './pages/admin/Trash/Trash'
-import User from './pages/admin/User/User'
+import User from './pages/admin/User'
 import Login from './pages/admin/Auth/Login'
 import Permission from './pages/admin/Role/Permission'
 import EditMyAccount from './pages/admin/MyAccount/Edit'
@@ -43,6 +43,7 @@ import CreateRole from './pages/admin/Role/Create'
 import CreateAccount from './pages/admin/Account/Create'
 import DetailAccount from './pages/admin/Account/Detail'
 import EditAccount from './pages/admin/Account/Edit'
+import DetailUser from './pages/admin/User/Detail'
 
 function App() {
   useEffect(() => {
@@ -98,6 +99,8 @@ function App() {
             </Route>
             <Route path='trash' element={<Trash />}/>
             <Route path='users' element={<User />}/>
+            <Route path='users/detail/:id' element={<DetailUser />}/>
+
           </Route>
           <Route path='/admin/auth' element={<AuthAdmin />}>
             <Route path='login' element={ <Login />}/>

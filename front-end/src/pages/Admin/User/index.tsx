@@ -1,31 +1,33 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { fetchAccountsAPI, fetchChangeStatusAPI, fetchDeleteAccountAPI } from '~/apis/admin/account.api'
+import { fetchChangeStatusAPI, fetchDeleteUserAPI, fetchUsersAPI } from '~/apis/admin/user.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { AccountsDetailInterface, AccountInfoInterface } from '~/types/account.type'
-import type { RolesInfoInterface } from '~/types/role.type'
+import type { UserInfoInterface, UsersDetailInterface } from '~/types/user.type'
 
-const Account = () => {
-  const [accounts, setAccounts] = useState<AccountInfoInterface[]>([])
-  const [roles, setRoles] = useState<RolesInfoInterface[]>([])
+const User = () => {
+  const [users, setUsers] = useState<UserInfoInterface[]>([])
   const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
-    fetchAccountsAPI().then((response: AccountsDetailInterface) => {
-      setAccounts(response.accounts)
-      setRoles(response.roles)
+    fetchUsersAPI().then((response: UsersDetailInterface) => {
+      setUsers(response.users)
     })
   }, [])
 
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusAPI(newStatus, id)
+    const response = await fetchChangeStatusAPI(id, newStatus)
     if (response.code === 200) {
-      setAccounts((prev) => prev.map((account) => account._id === id ? {
-        ...account,
+      setUsers((prev) => prev.map((user) => user._id === id ? {
+        ...user,
         status: newStatus
-      }: account))
+      }: user))
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
@@ -36,12 +38,12 @@ const Account = () => {
     }
   }
 
-  const handleDeleteAccount = async (_id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa tài khoản này?')
-    const response = await fetchDeleteAccountAPI(_id)
+  const handleDeleteUser = async (_id: string) => {
+    const isConfirm = confirm('Bạn có chắc muốn xóa người dùng này?')
+    const response = await fetchDeleteUserAPI(_id)
     if (response.code === 204) {
       if (isConfirm) {
-        setAccounts((prev) => prev.filter((item) => item._id != _id))
+        setUsers((prev) => prev.filter((item) => item._id != _id))
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
@@ -52,19 +54,10 @@ const Account = () => {
       return
     }
   }
-
   return (
     <>
-      <h1 className="text-[30px] font-[700] text-[#000000]">Danh sách tài khoản</h1>
+      <h1 className="text-[30px] font-[700] text-[#000000]">Danh sách người dùng</h1>
 
-      <div className="flex items-center justify-end">
-        <Link
-          to={'/admin/accounts/create'}
-          className="border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white"
-        >
-          + Thêm mới
-        </Link>
-      </div>
       <TableContainer sx={{ maxHeight: 600 }}>
         <Table sx={{
           borderCollapse: 'collapse',
@@ -77,7 +70,6 @@ const Account = () => {
               <TableCell>STT</TableCell>
               <TableCell>Avatar</TableCell>
               <TableCell>Họ và tên</TableCell>
-              <TableCell>Phân quyền</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Số điện thoại</TableCell>
               <TableCell>Trạng thái</TableCell>
@@ -85,45 +77,44 @@ const Account = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {accounts && (
-              accounts.map((account, index) => (
+            {users && (
+              users.map((user, index) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
-                    <img src={account.avatar} className='w-[100px] h-[100px]'/>
+                    <img
+                      src={user.avatar}
+                      className='w-[150px] h-[150px] rounded-full object-cover'
+                      alt="Avatar"
+                    />
                   </TableCell>
-                  <TableCell>{account.fullName}</TableCell>
-                  <TableCell>
-                    {roles.map((role) => (
-                      account.role_id === role._id ? role.title : ''
-                    ))}
-                  </TableCell>
-                  <TableCell>{account.email}</TableCell>
-                  <TableCell>{account.phone}</TableCell>
+                  <TableCell>{user.fullName}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.phone}</TableCell>
                   <TableCell>
                     <button
-                      onClick={() => handleToggleStatus(account._id, account.status)}
+                      onClick={() => handleToggleStatus(user._id, user.status)}
                       className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-                          ${account.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                          ${user.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
                     >
-                      {account.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
+                      {user.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                     </button>
                   </TableCell>
                   <TableCell>
                     <Link
-                      to={`/admin/accounts/detail/${account._id}`}
+                      to={`/admin/users/detail/${user._id}`}
                       className='border rounded-[5px] bg-[#757575] p-[5px] text-white'
                     >
                       Chi tiết
                     </Link>
                     <Link
-                      to={`/admin/accounts/edit/${account._id}`}
+                      to={`/admin/users/edit/${user._id}`}
                       className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'
                     >
                       Sửa
                     </Link>
                     <button
-                      onClick={() => handleDeleteAccount(account._id)}
+                      onClick={() => handleDeleteUser(user._id)}
                       className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>Xóa</button>
                   </TableCell>
                 </TableRow>
@@ -136,4 +127,4 @@ const Account = () => {
   )
 }
 
-export default Account
+export default User
