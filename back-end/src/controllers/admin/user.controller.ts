@@ -64,7 +64,7 @@ export const editPatch = async (req: Request, res: Response) => {
       await User.updateOne({ _id: req.params.id }, req.body)
       res.json({
         code: 200,
-        message: 'Đã cập nhật thành công người dùng!'
+        message: 'Cập nhật thành công người dùng!'
       })
     }
   } catch (error) {
@@ -105,7 +105,7 @@ export const deleteItem = async (req: Request, res: Response) => {
     await User.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
     res.json({
       code: 204,
-      message: 'Đã xóa thành công người dùng!'
+      message: 'Xóa thành công người dùng!'
     })
   } catch (error) {
     res.json({
