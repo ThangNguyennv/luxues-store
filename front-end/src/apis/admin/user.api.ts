@@ -33,3 +33,12 @@ export const fetchDetailUserAPI = async (id: string) => {
   )
   return response.data
 }
+
+export const fetchEditUserAPI = async (id: string, formData: FormData) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/users/edit/${id}`,
+    formData,
+    { withCredentials: true }
+  )
+  return response.data
+}

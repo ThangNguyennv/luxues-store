@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { fetchDetailAccountAPI, fetchEditAccountAPI } from '~/apis/admin/account.api'
+import { fetchDetailUserAPI, fetchEditUserAPI } from '~/apis/admin/user.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { AccountDetailInterface, AccountInfoInterface } from '~/types/account.type'
-import type { RolesInfoInterface } from '~/types/role.type'
+import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
 
-const EditAccount = () => {
-  const [accountInfo, setAccountInfo] = useState<AccountInfoInterface | null>(null)
-  const [roles, setRoles] = useState<RolesInfoInterface[]>([])
+const EditUser = () => {
+  const [userInfo, setUserInfo] = useState<UserInfoInterface | null>(null)
   const params = useParams()
   const id = params.id as string
   const { dispatchAlert } = useAlertContext()
@@ -15,12 +13,10 @@ const EditAccount = () => {
 
   useEffect(() => {
     if (!id) return
-    fetchDetailAccountAPI(id).then((response: AccountDetailInterface) => {
-      setAccountInfo(response.account)
-      setRoles(response.roles)
+    fetchDetailUserAPI(id).then((response: UserDetailInterface) => {
+      setUserInfo(response.user)
     })
   }, [id])
-
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
 
@@ -33,30 +29,34 @@ const EditAccount = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    if (!accountInfo) return
+    if (!userInfo) return
     const formData = new FormData(event.currentTarget)
-    formData.set('fullName', accountInfo.fullName)
-    formData.set('email', accountInfo.email)
-    formData.set('phone', accountInfo.phone)
-    formData.set('password', accountInfo.password)
+    formData.set('fullName', userInfo.fullName)
+    formData.set('email', userInfo.email)
+    formData.set('phone', userInfo.phone)
+    formData.set('password', userInfo.password)
 
-    const response = await fetchEditAccountAPI(id, formData)
+    const response = await fetchEditUserAPI(id, formData)
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate(`/admin/accounts/detail/${id}`)
+        navigate(`/admin/users/detail/${id}`)
       }, 2000)
     }
   }
-
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa tài khoản admin</h1>
-      {accountInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} className="flex flex-col gap-[10px]" encType="multipart/form-data">
+      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa tài khoản người dùng</h1>
+
+      {userInfo && (
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex flex-col gap-[10px]"
+          encType="multipart/form-data"
+        >
           <div className="flex flex-col gap-[5px]">
             <label htmlFor="avatar">Avatar</label>
             <input
@@ -69,7 +69,7 @@ const EditAccount = () => {
             />
             <img
               ref={uploadImagePreviewRef}
-              src={accountInfo.avatar}
+              src={userInfo.avatar}
               className="w-[150px] h-auto"
             />
           </div>
@@ -77,90 +77,67 @@ const EditAccount = () => {
           <div className="form-group">
             <label htmlFor="fullName">Họ và tên</label>
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, fullName: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, fullName: event.target.value })}
               type="text"
               id="fullName"
               name="fullName"
-              value={accountInfo.fullName}/>
+              value={userInfo.fullName}/>
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, email: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, email: event.target.value })}
               type="email"
               id="email"
               name="email"
-              value={accountInfo.email}
+              value={userInfo.email}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="phone">Số điện thoại</label>
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, phone: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, phone: event.target.value })}
               type="phone"
               id="phone"
               name="phone"
-              value={accountInfo.phone}
+              value={userInfo.phone}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Mật khẩu</label>
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, password: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, password: event.target.value })}
               type="text"
               id="password"
               name="password"
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="role_id">Phân quyền</label>
-            <select
-              value={accountInfo.role_id}
-              name="role_id"
-              id="role_id"
-              className="outline-none border rounded-[5px] border-[#192335]"
-              onChange={(event) => setAccountInfo({ ...accountInfo, role_id: event.target.value })}
-            >
-              <option value={''}> -- Chọn quyền-- </option>
-              {roles && (
-                roles.map((role, index) => (
-                  <option
-                    key={index}
-                    value={role._id}
-                  >
-                    {role.title}
-                  </option>
-                ))
-              )}
-            </select>
-          </div>
-
           <div className="flex gap-[5px]">
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, status: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, status: event.target.value })}
               type="radio"
               className="border rounded-[5px] border-[#192335]"
               id="statusActive"
               name="status"
               value={'active'}
-              checked={accountInfo.status === 'active' ? true : false}
+              checked={userInfo.status === 'active' ? true : false}
             />
             <label htmlFor="statusActive">Hoạt động</label>
           </div>
 
           <div className="flex gap-[5px]">
             <input
-              onChange={(event) => setAccountInfo({ ...accountInfo, status: event.target.value })}
+              onChange={(event) => setUserInfo({ ...userInfo, status: event.target.value })}
               type="radio"
               className="border rounded-[5px] border-[#192335]"
               id="statusInActive"
               name="status"
               value={'inactive'}
-              checked={accountInfo.status === 'inactive' ? true : false}
+              checked={userInfo.status === 'inactive' ? true : false}
             />
             <label htmlFor="statusInActive">Dừng hoạt động</label>
           </div>
@@ -177,4 +154,4 @@ const EditAccount = () => {
   )
 }
 
-export default EditAccount
+export default EditUser

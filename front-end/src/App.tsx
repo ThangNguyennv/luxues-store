@@ -44,6 +44,7 @@ import CreateAccount from './pages/admin/Account/Create'
 import DetailAccount from './pages/admin/Account/Detail'
 import EditAccount from './pages/admin/Account/Edit'
 import DetailUser from './pages/admin/User/Detail'
+import EditUser from './pages/admin/User/Edit'
 
 function App() {
   useEffect(() => {
@@ -100,7 +101,7 @@ function App() {
             <Route path='trash' element={<Trash />}/>
             <Route path='users' element={<User />}/>
             <Route path='users/detail/:id' element={<DetailUser />}/>
-
+            <Route path='users/edit/:id' element={<EditUser />}/>
           </Route>
           <Route path='/admin/auth' element={<AuthAdmin />}>
             <Route path='login' element={ <Login />}/>
