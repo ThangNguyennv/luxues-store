@@ -8,11 +8,11 @@ export const index = async (req: Request, res: Response) => {
     const find = {
       deleted: false
     }
-    const records = await User.find(find).select('-password -token')
+    const users = await User.find(find).select('-password -token')
     res.json({
       code: 200,
       message: 'Thành công!',
-      records: records
+      users: users
     })
   } catch (error) {
     res.json({
@@ -83,11 +83,11 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
       _id: req.params.id
     }
-    const record = await User.findOne(find)
+    const user = await User.findOne(find).select('-password -tokenUser')
     res.json({
       code: 200,
       message: 'Chi tiết người dùng!',
-      record: record
+      user: user
     })
   } catch (error) {
     res.json({
