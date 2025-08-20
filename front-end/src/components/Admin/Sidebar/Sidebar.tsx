@@ -48,10 +48,10 @@ const Sidebar = () => {
             <NavLink to={'/admin/users'}>Tài khoản người dùng</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/general'}>Cài đặt chung</NavLink>
+            <NavLink to={'/admin/settings/general'}>Cài đặt chung</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
-            <NavLink to={'/admin/dvance'}>Cài đặt nâng cao</NavLink>
+            <NavLink to={'/admin/settings/advance'}>Cài đặt nâng cao</NavLink>
           </li>
           <li className="border-b border-[#9D9995] pb-[7px]">
             <NavLink to={'/admin/trash'}>Thùng rác</NavLink>

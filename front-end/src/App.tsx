@@ -17,8 +17,8 @@ import ProductAdmin from './pages/admin/Product'
 import ProductCategoryAdmin from './pages/admin/ProductCategory'
 import Role from './pages/admin/Role'
 import LayoutSetting from './layouts/admin/layoutSetting/LayoutSetting'
-import General from './pages/admin/Setting/General'
-import Advance from './pages/admin/Setting/Advance'
+import General from './pages/admin/Setting/General/General'
+import Advance from './pages/admin/Setting/Advance/Advance'
 import Trash from './pages/admin/Trash/Trash'
 import User from './pages/admin/User'
 import Login from './pages/admin/Auth/Login'
@@ -45,6 +45,7 @@ import DetailAccount from './pages/admin/Account/Detail'
 import EditAccount from './pages/admin/Account/Edit'
 import DetailUser from './pages/admin/User/Detail'
 import EditUser from './pages/admin/User/Edit'
+import EditSettingGeneral from './pages/admin/Setting/General/Edit'
 
 function App() {
   useEffect(() => {
@@ -96,6 +97,7 @@ function App() {
             <Route path='roles/permissions' element={<Permission />} />
             <Route path='settings' element={<LayoutSetting />}>
               <Route path='general' element={<General />}/>
+              <Route path='general/edit' element={<EditSettingGeneral />}/>
               <Route path='advance' element={<Advance />}/>
             </Route>
             <Route path='trash' element={<Trash />}/>

@@ -3,6 +3,7 @@ import { IoSearch } from 'react-icons/io5'
 import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
+import logo from '~/assets/images/Header/logo.png'
 
 const Header = () => {
   return (
@@ -27,7 +28,16 @@ const Header = () => {
             <button className=" text-[20px] md:hidden inline">
               <FaBars />
             </button>
-            <a className="font-[700] sm:text-[32px] text-[25px] text-primary lg:flex-none flex-1" href="">CODE.SHOP</a>
+            <a
+              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[32px] text-[25px] text-primary lg:flex-none flex-1"
+              href=""
+            >
+              <img
+                src={logo}
+                className='w-[50px] h-[50px] bg-amber-900'
+              />
+              LUXUES STORE
+            </a>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
                 <li><a href="/">Trang chủ</a></li>
