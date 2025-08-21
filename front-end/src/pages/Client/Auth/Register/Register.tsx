@@ -1,0 +1,30 @@
+import { Link } from 'react-router-dom'
+
+const RegisterClient = () => {
+  return (
+    <>
+      <div className="flex items-center justify-center gap-[70px] p-[70px] mt-[40px] mb-[80px] bg-[#96D5FE]">
+        <div className='flex flex-col gap-[10px] text-center text-[20px]'>
+          <div className='font-[600]'>LUXUES STORE</div>
+          <div>Shop thời trang được yêu thích nhất tại Việt Nam</div>
+        </div>
+        <div className="w-[30%]">
+          <form className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50">
+            <div className='text-[20px] font-[500]'>Đăng ký</div>
+            <input type='text' name='fullName' placeholder="Họ và tên" className="border rounded-[5px] p-[10px]"/>
+            <input type='email' name='email' placeholder="Email" className="border rounded-[5px] p-[10px]"/>
+            <input type='password' name='password' placeholder="Mật khẩu" className="border rounded-[5px] p-[10px]"/>
+            <input type='password' name='confirmPassword' placeholder="Xác nhận lại mật khẩu" className="border rounded-[5px] p-[10px]"/>
+            <button className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'>Đăng ký</button>
+            <div className="flex items-center justify-center gap-[5px]">
+              <p className='text-[15px]'>Bạn đã có tài khoản?</p>
+              <Link to={'/user/login'} className='text-[#525FE1] font-[600] hover:underline'>Đăng nhập</Link>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default RegisterClient

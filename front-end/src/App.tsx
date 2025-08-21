@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LayoutDefault from './layouts/client/LayoutDefault/LayoutDefault'
+import LayoutDefault from './layouts/client/layoutDefault/LayoutDefault'
 import LayoutDefaultAdmin from './layouts/admin/layoutDefault/LayoutDefault'
 import Home from './pages/client/Home'
 import AOS from 'aos'
@@ -46,6 +46,9 @@ import EditAccount from './pages/admin/Account/Edit'
 import DetailUser from './pages/admin/User/Detail'
 import EditUser from './pages/admin/User/Edit'
 import EditSettingGeneral from './pages/admin/Setting/General/Edit'
+import LayoutAuth from './layouts/client/layoutAuth/LayoutAuth'
+import LoginClient from './pages/client/Auth/Login/Login'
+import RegisterClient from './pages/client/Auth/Register/Register'
 
 function App() {
   useEffect(() => {
@@ -63,6 +66,10 @@ function App() {
           <Route element={<LayoutDefault />}>
             <Route path='/' element={<Home />}/>
             <Route path='/products' element={<Product />}/>
+          </Route>
+          <Route path='/user/*' element={<LayoutAuth />}>
+            <Route path='login' element={<LoginClient />} />
+            <Route path='register' element={<RegisterClient />} />
           </Route>
           <Route path='/admin/*' element={<PrivateRoute><LayoutDefaultAdmin /></PrivateRoute>}>
             <Route index element={ <Dashboard />} />

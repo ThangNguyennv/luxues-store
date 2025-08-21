@@ -4,6 +4,7 @@ import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
 import logo from '~/assets/images/Header/logo.png'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -22,7 +23,7 @@ const Header = () => {
       </div>
       {/* End Top header */}
       {/* Header */}
-      <header className="sm:py-[24px] py-[20px]">
+      <header className="sm:py-[24px] py-[20px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
         <div className="container mx-auto px-[16px]">
           <div className="flex items-center md:gap-x-[40px] gap-x-[16px]">
             <button className=" text-[20px] md:hidden inline">
@@ -67,9 +68,9 @@ const Header = () => {
               <a href="#">
                 <IoMdCart />
               </a>
-              <a href="#">
+              <Link to={'/user/login'}>
                 <FaRegUserCircle />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
