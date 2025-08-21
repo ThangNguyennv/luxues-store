@@ -20,7 +20,9 @@ export const cartId = async (
     const cart = await Cart.findOne({
       _id: req.cookies.cartId
     })
-    cart['totalProduct'] = cart.products.length
+    if (cart.products.length > 0) {
+      cart['totalProduct'] = cart.products.length
+    }
     req['miniCart'] = cart
   }
   next()

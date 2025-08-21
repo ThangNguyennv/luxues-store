@@ -9,29 +9,53 @@ import * as sendMailHelper from '~/helpers/sendMail'
 // [POST] /user/register
 export const registerPost = async (req: Request, res: Response) => {
   try {
+    const { fullName, email } = req.body
+    const isFullName = await User.findOne({
+      fullName: fullName
+    })
+    if (isFullName) {
+      res.json({
+        code: 401,
+        message: 'Tên đăng nhập đã tồn tại, vui lòng chọn tên khác!'
+      })
+      return
+    }
     const isExistEmail = await User.findOne({
-      email: req.body.email
+      email: email
     })
     if (isExistEmail) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'Email đã tồn tại, vui lòng chọn email khác!'
       })
       return
     }
     req.body.password = md5(req.body.password)
+    req.body.confirmPassword = md5(req.body.confirmPassword)
+    if (req.body.password !== req.body.confirmPassword) {
+        res.json({
+        code: 400,
+        message: 'Mật khẩu xác nhận không đúng! Vui lòng nhập lại.'
+      })
+      return
+    }
     const user = new User(req.body)
     await user.save()
-    res.cookie('tokenUser', user.tokenUser)
+    // res.cookie('tokenUser', user.tokenUser, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: 'none',
+    //   maxAge: 24 * 60 * 60 * 1000
+    // })
     res.json({
       code: 200,
-      message: 'Đăng ký tài khoản thành công!'
+      message: 'Đăng ký tài khoản thành công! Mời bạn đăng nhập lại tài khoản và mật khẩu.'
     })
   } catch (error) {
     res.json({
       code: 400,
       message: 'Lỗi!',
-      error: error
+      error: error,
     })
   }
 }
