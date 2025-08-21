@@ -18,14 +18,14 @@ export const loginPost = async (req: Request, res: Response) => {
       })
       return
     }
-    if (md5(password) != accountAdmin.password) {
+    if (md5(password) !== accountAdmin.password) {
       res.json({
         code: 401,
         message: 'Tài khoản hoặc mật khẩu không chính xác'
       })
       return
     }
-    if (accountAdmin.status == 'inactive') {
+    if (accountAdmin.status === 'inactive') {
       res.json({
         code: 403,
         message: 'Tài khoản đã bị khóa!'

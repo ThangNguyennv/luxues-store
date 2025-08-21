@@ -3,7 +3,7 @@ import ProductCategory from '~/models/product-category.model'
 import ArticleCategory from '~/models/article-category.model'
 import { buildTree, TreeItem } from '~/helpers/createTree'
 
-export const category = async (
+export const categoryProduct = async (
   req: Request,
   res: Response,
   next: NextFunction

@@ -39,27 +39,29 @@ export const registerPost = async (req: Request, res: Response) => {
 // [POST] /user/login
 export const loginPost = async (req: Request, res: Response) => {
   try {
+    const { email, password } = req.body
+
     const user = await User.findOne({
-      email: req.body.email,
+      email: email,
       deleted: false
     })
     if (!user) {
       res.json({
-        code: 400,
-        message: 'Email không tồn tại!'
+        code: 401,
+        message: 'Tài khoản hoặc mật khẩu không chính xác!'
       })
       return
     }
-    if (md5(req.body.password) !== user.password) {
+    if (md5(password) !== user.password) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'Tài khoản hoặc mật khẩu không chính xác!'
       })
       return
     }
     if (user.status === 'inactive') {
       res.json({
-        code: 400,
+        code: 403,
         message: 'Tài khoản đang bị khóa!'
       })
       return
@@ -79,10 +81,16 @@ export const loginPost = async (req: Request, res: Response) => {
         }
       )
     }
-    res.cookie('tokenUser', user.tokenUser)
+    res.cookie('tokenUser', user.tokenUser, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000
+    })
     res.json({
       code: 200,
-      message: 'Đăng nhập thành công!'
+      message: 'Đăng nhập thành công!',
+      tokenUser: user.tokenUser
     })
   } catch (error) {
     res.json({
