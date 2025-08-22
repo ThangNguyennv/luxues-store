@@ -1,4 +1,4 @@
-import { type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/admin/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
@@ -6,6 +6,8 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 export const useLoginAdmin = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
+  const [showPassword, setShowPassword] = useState(false)
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
@@ -38,6 +40,8 @@ export const useLoginAdmin = () => {
     }
   }
   return {
-    handleSubmit
+    handleSubmit,
+    showPassword,
+    setShowPassword
   }
 }
