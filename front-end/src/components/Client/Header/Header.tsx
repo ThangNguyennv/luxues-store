@@ -4,9 +4,39 @@ import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
 import logo from '~/assets/images/Header/logo.png'
-import { Link } from 'react-router-dom'
+import Menu from '@mui/material/Menu'
+import { useState } from 'react'
+import MenuItem from '@mui/material/MenuItem'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { useAuth } from '~/contexts/client/AuthContext'
+import { fetchLogoutAPI } from '~/apis/client/auth.api'
 
 const Header = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const { accountUser, setAccountUser } = useAuth()
+  const navigate = useNavigate()
+  const { dispatchAlert } = useAlertContext()
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => setAnchorEl(null)
+  const handleLogout = async () => {
+    const response = await fetchLogoutAPI()
+    if (response.code === 200) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setAccountUser(null)
+      setTimeout(() => {
+        navigate('/user/login')
+      })
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
   return (
     <>
       {/* Top header */}
@@ -68,9 +98,46 @@ const Header = () => {
               <a href="#">
                 <IoMdCart />
               </a>
-              <Link to={'/user/login'}>
+              <div
+                onMouseEnter={(event) => handleOpen(event)}
+                onMouseLeave={handleClose}
+                className='flex items-center justify-center gap-[5px]'
+              >
                 <FaRegUserCircle />
-              </Link>
+                <span>{accountUser ? accountUser.fullName : 'Khách'}</span>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  slotProps={{
+                    paper: {
+                      onMouseEnter: () => setAnchorEl(anchorEl), // giữ menu khi hover
+                      onMouseLeave: handleClose // rời ra thì đóng
+                    }
+                  }}
+                >
+                  <MenuItem sx={{
+                    '&:hover': {
+                      backgroundColor: '#E0F2FE',
+                      color: '#00A7E6'
+                    }
+                  }}>Thông tin tài khoản</MenuItem>
+                  <MenuItem sx={{
+                    '&:hover': {
+                      backgroundColor: '#E0F2FE',
+                      color: '#00A7E6'
+                    }
+                  }}>Cài đặt</MenuItem>
+                  <MenuItem sx={{
+                    '&:hover': {
+                      backgroundColor: '#E0F2FE',
+                      color: '#00A7E6'
+                    }
+                  }}>
+                    <div onClick={handleLogout}>Đăng xuất</div>
+                  </MenuItem>
+                </Menu>
+              </div>
             </div>
           </div>
         </div>

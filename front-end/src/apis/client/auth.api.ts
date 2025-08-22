@@ -10,6 +10,14 @@ export const fetchLoginAPI = async (email: string, password: string) => {
   return response.data
 }
 
+export const fetchLogoutAPI = async () => {
+  const response = await axios.get(
+    `${API_ROOT}/user/logout`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
 export const fetchRegisterAPI = async (fullName: string, email: string, password: string, confirmPassword: string) => {
   const response = await axios.post(
     `${API_ROOT}/user/register`,
