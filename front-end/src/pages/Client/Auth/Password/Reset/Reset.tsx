@@ -1,31 +1,26 @@
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { fetchLoginAPI } from '~/apis/client/auth.api'
+import { useNavigate } from 'react-router-dom'
+import { fetchResetPasswordOTPAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 
-const LoginClient = () => {
+const Reset = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
-    const email = form.email.value
     const password = form.password.value
-    const response = await fetchLoginAPI(email, password)
+    const confirmPassword = form.confirmPassword.value
+    const response = await fetchResetPasswordOTPAPI(password, confirmPassword)
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/')
+        navigate('/user/login')
       }, 1500)
     } else if (response.code === 401) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
-    } else if (response.code == 403) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'error' }
@@ -49,40 +44,27 @@ const LoginClient = () => {
             onSubmit={(event) => handleSubmit(event)}
             className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50"
           >
-            <div className='text-[20px] font-[500]'>Đăng nhập</div>
-            <input
-              type='email'
-              name='email'
-              placeholder="Email"
-              className="border rounded-[5px] p-[10px]"
-            />
+            <div className='text-[20px] font-[500]'>Đổi mật khẩu</div>
             <input
               type='password'
               name='password'
               placeholder="Mật khẩu"
               className="border rounded-[5px] p-[10px]"
+              required
+            />
+            <input
+              type='password'
+              name='confirmPassword'
+              placeholder="Xác nhận lại mật khẩu"
+              className="border rounded-[5px] p-[10px]"
+              required
             />
             <button
               type='submit'
               className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'
             >
-              Đăng nhập
+              Đổi mật khẩu
             </button>
-            <Link
-              to={'/user/password/forgot'}
-              className='hover:underline text-[15px] text-[#003459]'
-            >
-              Quên mật khẩu?
-            </Link>
-            <div className="flex items-center justify-center gap-[5px]">
-              <p className='text-[15px]'>Bạn mới biết đến LUXUES STORE?</p>
-              <Link
-                to={'/user/register'}
-                className='text-[#525FE1] font-[600] hover:underline'
-              >
-                Đăng ký
-              </Link>
-            </div>
           </form>
         </div>
       </div>
@@ -90,4 +72,4 @@ const LoginClient = () => {
   )
 }
 
-export default LoginClient
+export default Reset

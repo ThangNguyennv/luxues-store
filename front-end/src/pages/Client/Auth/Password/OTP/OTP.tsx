@@ -1,31 +1,30 @@
-import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { fetchLoginAPI } from '~/apis/client/auth.api'
+import { useState, type FormEvent } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { fetchForgotPasswordAPI, fetchOTPPasswordAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 
-const LoginClient = () => {
+const OTP = () => {
   const navigate = useNavigate()
+  const [isSending, setIsSending] = useState(false)
   const { dispatchAlert } = useAlertContext()
+  const [searchParams] = useSearchParams()
+  const email = searchParams.get('email') ?? '' // luôn là string
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
     const email = form.email.value
-    const password = form.password.value
-    const response = await fetchLoginAPI(email, password)
+    const otp = form.otp.value
+    const response = await fetchOTPPasswordAPI(email, otp)
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/')
+        navigate('/user/password/reset')
       }, 1500)
     } else if (response.code === 401) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
-    } else if (response.code == 403) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'error' }
@@ -36,6 +35,28 @@ const LoginClient = () => {
         payload: { message: response.message, severity: 'error' }
       })
     }
+  }
+  const handleClick = async () => {
+    if (isSending) return
+    setIsSending(true)
+    const response = await fetchForgotPasswordAPI(email)
+    if (response.code === 200) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+    } else if (response.code === 401) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'error' }
+      })
+    } else if (response.code === 400) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'error' }
+      })
+    }
+    setIsSending(false)
   }
   return (
     <>
@@ -49,40 +70,34 @@ const LoginClient = () => {
             onSubmit={(event) => handleSubmit(event)}
             className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50"
           >
-            <div className='text-[20px] font-[500]'>Đăng nhập</div>
+            <div className='text-[20px] font-[500]'>Lấy lại mật khẩu</div>
             <input
               type='email'
               name='email'
               placeholder="Email"
               className="border rounded-[5px] p-[10px]"
+              value={email}
+              readOnly
             />
             <input
-              type='password'
-              name='password'
-              placeholder="Mật khẩu"
+              type='text'
+              name='otp'
+              placeholder="Nhập mã OTP"
               className="border rounded-[5px] p-[10px]"
+              required
             />
+            <div
+              onClick={handleClick}
+              className={`hover:underline text-[14px] font-[400] text-[#0A033C] cursor-pointer flex items-center justify-start ${isSending ? 'opacity-50 pointer-events-none' : ''}`}
+            >
+              {isSending ? 'Đang gửi...' : 'Gửi lại mã OTP?'}
+            </div>
             <button
               type='submit'
               className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'
             >
-              Đăng nhập
+              Xác nhận mã OTP
             </button>
-            <Link
-              to={'/user/password/forgot'}
-              className='hover:underline text-[15px] text-[#003459]'
-            >
-              Quên mật khẩu?
-            </Link>
-            <div className="flex items-center justify-center gap-[5px]">
-              <p className='text-[15px]'>Bạn mới biết đến LUXUES STORE?</p>
-              <Link
-                to={'/user/register'}
-                className='text-[#525FE1] font-[600] hover:underline'
-              >
-                Đăng ký
-              </Link>
-            </div>
           </form>
         </div>
       </div>
@@ -90,4 +105,4 @@ const LoginClient = () => {
   )
 }
 
-export default LoginClient
+export default OTP
