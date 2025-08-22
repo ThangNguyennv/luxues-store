@@ -15,5 +15,5 @@ export interface UsersDetailInterface {
 }
 
 export interface UserDetailInterface {
-  user: UserInfoInterface
+  accountUser: UserInfoInterface
 }

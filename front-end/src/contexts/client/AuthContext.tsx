@@ -1,18 +1,18 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { MyAccountDetailInterface } from '~/types/account.type'
+import type { UserDetailInterface } from '~/types/user.type'
 
 interface AuthContextType {
-    myAccount: MyAccountDetailInterface['myAccount'] | null
-    setMyAccount: (account: MyAccountDetailInterface['myAccount'] | null) => void
+    accountUser: UserDetailInterface['accountUser'] | null
+    setAccountUser: (user: UserDetailInterface['accountUser'] | null) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthAdminProvider = ({ children }: { children: ReactNode }) => {
-  const [myAccount, setMyAccount] = useState<AuthContextType['myAccount']>(null)
+export const AuthClientProvider = ({ children }: { children: ReactNode }) => {
+  const [accountUser, setAccountUser] = useState<AuthContextType['accountUser']>(null)
   return (
-    <AuthContext.Provider value={{ myAccount, setMyAccount }}>
+    <AuthContext.Provider value={{ accountUser, setAccountUser }}>
       {children}
     </AuthContext.Provider>
   )

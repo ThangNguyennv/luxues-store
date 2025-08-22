@@ -70,7 +70,7 @@ const LoginClient = () => {
             </button>
             <Link
               to={'/user/password/forgot'}
-              className='hover:underline text-[15px] text-[#003459]'
+              className='hover:underline text-[14px] text-[#003459] flex items-center justify-start'
             >
               Quên mật khẩu?
             </Link>

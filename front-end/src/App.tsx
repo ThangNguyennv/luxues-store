@@ -22,7 +22,6 @@ import User from './pages/admin/User'
 import Login from './pages/admin/Auth/Login'
 import Permission from './pages/admin/Role/Permission'
 import EditMyAccount from './pages/admin/MyAccount/Edit'
-import PrivateRoute from './components/admin/PrivateRoute/PrivateRoute '
 import DetailProduct from './pages/admin/Product/Detail'
 import EditProduct from './pages/admin/Product/Edit'
 import CreateProduct from './pages/admin/Product/Create'
@@ -50,6 +49,8 @@ import RegisterClient from './pages/client/Auth/Register/Register'
 import Forgot from './pages/client/Auth/Password/Forgot/Forgot'
 import OTP from './pages/client/Auth/Password/OTP/OTP'
 import Reset from './pages/client/Auth/Password/Reset/Reset'
+import PrivateRouteAdmin from './components/admin/PrivateRoute/PrivateRoute '
+import PrivateRouteClient from './components/client/PrivateRoute/PrivateRoute'
 
 function App() {
   useEffect(() => {
@@ -64,8 +65,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route element={<LayoutDefault />}>
-            <Route path='/' element={<Home />}/>
+          <Route path='/' element={<PrivateRouteClient><LayoutDefault /></PrivateRouteClient>}>
+            <Route index element={<Home />}/>
             <Route path='products' element={<Product />}/>
           </Route>
           <Route path='user' element={<LayoutAuth />}>
@@ -77,7 +78,7 @@ function App() {
               <Route path='reset' element={ <Reset />}/>
             </Route>
           </Route>
-          <Route path='admin' element={<PrivateRoute><LayoutDefaultAdmin /></PrivateRoute>}>
+          <Route path='admin' element={<PrivateRouteAdmin><LayoutDefaultAdmin /></PrivateRouteAdmin>}>
             <Route index element={ <Dashboard />} />
             <Route path='dashboard' element={ <Dashboard />}/>
             <Route path='orders' element={ <OrderAdmin />}/>

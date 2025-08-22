@@ -4,7 +4,7 @@ import { fetchMyAccountAPI } from '~/apis/admin/myAccount.api'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import type { MyAccountDetailInterface } from '~/types/account.type'
 
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+const PrivateRouteAdmin = ({ children }: { children: JSX.Element }) => {
   const { myAccount, setMyAccount } = useAuth()
   const [loading, setLoading] = useState(true)
 
@@ -20,9 +20,9 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
       })
   }, [setMyAccount])
   if (loading) return null // hoặc một loader
-  if (!myAccount?.token) return <Navigate to="/admin/auth/login" replace />
+  if (!myAccount?.token) return <Navigate to="/admin/auth/login" replace/>
 
   return children
 }
 
-export default PrivateRoute
+export default PrivateRouteAdmin
