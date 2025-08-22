@@ -121,13 +121,17 @@ const Header = () => {
                       backgroundColor: '#E0F2FE',
                       color: '#00A7E6'
                     }
-                  }}>Thông tin tài khoản</MenuItem>
+                  }}>
+                    <Link to={'/user/info'}>Thông tin tài khoản</Link>
+                  </MenuItem>
                   <MenuItem sx={{
                     '&:hover': {
                       backgroundColor: '#E0F2FE',
                       color: '#00A7E6'
                     }
-                  }}>Cài đặt</MenuItem>
+                  }}>
+                    Cài đặt
+                  </MenuItem>
                   <MenuItem sx={{
                     '&:hover': {
                       backgroundColor: '#E0F2FE',

@@ -1,11 +1,14 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { IoEye, IoEyeOff } from 'react-icons/io5'
 
 const LoginClient = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
+  const [showPassword, setShowPassword] = useState(false)
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
@@ -56,12 +59,22 @@ const LoginClient = () => {
               placeholder="Email"
               className="border rounded-[5px] p-[10px]"
             />
-            <input
-              type='password'
-              name='password'
-              placeholder="Mật khẩu"
-              className="border rounded-[5px] p-[10px]"
-            />
+            {/* Ô nhập mật khẩu có icon con mắt */}
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Mật khẩu"
+                className="border rounded-[5px] p-[10px] w-full pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+              >
+                {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </button>
+            </div>
             <button
               type='submit'
               className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'

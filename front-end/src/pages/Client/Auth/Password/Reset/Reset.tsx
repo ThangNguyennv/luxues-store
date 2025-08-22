@@ -1,11 +1,15 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchResetPasswordOTPAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { IoEye, IoEyeOff } from 'react-icons/io5'
 
 const Reset = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const form = event.currentTarget
@@ -45,20 +49,38 @@ const Reset = () => {
             className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50"
           >
             <div className='text-[20px] font-[500]'>Đổi mật khẩu</div>
-            <input
-              type='password'
-              name='password'
-              placeholder="Mật khẩu"
-              className="border rounded-[5px] p-[10px]"
-              required
-            />
-            <input
-              type='password'
-              name='confirmPassword'
-              placeholder="Xác nhận lại mật khẩu"
-              className="border rounded-[5px] p-[10px]"
-              required
-            />
+            {/* Ô nhập mật khẩu có icon con mắt */}
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Mật khẩu"
+                className="border rounded-[5px] p-[10px] w-full pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+              >
+                {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </button>
+            </div>
+            {/* Ô nhập mật khẩu có icon con mắt */}
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                name="confirmPassword"
+                placeholder="Xác nhận lại mật khẩu"
+                className="border rounded-[5px] p-[10px] w-full pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+              >
+                {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </button>
+            </div>
             <button
               type='submit'
               className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'
