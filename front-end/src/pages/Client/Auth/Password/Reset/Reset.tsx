@@ -55,7 +55,7 @@ const Reset = () => {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Mật khẩu"
-                className="border rounded-[5px] p-[10px] w-full pr-10"
+                className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
                 type="button"
@@ -71,7 +71,7 @@ const Reset = () => {
                 type={showConfirmPassword ? 'text' : 'password'}
                 name="confirmPassword"
                 placeholder="Xác nhận lại mật khẩu"
-                className="border rounded-[5px] p-[10px] w-full pr-10"
+                className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
                 type="button"

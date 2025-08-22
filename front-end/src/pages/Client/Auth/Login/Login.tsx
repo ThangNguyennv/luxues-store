@@ -57,7 +57,7 @@ const LoginClient = () => {
               type='email'
               name='email'
               placeholder="Email"
-              className="border rounded-[5px] p-[10px]"
+              className="border rounded-[5px] p-[10px] focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
             />
             {/* Ô nhập mật khẩu có icon con mắt */}
             <div className="relative">
@@ -65,7 +65,7 @@ const LoginClient = () => {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Mật khẩu"
-                className="border rounded-[5px] p-[10px] w-full pr-10"
+                className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
                 type="button"

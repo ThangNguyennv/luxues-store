@@ -1,4 +1,4 @@
-import { IoMdClose } from 'react-icons/io'
+import { IoIosNotifications, IoMdClose } from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5'
 import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
@@ -59,16 +59,16 @@ const Header = () => {
             <button className=" text-[20px] md:hidden inline">
               <FaBars />
             </button>
-            <a
+            <Link
               className="flex items-center justify-between gap-[4px] font-[700] sm:text-[32px] text-[25px] text-primary lg:flex-none flex-1"
-              href=""
+              to={'/'}
             >
               <img
                 src={logo}
                 className='w-[50px] h-[50px] bg-amber-900'
               />
               LUXUES STORE
-            </a>
+            </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
                 <li><a href="/">Trang chủ</a></li>
@@ -94,6 +94,9 @@ const Header = () => {
             <div className="flex items-center gap-x-[14px] text-[21px]">
               <a className="lg:hidden inline" href="#">
                 <IoSearch />
+              </a>
+              <a href='#'>
+                <IoIosNotifications />
               </a>
               <a href="#">
                 <IoMdCart />

@@ -75,7 +75,7 @@ const OTP = () => {
               type='email'
               name='email'
               placeholder="Email"
-              className="border rounded-[5px] p-[10px]"
+              className="border rounded-[5px] p-[10px] focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               value={email}
               readOnly
             />
@@ -83,7 +83,7 @@ const OTP = () => {
               type='text'
               name='otp'
               placeholder="Nhập mã OTP"
-              className="border rounded-[5px] p-[10px]"
+              className="border rounded-[5px] p-[10px] focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
             <div

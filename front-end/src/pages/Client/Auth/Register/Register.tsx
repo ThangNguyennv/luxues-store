@@ -55,14 +55,14 @@ const RegisterClient = () => {
               type='text'
               name='fullName'
               placeholder="Họ và tên"
-              className="border rounded-[5px] p-[10px]"
+              className="border rounded-[5px] p-[10px] focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
             <input
               type='email'
               name='email'
               placeholder="Email"
-              className="border rounded-[5px] p-[10px]"
+              className="border rounded-[5px] p-[10px] focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               required
             />
             {/* Ô nhập mật khẩu có icon con mắt */}
@@ -71,7 +71,7 @@ const RegisterClient = () => {
                 type={showPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Mật khẩu"
-                className="border rounded-[5px] p-[10px] w-full pr-10"
+                className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
                 type="button"
@@ -87,7 +87,7 @@ const RegisterClient = () => {
                 type={showConfirmPassword ? 'text' : 'password'}
                 name="confirmPassword"
                 placeholder="Xác nhận lại mật khẩu"
-                className="border rounded-[5px] p-[10px] w-full pr-10"
+                className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
                 type="button"

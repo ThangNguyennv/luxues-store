@@ -23,7 +23,7 @@ const Login = () => {
                 <label htmlFor='email' className="text-[15px] font-[500]">Email:</label>
                 <input
                   type="email"
-                  className="border rounded-[5px] p-[10px] w-full pr-10"
+                  className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                   name="email"
                   placeholder='Email'
                   required
@@ -37,7 +37,7 @@ const Login = () => {
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     placeholder="Mật khẩu"
-                    className="border rounded-[5px] p-[10px] w-full pr-10"
+                    className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                     required
                   />
                   <button

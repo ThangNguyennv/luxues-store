@@ -3,6 +3,7 @@ import { FaRegUserCircle } from 'react-icons/fa'
 import { useHeader } from '~/hooks/admin/header/useHeader'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { IoIosNotificationsOutline } from 'react-icons/io'
 
 const Header = () => {
   const {
@@ -21,8 +22,9 @@ const Header = () => {
         <div
           onMouseEnter={(event) => handleOpen(event)}
           onMouseLeave={handleClose}
-          className='flex items-center justify-center gap-[5px]'
+          className='flex items-center justify-center gap-[8px]'
         >
+          <IoIosNotificationsOutline />
           <FaRegUserCircle />
           <span>{myAccount ? myAccount.fullName : 'Khách'}</span>
           <Menu
