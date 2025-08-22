@@ -2,12 +2,18 @@ import { useNavigate } from 'react-router-dom'
 import { fetchLogoutAPI } from '~/apis/admin/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
+import { useState } from 'react'
 
 export const useHeader = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
   const { myAccount, setMyAccount } = useAuth()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => setAnchorEl(null)
   const handleLogout = async (): Promise<void> => {
     const response = await fetchLogoutAPI()
     if (response.code === 200) {
@@ -26,6 +32,10 @@ export const useHeader = () => {
   }
   return {
     myAccount,
-    handleLogout
+    handleLogout,
+    handleOpen,
+    handleClose,
+    anchorEl,
+    setAnchorEl
   }
 }
