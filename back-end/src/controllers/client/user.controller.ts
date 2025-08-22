@@ -32,13 +32,6 @@ export const registerPost = async (req: Request, res: Response) => {
     }
     req.body.password = md5(req.body.password)
     req.body.confirmPassword = md5(req.body.confirmPassword)
-    if (req.body.password !== req.body.confirmPassword) {
-        res.json({
-        code: 400,
-        message: 'Mật khẩu xác nhận không đúng! Vui lòng nhập lại.'
-      })
-      return
-    }
     const user = new User(req.body)
     await user.save()
     // res.cookie('tokenUser', user.tokenUser, {
@@ -49,7 +42,7 @@ export const registerPost = async (req: Request, res: Response) => {
     // })
     res.json({
       code: 200,
-      message: 'Đăng ký tài khoản thành công! Mời bạn đăng nhập lại tài khoản và mật khẩu.'
+      message: 'Đăng ký tài khoản thành công, mời bạn đăng nhập lại để tiếp tục!'
     })
   } catch (error) {
     res.json({
@@ -153,7 +146,7 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
     })
     if (!user) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'Email không tồn tại!'
       })
       return
@@ -205,7 +198,7 @@ export const otpPasswordPost = async (req: Request, res: Response) => {
     })
     if (!result) {
       res.json({
-        code: 400,
+        code: 401,
         message: 'OTP không hợp lệ!'
       })
       return

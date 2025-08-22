@@ -8,7 +8,7 @@ export const registerPost = (
   if (!req.body.fullName) {
     res.json({
       code: 400,
-      message: 'Vui lòng nhập họ tên!'
+      message: 'Vui lòng nhập tên đăng nhập!'
     })
     return
   }
@@ -25,6 +25,22 @@ export const registerPost = (
     res.json({
       code: 400,
       message: 'Vui lòng nhập mật khẩu!'
+    })
+    return
+  }
+
+  if (!req.body.confirmPassword) {
+    res.json({
+      code: 400,
+      message: 'Vui lòng nhập xác nhận mật khẩu!'
+    })
+    return
+  }
+
+  if (req.body.password != req.body.confirmPassword) {
+    res.json({
+      code: 400,
+      message: 'Mật khẩu không khớp, vui lòng nhập lại!'
     })
     return
   }
@@ -65,6 +81,21 @@ export const forgotPasswordPost = (
   next()
 }
 
+export const otpPasswordPost = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.body.otp) {
+    res.json({
+      code: 400,
+      message: 'Vui lòng nhập mã OTP!'
+    })
+    return
+  }
+  next()
+}
+
 export const resetPasswordPost = (
   req: Request,
   res: Response,
@@ -80,14 +111,14 @@ export const resetPasswordPost = (
   if (!req.body.confirmPassword) {
     res.json({
       code: 400,
-      message: 'Vui lòng xác nhận nhập mật khẩu!'
+      message: 'Vui lòng nhập xác nhận mật khẩu!'
     })
     return
   }
   if (req.body.password != req.body.confirmPassword) {
     res.json({
       code: 400,
-      message: 'Mật khẩu không khớp!'
+      message: 'Mật khẩu không khớp, vui lòng nhập lại!'
     })
     return
   }

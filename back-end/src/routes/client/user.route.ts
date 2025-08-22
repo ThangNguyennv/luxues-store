@@ -16,14 +16,20 @@ router.post(
   validate.forgotPasswordPost,
   controller.forgotPasswordPost
 )
-router.post('/password/otp', controller.otpPasswordPost)
+router.post(
+  '/password/otp', 
+  validate.otpPasswordPost,
+  controller.otpPasswordPost)
 router.post(
   '/password/reset',
   validate.resetPasswordPost,
   controller.resetPasswordPost
 )
 // // route private
-router.get('/info', authMiddleware.requireAuth, controller.info)
+router.get(
+  '/info', 
+  authMiddleware.requireAuth, 
+  controller.info)
 router.patch(
   '/info/edit',
   authMiddleware.requireAuth,
