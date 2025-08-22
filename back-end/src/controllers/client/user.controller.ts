@@ -250,14 +250,14 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
 export const info = async (req: Request, res: Response) => {
   try {
     const tokenUser = req.cookies.tokenUser
-    const userInfo = await User.findOne({
+    const accountUser = await User.findOne({
       tokenUser: tokenUser,
       deleted: false
     })
     res.json({
       code: 200,
       message: 'Thông tin tài khoản!',
-      userInfo: userInfo
+      accountUser: accountUser
     })
   } catch (error) {
     res.json({
