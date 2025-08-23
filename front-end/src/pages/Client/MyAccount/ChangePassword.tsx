@@ -3,9 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { fetchChangePasswordInfoUserAPI, fetchInfoUserAPI } from '~/apis/client/user.api'
 import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { IoEye, IoEyeOff } from 'react-icons/io5'
 
 const ChangePassword = () => {
   const [myAccount, setMyAccount] = useState<UserInfoInterface | null>(null)
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
   const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
   useEffect(() => {
@@ -18,9 +23,11 @@ const ChangePassword = () => {
     event.preventDefault()
     if (!myAccount) return
 
-    const formData = new FormData(event.currentTarget)
-
-    const response = await fetchChangePasswordInfoUserAPI(formData)
+    const form = event.currentTarget
+    const currentPassword = form.currentPassword.value
+    const password = form.password.value
+    const confirmPassword = form.confirmPassword.value
+    const response = await fetchChangePasswordInfoUserAPI(currentPassword, password, confirmPassword)
     if (response.code === 200) {
       dispatchAlert({
         type: 'SHOW_ALERT',
@@ -29,7 +36,7 @@ const ChangePassword = () => {
       setTimeout(() => {
         navigate('/user/account/info')
       }, 2000)
-    } else if (response.code === 409) {
+    } else if (response.code === 400) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'error' }
@@ -48,39 +55,62 @@ const ChangePassword = () => {
           <div className='flex flex-col w-[40%] gap-[15px]'>
             <h1 className='text-[25px] font-[600] text-center'>Thay đổi mật khẩu tài khoản</h1>
             <div className='flex flex-col gap-[10px]'>
-              <div className='form-group'>
-                <label htmlFor='currentPassword'>Mật khẩu hiện tại: </label>
+              <div className="relative">
                 <input
-                  type='password'
-                  id='currentPassword'
-                  name='currentPassword'
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  name="currentPassword"
+                  placeholder="Mật khẩu hiện tại"
+                  className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+                >
+                  {showCurrentPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                </button>
               </div>
-              <div className='form-group'>
-                <label htmlFor='password'>Mật khẩu mới:</label>
+              <div className="relative">
                 <input
-                  type='password'
-                  id='password'
-                  name='password'
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="Mật khẩu mới"
+                  className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+                >
+                  {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                </button>
               </div>
-              <div className='form-group'>
-                <label htmlFor='confirmPassword'>Xác nhận lại mật khẩu:</label>
+              <div className="relative">
                 <input
-                  type='password'
-                  id='confirmPassword'
-                  name='confirmPassword'
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  placeholder="Xác nhận lại mật khẩu"
+                  className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+                >
+                  {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                </button>
               </div>
-              <button
-                type='submit'
-                className='cursor-pointer border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[40%]'
-              >
-                    Cập nhật
-              </button>
+              <div className='flex items-center justify-center'>
+                <button
+                  type='submit'
+                  className='cursor-pointer border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[40%]'
+                >
+                Cập nhật
+                </button>
+              </div>
             </div>
           </div>
         </form>

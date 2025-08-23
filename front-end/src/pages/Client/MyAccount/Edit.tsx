@@ -102,7 +102,7 @@ const EditMyAccountClient = () => {
               htmlFor='avatar'
               className='text-[20px] font-[600]'
             >
-                    Ảnh đại diện:
+              Ảnh đại diện:
             </label>
             <input
               onChange={(event) => handleChange(event)}
