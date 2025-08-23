@@ -253,7 +253,7 @@ export const info = async (req: Request, res: Response) => {
     const accountUser = await User.findOne({
       tokenUser: tokenUser,
       deleted: false
-    })
+    }).select('-password')
     res.json({
       code: 200,
       message: 'Thông tin tài khoản!',

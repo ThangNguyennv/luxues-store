@@ -25,7 +25,7 @@ router.post(
   validate.resetPasswordPost,
   controller.resetPasswordPost
 )
-// // route private
+// route private
 router.get(
   '/info', 
   authMiddleware.requireAuth, 
