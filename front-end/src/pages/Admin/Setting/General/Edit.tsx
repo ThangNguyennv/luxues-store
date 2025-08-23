@@ -72,7 +72,7 @@ const EditSettingGeneral = () => {
               required
             />
           </div>
-          <div className='form-group'>
+          <div className='flex flex-col gap-[5px]'>
             <label htmlFor='logo'>Logo</label>
             <input
               onChange={(event) => handleChange(event)}
@@ -132,7 +132,7 @@ const EditSettingGeneral = () => {
           </div>
           <button
             type='submit'
-            className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px]'
+            className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px] w-[7%]'
           >
             Cập nhật
           </button>

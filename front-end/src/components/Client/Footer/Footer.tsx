@@ -7,8 +7,10 @@ import applePay from '~/assets/images/Footer/ApplePay.svg'
 import gPay from '~/assets/images/Footer/GPay.svg'
 import masterCard from '~/assets/images/Footer/Mastercard.svg'
 import paypal from '~/assets/images/Footer/Paypal.svg'
+import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
 
 function Footer() {
+  const { settingGeneral, setSettingGeneral } = useSettingGeneral()
   return (
     <>
       <footer className="bg-[#F0F0F0] pt-[148px] lg:pb-[84px] pb-[30px] mt-[-98px]">
@@ -141,7 +143,7 @@ function Footer() {
           </div>
           <div className="flex flex-wrap justify-between mt-[30px]">
             <div className="md:w-auto w-[100%] text-[14px] font-[400] text-[#00000099] flex items-center justify-center md:mb-[0] mb-[20px]">
-              Bản quyền thuộc về Code Craf. Bảo lưu mọi quyền.
+              {settingGeneral ? settingGeneral[0].copyright : ''}
             </div>
             <div className="md:w-auto w-[100%] flex justify-center items-center gap-[12px]">
               <img className="bg-[#FFFFFF] p-[8px] w-[47px] rounded-[5.38px] object-contain" src={ visa }/>

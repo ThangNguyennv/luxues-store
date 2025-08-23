@@ -3,7 +3,6 @@ import { IoSearch } from 'react-icons/io5'
 import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
-import logo from '~/assets/images/Header/logo.png'
 import Menu from '@mui/material/Menu'
 import { useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
@@ -12,11 +11,21 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
 import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
 import { fetchInfoUserAPI } from '~/apis/client/user.api'
+import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
+import { fetchSettingGeneralAPI } from '~/apis/admin/settingGeneral.api'
+import type { SettingGeneralDetailInterface } from '~/types/setting.type'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
-  // console.log("🚀 ~ Header.tsx ~ Header ~ accountUser:", accountUser);
+  const { settingGeneral, setSettingGeneral } = useSettingGeneral()
+
+  useEffect(() => {
+    fetchSettingGeneralAPI().then((response: SettingGeneralDetailInterface) => {
+      setSettingGeneral(response.settingGeneral)
+    })
+  }, [setSettingGeneral])
+
   useEffect(() => {
     fetchInfoUserAPI().then((response: UserDetailInterface) => {
       setAccountUser(response.accountUser)
@@ -68,14 +77,14 @@ const Header = () => {
               <FaBars />
             </button>
             <Link
-              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[32px] text-[25px] text-primary lg:flex-none flex-1"
+              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[30px] text-[25px] text-primary lg:flex-none flex-1"
               to={'/'}
             >
               <img
-                src={logo}
+                src={settingGeneral ? settingGeneral[0].logo : ''}
                 className='w-[50px] h-[50px] bg-amber-900'
               />
-              LUXUES STORE
+              <span className='uppercase'>{settingGeneral ? settingGeneral[0].websiteName : ''}</span>
             </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
