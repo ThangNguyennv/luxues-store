@@ -20,8 +20,8 @@ const MyAccountClient = () => {
     <>
       {myAccount && (
         <div className="flex items-center justify-center gap-[70px] p-[70px] mt-[40px] mb-[80px]">
-          <div className="container border rounded-[5px] flex justify-between gap-[20px] p-[20px]">
-            <div className='flex flex-col gap-[5px]'>
+          <div className="container border rounded-[5px] flex justify-around gap-[20px] p-[20px] shadow-lg">
+            <div className='flex flex-col gap-[5px] text-[17px] font-[500]'>
               <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[4px]'>
                 <IoIosNotifications />
                 <p>Thông báo</p>
@@ -31,7 +31,7 @@ const MyAccountClient = () => {
                 className='flex items-center gap-[5px] cursor-pointer'
               >
                 <FaRegUser />
-                <span>Tài khoản của tôi</span>
+                <span className='hover:underline hover:text-[#00A7E6]'>Tài khoản của tôi</span>
                 <span>{isOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
               </button>
               <div className={`
@@ -55,12 +55,12 @@ const MyAccountClient = () => {
                 Kho Voucher
               </div>
             </div>
-            <div className='w-[70%] flex flex-col gap-[15px]'>
-              <div className=''>
-                <h1 className='text-[25px] font-[600]'>Hồ sơ của tôi</h1>
-                <p className='text-[20px] font-[500]'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-              </div>
-              <div className='flex justify-between gap-[10px]'>
+            <div className='w-[70%] flex justify-around gap-[15px]'>
+              <div className='flex flex-col gap-[15px]'>
+                <div>
+                  <h1 className='text-[25px] font-[600]'>Hồ sơ của tôi</h1>
+                  <p className='text-[20px] font-[500]'>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                </div>
                 <div className='flex flex-col gap-[10px]'>
                   <div>
                     Họ và tên: <b>{myAccount.fullName}</b>
@@ -69,15 +69,22 @@ const MyAccountClient = () => {
                     Email: <b>{myAccount.email}</b>
                   </div>
                   <div>
-                  </div>
-                  <div>
                     Số điện thoại: <b>{myAccount.phone}</b>
                   </div>
-                  <Link to={'/user/info/edit'} className='border rounded-[5px] p-[10px] bg-[#525FE1] text-white text-center w-[50%]'>Chỉnh sửa</Link>
+                  <Link
+                    to={'/user/info/edit'}
+                    className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[30%]'
+                  >
+                    Chỉnh sửa
+                  </Link>
                 </div>
-                <div>
-                  Avatar: <img src={myAccount.avatar}/>
-                </div>
+              </div>
+              <div className='flex flex-col gap-[5px] text-center'>
+                <span className='text-[20px] font-[600]'>Ảnh đại diện:</span>
+                <img
+                  className='border rounded-[100%] w-[250px] h-[250px]'
+                  src={myAccount.avatar}
+                />
               </div>
             </div>
           </div>
