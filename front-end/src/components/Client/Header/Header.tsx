@@ -79,7 +79,11 @@ const Header = () => {
             </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
-                <li><Link to="/">Trang chủ</Link></li>
+                <li>
+                  <Link to="/">
+                    Trang chủ
+                  </Link>
+                </li>
                 <li><Link to="">Trang phục</Link></li>
                 <li><Link to="">Phụ kiện</Link></li>
                 <li><Link to="">Thương hiệu</Link></li>

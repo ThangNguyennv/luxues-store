@@ -5,6 +5,7 @@ import Section4 from './Section4'
 import Section5 from './Section5'
 import Section6 from './Section6'
 import Section7 from './Section7'
+import Section8 from './Section8'
 
 const Home = () => {
   // let productListNew = [
@@ -62,6 +63,7 @@ const Home = () => {
       <Section3 />
       <Section4 />
       <Section5 />
+      <Section8 />
       <Section6 />
       <Section7 />
     </>
