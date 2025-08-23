@@ -93,7 +93,7 @@ const CreateAccount = () => {
             <label htmlFor="phone">Số điện thoại</label>
             <input
               onChange={(event) => setAccountInfo({ ...accountInfo, phone: event.target.value })}
-              type="text"
+              type="tel"
               id="phone"
               name="phone"
             />

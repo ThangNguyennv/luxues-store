@@ -10,7 +10,7 @@ const DetailUser = () => {
 
   useEffect(() => {
     fetchDetailUserAPI(id).then((response: UserDetailInterface) => {
-      setUser(response.user)
+      setUser(response.accountUser)
     })
   }, [id])
 

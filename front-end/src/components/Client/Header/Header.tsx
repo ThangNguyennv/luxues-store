@@ -125,7 +125,7 @@ const Header = () => {
                       color: '#00A7E6'
                     }
                   }}>
-                    <Link to={'/user/info'}>Thông tin tài khoản</Link>
+                    <Link to={'/user/account/info'}>Thông tin tài khoản</Link>
                   </MenuItem>
                   <MenuItem sx={{
                     '&:hover': {

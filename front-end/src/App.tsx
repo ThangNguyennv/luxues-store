@@ -52,6 +52,7 @@ import Reset from './pages/client/Auth/Password/Reset/Reset'
 import PrivateRouteAdmin from './components/admin/PrivateRoute/PrivateRoute '
 import PrivateRouteClient from './components/client/PrivateRoute/PrivateRoute'
 import MyAccountClient from './pages/client/MyAccount'
+import EditMyAccountClient from './pages/client/MyAccount/Edit'
 
 function App() {
   useEffect(() => {
@@ -69,7 +70,8 @@ function App() {
           <Route path='/' element={<PrivateRouteClient><LayoutDefault /></PrivateRouteClient>}>
             <Route index element={<Home />}/>
             <Route path='products' element={<Product />}/>
-            <Route path='user/info' element={ <MyAccountClient />}/>
+            <Route path='user/account/info' element={ <MyAccountClient />}/>
+            <Route path='user/account/info/edit' element={ <EditMyAccountClient />}/>
           </Route>
           <Route path='user' element={<LayoutAuth />}>
             <Route path='login' element={<LoginClient />} />

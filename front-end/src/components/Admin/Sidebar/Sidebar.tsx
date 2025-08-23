@@ -44,7 +44,6 @@ const Sidebar = () => {
         {isOpen ? <BiMenuAltRight /> : <IoMenu />}
       </button>
       {/* Menu */}
-
       {/* Tổng quan */}
       <div
         className='flex flex-col text-white cursor-pointer'
@@ -321,7 +320,6 @@ const Sidebar = () => {
         </Link>
       </div>
       {/* Hết thùng rác */}
-
       {/* Hết menu */}
     </div>
   )

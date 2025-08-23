@@ -14,7 +14,7 @@ const EditUser = () => {
   useEffect(() => {
     if (!id) return
     fetchDetailUserAPI(id).then((response: UserDetailInterface) => {
-      setUserInfo(response.user)
+      setUserInfo(response.accountUser)
     })
   }, [id])
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
@@ -99,7 +99,7 @@ const EditUser = () => {
             <label htmlFor="phone">Số điện thoại</label>
             <input
               onChange={(event) => setUserInfo({ ...userInfo, phone: event.target.value })}
-              type="phone"
+              type="tel"
               id="phone"
               name="phone"
               value={userInfo.phone}

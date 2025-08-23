@@ -71,8 +71,7 @@ const EditMyAccount = () => {
             <input onChange={(event) =>
               setAccountInfo({ ...accountInfo, phone: event.target.value })
             }
-            type="phone"
-            className=""
+            type="tel"
             id='phone'
             name="phone"
             value={accountInfo.phone}

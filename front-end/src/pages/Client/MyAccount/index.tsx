@@ -6,6 +6,7 @@ import { fetchInfoUserAPI } from '~/apis/client/user.api'
 import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
 import { LiaFileInvoiceSolid } from 'react-icons/lia'
 import { LuTicket } from 'react-icons/lu'
+import { BsCoin } from 'react-icons/bs'
 
 const MyAccountClient = () => {
   const [myAccount, setMyAccount] = useState<UserInfoInterface | null>(null)
@@ -20,18 +21,18 @@ const MyAccountClient = () => {
     <>
       {myAccount && (
         <div className="flex items-center justify-center gap-[70px] p-[70px] mt-[40px] mb-[80px]">
-          <div className="container border rounded-[5px] flex justify-around gap-[20px] p-[20px] shadow-lg">
-            <div className='flex flex-col gap-[5px] text-[17px] font-[500]'>
+          <div className="container flex justify-around gap-[20px] p-[20px] shadow-lg">
+            <div className='flex flex-col gap-[5px] text-[17px] font-[500] p-[10px]'>
               <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[4px]'>
                 <IoIosNotifications />
-                <p>Thông báo</p>
+                <p>Thông Báo</p>
               </div>
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className='flex items-center gap-[5px] cursor-pointer'
               >
                 <FaRegUser />
-                <span className='hover:underline hover:text-[#00A7E6]'>Tài khoản của tôi</span>
+                <span className='hover:underline hover:text-[#00A7E6]'>Tài Khoản Của Tôi</span>
                 <span>{isOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
               </button>
               <div className={`
@@ -40,22 +41,29 @@ const MyAccountClient = () => {
                 `}
               >
                 <ul className='flex flex-col gap-2 ml-[22px]'>
-                  <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Hồ sơ</li>
+                  <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>
+                    <Link to={'/user/account/info'}>Hồ sơ</Link>
+                  </li>
+                  <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Ngân hàng</li>
                   <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Địa chỉ</li>
                   <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Đổi mật khẩu</li>
-                  <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Thông tin cá nhân</li>
+                  <li className='hover:underline hover:text-[#00A7E6] cursor-pointer'>Những thiết lập riêng</li>
                 </ul>
               </div>
               <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[5px]'>
                 <LiaFileInvoiceSolid />
-                <span>Đơn mua</span>
+                <span>Đơn Mua</span>
               </div>
               <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[5px]'>
                 <LuTicket />
                 Kho Voucher
               </div>
+              <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[5px]'>
+                <BsCoin />
+                Luxues Xu
+              </div>
             </div>
-            <div className='w-[70%] flex justify-around gap-[15px]'>
+            <div className='w-[70%] flex justify-around gap-[15px] border rounded-[15px] p-[10px]'>
               <div className='flex flex-col gap-[15px]'>
                 <div>
                   <h1 className='text-[25px] font-[600]'>Hồ sơ của tôi</h1>
@@ -72,7 +80,7 @@ const MyAccountClient = () => {
                     Số điện thoại: <b>{myAccount.phone}</b>
                   </div>
                   <Link
-                    to={'/user/info/edit'}
+                    to={'/user/account/info/edit'}
                     className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[30%]'
                   >
                     Chỉnh sửa

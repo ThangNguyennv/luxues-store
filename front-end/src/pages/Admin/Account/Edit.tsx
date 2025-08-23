@@ -99,7 +99,7 @@ const EditAccount = () => {
             <label htmlFor="phone">Số điện thoại</label>
             <input
               onChange={(event) => setAccountInfo({ ...accountInfo, phone: event.target.value })}
-              type="phone"
+              type="tel"
               id="phone"
               name="phone"
               value={accountInfo.phone}
