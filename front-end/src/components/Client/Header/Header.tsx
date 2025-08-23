@@ -5,16 +5,24 @@ import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
 import logo from '~/assets/images/Header/logo.png'
 import Menu from '@mui/material/Menu'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useAuth } from '~/contexts/client/AuthContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
+import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
+import { fetchInfoUserAPI } from '~/apis/client/user.api'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const { accountUser, setAccountUser } = useAuth()
+  const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
+  // console.log("🚀 ~ Header.tsx ~ Header ~ accountUser:", accountUser);
+  useEffect(() => {
+    fetchInfoUserAPI().then((response: UserDetailInterface) => {
+      setAccountUser(response.accountUser)
+    })
+  }, [])
+
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,7 +38,7 @@ const Header = () => {
       })
       setAccountUser(null)
       setTimeout(() => {
-        navigate('/user/login')
+        navigate('/')
       })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
@@ -71,11 +79,11 @@ const Header = () => {
             </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
-                <li><a href="/">Trang chủ</a></li>
-                <li><a href="">Trang phục</a></li>
-                <li><a href="">Phụ kiện</a></li>
-                <li><a href="">Thương hiệu</a></li>
-                <li><a href="">Bài Viết</a></li>
+                <li><Link to="/">Trang chủ</Link></li>
+                <li><Link to="">Trang phục</Link></li>
+                <li><Link to="">Phụ kiện</Link></li>
+                <li><Link to="">Thương hiệu</Link></li>
+                <li><Link to="">Bài Viết</Link></li>
               </ul>
             </nav>
             <form
@@ -101,50 +109,88 @@ const Header = () => {
               <a href="#">
                 <IoMdCart />
               </a>
-              <div
-                onMouseEnter={(event) => handleOpen(event)}
-                onMouseLeave={handleClose}
-                className='flex items-center justify-center gap-[5px]'
-              >
-                <FaRegUserCircle />
-                <span>{accountUser ? accountUser.fullName : 'Khách'}</span>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  slotProps={{
-                    paper: {
-                      onMouseEnter: () => setAnchorEl(anchorEl), // giữ menu khi hover
-                      onMouseLeave: handleClose // rời ra thì đóng
-                    }
-                  }}
+              {accountUser ? (
+                <div
+                  onMouseEnter={(event) => handleOpen(event)}
+                  onMouseLeave={handleClose}
+                  className='flex items-center justify-center gap-[5px]'
                 >
-                  <MenuItem sx={{
-                    '&:hover': {
-                      backgroundColor: '#E0F2FE',
-                      color: '#00A7E6'
-                    }
-                  }}>
-                    <Link to={'/user/account/info'}>Thông tin tài khoản</Link>
-                  </MenuItem>
-                  <MenuItem sx={{
-                    '&:hover': {
-                      backgroundColor: '#E0F2FE',
-                      color: '#00A7E6'
-                    }
-                  }}>
+                  <FaRegUserCircle />
+                  <span>{accountUser.fullName}</span>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    slotProps={{
+                      paper: {
+                        onMouseEnter: () => setAnchorEl(anchorEl), // giữ menu khi hover
+                        onMouseLeave: handleClose // rời ra thì đóng
+                      }
+                    }}
+                  >
+                    <MenuItem sx={{
+                      '&:hover': {
+                        backgroundColor: '#E0F2FE',
+                        color: '#00A7E6'
+                      }
+                    }}>
+                      <Link to={'/user/account/info'}>Thông tin tài khoản</Link>
+                    </MenuItem>
+                    <MenuItem sx={{
+                      '&:hover': {
+                        backgroundColor: '#E0F2FE',
+                        color: '#00A7E6'
+                      }
+                    }}>
                     Cài đặt
-                  </MenuItem>
-                  <MenuItem sx={{
-                    '&:hover': {
-                      backgroundColor: '#E0F2FE',
-                      color: '#00A7E6'
-                    }
-                  }}>
-                    <div onClick={handleLogout}>Đăng xuất</div>
-                  </MenuItem>
-                </Menu>
-              </div>
+                    </MenuItem>
+                    <MenuItem sx={{
+                      '&:hover': {
+                        backgroundColor: '#E0F2FE',
+                        color: '#00A7E6'
+                      }
+                    }}>
+                      <div onClick={handleLogout}>Đăng xuất</div>
+                    </MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                <div
+                  onMouseEnter={(event) => handleOpen(event)}
+                  onMouseLeave={handleClose}
+                  className='flex items-center justify-center gap-[5px]'
+                >
+                  <FaRegUserCircle />
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                    slotProps={{
+                      paper: {
+                        onMouseEnter: () => setAnchorEl(anchorEl), // giữ menu khi hover
+                        onMouseLeave: handleClose // rời ra thì đóng
+                      }
+                    }}
+                  >
+                    <MenuItem sx={{
+                      '&:hover': {
+                        backgroundColor: '#E0F2FE',
+                        color: '#00A7E6'
+                      }
+                    }}>
+                      <Link to={'/user/login'}>Đăng nhập</Link>
+                    </MenuItem>
+                    <MenuItem sx={{
+                      '&:hover': {
+                        backgroundColor: '#E0F2FE',
+                        color: '#00A7E6'
+                      }
+                    }}>
+                      <Link to={'/user/register'}>Đăng ký</Link>
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
             </div>
           </div>
         </div>

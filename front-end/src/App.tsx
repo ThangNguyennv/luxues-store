@@ -53,6 +53,8 @@ import PrivateRouteAdmin from './components/admin/PrivateRoute/PrivateRoute '
 import PrivateRouteClient from './components/client/PrivateRoute/PrivateRoute'
 import MyAccountClient from './pages/client/MyAccount'
 import EditMyAccountClient from './pages/client/MyAccount/Edit'
+import ChangePassword from './pages/client/MyAccount/ChangePassword'
+import LayoutUser from './layouts/client/layoutUser/LayoutUser'
 
 function App() {
   useEffect(() => {
@@ -67,11 +69,26 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<PrivateRouteClient><LayoutDefault /></PrivateRouteClient>}>
+          <Route path='/' element={<LayoutDefault />}>
             <Route index element={<Home />}/>
             <Route path='products' element={<Product />}/>
-            <Route path='user/account/info' element={ <MyAccountClient />}/>
-            <Route path='user/account/info/edit' element={ <EditMyAccountClient />}/>
+            <Route path='user' element={<PrivateRouteClient><LayoutUser /></PrivateRouteClient>}>
+              <Route path='notification'></Route>
+              <Route path='account'>
+                <Route path='info'>
+                  <Route index element={ <MyAccountClient />} />
+                  <Route path='edit' element={ <EditMyAccountClient />}/>
+                  <Route path='change-password' element={ <ChangePassword />}/>
+                </Route>
+                <Route path='payment'></Route>
+                <Route path='address'></Route>
+                <Route path='setting-privacy'></Route>
+              </Route>
+              <Route path='purchase'></Route>
+              <Route path='voucher-wallet'></Route>
+              <Route path='coin'></Route>
+            </Route>
+            <Route path='cart'></Route>
           </Route>
           <Route path='user' element={<LayoutAuth />}>
             <Route path='login' element={<LoginClient />} />
