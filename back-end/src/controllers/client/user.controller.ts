@@ -253,7 +253,7 @@ export const info = async (req: Request, res: Response) => {
     const accountUser = await User.findOne({
       tokenUser: tokenUser,
       deleted: false
-    }).select('-password')
+    })
     res.json({
       code: 200,
       message: 'Thông tin tài khoản!',
@@ -308,7 +308,7 @@ export const changePasswordPatch = async (req: Request, res: Response) => {
       if (md5(req.body.currentPassword) != user.password) {
         res.json({
           code: 400,
-          message: 'Mật khẩu hiện tại không chính xác!'
+          message: 'Mật khẩu hiện tại không chính xác, vui lòng nhập lại!'
         })
         return
       }
@@ -320,7 +320,7 @@ export const changePasswordPatch = async (req: Request, res: Response) => {
       await User.updateOne({ email: req['accountUser'].email }, req.body)
       res.json({
         code: 400,
-        message: 'Đã đổi mật khẩu thành công!'
+        message: 'Đã đổi mật khẩu tài khoản thành công!'
       })
     }
   } catch (error) {
