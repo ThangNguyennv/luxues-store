@@ -173,7 +173,7 @@ export const changePasswordPatch = (
   if (req.body.password != req.body.confirmPassword) {
     res.json({
       code: 400,
-      message: 'Mật khẩu không khớp!'
+      message: 'Mật khẩu không khớp, vui lòng nhập lại!'
     })
     return
   }

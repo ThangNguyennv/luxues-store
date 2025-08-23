@@ -319,7 +319,7 @@ export const changePasswordPatch = async (req: Request, res: Response) => {
       }
       await User.updateOne({ email: req['accountUser'].email }, req.body)
       res.json({
-        code: 400,
+        code: 200,
         message: 'Đã đổi mật khẩu tài khoản thành công!'
       })
     }
