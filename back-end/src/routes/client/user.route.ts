@@ -27,11 +27,11 @@ router.post(
 )
 // route private
 router.get(
-  '/info', 
+  '/account/info', 
   authMiddleware.requireAuth, 
   controller.info)
 router.patch(
-  '/info/edit',
+  '/account/info/edit',
   authMiddleware.requireAuth,
   multer().single('avatar'),
   uploadCloud,
@@ -39,7 +39,7 @@ router.patch(
   controller.editPatch
 )
 router.patch(
-  '/info/edit/change-password',
+  '/account/info/change-password',
   authMiddleware.requireAuth,
   validate.changePasswordPatch,
   controller.changePasswordPatch
