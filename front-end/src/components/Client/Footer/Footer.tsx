@@ -10,7 +10,7 @@ import paypal from '~/assets/images/Footer/Paypal.svg'
 import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
 
 function Footer() {
-  const { settingGeneral, setSettingGeneral } = useSettingGeneral()
+  const { settingGeneral } = useSettingGeneral()
   return (
     <>
       <footer className="bg-[#F0F0F0] pt-[148px] lg:pb-[84px] pb-[30px] mt-[-98px]">

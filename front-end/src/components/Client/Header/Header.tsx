@@ -84,7 +84,10 @@ const Header = () => {
                 src={settingGeneral ? settingGeneral[0].logo : ''}
                 className='w-[50px] h-[50px] bg-amber-900'
               />
-              <span className='uppercase'>{settingGeneral ? settingGeneral[0].websiteName : ''}</span>
+              <span className='uppercase flex flex-col items-center'>
+                <p className='text-[#00171F]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>{settingGeneral ? settingGeneral[0].websiteName : ''}</p>
+                <p className='text-[10px] font-bold text-[#0A033C]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>Lịch lãm - Sang trọng - Quý phái</p>
+              </span>
             </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
