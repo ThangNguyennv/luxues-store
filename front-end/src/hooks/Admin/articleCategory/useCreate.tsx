@@ -16,12 +16,14 @@ export const useCreate = () => {
     thumbnail: '',
     createdBy: {
       account_id: '',
-      createdAt: new Date()
+      // createdAt: new Date()
     },
     updatedBy: [],
     children: [],
     slug: '',
-    parent_id: ''
+    parent_id: '',
+    createdAt: null,
+    updatedAt: null
   }
 
   const [articleCategoryInfo, setArticleCategoryInfo] = useState<ArticleCategoryInfoInterface>(initialArticleCategory)

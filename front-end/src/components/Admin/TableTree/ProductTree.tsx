@@ -11,9 +11,9 @@ interface Props {
   level: number
   selectedIds: string[]
   accounts: AccountInfoInterface[]
-  handleCheckbox: (id: string, checked: boolean) => void
-  handleToggleStatus: (id: string, status: string) => void
-  handleDeleteProductCategory: (id: string) => void
+  handleCheckbox: (_id: string, checked: boolean) => void
+  handleToggleStatus: (_id: string, status: string) => void
+  handleDeleteProductCategory: (_id: string) => void
   dispatchProductCategory: React.Dispatch<ProductCategoryActions>
   productCategories: ProductCategoryInfoInterface[]
 }
@@ -31,8 +31,8 @@ const ProductTree = ({
 }: Props) => {
   const prefix = '— '.repeat(level)
 
-  const updatedBy = productCategory.updatedBy?.at(-1)
-  const creator = accounts.find((account) => account._id === productCategory.createdBy?.account_id)
+  const updatedBy = productCategory.updatedBy.at(-1)
+  const creator = accounts.find((account) => account._id === productCategory.createdBy.account_id)
   const updater = accounts.find((account) => account._id === updatedBy?.account_id)
 
   return (
@@ -59,8 +59,8 @@ const ProductTree = ({
         <TableCell align="center">
           <input
             type="number"
-            value={productCategory.position}
-            min="1"
+            value={productCategory.position ? productCategory.position : ''}
+            min={1}
             onChange={(e) => {
               const newPosition = parseInt(e.target.value, 10)
               dispatchProductCategory({
@@ -88,7 +88,7 @@ const ProductTree = ({
           {creator ? (
             <>
               <p className="text-sm font-medium text-gray-800">{creator.fullName}</p>
-              <FormatDateTime time={productCategory.createdBy?.createdAt} />
+              <FormatDateTime time={productCategory.createdAt} />
             </>
           ) : (
             <p className="text-sm italic text-gray-400">Không xác định</p>

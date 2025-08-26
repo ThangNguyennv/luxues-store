@@ -38,12 +38,12 @@ const User = () => {
     }
   }
 
-  const handleDeleteUser = async (_id: string) => {
+  const handleDeleteUser = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa người dùng này?')
-    const response = await fetchDeleteUserAPI(_id)
+    const response = await fetchDeleteUserAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
-        setUsers((prev) => prev.filter((item) => item._id != _id))
+        setUsers((prev) => prev.filter((item) => item._id != id))
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }

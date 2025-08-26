@@ -18,18 +18,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const [searchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
 
-  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+  const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id,
+      account_id: myAccount!._id ?? '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusAPI(newStatus, _id)
+    const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
       dispatchArticle({
         type: 'SET_DATA',
         payload: {
-          articles:  articles.map((article) => article._id === _id ? {
+          articles:  articles.map((article) => article._id === id ? {
             ...article,
             status: newStatus,
             updatedBy: [...(article.updatedBy || []), currentUser]
@@ -46,15 +46,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteArticle = async (_id: string) => {
+  const handleDeleteArticle = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa bài viết này?')
-    const response = await fetchDeleteArticleAPI(_id)
+    const response = await fetchDeleteArticleAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
         dispatchArticle({
           type: 'SET_DATA',
           payload: {
-            articles: articles.filter((article) => article._id != _id)
+            articles: articles.filter((article) => article._id != id)
           }
         })
         dispatchAlert({

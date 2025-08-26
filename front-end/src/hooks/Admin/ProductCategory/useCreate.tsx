@@ -9,18 +9,19 @@ export const useCreate = () => {
   const initialProductCategory: ProductCategoryInfoInterface = {
     _id: '',
     title: '',
-    position: 0,
+    position: '',
     status: 'active',
     description: '',
     thumbnail: '',
     createdBy: {
-      account_id: '',
-      createdAt: new Date()
+      account_id: ''
     },
     updatedBy: [],
     children: [],
     slug: '',
-    parent_id: ''
+    parent_id: '',
+    createdAt: null,
+    updatedAt: null
   }
 
   const [productCategoryInfo, setProductCategoryInfo] = useState<ProductCategoryInfoInterface>(initialProductCategory)

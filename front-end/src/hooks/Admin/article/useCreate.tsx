@@ -18,11 +18,13 @@ export const useCreate = () => {
     accountFullName: '',
     createdBy: {
       account_id: '',
-      createdAt: new Date()
+      // createdAt: new Date()
     },
     updatedBy: [],
     article_category_id: '',
-    slug: ''
+    slug: '',
+    createdAt: null,
+    updatedAt: null
   }
 
   const [articleInfo, setArticleInfo] = useState<ArticleInfoInterface>(initialArticle)

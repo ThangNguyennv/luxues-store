@@ -44,6 +44,8 @@ input {
     position: relative;
     display: inline-block;
     cursor: pointer;
+    font-size: 17px;
+    font-weight: 500;
 }
 
 .menu li::after {

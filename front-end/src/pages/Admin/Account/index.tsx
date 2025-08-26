@@ -36,12 +36,12 @@ const Account = () => {
     }
   }
 
-  const handleDeleteAccount = async (_id: string) => {
+  const handleDeleteAccount = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa tài khoản này?')
-    const response = await fetchDeleteAccountAPI(_id)
+    const response = await fetchDeleteAccountAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
-        setAccounts((prev) => prev.filter((item) => item._id != _id))
+        setAccounts((prev) => prev.filter((item) => item._id != id))
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }

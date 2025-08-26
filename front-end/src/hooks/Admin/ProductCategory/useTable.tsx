@@ -16,18 +16,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
 
-  const handleToggleStatus = async (currentStatus: string, _id: string): Promise<void> => {
+  const handleToggleStatus = async (currentStatus: string, id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id,
+      account_id: myAccount!._id ?? '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusWithChildren(newStatus, _id)
+    const response = await fetchChangeStatusWithChildren(newStatus, id)
     if (response.code === 200) {
       dispatchProductCategory({
         type: 'SET_DATA',
         payload: {
-          productCategories: updateStatusRecursiveForProduct(productCategories, _id, newStatus, currentUser)
+          productCategories: updateStatusRecursiveForProduct(productCategories, id, newStatus, currentUser)
         }
       })
       dispatchAlert({
@@ -39,15 +39,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
-  const handleDeleteProductCategory = async (_id: string) => {
+  const handleDeleteProductCategory = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa danh mục sản phẩm này?')
-    const response = await fetchDeleteProductCategoryAPI(_id)
+    const response = await fetchDeleteProductCategoryAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
         dispatchProductCategory({
           type: 'SET_DATA',
           payload: {
-            productCategories: productCategories.filter((productCategory) => productCategory._id != _id)
+            productCategories: productCategories.filter((productCategory) => productCategory._id != id)
           }
         })
         dispatchAlert({

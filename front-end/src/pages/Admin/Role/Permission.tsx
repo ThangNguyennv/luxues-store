@@ -111,7 +111,7 @@ const Permission = () => {
   useEffect(() => {
     fetchRoleAPI().then((res: RolesResponseInterface) => {
       setRoles(res.roles)
-      setPermissionsData(res.roles.map(role => ({ id: String(role._id), permissions: role.permissions || [] })))
+      setPermissionsData(res.roles.map(role => ({ _id: String(role._id), permissions: role.permissions || [] })))
     })
   }, [])
 

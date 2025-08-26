@@ -12,19 +12,20 @@ export const useCreate = () => {
     price: 0,
     discountPercentage: 0,
     stock: 0,
-    position: 0,
+    position: '',
     status: 'active',
     description: '',
     featured: '1',
     thumbnail: '',
     accountFullName: '',
     createdBy: {
-      account_id: '',
-      createdAt: new Date()
+      account_id: ''
+      // createdAt: null
     },
     updatedBy: [],
     product_category_id: '',
-    slug: ''
+    createdAt: null,
+    updatedAt: null
   }
 
   const [productInfo, setProductInfo] = useState<ProductInfoInterface>(initialProduct)
@@ -45,7 +46,6 @@ export const useCreate = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    formData.append('description', productInfo.description)
     const file = uploadImageInputRef.current?.files?.[0]
     if (file) {
       formData.set('thumbnail', file)

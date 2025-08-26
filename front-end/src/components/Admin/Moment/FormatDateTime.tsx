@@ -1,7 +1,7 @@
 import moment from 'moment'
 
 interface Props {
-  time: string | Date
+  time: Date | null
 }
 
 const FormatDateTime = ({ time }: Props) => {

@@ -2,7 +2,7 @@ import type { AccountInfoInterface } from './account.type'
 
 export interface UpdatedBy {
   account_id: string,
-  updatedAt: Date
+  updatedAt: Date | null
 }
 
 export interface FilterStatusInterface {
@@ -38,15 +38,16 @@ export interface ParamsInterface {
 }
 
 export interface GeneralInfoInterface {
+  _id: string,
   createdBy: {
     account_id: string,
-    createdAt: Date
   },
   updatedBy: UpdatedBy[],
-  _id: string,
   title: string,
   thumbnail: string,
-  position: number,
+  position: number | string,
   status: string,
-  slug: string,
+  slug?: string,
+  createdAt: Date | null
+  updatedAt: Date | null
 }

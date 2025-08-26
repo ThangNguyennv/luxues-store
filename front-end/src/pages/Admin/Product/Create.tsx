@@ -66,7 +66,7 @@ const CreateProduct = () => {
                 className="border rounded-[5px] border-[#192335]"
                 id="featured1"
                 name="featured"
-                value={1}
+                value={'1'}
                 checked={productInfo.featured === '1' ? true : false}
               />
               <label htmlFor="featured1">Nổi bật</label>
@@ -78,7 +78,7 @@ const CreateProduct = () => {
                 className="border rounded-[5px] border-[#192335]"
                 id="featured0"
                 name="featured"
-                value={0}
+                value={'0'}
                 checked={productInfo.featured === '0' ? true : false}
               />
               <label htmlFor="featured0">Không nổi bật</label>
@@ -95,6 +95,7 @@ const CreateProduct = () => {
               }}
               onEditorChange={(newValue) => setProductInfo({ ...productInfo, description: newValue })}
               id="desc"
+              textareaName="description"
             />
           </div>
 
@@ -155,6 +156,7 @@ const CreateProduct = () => {
               id="position"
               name="position"
               placeholder="Tự động tăng"
+              value={productInfo.position ?? ''}
               min={1}
             />
           </div>
@@ -194,7 +196,6 @@ const CreateProduct = () => {
             Tạo mới
           </button>
         </form>
-
       )}
     </>
   )

@@ -11,9 +11,9 @@ interface Props {
   level: number
   selectedIds: string[]
   accounts: AccountInfoInterface[]
-  handleCheckbox: (id: string, checked: boolean) => void
-  handleToggleStatus: (id: string, status: string) => void
-  handleDeleteArticleCategory: (id: string) => void
+  handleCheckbox: (_id: string, checked: boolean) => void
+  handleToggleStatus: (_id: string, status: string) => void
+  handleDeleteArticleCategory: (_id: string) => void
   dispatchArticleCategory: React.Dispatch<ArticleCategoryActions>
   articleCategories: ArticleCategoryInfoInterface[]
 }
@@ -31,8 +31,8 @@ const ArticleTree = ({
 }: Props) => {
   const prefix = '— '.repeat(level)
 
-  const updatedBy = articleCategory.updatedBy?.at(-1)
-  const creator = accounts.find((account) => account._id === articleCategory.createdBy?.account_id)
+  const updatedBy = articleCategory.updatedBy.at(-1)
+  const creator = accounts.find((account) => account._id === articleCategory.createdBy.account_id)
   const updater = accounts.find((account) => account._id === updatedBy?.account_id)
 
   return (
@@ -88,7 +88,7 @@ const ArticleTree = ({
           {creator ? (
             <>
               <p className="text-sm font-medium text-gray-800">{creator.fullName}</p>
-              <FormatDateTime time={articleCategory.createdBy?.createdAt} />
+              <FormatDateTime time={articleCategory.createdAt} />
             </>
           ) : (
             <p className="text-sm italic text-gray-400">Không xác định</p>
@@ -99,7 +99,7 @@ const ArticleTree = ({
             updater ? (
               <>
                 <p className="text-sm font-medium text-gray-800">{updater.fullName}</p>
-                <FormatDateTime time={updatedBy.updatedAt} />
+                <FormatDateTime time={articleCategory.updatedAt} />
               </>
             ) : (
               <p className="text-sm italic text-gray-400">Không xác định</p>

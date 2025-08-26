@@ -24,8 +24,11 @@ const EditRole = () => {
     event.preventDefault()
     if (!roleInfo) return
     const payload: RolesInfoInterface = {
+      _id: roleInfo._id,
       title: roleInfo.title,
-      description: roleInfo.description
+      description: roleInfo.description,
+      createdAt: roleInfo.createdAt,
+      updatedAt: roleInfo.updatedAt
     }
     const response = await fetchEditRoleAPI(id, payload)
     if (response.code === 200) {

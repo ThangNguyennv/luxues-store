@@ -16,18 +16,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
 
-  const handleToggleStatus = async (currentStatus: string, _id: string): Promise<void> => {
+  const handleToggleStatus = async (currentStatus: string, id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id,
+      account_id: myAccount!._id ?? '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusWithChildren(newStatus, _id)
+    const response = await fetchChangeStatusWithChildren(newStatus, id)
     if (response.code === 200) {
       dispatchArticleCategory({
         type: 'SET_DATA',
         payload: {
-          articleCategories: updateStatusRecursiveForArticle(articleCategories, _id, newStatus, currentUser)
+          articleCategories: updateStatusRecursiveForArticle(articleCategories, id, newStatus, currentUser)
         }
       })
       dispatchAlert({
@@ -40,15 +40,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteArticleCategory = async (_id: string) => {
+  const handleDeleteArticleCategory = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa danh mục bài viết này?')
-    const response = await fetchDeleteArticleCategoryAPI(_id)
+    const response = await fetchDeleteArticleCategoryAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
         dispatchArticleCategory({
           type: 'SET_DATA',
           payload: {
-            articleCategories: articleCategories.filter((articleCategory) => articleCategory._id != _id)
+            articleCategories: articleCategories.filter((articleCategory) => articleCategory._id != id)
           }
         })
         dispatchAlert({

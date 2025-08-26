@@ -92,6 +92,7 @@ const EditProduct = () => {
               value={productInfo.description}
               onEditorChange={(newValue) => setProductInfo({ ...productInfo, description: newValue })}
               id="desc"
+              textareaName="description"
             />
           </div>
 
@@ -154,7 +155,7 @@ const EditProduct = () => {
               name="position"
               placeholder="Tự động tăng"
               min={1}
-              value={productInfo.position}
+              value={productInfo.position ? productInfo.position : ''}
             />
           </div>
 

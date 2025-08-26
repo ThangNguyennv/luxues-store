@@ -91,9 +91,9 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                           })
                         }}
                         type='number'
-                        value={article.position}
+                        value={article.position? article.position : ''}
                         min={'1'}
-                        data-id={article._id}
+                        data-_id={article._id}
                         name='position'
                         className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
                       />
@@ -116,7 +116,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                           <span className="text-sm font-medium text-gray-800">
                             {creator.fullName}
                           </span>
-                          <FormatDateTime time={article.createdBy.createdAt}/>
+                          <FormatDateTime time={article.createdAt}/>
                         </>
                       ) : (
                         <span className="text-sm italic text-gray-400">Không xác định</span>

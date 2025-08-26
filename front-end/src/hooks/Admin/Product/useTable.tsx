@@ -18,18 +18,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const [searchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
 
-  const handleToggleStatus = async (_id: string, currentStatus: string): Promise<void> => {
+  const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id,
+      account_id: myAccount!._id ?? '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    const response = await fetchChangeStatusAPI(newStatus, _id)
+    const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
       dispatchProduct({
         type: 'SET_DATA',
         payload: {
-          products:  products.map((product) => product._id === _id ? {
+          products:  products.map((product) => product._id === id ? {
             ...product,
             status: newStatus,
             updatedBy: [...(product.updatedBy || []), currentUser]
@@ -46,15 +46,15 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteProduct = async (_id: string) => {
+  const handleDeleteProduct = async (id: string) => {
     const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này?')
-    const response = await fetchDeleteProductAPI(_id)
+    const response = await fetchDeleteProductAPI(id)
     if (response.code === 204) {
       if (isConfirm) {
         dispatchProduct({
           type: 'SET_DATA',
           payload: {
-            products: products.filter((product) => product._id != _id)
+            products: products.filter((product) => product._id != id)
           }
         })
         dispatchAlert({

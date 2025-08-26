@@ -8,10 +8,13 @@ import { API_KEY } from '~/utils/constants'
 
 const CreateRole = () => {
   const initialRole: RolesInfoInterface = {
+    _id: '',
     title: '',
     description: '',
     permissions: [],
-    updatedBy: []
+    updatedBy: [],
+    createdAt: null,
+    updatedAt: null
   }
   const [roleInfo, setRoleInfo] = useState<RolesInfoInterface>(initialRole)
   const { dispatchAlert } = useAlertContext()

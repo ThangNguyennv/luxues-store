@@ -98,7 +98,7 @@ const EditProductCategory = () => {
               name="position"
               placeholder="Tự động tăng"
               min={1}
-              value={productCategoryInfo.position}
+              value={productCategoryInfo.position ? productCategoryInfo.position : ''}
             />
           </div>
 
