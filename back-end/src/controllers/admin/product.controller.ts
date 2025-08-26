@@ -163,7 +163,7 @@ export const changeMulti = async (req: Request, res: Response) => {
       case Key.DELETEALL:
         await Product.updateMany(
           { _id: { $in: ids } },
-          { deleted: 'true', deletedAt: new Date() }
+          { deleted: true, deletedAt: new Date() }
         )
         res.json({
           code: 204,
@@ -232,21 +232,24 @@ export const createPost = async (req: Request, res: Response) => {
     req.body.price = parseInt(req.body.price)
     req.body.discountPercentage = parseInt(req.body.discountPercentage)
     req.body.stock = parseInt(req.body.stock)
-    if (req.body.position == '') {
-      const count = await Product.countDocuments()
-      req.body.position = count + 1
+    let position: number
+    if (req.body.position === '' || req.body.position === null) {
+      const count = await Product.countDocuments({ deleted: false })
+      position = count + 1
     } else {
-      req.body.position = parseInt(req.body.position)
+      position = parseInt(req.body.position)
     }
+    req.body.position = position
     req.body.createdBy = {
       account_id: req['accountAdmin'].id
     }
+
     const records = new Product(req.body)
     await records.save()
     res.json({
       code: 201,
       message: 'Thêm thành công sản phẩm!',
-      data: req.body,
+      data: records,
     })
   } catch (error) {
     res.json({

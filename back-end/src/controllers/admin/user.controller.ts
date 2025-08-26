@@ -83,11 +83,11 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
       _id: req.params.id
     }
-    const user = await User.findOne(find).select('-password -tokenUser')
+    const accountUser = await User.findOne(find).select('-password -tokenUser')
     res.json({
       code: 200,
       message: 'Chi tiết người dùng!',
-      user: user
+      accountUser: accountUser
     })
   } catch (error) {
     res.json({
