@@ -49,16 +49,20 @@ export const useEditMyAccount = () => {
       })
     }
   }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    uploadImageInputRef.current?.click()
+  }
 
   return {
     accountInfo,
     setAccountInfo,
     password,
     setPassword,
-
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   }
 }

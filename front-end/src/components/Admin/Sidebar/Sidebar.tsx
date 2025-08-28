@@ -28,7 +28,6 @@ const Sidebar = () => {
   return (
     <div
       className={`
-        transition-all duration-500
         ${isOpen ? 'w-[22 0px]' : 'w-[70px]'}
         border rounded-[12px]
         flex flex-col gap-[20px]
@@ -39,7 +38,11 @@ const Sidebar = () => {
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center text-[20px] cursor-pointer ${isOpen ? 'justify-end' : 'justify-center'} mb-[10px]`}
+        className={`
+          flex items-center text-[20px] 
+          cursor-pointer mb-[10px]
+          ${isOpen ? 'justify-end' : 'justify-center'}
+        `}
       >
         {isOpen ? <BiMenuAltRight /> : <IoMenu />}
       </button>

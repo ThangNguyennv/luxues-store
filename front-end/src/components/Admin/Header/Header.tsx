@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { FaRegUserCircle } from 'react-icons/fa'
 import { useHeader } from '~/hooks/admin/header/useHeader'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
