@@ -11,18 +11,22 @@ const MyAccountAdmin = () => {
     <>
       <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Thông tin tài khoản</h1>
       {accountInfo && (
-        <div className="border rounded-[5px] p-[10px] m-[20px] flex flex-col gap-[5px]">
+        <div className="text-[30px] border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px]">
           <p>
-            <img src={accountInfo.avatar} alt="Avatar" className="w-[150px] h-[150px]" />
+            <img
+              src={accountInfo.avatar}
+              alt="Avatar"
+              className="border rounded-[50%] w-[150px] h-[150px]"
+            />
           </p>
-          <p className='text-[35px] font-[600] text-[#00171F]'><b>Họ và tên:</b> {accountInfo.fullName}</p>
-          <p className='text-[35px] font-[600] text-[#00171F]'><b>Email:</b> {accountInfo.email}</p>
-          <p className='text-[35px] font-[600] text-[#00171F]'><b>Số điện thoại:</b> {accountInfo.phone}</p>
+          <p><b>Họ và tên:</b> {accountInfo.fullName}</p>
+          <p><b>Email:</b> {accountInfo.email}</p>
+          <p><b>Số điện thoại:</b> {accountInfo.phone}</p>
           {role && (
-            <div className='text-[35px] font-[600] text-[#00171F]'><b>Vai trò:</b> {role.title}</div>
+            <div><b>Vai trò:</b> {role.title}</div>
           )}
-          <p className='text-[35px] font-[600] text-[#00171F]'>
-            <b>Trạng thái:</b>
+          <p>
+            <b>Trạng thái: </b>
             {
               accountInfo.status === 'active' ?
                 <span className="text-green-500">Hoạt động</span> :
@@ -31,9 +35,9 @@ const MyAccountAdmin = () => {
           </p>
           <Link
             to={'/admin/my-account/edit'}
-            className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[15%] text-center'
+            className='text-[20px] border rounded-[5px] bg-[#FFAB19] hover:bg-[#2F57EF] p-[5px] text-white w-[10%] text-center'
           >
-            Chỉnh sửa thông tin
+            Chỉnh sửa
           </Link>
         </div>
       )}

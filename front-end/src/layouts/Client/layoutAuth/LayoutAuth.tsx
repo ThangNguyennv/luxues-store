@@ -7,7 +7,7 @@ const LayoutAuth = () => {
       <header className='pt-[50px] pb-[50px] flex items-center justify-center'>
         <div className='container flex items-center justify-between gap-[15px]'>
           <Link
-            to={'/user/login'}
+            to={'/'}
             className='font-[500] hover:text-[#2F57EF]'>
             LUXUES STORE / CỦA HÀNG THỜI TRANG ĐẸP - RẺ - CHẤT
           </Link>

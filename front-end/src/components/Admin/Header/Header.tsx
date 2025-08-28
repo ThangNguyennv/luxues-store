@@ -21,13 +21,14 @@ const Header = () => {
         <Link to="/admin/dashboard">ADMIN</Link>
         <div className='flex items-center justify-between gap-[25px]'>
           <IoIosNotificationsOutline />
-          <div
+          <Link
+            to={'/admin/my-account'}
             onMouseEnter={(event) => handleOpen(event)}
             onMouseLeave={handleClose}
             className='flex items-center justify-center gap-[10px]'
           >
             <div className='flex items-center justify-center gap-[8px] cursor-pointer'>
-              <FaRegUserCircle />
+              <img src={myAccount?.avatar} className='border rounded-[50%] w-[40px] h-[40px] object-cover'/>
               <span>{myAccount ? myAccount.fullName : 'Khách'}</span>
               <Menu
                 anchorEl={anchorEl}
@@ -66,7 +67,7 @@ const Header = () => {
                 </MenuItem>
               </Menu>
             </div>
-          </div>
+          </Link>
         </div>
       </header>
     </>

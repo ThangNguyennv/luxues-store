@@ -19,8 +19,15 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
   const { settingGeneral, setSettingGeneral } = useSettingGeneral()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
+    // lấy từ localStorage khi khởi tạo
+    const saved = sessionStorage.getItem('closeTopHeader')
+    return saved === 'true'
+  })
 
   useEffect(() => {
+    setLoading(true)
     fetchSettingGeneralAPI().then((response: SettingGeneralDetailInterface) => {
       setSettingGeneral(response.settingGeneral)
     })
@@ -41,6 +48,8 @@ const Header = () => {
   const handleLogout = async () => {
     const response = await fetchLogoutAPI()
     if (response.code === 200) {
+      sessionStorage.setItem('closeTopHeader', 'false')
+      setCloseTopHeader(false)
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
@@ -54,20 +63,36 @@ const Header = () => {
       return
     }
   }
+  const handleCloseTopHeader = () => {
+    setCloseTopHeader(true)
+    sessionStorage.setItem('closeTopHeader', 'true')
+  }
+
   return (
     <>
       {/* Top header */}
-      <div className="bg-primary sm:py-[10px] py-[9px]">
-        <div className="container mx-auto px-[16px]">
-          <div className="flex">
-            <div className="text-white flex-1 text-center sm:text-[14px] text-[12px]">
-              <span className="font-[400]">Đăng ký để được giảm giá 20%.</span>
-              <a className="font-[500] underline ml-[5px]" href="#">Đăng Ký Ngay</a>
+      {!accountUser && (
+        <div className={`bg-primary sm:py-[10px] py-[9px] ${closeTopHeader ? 'hidden' : 'block'}`}>
+          <div className="container mx-auto px-[16px]">
+            <div className="flex">
+              <div className="text-white flex-1 text-center sm:text-[14px] text-[12px]">
+                <span className="font-[400]">Đăng ký để được giảm giá 20%.</span>
+                <Link
+                  className="font-[500] hover:underline ml-[5px]"
+                  to="/user/register">
+                Đăng Ký Ngay
+                </Link>
+              </div>
+              <button
+                onClick={handleCloseTopHeader}
+                className="text-white text-[14px] sm:inline-block hidden cursor-pointer"
+              >
+                <IoMdClose />
+              </button>
             </div>
-            <button className="text-white text-[14px] sm:inline-block hidden"><IoMdClose /></button>
           </div>
         </div>
-      </div>
+      )}
       {/* End Top header */}
       {/* Header */}
       <header className="sm:py-[24px] py-[20px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
@@ -81,7 +106,8 @@ const Header = () => {
               to={'/'}
             >
               <img
-                src={settingGeneral ? settingGeneral[0].logo : ''}
+                alt="logo"
+                src={settingGeneral ? settingGeneral[0].logo : 'logo'}
                 className='w-[50px] h-[50px] bg-amber-900'
               />
               <span className='uppercase flex flex-col items-center'>
