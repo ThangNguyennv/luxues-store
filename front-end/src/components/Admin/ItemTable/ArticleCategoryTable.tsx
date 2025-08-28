@@ -8,6 +8,7 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import ArticleTree from '../TableTree/ArticleTree'
 import TableContainer from '@mui/material/TableContainer'
 import { useTable, type Props } from '~/hooks/admin/articleCategory/useTable'
+import Skeleton from '@mui/material/Skeleton'
 
 const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
@@ -51,7 +52,7 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {articleCategories && articleCategories.length > 0 && (
+            {articleCategories && articleCategories.length > 0 ? (
               articleCategories.map(articleCategory => (
                 <ArticleTree
                   key={articleCategory._id}
@@ -66,6 +67,33 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                   dispatchArticleCategory={dispatchArticleCategory}
                 />
               ))
+            ) : (
+              <TableRow>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="text" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center' className='font-[700] '>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
