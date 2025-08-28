@@ -25,7 +25,6 @@ const Login = () => {
                   type="email"
                   className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                   name="email"
-                  placeholder='Email'
                   required
                 />
               </div>
@@ -36,7 +35,6 @@ const Login = () => {
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
-                    placeholder="Mật khẩu"
                     className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
                     required
                   />

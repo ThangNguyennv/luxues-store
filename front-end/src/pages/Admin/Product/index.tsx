@@ -41,7 +41,8 @@ const ProductAdmin = () => {
             <Search
               keyword={keyword}
               handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
-              handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
+              handleSearch={(keyword) => updateSearchParams('keyword', keyword)}
+            />
           </div>
         </div>
         <div className='flex items-center justify-between'>
@@ -61,8 +62,9 @@ const ProductAdmin = () => {
             </select>
             <button
               type='submit'
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
-                Áp dụng
+              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
+            >
+              Áp dụng
             </button>
           </form>
           <SortProduct

@@ -11,6 +11,7 @@ import type { Props } from '~/hooks/admin/product/useTable'
 import FormatDateTime from '../Moment/FormatDateTime'
 import TableContainer from '@mui/material/TableContainer'
 import type { UpdatedBy } from '~/types/helper.type'
+import Skeleton from '@mui/material/Skeleton'
 
 const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
@@ -55,7 +56,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
               <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
-          {products && (
+          {products && products.length > 0 ? (
             <TableBody>
               {products
                 .map((product, index) => (
@@ -171,6 +172,41 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                     </TableCell>
                   </TableRow>
                 ))}
+            </TableBody>
+          ) : (
+            <TableBody>
+              <TableRow>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="text" width={120} height={120} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align="center">
+                  <Skeleton variant="text" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center' className='font-[700] '>
+                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+              </TableRow>
             </TableBody>
           )}
         </Table>

@@ -30,6 +30,7 @@ export const useHeader = () => {
       return
     }
   }
+
   return {
     myAccount,
     handleLogout,

@@ -66,8 +66,8 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
                   key={index}
                   onClick={() => handlePagination(page)}
                   className={`cursor-pointer px-3 py-1 border rounded ${
-                    page === pagination.currentPage ? 'bg-blue-500 text-white' : ''
-                  }`}
+                    page === pagination.currentPage ? 'bg-blue-500 text-white' : ''}`
+                  }
                 >
                   {page}
                 </button>
