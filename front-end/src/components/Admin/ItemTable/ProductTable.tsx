@@ -183,7 +183,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={120} height={120} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
@@ -198,13 +198,13 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center' className='font-[700] '>
-                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={210} height={134} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
               </TableRow>
             </TableBody>
