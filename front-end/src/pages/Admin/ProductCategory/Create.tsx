@@ -9,27 +9,31 @@ const CreateProductCategory = () => {
     productCategoryInfo,
     setProductCategoryInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
+    preview,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   } = useCreate()
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới danh mục sản phẩm</h1>
+      <h1 className="text-[30px] font-[600] text-[#192335]">Thêm mới danh mục sản phẩm</h1>
       {productCategoryInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500]"
           encType="multipart/form-data"
         >
           <div className="form-group">
-            <label htmlFor="title">Tiêu đề</label>
+            <label htmlFor="title">
+              Tiêu đề
+            </label>
             <input
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, title: event.target.value })}
               type="text"
               id="title"
               name="title"
+              className='py-[3px]'
               required
             />
           </div>
@@ -39,7 +43,7 @@ const CreateProductCategory = () => {
             <select
               name="parent_id"
               id="parent_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px]"
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}
             >
@@ -79,12 +83,22 @@ const CreateProductCategory = () => {
               type="file"
               id="thumbnail"
               name="thumbnail"
+              className='hidden'
               accept="image/*"
             />
-            <img
-              ref={uploadImagePreviewRef}
-              className="w-[150px] h-auto"
-            />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] font-[500] border rounded-[10px] w-[7%] py-[4px] cursor-pointer hover:opacity-80 transition-all duration-200 ease-in-out"
+            >
+              Chọn ảnh
+            </button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Thumbnail preview"
+                className="border rounded-[5px] w-[150px] h-[150px]"
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -95,6 +109,7 @@ const CreateProductCategory = () => {
               id="position"
               name="position"
               placeholder="Tự động tăng"
+              className='py-[3px]'
               min={1}
             />
           </div>
@@ -129,7 +144,7 @@ const CreateProductCategory = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
           >
             Tạo mới
           </button>

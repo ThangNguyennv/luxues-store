@@ -16,7 +16,7 @@ const CreateProduct = () => {
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
+      <h1 className="text-[30px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
       {productInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}

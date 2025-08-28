@@ -101,7 +101,7 @@ const EditMyAccount = () => {
             </div>
             <button
               type="submit"
-              className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px] w-[25%] hover:bg-[#FFAB19] hover:text-black"
+              className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px] w-[25%] hover:opacity-80 transition-all duration-200 ease-in-out"
             >
             Cập nhật
             </button>
