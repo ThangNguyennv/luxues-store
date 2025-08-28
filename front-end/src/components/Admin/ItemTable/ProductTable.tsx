@@ -77,7 +77,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                         <img src={product.thumbnail} alt={product.title} className='w-[100px] h-[100px]'/>
                       </div>
                     </TableCell>
-                    <TableCell align="center">${product.price.toLocaleString()}</TableCell>
+                    <TableCell align="center">{product.price.toLocaleString()}đ</TableCell>
                     <TableCell align='center'>
                       <input
                         onChange={(event) => {
