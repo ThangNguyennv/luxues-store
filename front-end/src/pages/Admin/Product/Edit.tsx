@@ -16,9 +16,12 @@ const EditProduct = () => {
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
+      <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
       {productInfo && (
-        <form onSubmit={(event) => handleSubmit(event)} action="" className="flex flex-col gap-[10px]" encType="multipart/form-data">
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex flex-col gap-[10px] text-[17px] font-[500]"
+          encType="multipart/form-data">
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -26,6 +29,7 @@ const EditProduct = () => {
               type="text"
               id="title"
               name="title"
+              className='py-[3px]'
               value={productInfo.title}
             />
           </div>
@@ -35,7 +39,7 @@ const EditProduct = () => {
             <select
               name="product_category_id"
               id="product_category_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px]"
               value={productInfo.product_category_id}
               onChange={(event) => setProductInfo({ ...productInfo, product_category_id: event.target.value })}
             >
@@ -54,7 +58,7 @@ const EditProduct = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[10px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
