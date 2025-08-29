@@ -28,7 +28,7 @@ const Search = ({ keyword, handleChangeKeyword, handleSearch }: Props) => {
           />
           <button
             type="submit"
-            className='cursor-pointer p-[5px] bg-[#00A7E6] border rounded-[5px]'
+            className='p-[5px] bg-[#00A7E6] border rounded-[5px]'
           >
             Tìm
           </button>

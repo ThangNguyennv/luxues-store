@@ -35,7 +35,7 @@ const MyAccountAdmin = () => {
             </span>
             <Link
               to={'/admin/my-account/edit'}
-              className='text-[20px] border rounded-[5px] bg-[#2F57EF] hover:opacity-80 transition-all duration-200 ease-in-out p-[6px] text-white w-[17%] text-center'
+              className='nav-link text-[20px] border rounded-[5px] bg-[#2F57EF] p-[6px] text-white w-[17%] text-center'
             >
             Chỉnh sửa
             </Link>

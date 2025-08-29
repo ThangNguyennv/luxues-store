@@ -88,7 +88,7 @@ const CreateProductCategory = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] font-[500] border rounded-[10px] w-[7%] py-[4px] cursor-pointer hover:opacity-80 transition-all duration-200 ease-in-out"
+              className="bg-[#9D9995] font-[500] border rounded-[10px] w-[7%] py-[4px]"
             >
               Chọn ảnh
             </button>
@@ -114,7 +114,7 @@ const CreateProductCategory = () => {
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[10px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, status: event.target.value })}
@@ -144,7 +144,7 @@ const CreateProductCategory = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
+            className="w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
           >
             Tạo mới
           </button>

@@ -2,15 +2,17 @@
 import { PiGreaterThan } from 'react-icons/pi'
 import { PiLessThan } from 'react-icons/pi'
 import type { PaginationInterface } from '~/types/helper.type'
+import type { ProductInfoInterface } from '~/types/product.type'
 
 interface Props {
   pagination: PaginationInterface | null
+  products: ProductInfoInterface[]
   handlePagination: (page: number) => void
   handlePaginationPrevious: (page: number) => void
   handlePaginationNext: (page: number) => void
 }
 
-const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext }: Props) => {
+const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext, products }: Props) => {
   const getPages = () => {
     if (pagination) {
       const pages: (number | string)[] = []
@@ -45,17 +47,15 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
       return []
     }
   }
-
   return (
     <>
-      {pagination && (
+      {products && products.length > 0 && pagination && (
         <nav className='flex items-center justify-center p-[30px]'>
           <ul className='flex items-center justify-center gap-[10px]'>
             <li>
               <button
                 disabled={pagination.currentPage === 1} // disable nút khi đang ở trang đầu
                 onClick={() => handlePaginationPrevious(pagination.currentPage)}
-                className='cursor-pointer'
               >
                 <PiLessThan />
               </button>
@@ -65,7 +65,7 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
                 <button
                   key={index}
                   onClick={() => handlePagination(page)}
-                  className={`cursor-pointer px-3 py-1 border rounded ${
+                  className={`px-3 py-1 border rounded ${
                     page === pagination.currentPage ? 'bg-blue-500 text-white' : ''}`
                   }
                 >
@@ -81,7 +81,6 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
               <button
                 disabled={pagination.currentPage === pagination.totalPage} // disable nút khi đang ở trang cuối
                 onClick={() => handlePaginationNext(pagination.currentPage)}
-                className='cursor-pointer'
               >
                 <PiGreaterThan />
               </button>

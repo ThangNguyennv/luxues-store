@@ -9,6 +9,7 @@ import SortProduct from '~/components/admin/Sort/SortProduct'
 const ProductAdmin = () => {
   const {
     dispatchProduct,
+    products,
     filterStatus,
     pagination,
     keyword,
@@ -91,6 +92,7 @@ const ProductAdmin = () => {
           handlePagination={(page) => updateSearchParams('page', (page).toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+          products={products}
         />
       </div>
     </>

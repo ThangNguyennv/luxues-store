@@ -147,6 +147,7 @@ export const useProduct = () => {
 
   return {
     dispatchProduct,
+    products,
     filterStatus,
     pagination,
     keyword,

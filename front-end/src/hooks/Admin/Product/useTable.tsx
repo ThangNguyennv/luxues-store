@@ -4,6 +4,7 @@ import { useProductContext } from '~/contexts/admin/ProductContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
 import type { UpdatedBy } from '~/types/helper.type'
+import { useState } from 'react'
 
 export interface Props {
   selectedIds: string[],
@@ -12,12 +13,43 @@ export interface Props {
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateProduct, dispatchProduct } = useProductContext()
-  const { products, accounts } = stateProduct
+  const { products, accounts, loading } = stateProduct
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
+  const [open, setOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
+  const handleOpen = (id: string) => {
+    setSelectedId(id)
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setSelectedId(null)
+    setOpen(false)
+  }
+  const handleDelete = async () => {
+    if (!selectedId) return
+
+    const response = await fetchDeleteProductAPI(selectedId)
+    if (response.code === 204) {
+      dispatchProduct({
+        type: 'SET_DATA',
+        payload: {
+          products: products.filter((product) => product._id !== selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount!._id ?? '',
@@ -90,12 +122,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   return {
     currentStatus,
     products,
+    loading,
     dispatchProduct,
     accounts,
     handleToggleStatus,
+    open,
+    handleOpen,
+    handleClose,
+    handleDelete,
     handleDeleteProduct,
     handleCheckbox,
     handleCheckAll,
-    isCheckAll
+    isCheckAll,
+    selectedId
   }
 }

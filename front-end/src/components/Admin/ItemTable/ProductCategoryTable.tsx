@@ -22,6 +22,19 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleCheckAll,
     isCheckAll
   } = useTable({ selectedIds, setSelectedIds })
+  // if (!productCategories || productCategories.length === 0) {
+  //   return (
+  //     <Table>
+  //       <TableBody>
+  //         <TableRow>
+  //           <TableCell colSpan={8} align="center" className="font-[700] text-[20px] text-[#000000]">
+  //           Không có danh mục sản phẩm nào
+  //           </TableCell>
+  //         </TableRow>
+  //       </TableBody>
+  //     </Table>
+  //   )
+  // }
 
   return (
     <>
