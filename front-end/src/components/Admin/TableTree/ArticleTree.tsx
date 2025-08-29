@@ -59,8 +59,8 @@ const ArticleTree = ({
         <TableCell align="center">
           <input
             type="number"
-            value={articleCategory.position}
-            min="1"
+            value={articleCategory ? articleCategory.position : ''}
+            min={1}
             onChange={(e) => {
               const newPosition = parseInt(e.target.value, 10)
               dispatchArticleCategory({

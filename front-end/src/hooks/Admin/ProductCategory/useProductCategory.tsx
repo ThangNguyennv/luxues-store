@@ -140,6 +140,7 @@ export const useProductCategory = () => {
   }
 
   return {
+    productCategories,
     dispatchProductCategory,
     filterStatus,
     pagination,

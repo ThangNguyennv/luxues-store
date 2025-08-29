@@ -25,10 +25,12 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     setSelectedId(id)
     setOpen(true)
   }
+
   const handleClose = () => {
     setSelectedId(null)
     setOpen(false)
   }
+
   const handleDelete = async () => {
     if (!selectedId) return
 
@@ -50,6 +52,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
+
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount!._id ?? '',
@@ -72,28 +75,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
-    } else if (response.code === 400) {
-      alert('error: ' + response.error)
-      return
-    }
-  }
-
-  const handleDeleteProduct = async (id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa sản phẩm này?')
-    const response = await fetchDeleteProductAPI(id)
-    if (response.code === 204) {
-      if (isConfirm) {
-        dispatchProduct({
-          type: 'SET_DATA',
-          payload: {
-            products: products.filter((product) => product._id != id)
-          }
-        })
-        dispatchAlert({
-          type: 'SHOW_ALERT',
-          payload: { message: response.message, severity: 'success' }
-        })
-      }
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -130,7 +111,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleOpen,
     handleClose,
     handleDelete,
-    handleDeleteProduct,
     handleCheckbox,
     handleCheckAll,
     isCheckAll,

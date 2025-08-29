@@ -2,17 +2,16 @@
 import { PiGreaterThan } from 'react-icons/pi'
 import { PiLessThan } from 'react-icons/pi'
 import type { PaginationInterface } from '~/types/helper.type'
-import type { ProductInfoInterface } from '~/types/product.type'
 
 interface Props {
   pagination: PaginationInterface | null
-  products: ProductInfoInterface[]
+  items: unknown[]
   handlePagination: (page: number) => void
   handlePaginationPrevious: (page: number) => void
   handlePaginationNext: (page: number) => void
 }
 
-const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext, products }: Props) => {
+const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, handlePaginationNext, items }: Props) => {
   const getPages = () => {
     if (pagination) {
       const pages: (number | string)[] = []
@@ -49,7 +48,7 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
   }
   return (
     <>
-      {products && products.length > 0 && pagination && (
+      {items && items.length > 0 && pagination && (
         <nav className='flex items-center justify-center p-[30px]'>
           <ul className='flex items-center justify-center gap-[10px]'>
             <li>

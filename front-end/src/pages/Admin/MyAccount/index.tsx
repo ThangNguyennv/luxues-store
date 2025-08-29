@@ -19,11 +19,23 @@ const MyAccountAdmin = () => {
               alt="Avatar"
               className="border rounded-[50%] w-[150px] h-[150px]"
             />
-            <span><b>Họ và tên:</b> {accountInfo.fullName}</span>
-            <span><b>Email:</b> {accountInfo.email}</span>
-            <span><b>Số điện thoại:</b> {accountInfo.phone}</span>
+            <span>
+              <b>Họ và tên:</b>
+              {accountInfo.fullName}
+            </span>
+            <span>
+              <b>Email: </b>
+              {accountInfo.email}
+            </span>
+            <span>
+              <b>Số điện thoại: </b>
+              {accountInfo.phone}
+            </span>
             {role && (
-              <span><b>Vai trò:</b> {role.title}</span>
+              <span>
+                <b>Vai trò: </b>
+                <span className="text-[#BC3433] font-[600]">{role.title}</span>
+              </span>
             )}
             <span>
               <b>Trạng thái: </b>
@@ -37,7 +49,7 @@ const MyAccountAdmin = () => {
               to={'/admin/my-account/edit'}
               className='nav-link text-[20px] border rounded-[5px] bg-[#2F57EF] p-[6px] text-white w-[17%] text-center'
             >
-            Chỉnh sửa
+              Chỉnh sửa
             </Link>
           </div>
         </>

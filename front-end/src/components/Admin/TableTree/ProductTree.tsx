@@ -13,9 +13,12 @@ interface Props {
   accounts: AccountInfoInterface[]
   handleCheckbox: (_id: string, checked: boolean) => void
   handleToggleStatus: (_id: string, status: string) => void
-  handleDeleteProductCategory: (_id: string) => void
   dispatchProductCategory: React.Dispatch<ProductCategoryActions>
   productCategories: ProductCategoryInfoInterface[]
+  open: boolean
+  handleOpen: (_id: string) => void
+  handleClose: () => void
+  handleDelete: () => void
 }
 
 const ProductTree = ({
@@ -25,9 +28,12 @@ const ProductTree = ({
   accounts,
   handleCheckbox,
   handleToggleStatus,
-  handleDeleteProductCategory,
   dispatchProductCategory,
-  productCategories
+  productCategories,
+  open,
+  handleOpen,
+  handleClose,
+  handleDelete
 }: Props) => {
   const prefix = '— '.repeat(level)
 
@@ -59,7 +65,7 @@ const ProductTree = ({
         <TableCell align="center">
           <input
             type="number"
-            value={productCategory.position ? productCategory.position : ''}
+            value={productCategory ? productCategory.position : ''}
             min={1}
             onChange={(e) => {
               const newPosition = parseInt(e.target.value, 10)
@@ -111,19 +117,19 @@ const ProductTree = ({
         <TableCell align="center">
           <Link
             to={`/admin/products-category/detail/${productCategory._id}`}
-            className="border rounded-[5px] bg-[#757575] p-[5px] text-white"
+            className="nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white"
           >
             Chi tiết
           </Link>
           <Link
             to={`/admin/products-category/edit/${productCategory._id}`}
-            className="border rounded-[5px] bg-[#FFAB19] p-[5px] text-white"
+            className="nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white"
           >
             Sửa
           </Link>
           <button
-            onClick={() => handleDeleteProductCategory(productCategory._id)}
-            className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
+            onClick={() => handleOpen(productCategory._id)}
+            className="border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
           >
             Xóa
           </button>
@@ -138,9 +144,12 @@ const ProductTree = ({
           accounts={accounts}
           handleCheckbox={handleCheckbox}
           handleToggleStatus={handleToggleStatus}
-          handleDeleteProductCategory={handleDeleteProductCategory}
+          handleDelete={handleDelete}
           productCategories={productCategories}
           dispatchProductCategory={dispatchProductCategory}
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
         />
       ))}
     </>

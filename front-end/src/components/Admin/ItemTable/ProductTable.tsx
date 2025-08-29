@@ -177,9 +177,9 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                             })
                           }}
                           type='number'
-                          value={product.position ? product.position : ''}
+                          value={product ? product.position : ''}
                           min={1}
-                          data-_id={product._id}
+                          data-id={product._id}
                           name='position'
                           className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
                         />
@@ -230,7 +230,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                             </>
                           ) : (
                             <span className="text-sm italic text-gray-400">
-                            Không xác định
+                              Không xác định
                             </span>
                           )
                         }
@@ -239,17 +239,20 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                       <TableCell align='center'>
                         <Link
                           to={`/admin/products/detail/${product._id}`}
-                          className='nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white'>
-                      Chi tiết
+                          className='nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white'
+                        >
+                          Chi tiết
                         </Link>
                         <Link
                           to={`/admin/products/edit/${product._id}`}
-                          className='nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'>
-                      Sửa
+                          className='nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'
+                        >
+                          Sửa
                         </Link>
                         <button
                           onClick={() => handleOpen(product._id)}
-                          className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>
+                          className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
+                        >
                           Xóa
                         </button>
                       </TableCell>
@@ -264,14 +267,13 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                 <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                  Bạn có chắc chắn muốn xóa vật phẩm này không? Hành động này
-                    <b> không thể hoàn tác</b>.
+                    Bạn có chắc chắn muốn xóa vật phẩm này không?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Hủy</Button>
                   <Button onClick={handleDelete} color="error" variant="contained">
-                  Xóa
+                    Xóa
                   </Button>
                 </DialogActions>
               </Dialog>

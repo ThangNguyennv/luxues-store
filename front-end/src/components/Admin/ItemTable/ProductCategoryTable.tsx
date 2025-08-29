@@ -10,32 +10,92 @@ import type { Props } from '~/hooks/admin/productCategory/useTable'
 import ProductTree from '../TableTree/ProductTree'
 import TableContainer from '@mui/material/TableContainer'
 import Skeleton from '@mui/material/Skeleton'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
+    loading,
     dispatchProductCategory,
     productCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteProductCategory,
+    handleDelete,
     handleCheckbox,
     handleCheckAll,
-    isCheckAll
+    isCheckAll,
+    open,
+    handleOpen,
+    handleClose
   } = useTable({ selectedIds, setSelectedIds })
-  // if (!productCategories || productCategories.length === 0) {
-  //   return (
-  //     <Table>
-  //       <TableBody>
-  //         <TableRow>
-  //           <TableCell colSpan={8} align="center" className="font-[700] text-[20px] text-[#000000]">
-  //           Không có danh mục sản phẩm nào
-  //           </TableCell>
-  //         </TableRow>
-  //       </TableBody>
-  //     </Table>
-  //   )
-  // }
 
+  if (loading) {
+    return (
+      <TableContainer sx={{ maxHeight: 600 }}>
+        <Table sx={{
+          borderCollapse: 'collapse',
+          '& th, & td': {
+            border: '1px solid #000000' // đường kẻ
+          }
+        }}>
+          <TableHead>
+            <TableRow>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>
+                <Checkbox
+                  checked={isCheckAll}
+                  onChange={(event) => handleCheckAll(event.target.checked)}
+                  {...label}
+                  size="small"
+                  sx={{ padding: 0 }}
+                />
+              </TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Tiêu đề</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Vị trí</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Người tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Array.from({ length: 3 }).map((_item, index) => (
+              <TableRow key={index}>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="text" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center' className='font-[700] '>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="rectangular" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
   return (
     <>
       <TableContainer sx={{ maxHeight: 600 }}>
@@ -76,9 +136,12 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                   accounts={accounts}
                   handleCheckbox={handleCheckbox}
                   handleToggleStatus={handleToggleStatus}
-                  handleDeleteProductCategory={handleDeleteProductCategory}
+                  handleDelete={handleDelete}
                   productCategories={productCategories}
                   dispatchProductCategory={dispatchProductCategory}
+                  open={open}
+                  handleOpen={handleOpen}
+                  handleClose={handleClose}
                 />
               ))
             ) : (
@@ -109,6 +172,24 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                 </TableCell>
               </TableRow>
             )}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="delete-dialog-title"
+            >
+              <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Bạn có chắc chắn muốn xóa vật phẩm này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Hủy</Button>
+                <Button onClick={handleDelete} color="error" variant="contained">
+                  Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
           </TableBody>
         </Table>
       </TableContainer>

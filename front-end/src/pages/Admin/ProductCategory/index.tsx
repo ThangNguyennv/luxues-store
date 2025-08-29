@@ -8,6 +8,7 @@ import { useProductCategory } from '~/hooks/admin/productCategory/useProductCate
 
 const ProductCategoryAdmin = () => {
   const {
+    productCategories,
     dispatchProductCategory,
     filterStatus,
     pagination,
@@ -89,6 +90,7 @@ const ProductCategoryAdmin = () => {
           handlePagination={(page) => updateSearchParams('page', page.toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+          items={productCategories}
         />
       </div>
     </>

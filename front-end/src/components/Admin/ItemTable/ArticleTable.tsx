@@ -94,7 +94,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                         type='number'
                         value={article.position? article.position : ''}
                         min={'1'}
-                        data-_id={article._id}
+                        data-id={article._id}
                         name='position'
                         className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
                       />

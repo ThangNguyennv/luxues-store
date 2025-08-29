@@ -8,11 +8,11 @@ export const useProduct = () => {
   const { stateProduct, fetchProduct, dispatchProduct } = useProductContext()
   const { products, pagination, filterStatus, keyword } = stateProduct
   const { dispatchAlert } = useAlertContext()
-
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
-
+  const [open, setOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<string | null>(null)
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
@@ -56,6 +56,10 @@ export const useProduct = () => {
     })
   }
 
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
 
@@ -67,7 +71,6 @@ export const useProduct = () => {
       })
       return
     }
-
     if (!typeChange) {
       dispatchAlert({
         type: 'SHOW_ALERT',
@@ -77,10 +80,14 @@ export const useProduct = () => {
     }
 
     if (typeChange === 'delete-all') {
-      const isConfirm = confirm('Bạn có chắc muốn xóa tất cả những sản phẩm này?')
-      if (!isConfirm) return
+      setPendingAction('delete-all')
+      setOpen(true)
+      return
     }
+    await executeAction(typeChange)
+  }
 
+  const executeAction = async (typeChange: string) => {
     const selectedProducts = products.filter(product =>
       selectedIds.includes(product._id)
     )
@@ -114,9 +121,15 @@ export const useProduct = () => {
 
     setSelectedIds([])
     setActionType('')
-
+    setPendingAction(null)
     // Refetch
     reloadData()
+  }
+  const handleConfirmDeleteAll = async () => {
+    if (pendingAction === 'delete-all') {
+      await executeAction('delete-all')
+    }
+    setOpen(false)
   }
 
   const handleSort = (event: ChangeEvent<HTMLSelectElement>): void => {
@@ -162,6 +175,9 @@ export const useProduct = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    open,
+    handleClose,
+    handleConfirmDeleteAll
   }
 }

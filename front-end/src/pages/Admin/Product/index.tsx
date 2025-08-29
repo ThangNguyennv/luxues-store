@@ -5,6 +5,12 @@ import Search from '~/components/admin/Search/Search'
 import { useProduct } from '~/hooks/admin/product/useProduct'
 import { Link } from 'react-router-dom'
 import SortProduct from '~/components/admin/Sort/SortProduct'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ProductAdmin = () => {
   const {
@@ -24,7 +30,10 @@ const ProductAdmin = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    open,
+    handleClose,
+    handleConfirmDeleteAll
   } = useProduct()
 
   return (
@@ -50,7 +59,6 @@ const ProductAdmin = () => {
           <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
             <select
               name="type"
-              id=""
               value={actionType}
               onChange={(e) => setActionType(e.target.value)}
               className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
@@ -62,11 +70,29 @@ const ProductAdmin = () => {
               <option value="change-position">Thay đổi vị trí</option>
             </select>
             <button
-              type='submit'
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
+              type="submit"
+              className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
             >
               Áp dụng
             </button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="delete-dialog-title"
+            >
+              <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Bạn có chắc chắn muốn xóa {selectedIds.length} vật phẩm này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Hủy</Button>
+                <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
+                  Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
           </form>
           <SortProduct
             handleSort={handleSort}
@@ -92,7 +118,7 @@ const ProductAdmin = () => {
           handlePagination={(page) => updateSearchParams('page', (page).toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
-          products={products}
+          items={products}
         />
       </div>
     </>
