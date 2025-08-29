@@ -168,7 +168,7 @@ const CreateProduct = () => {
               id="position"
               name="position"
               placeholder="Tự động tăng"
-              value={productInfo.position ?? ''}
+              value={productInfo ? productInfo.position : ''}
               min={1}
             />
           </div>
