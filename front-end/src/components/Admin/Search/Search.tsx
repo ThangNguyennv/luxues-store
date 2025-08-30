@@ -1,3 +1,5 @@
+import { IoSearchOutline } from 'react-icons/io5'
+
 /* eslint-disable no-unused-vars */
 interface Props {
     keyword: string,
@@ -13,25 +15,24 @@ const Search = ({ keyword, handleChangeKeyword, handleSearch }: Props) => {
 
   return (
     <>
-      <div className='border rounded-[5px] py-[7px] px-[9px] w-[30%]'>
+      <div className='w-[25%]'>
         <form
           onSubmit={handleSubmit}
-          className='flex items-center gap-[10px] w-full'
+          className='flex items-center gap-[2px] w-full border rounded-[15px] hover:shadow-md px-[10px]'
         >
+          <button
+            type="submit"
+          >
+            <IoSearchOutline />
+          </button>
           <input
             onChange={(event) => handleChangeKeyword(event.target.value)}
             type="text"
             name="keyword"
             value={keyword}
             placeholder='Nhập từ khóa...'
-            className='outline-none flex-1'
+            className='outline-none p-[10px] w-full pr-10'
           />
-          <button
-            type="submit"
-            className='p-[5px] bg-[#00A7E6] border rounded-[5px]'
-          >
-            Tìm
-          </button>
         </form>
       </div>
     </>

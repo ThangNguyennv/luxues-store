@@ -39,7 +39,7 @@ const ProductAdmin = () => {
   return (
     <>
       <div className='flex flex-col gap-[15px]'>
-        <h1 className='text-[30px] font-[700] text-[#000000]'>Danh sách trang phục</h1>
+        <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách trang phục</h1>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>

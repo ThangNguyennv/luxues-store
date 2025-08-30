@@ -30,7 +30,7 @@ const Sidebar = () => {
       className={`
         ${isOpen ? 'w-[220px]' : 'w-[70px]'}
         flex flex-col gap-[20px] py-[30px]
-        shadow:md bg-[#0E0C28] px-[30px]
+        shadow:md bg-[#263544] px-[30px]
         text-[14px] font-[500] text-[#EFF2F2]
         h-screen fixed top-[66px] left-0 z-40
       `}
@@ -58,16 +58,15 @@ const Sidebar = () => {
           {/* Tổng quan */}
           <div
             className='hover-sidebar text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenDashboard(true)}
-            onMouseLeave={() => setIsOpenDashboard(false)}
+            onClick={() => setIsOpenDashboard(!isOpenDashboard)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdDashboard className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <MdDashboard className='text-[18px]'/>
+                <p>Tổng quan</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Tổng quan</p>
-                  <span>{isOpenDashboard ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenDashboard ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -91,16 +90,15 @@ const Sidebar = () => {
           {/* Danh mục */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenCategory(true)}
-            onMouseLeave={() => setIsOpenCategory(false)}
+            onClick={() => setIsOpenCategory(!isOpenCategory)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdCategory className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <MdCategory className='text-[18px]'/>
+                <p>Danh mục</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Danh mục</p>
-                  <span>{isOpenCategory ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenCategory ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -124,16 +122,15 @@ const Sidebar = () => {
           {/* Sản phẩm */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenProduct(true)}
-            onMouseLeave={() => setIsOpenProduct(false)}
+            onClick={() => setIsOpenProduct(!isOpenProduct)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaProductHunt className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <FaProductHunt className='text-[18px]'/>
+                <p>Sản phẩm</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Sản phẩm</p>
-                  <span>{isOpenProduct ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenProduct ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -157,16 +154,15 @@ const Sidebar = () => {
           {/* Thương hiệu */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenBranch(true)}
-            onMouseLeave={() => setIsOpenBranch(false)}
+            onClick={() => setIsOpenBranch(!isOpenBranch)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaCodeBranch className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <FaCodeBranch className='text-[18px]'/>
+                <p>Thương hiệu</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Thương hiệu</p>
-                  <span>{isOpenBranch ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenBranch ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -190,16 +186,15 @@ const Sidebar = () => {
           {/* Bài viết */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenArticle(true)}
-            onMouseLeave={() => setIsOpenArticle(false)}
+            onClick={() => setIsOpenArticle(!isOpenArticle)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdArticle className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <MdArticle className='text-[18px]'/>
+                <p>Bài viết</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Bài viết</p>
-                  <span>{isOpenArticle ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenArticle ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -223,16 +218,15 @@ const Sidebar = () => {
           {/* Quyền */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenRole(true)}
-            onMouseLeave={() => setIsOpenRole(false)}
+            onClick={() => setIsOpenRole(!isOpenRole)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaCriticalRole className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <FaCriticalRole className='text-[18px]'/>
+                <p>Quyền</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Quyền</p>
-                  <span>{isOpenRole ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenRole ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -253,29 +247,18 @@ const Sidebar = () => {
           </div>
           {/* Hết quyền */}
 
-          {/* Chat */}
-          <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-start gap-[20px] p-[5px]">
-            <BsChatLeftText className='text-[18px]'/>
-            {isOpen && (
-              <span>Chat</span>
-            )}
-            {/* <BsChatLeftText className='text-[18px]'/> */}
-          </Link>
-          {/* Hết chat */}
-
           {/* Tài khoản */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenAccount(true)}
-            onMouseLeave={() => setIsOpenAccount(false)}
+            onClick={() => setIsOpenAccount(!isOpenAccount)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdOutlineSupervisorAccount className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <MdOutlineSupervisorAccount className='text-[18px]'/>
+                <p>Tài khoản</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Tài khoản</p>
-                  <span>{isOpenAccount ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenAccount ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -300,16 +283,15 @@ const Sidebar = () => {
           {/* Cài đặt */}
           <div
             className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onMouseEnter={() => setIsOpenSetting(true)}
-            onMouseLeave={() => setIsOpenSetting(false)}
+            onClick={() => setIsOpenSetting(!isOpenSetting)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <IoIosSettings className='text-[18px]'/>
+              <div className='flex items-center justify-start gap-[15px]'>
+                <IoIosSettings className='text-[18px]'/>
+                <p>Cài đặt</p>
+              </div>
               {isOpen && (
-                <>
-                  <p>Cài đặt</p>
-                  <span>{isOpenSetting ? <FaChevronUp /> : <FaChevronDown />}</span>
-                </>
+                <span>{isOpenSetting ? <FaChevronUp /> : <FaChevronDown />}</span>
               )}
             </div>
             <div
@@ -330,8 +312,18 @@ const Sidebar = () => {
           </div>
           {/* Hết cài đặt */}
 
+          {/* Chat */}
+          <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
+            <BsChatLeftText className='text-[18px]'/>
+            {isOpen && (
+              <span>Chat</span>
+            )}
+            {/* <BsChatLeftText className='text-[18px]'/> */}
+          </Link>
+          {/* Hết chat */}
+
           {/* Thùng rác */}
-          <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[20px] p-[5px]">
+          <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
             <FaTrash className='text-[17px]'/>
             {isOpen && (
               <span>Thùng rác</span>
@@ -348,9 +340,9 @@ const Sidebar = () => {
             <FaCodeBranch />
             <MdArticle />
             <FaCriticalRole />
-            <BsChatLeftText />
             <MdOutlineSupervisorAccount />
             <IoIosSettings />
+            <BsChatLeftText />
             <FaTrash />
           </div>
         </>
