@@ -29,9 +29,9 @@ const ProductCategoryAdmin = () => {
 
   return (
     <>
-      <h1 className="text-[30px] font-[700] text-[#000000]">Danh mục trang phục</h1>
+      <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục trang phục</h1>
       <div className='flex flex-col gap-[15px]'>
-        <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
+        <div className='text-[17px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatus
@@ -62,7 +62,7 @@ const ProductCategoryAdmin = () => {
             </select>
             <button
               type='submit'
-              className='cursor-pointer border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
+              className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
                 Áp dụng
             </button>
           </form>
@@ -87,7 +87,7 @@ const ProductCategoryAdmin = () => {
         />
         <Pagination
           pagination={pagination}
-          handlePagination={(page) => updateSearchParams('page', page.toString())}
+          handlePagination={(page) => updateSearchParams('page', (page).toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
           items={productCategories}

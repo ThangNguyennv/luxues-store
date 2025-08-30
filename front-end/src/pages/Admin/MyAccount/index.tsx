@@ -12,15 +12,15 @@ const MyAccountAdmin = () => {
     <>
       {accountInfo ? (
         <>
-          <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Thông tin tài khoản</h1>
-          <div className="text-[30px] border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
+          <h1 className="text-[24px] font-[700] mt-[20px] ml-[20px]">Thông tin tài khoản</h1>
+          <div className="text-[16px] border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
             <img
               src={accountInfo.avatar}
               alt="Avatar"
               className="border rounded-[50%] w-[150px] h-[150px]"
             />
             <span>
-              <b>Họ và tên:</b>
+              <b>Họ và tên: </b>
               {accountInfo.fullName}
             </span>
             <span>
@@ -47,7 +47,7 @@ const MyAccountAdmin = () => {
             </span>
             <Link
               to={'/admin/my-account/edit'}
-              className='nav-link text-[20px] border rounded-[5px] bg-[#2F57EF] p-[6px] text-white w-[17%] text-center'
+              className='nav-link text-[14px] border rounded-[5px] bg-[#2F57EF] p-[4px] text-white w-[13%] text-center'
             >
               Chỉnh sửa
             </Link>
@@ -56,7 +56,7 @@ const MyAccountAdmin = () => {
       ) : (
         <>
           <Skeleton variant="text" width={300} height={32} sx={{ bgcolor: 'grey.400' }}/>
-          <div className="text-[30px] border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
+          <div className="border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
             <Skeleton variant="circular" width={150} height={150} sx={{ bgcolor: 'grey.400' }}/>
             <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
             <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>

@@ -1,3 +1,4 @@
+import Skeleton from '@mui/material/Skeleton'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchSettingGeneralAPI } from '~/apis/admin/settingGeneral.api'
@@ -15,26 +16,56 @@ const General = () => {
 
   return (
     <>
-      <h1 className='text-[30px] font-[700] text-[#000000]'>Cài đặt chung</h1>
-      {general && (
-        <>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Tên website: {general.websiteName}</h1>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Logo:
+      <h1 className='text-[24px] font-[700]'>Cài đặt chung</h1>
+      {general ?(
+        <div className='flex flex-col gap-[15px] mt-[20px]'>
+          <div>
+            <b className='text-[18px]'>Tên website: </b>
+            <span className='text-[16px]'>{general.websiteName}</span>
+          </div>
+          <div className='flex flex-col gap-[10px]'>
+            <b className='text-[18px]'>Logo: </b>
             <img
               src={general.logo}
               className='w-[150px] h-auto'
             />
-          </h1>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Số điện thoại: {general.phone}</h1>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Email: {general.email}</h1>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Địa chỉ: {general.address}</h1>
-          <h1 className='text-[35px] font-[600] text-[#00171F]'>Bản quyền: {general.copyright}</h1>
+          </div>
+          <div>
+            <b className='text-[18px]'>Số điện thoại: </b>
+            <span className='text-[16px]'>{general.phone}</span>
+          </div>
+          <div>
+            <b className='text-[18px]'>Email: </b>
+            <span className='text-[16px]'>{general.email}</span>
+          </div>
+          <div>
+            <b className='text-[18px]'>Địa chỉ: </b>
+            <span className='text-[16px]'>{general.address}</span>
+          </div>
+          <div>
+            <b className='text-[18px]'>Bản quyền: </b>
+            <span className='text-[16px]'>{general.copyright}</span>
+          </div>
           <Link
             to={'/admin/settings/general/edit'}
-            className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[7px] w-[7%] text-center'
+            className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[7%] text-center text-[16px]'
           >
             Chỉnh sửa
           </Link>
+        </div>
+      ) : (
+        <>
+          <Skeleton variant="text" width={200} height={30} sx={{ bgcolor: 'grey.400' }}/>
+          <div className='flex flex-col gap-[15px] mt-[20px]'>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
         </>
       )}
     </>

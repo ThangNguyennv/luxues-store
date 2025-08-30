@@ -20,7 +20,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id ?? '',
+      account_id: myAccount ? myAccount._id : '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'

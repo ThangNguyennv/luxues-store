@@ -4,7 +4,7 @@ import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryConte
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursiveForProduct } from '~/helpers/updateStatusRecursiveForProduct'
 import type { UpdatedBy } from '~/types/helper.type'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export interface Props {
   selectedIds: string[],
@@ -14,6 +14,8 @@ export interface Props {
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateProductCategory, dispatchProductCategory } = useProductCategoryContext()
   const { productCategories, accounts, loading } = stateProductCategory
+
+  console.log("🚀 ~ useTable.tsx ~ useTable ~ productCategories con:", productCategories);
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [open, setOpen] = useState(false)
@@ -30,7 +32,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const handleToggleStatus = async (currentStatus: string, id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
-      account_id: myAccount!._id ?? '',
+      account_id: myAccount ? myAccount._id : '',
       updatedAt: new Date()
     }
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'

@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom'
 import { useHeader } from '~/hooks/admin/header/useHeader'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { IoIosNotificationsOutline } from 'react-icons/io'
+import { IoIosLogOut, IoIosNotificationsOutline } from 'react-icons/io'
 import Skeleton from '@mui/material/Skeleton'
+import logo from '~/assets/images/Header/logo.jpg'
+import { CgProfile } from 'react-icons/cg'
+import { IoSettingsOutline } from 'react-icons/io5'
 
 const Header = () => {
   const {
@@ -20,14 +23,17 @@ const Header = () => {
       {myAccount ? (
         <>
           <header className="
-            bg-[#00171F] p-[20px]
+            bg-[#252733] py-[13px] px-[30px]
             text-[25px] font-[700] text-[#EFF2F2]
             flex items-center justify-between
             fixed top-0 left-0 right-0
             w-full z-50 shadow-md
             "
           >
-            <Link to="/admin/dashboard">ADMIN</Link>
+            <Link to={'/admin/dashboard'} className='flex items-center justify-center gap-[10px]'>
+              <img src={logo} className='contain w-[40px] h-[40px]'/>
+              <p className='uppercase'>ADMIN</p>
+            </Link>
             <div className='flex items-center justify-between gap-[25px]'>
               <IoIosNotificationsOutline />
               <Link
@@ -59,7 +65,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <Link to={'/admin/my-account'}>Thông tin tài khoản</Link>
+                      <Link to={'/admin/my-account'} className='flex items-center justify-start gap-[10px] w-full'>
+                        <CgProfile />
+                        <span>Hồ sơ</span>
+                      </Link>
                     </MenuItem>
                     <MenuItem sx={{
                       '&:hover': {
@@ -67,7 +76,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <Link to={'/admin/settings/general'}>Cài đặt</Link>
+                      <Link to={'/admin/settings/general'} className='flex items-center justify-start gap-[10px] w-full'>
+                        <IoSettingsOutline />
+                        <span>Cài đặt</span>
+                      </Link>
                     </MenuItem>
                     <MenuItem sx={{
                       '&:hover': {
@@ -75,7 +87,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <button onClick={handleLogout}>Đăng xuất</button>
+                      <button onClick={handleLogout} className='flex items-center justify-start gap-[10px] w-full'>
+                        <IoIosLogOut />
+                        <span>Đăng xuất</span>
+                      </button>
                     </MenuItem>
                   </Menu>
                 </div>

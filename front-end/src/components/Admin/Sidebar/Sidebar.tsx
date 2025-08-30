@@ -28,23 +28,22 @@ const Sidebar = () => {
   return (
     <div
       className={`
-        ${isOpen ? 'w-[22 0px]' : 'w-[70px]'}
-        border rounded-[12px]
-        flex flex-col gap-[20px]
-        shadow:md bg-[#192335] p-[20px]
-        text-[15px] font-[500] text-[#EFF2F2]
-        h-screen fixed top-[80px] left-0 z-40
+        ${isOpen ? 'w-[220px]' : 'w-[70px]'}
+        flex flex-col gap-[20px] py-[30px]
+        shadow:md bg-[#0E0C28] px-[30px]
+        text-[14px] font-[500] text-[#EFF2F2]
+        h-screen fixed top-[66px] left-0 z-40
       `}
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          flex items-center text-[20px] 
+          flex items-center text-[18px] 
           cursor-pointer mb-[10px]
           ${isOpen ? 'justify-end' : 'justify-center'}
         `}
       >
-        {isOpen ? <BiMenuAltRight /> : <IoMenu />}
+        {isOpen ? <BiMenuAltRight /> : <IoMenu className='text-[18px]'/>}
       </button>
       {/* Menu */}
       {isOpen ? (
@@ -56,7 +55,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenDashboard(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdDashboard className='text-[20px]'/>
+              <MdDashboard className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Tổng quan</p>
@@ -89,7 +88,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenCategory(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdCategory className='text-[20px]'/>
+              <MdCategory className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Danh mục</p>
@@ -122,7 +121,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenProduct(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaProductHunt className='text-[20px]'/>
+              <FaProductHunt className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Sản phẩm</p>
@@ -155,7 +154,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenBranch(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaCodeBranch className='text-[20px]'/>
+              <FaCodeBranch className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Thương hiệu</p>
@@ -188,7 +187,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenArticle(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdArticle className='text-[20px]'/>
+              <MdArticle className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Bài viết</p>
@@ -221,7 +220,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenRole(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <FaCriticalRole className='text-[20px]'/>
+              <FaCriticalRole className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Quyền</p>
@@ -248,12 +247,12 @@ const Sidebar = () => {
           {/* Hết quyền */}
 
           {/* Chat */}
-          <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-between p-[5px]">
+          <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-start gap-[20px] p-[5px]">
             <BsChatLeftText className='text-[18px]'/>
             {isOpen && (
               <span>Chat</span>
             )}
-            <BsChatLeftText className='text-[18px]'/>
+            {/* <BsChatLeftText className='text-[18px]'/> */}
           </Link>
           {/* Hết chat */}
 
@@ -264,7 +263,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenAccount(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <MdOutlineSupervisorAccount className='text-[20px]'/>
+              <MdOutlineSupervisorAccount className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Tài khoản</p>
@@ -298,7 +297,7 @@ const Sidebar = () => {
             onMouseLeave={() => setIsOpenSetting(false)}
           >
             <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <IoIosSettings className='text-[20px]'/>
+              <IoIosSettings className='text-[18px]'/>
               {isOpen && (
                 <>
                   <p>Cài đặt</p>
@@ -325,18 +324,17 @@ const Sidebar = () => {
           {/* Hết cài đặt */}
 
           {/* Thùng rác */}
-          <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-between p-[5px]">
-            <FaTrash className='text-[18px]'/>
+          <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[20px] p-[5px]">
+            <FaTrash className='text-[17px]'/>
             {isOpen && (
               <span>Thùng rác</span>
             )}
-            <FaTrash className='text-[18px]'/>
           </Link>
           {/* Hết thùng rác */}
         </>
       ) : (
         <>
-          <div className='flex flex-col text-[20px] gap-[35px] items-center justify-center'>
+          <div className='flex flex-col text-[18px] gap-[35px] items-center justify-center'>
             <MdDashboard />
             <MdCategory />
             <FaProductHunt />

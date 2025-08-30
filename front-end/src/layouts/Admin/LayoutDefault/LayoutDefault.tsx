@@ -1,6 +1,5 @@
 import { Outlet } from 'react-router-dom'
 import Header from '~/components/admin/Header/Header'
-import Footer from '~/components/admin/Footer/Footer'
 import Sidebar from '~/components/admin/Sidebar/Sidebar'
 
 const LayoutDefaultAdmin = () => {
@@ -9,13 +8,13 @@ const LayoutDefaultAdmin = () => {
       <Header />
       <div className='flex'>
         <Sidebar />
-        <div className='flex justify-center flex-1 ml-[200px] my-[82px]'>
-          <div className='container flex flex-col gap-[15px] p-[15px]'>
+        <div className='flex justify-center flex-1 ml-[200px] my-[75px]'>
+          <div className='container flex flex-col'>
             <Outlet />
           </div>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }

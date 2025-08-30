@@ -55,6 +55,7 @@ import MyAccountClient from './pages/client/MyAccount'
 import EditMyAccountClient from './pages/client/MyAccount/Edit'
 import ChangePassword from './pages/client/MyAccount/ChangePassword'
 import LayoutUser from './layouts/client/layoutUser/LayoutUser'
+import ForgotPassword from './pages/admin/Auth/ForgotPassword'
 
 function App() {
   useEffect(() => {
@@ -160,6 +161,7 @@ function App() {
           </Route>
           <Route path='admin/auth'>
             <Route path='login' element={ <Login />}/>
+            <Route path='forgot-password' element={<ForgotPassword />}/>
           </Route>
         </Routes>
       </BrowserRouter>
