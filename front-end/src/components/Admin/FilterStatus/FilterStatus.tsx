@@ -19,7 +19,7 @@ const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus }: Props
               <button
                 key={index}
                 onClick={() => handleFilterStatus(item.status)}
-                className={`p-[10px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] 
+                className={`p-[5px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] 
                   ${isActive ? 'bg-[#525FE1] border-[#525FE1]' : 'bg-white'}`}
               >
                 {item.name}
@@ -29,9 +29,9 @@ const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus }: Props
         </div>
       ) : (
         <div className='flex gap-[15px] items-center'>
-          <Skeleton variant="rectangular" width={65} height={45} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
-          <Skeleton variant="rectangular" width={94} height={45} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
-          <Skeleton variant="rectangular" width={132} height={45} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={74} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={122} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
         </div>
       )}
     </>

@@ -113,7 +113,8 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
         <Table sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
-            border: '1px solid #000000' // đường kẻ
+            border: '1px solid #000000', // đường kẻ
+            fontSize: '14px'
           }
         }}>
           <TableHead>

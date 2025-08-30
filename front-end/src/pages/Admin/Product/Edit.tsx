@@ -19,11 +19,12 @@ const EditProduct = () => {
     <>
       {productInfo ? (
         <>
-          <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
           <form
             onSubmit={(event) => handleSubmit(event)}
-            className="flex flex-col gap-[10px] text-[17px] font-[500]"
-            encType="multipart/form-data">
+            className="flex flex-col gap-[10px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
+            encType="multipart/form-data"
+          >
+            <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
             <div className="form-group">
               <label htmlFor="title">Tiêu đề</label>
               <input
@@ -195,7 +196,7 @@ const EditProduct = () => {
 
             <button
               type="submit"
-              className="w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+              className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
             >
             Cập nhật
             </button>

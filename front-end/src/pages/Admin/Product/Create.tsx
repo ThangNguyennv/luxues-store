@@ -17,13 +17,13 @@ const CreateProduct = () => {
 
   return (
     <>
-      <h1 className="text-[30px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
       {productInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[15px] text-[17px] font-[500]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[30px] font-[600] text-[#192335]">Thêm mới sản phẩm</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -203,7 +203,7 @@ const CreateProduct = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
+            className="cursor-pointer w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
           >
             Tạo mới
           </button>

@@ -38,9 +38,9 @@ const ProductAdmin = () => {
 
   return (
     <>
-      <div className='flex flex-col gap-[15px]'>
+      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md'>
         <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách trang phục</h1>
-        <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
+        <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatus
@@ -55,7 +55,7 @@ const ProductAdmin = () => {
             />
           </div>
         </div>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between text-[15px]'>
           <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
             <select
               name="type"
@@ -103,7 +103,7 @@ const ProductAdmin = () => {
           <div>
             <Link
               to={'/admin/products/create'}
-              className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+              className='border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white'
             >
               + Thêm mới
             </Link>
