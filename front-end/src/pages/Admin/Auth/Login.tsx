@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <>
       <div className="w-screen h-screen bg-[#252733] p-[25px] text-[#ECECEC] flex items-center justify-center">
-        <div className='login-admin relative flex flex-col items-center justify-center gap-[10px] border rounded-[15px] border-[#231F40] p-[25px] bg-[#00171F] w-[500px] h-[600px]'>
+        <div className='login-admin relative flex flex-col items-center justify-center gap-[10px] border rounded-[15px] border-[#231F40] p-[25px] bg-[#00171F] w-[500px] h-[600px] shadow-[0_0_20px_5px_rgba(0,255,255,0.3)]'>
           <FaCircleUser className='absolute top-[-80px] w-[150px] h-[150px]'/>
           <div className='flex flex-col w-full'>
             <form onSubmit={(event) => handleSubmit(event)} className="flex flex-col gap-[30px] text-center">
