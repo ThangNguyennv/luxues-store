@@ -38,12 +38,19 @@ const Sidebar = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          flex items-center text-[18px] 
-          cursor-pointer mb-[10px]
+          flex items-center justify-center 
+          mb-[10px] text-[18px] 
           ${isOpen ? 'justify-end' : 'justify-center'}
         `}
       >
-        {isOpen ? <BiMenuAltRight /> : <IoMenu className='text-[18px]'/>}
+        <span
+          className={`
+            transition-transform duration-400 ease-in-out
+            ${isOpen ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}
+          `}
+        >
+          {isOpen ? <BiMenuAltRight /> : <IoMenu />}
+        </span>
       </button>
       {/* Menu */}
       {isOpen ? (
