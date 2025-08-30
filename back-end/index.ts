@@ -1,11 +1,8 @@
 import express, { Express } from 'express'
 import path from 'path'
-import methodOverride from 'method-override'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import flash from 'express-flash'
-import moment from 'moment'
 import http from 'http'
 import dotenv from 'dotenv'
 import { Server } from 'socket.io'
@@ -34,19 +31,16 @@ const io = new Server(server)
 global._io = io
 // End Socket IO
 
-app.use(methodOverride('_method'))
-
-// // parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded());
-
 // Parse JSON bodies
 app.use(bodyParser.json())
 
-// flash
 app.use(cookieParser('dfdfsadasd'))
-app.use(session({ cookie: { maxAge: 60000 } }))
-app.use(flash())
-// End flash
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,         // khuyến nghị: không lưu lại nếu session chưa thay đổi
+  saveUninitialized: false, // khuyến nghị: không tạo session trống
+  cookie: { maxAge: 60000 }
+}))
 
 // Tinymce
 app.use(
@@ -55,25 +49,14 @@ app.use(
 )
 // End Tinymce
 
-// App Locals Variables (Tạo ra các biến toàn cục, file .pug nào cũng xài được, và chỉ đc sử dụng trong file .pug)
+// App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
-app.locals.moment = moment
 
-app.use(express.static(`${__dirname}/public`)) // Rất quan trọng, muốn cái gì public thì cho vào thư mục public còn lại là private
+app.use(express.static(`${__dirname}/public`)) // giúp Express phục vụ các file tĩnh trong thư mục public mà không cần viết route thủ công.
 
 // Routes
 routeAdmin(app)
 routeClient(app)
-// app.get("*", function (req, res) {
-//   res.render("client/pages/errors/404.pug", {
-//     pageTitle: "404 Not Found",
-//   });
-// });
-app.use(function (req, res) {
-  res.status(404).render('client/pages/errors/404.pug', {
-    pageTitle: '404 Not Found'
-  })
-})
 
 server.listen(port, () => {
   // eslint-disable-next-line no-console

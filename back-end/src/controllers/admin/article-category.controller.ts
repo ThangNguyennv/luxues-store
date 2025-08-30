@@ -273,7 +273,7 @@ export const createPost = async (req: Request, res: Response) => {
     res.json({
       code: 201,
       message: 'Thêm thành công danh mục bài viết!',
-      data: req.body
+      data: records
     })
   } catch (error) {
     res.json({
