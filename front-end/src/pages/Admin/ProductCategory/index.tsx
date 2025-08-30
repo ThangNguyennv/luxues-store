@@ -29,9 +29,9 @@ const ProductCategoryAdmin = () => {
 
   return (
     <>
-      <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục trang phục</h1>
-      <div className='flex flex-col gap-[15px]'>
-        <div className='text-[17px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
+      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md'>
+        <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục trang phục</h1>
+        <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatus
@@ -45,7 +45,7 @@ const ProductCategoryAdmin = () => {
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
           </div>
         </div>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between text-[15px]'>
           <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
             <select
               name="type"

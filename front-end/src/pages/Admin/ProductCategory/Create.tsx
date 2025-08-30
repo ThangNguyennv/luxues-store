@@ -17,13 +17,13 @@ const CreateProductCategory = () => {
 
   return (
     <>
-      <h1 className="text-[30px] font-[600] text-[#192335]">Thêm mới danh mục sản phẩm</h1>
       {productCategoryInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[15px] text-[17px] font-[500]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới danh mục sản phẩm</h1>
           <div className="form-group">
             <label htmlFor="title">
               Tiêu đề
@@ -33,7 +33,7 @@ const CreateProductCategory = () => {
               type="text"
               id="title"
               name="title"
-              className='py-[3px]'
+              className='py-[3px] text-[16px]'
               required
             />
           </div>
@@ -43,7 +43,7 @@ const CreateProductCategory = () => {
             <select
               name="parent_id"
               id="parent_id"
-              className="outline-none border rounded-[5px] border-[#00171F] py-[3px]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}
             >
@@ -88,7 +88,7 @@ const CreateProductCategory = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] font-[500] border rounded-[10px] w-[7%] py-[4px]"
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
             >
               Chọn ảnh
             </button>
@@ -109,12 +109,12 @@ const CreateProductCategory = () => {
               id="position"
               name="position"
               placeholder="Tự động tăng"
-              className='py-[3px]'
+              className='py-[3px] text-[16px]'
               min={1}
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[10px]">
+          <div className="flex items-center justify-start gap-[10px] text-[16px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, status: event.target.value })}
@@ -144,7 +144,7 @@ const CreateProductCategory = () => {
 
           <button
             type="submit"
-            className="w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[5px] text-[16px]"
           >
             Tạo mới
           </button>

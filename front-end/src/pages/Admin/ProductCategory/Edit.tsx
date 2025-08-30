@@ -11,18 +11,19 @@ const EditProductCategory = () => {
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   } = useEdit()
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
       {productCategoryInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -30,6 +31,7 @@ const EditProductCategory = () => {
               type="text"
               id="title"
               name="title"
+              className='py-[3px] text-[16px]'
               value={productCategoryInfo.title}
             />
           </div>
@@ -39,7 +41,7 @@ const EditProductCategory = () => {
             <select
               name="parent_id"
               id="parent_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={productCategoryInfo.parent_id}
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, parent_id: event.target.value })}
             >
@@ -80,12 +82,20 @@ const EditProductCategory = () => {
               type="file"
               id="thumbnail"
               name="thumbnail"
+              className='hidden'
               accept="image/*"
             />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+            >
+              Chọn ảnh
+            </button>
             <img
               ref={uploadImagePreviewRef}
               src={productCategoryInfo.thumbnail}
-              className="w-[150px] h-auto"
+              alt="Avatar preview"
+              className="border w-[150px] h-[150px]"
             />
           </div>
 
@@ -98,11 +108,12 @@ const EditProductCategory = () => {
               name="position"
               placeholder="Tự động tăng"
               min={1}
+              className='text-[16px] py-[3px]'
               value={productCategoryInfo.position ? productCategoryInfo.position : ''}
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[5px] text-[16px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductCategoryInfo(productCategoryInfo ? { ...productCategoryInfo, status: event.target.value }: productCategoryInfo)}
@@ -132,7 +143,7 @@ const EditProductCategory = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[16px]"
           >
             Cập nhật
           </button>

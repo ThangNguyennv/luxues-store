@@ -18,11 +18,11 @@ const DetailProduct = () => {
             </div>
             <div className='flex justify-between gap-[10px] w-[50%]'>
               <div className='flex flex-col gap-[15px]'>
-                <div className=''>
+                <div>
                   <b>Tên sản phẩm: </b>
                   {productDetail.title}
                 </div>
-                <div className=''>
+                <div>
                   <b>Giá: </b>
                   {productDetail.price.toLocaleString('vi-VN')}đ
                 </div>

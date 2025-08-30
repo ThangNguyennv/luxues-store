@@ -12,7 +12,8 @@ const EditProduct = () => {
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   } = useEdit()
 
   return (
@@ -21,7 +22,7 @@ const EditProduct = () => {
         <>
           <form
             onSubmit={(event) => handleSubmit(event)}
-            className="flex flex-col gap-[10px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
+            className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
             encType="multipart/form-data"
           >
             <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
@@ -144,12 +145,20 @@ const EditProduct = () => {
                 type="file"
                 id="thumbnail"
                 name="thumbnail"
+                className='hidden'
                 accept="image/*"
               />
+              <button
+                onClick={event => handleClick(event)}
+                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+              >
+              Chọn ảnh
+              </button>
               <img
                 ref={uploadImagePreviewRef}
                 src={productInfo.thumbnail}
-                className="w-[150px] h-auto"
+                alt="Avatar preview"
+                className="border w-[150px] h-[150px]"
               />
             </div>
 

@@ -10,7 +10,7 @@ import { FaCriticalRole } from 'react-icons/fa'
 import { MdOutlineSupervisorAccount } from 'react-icons/md'
 import { IoIosSettings } from 'react-icons/io'
 import { FaTrash } from 'react-icons/fa'
-import { BiMenuAltRight } from 'react-icons/bi'
+import { TbMenu4 } from 'react-icons/tb'
 import { IoMenu } from 'react-icons/io5'
 import { BsChatLeftText } from 'react-icons/bs'
 
@@ -49,7 +49,7 @@ const Sidebar = () => {
             ${isOpen ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}
           `}
         >
-          {isOpen ? <BiMenuAltRight /> : <IoMenu />}
+          {isOpen ? <TbMenu4 /> : <IoMenu />}
         </span>
       </button>
       {/* Menu */}

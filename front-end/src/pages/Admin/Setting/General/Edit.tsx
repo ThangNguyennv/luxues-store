@@ -73,7 +73,7 @@ const EditSettingGeneral = () => {
                 type='text'
                 id='websiteName'
                 name='websiteName'
-                className='border p-[5px] rounded-[5px] text-[14px]'
+                className='border p-[5px] rounded-[5px] text-[16px]'
                 value={general.websiteName}
                 required
               />
@@ -92,7 +92,7 @@ const EditSettingGeneral = () => {
               <div className='flex flex-col gap-[10px]'>
                 <button
                   onClick={event => handleClick(event)}
-                  className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] cursor-pointer text-[14px]"
+                  className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
                 >
               Chọn ảnh
                 </button>
@@ -111,7 +111,7 @@ const EditSettingGeneral = () => {
                 type='text'
                 id='phone'
                 name='phone'
-                className='border p-[5px] rounded-[5px] text-[14px]'
+                className='border p-[5px] rounded-[5px] text-[16px]'
                 value={general.phone}
               />
             </div>
@@ -122,7 +122,7 @@ const EditSettingGeneral = () => {
                 type='email'
                 id='email'
                 name='email'
-                className='border p-[5px] rounded-[5px] text-[14px]'
+                className='border p-[5px] rounded-[5px] text-[16px]'
                 value={general.email}
                 required
               />
@@ -134,7 +134,7 @@ const EditSettingGeneral = () => {
                 type='text'
                 id='address'
                 name='address'
-                className='border p-[5px] rounded-[5px] text-[14px]'
+                className='border p-[5px] rounded-[5px] text-[16px]'
                 value={general.address}
               />
             </div>
@@ -145,7 +145,7 @@ const EditSettingGeneral = () => {
                 type='text'
                 id='copyright'
                 name='copyright'
-                className='border p-[5px] rounded-[5px] text-[14px]'
+                className='border p-[5px] rounded-[5px] text-[16px]'
                 value={general.copyright}
                 required
               />

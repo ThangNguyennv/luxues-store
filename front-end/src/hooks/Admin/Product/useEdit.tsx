@@ -56,6 +56,11 @@ export const useEdit = () => {
     }
   }
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    uploadImageInputRef.current?.click()
+  }
+
   return {
     allProductCategories,
     productInfo,
@@ -63,6 +68,7 @@ export const useEdit = () => {
     uploadImageInputRef,
     uploadImagePreviewRef,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   }
 }
