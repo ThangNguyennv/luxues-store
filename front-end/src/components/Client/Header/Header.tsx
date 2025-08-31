@@ -14,6 +14,9 @@ import { fetchInfoUserAPI } from '~/apis/client/user.api'
 import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
 import { fetchSettingGeneralAPI } from '~/apis/admin/settingGeneral.api'
 import type { SettingGeneralDetailInterface } from '~/types/setting.type'
+import { IoLogOutOutline } from 'react-icons/io5'
+import { CgProfile } from 'react-icons/cg'
+import { IoSettingsOutline } from 'react-icons/io5'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -176,7 +179,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <Link to={'/user/account/info'}>Thông tin tài khoản</Link>
+                      <Link to={'/user/account/info'} className='flex items-center justify-start gap-[10px]'>
+                        <CgProfile />
+                        <span>Tài khoản của tôi</span>
+                      </Link>
                     </MenuItem>
                     <MenuItem sx={{
                       '&:hover': {
@@ -184,7 +190,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                    Cài đặt
+                      <Link to={''} className='flex items-center justify-start gap-[10px]'>
+                        <IoSettingsOutline />
+                        <span>Cài đặt</span>
+                      </Link>
                     </MenuItem>
                     <MenuItem sx={{
                       '&:hover': {
@@ -192,7 +201,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <div onClick={handleLogout}>Đăng xuất</div>
+                      <div onClick={handleLogout} className='flex items-center justify-start gap-[10px]'>
+                        <IoLogOutOutline />
+                        <span>Đăng xuất</span>
+                      </div>
                     </MenuItem>
                   </Menu>
                 </div>

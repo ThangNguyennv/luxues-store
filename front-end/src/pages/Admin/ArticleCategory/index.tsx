@@ -23,12 +23,13 @@ const ArticleCategoryAdmin = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    articleCategories
   } = useArticleCategory()
 
   return (
     <>
-      <h1 className="text-[30px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
+      <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
       <div className='flex flex-col gap-[15px]'>
         <div className='text-[20px] font-[500] text-[#000000] p-[15px] border rounded-[5px] flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
@@ -86,9 +87,10 @@ const ArticleCategoryAdmin = () => {
         />
         <Pagination
           pagination={pagination}
-          handlePagination={(page) => updateSearchParams('page', page)}
+          handlePagination={(page) => updateSearchParams('page', (page).toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+          items={articleCategories}
         />
       </div>
     </>

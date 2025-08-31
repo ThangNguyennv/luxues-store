@@ -23,7 +23,7 @@ const EditProductCategory = () => {
           className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
-          <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
+          <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -87,7 +87,7 @@ const EditProductCategory = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+              className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
             >
               Chọn ảnh
             </button>

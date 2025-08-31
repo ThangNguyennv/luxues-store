@@ -155,6 +155,7 @@ export const useArticleCategory = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    articleCategories
   }
 }

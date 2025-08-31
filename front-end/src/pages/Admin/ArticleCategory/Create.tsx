@@ -16,7 +16,7 @@ const CreateArticleCategory = () => {
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới danh mục bài viết</h1>
+      <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới danh mục bài viết</h1>
       {articleCategoryInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}

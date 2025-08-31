@@ -25,7 +25,7 @@ const EditProduct = () => {
             className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
             encType="multipart/form-data"
           >
-            <h1 className="text-[30px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
+            <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
             <div className="form-group">
               <label htmlFor="title">Tiêu đề</label>
               <input
@@ -33,7 +33,7 @@ const EditProduct = () => {
                 type="text"
                 id="title"
                 name="title"
-                className='py-[3px]'
+                className='py-[3px] text-[16px]'
                 value={productInfo.title}
               />
             </div>
@@ -43,7 +43,7 @@ const EditProduct = () => {
               <select
                 name="product_category_id"
                 id="product_category_id"
-                className="outline-none border rounded-[5px] border-[#00171F] py-[3px]"
+                className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
                 value={productInfo.product_category_id}
                 onChange={(event) => setProductInfo({ ...productInfo, product_category_id: event.target.value })}
               >
@@ -62,7 +62,7 @@ const EditProduct = () => {
               </select>
             </div>
 
-            <div className="flex items-center justify-start gap-[10px]">
+            <div className="flex items-center justify-start gap-[10px] text-[16px]">
               <div className="flex gap-[5px]">
                 <input
                   onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
@@ -111,6 +111,7 @@ const EditProduct = () => {
                 type="number"
                 id="price"
                 name="price"
+                className='text-[16px] py-[3px]'
                 value={productInfo.price}
                 min={0}/>
             </div>
@@ -123,6 +124,7 @@ const EditProduct = () => {
                 id="discount"
                 name="discountPercentage"
                 value={productInfo.discountPercentage}
+                className='text-[16px] py-[3px]'
                 min={0}/>
             </div>
 
@@ -134,6 +136,7 @@ const EditProduct = () => {
                 id="stock"
                 name="stock"
                 value={productInfo.stock}
+                className='text-[16px] py-[3px]'
                 min={0}/>
             </div>
 
@@ -150,7 +153,7 @@ const EditProduct = () => {
               />
               <button
                 onClick={event => handleClick(event)}
-                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
               >
               Chọn ảnh
               </button>
@@ -171,11 +174,12 @@ const EditProduct = () => {
                 name="position"
                 placeholder="Tự động tăng"
                 min={1}
+                className='text-[16px] py-[3px]'
                 value={productInfo ? productInfo.position : ''}
               />
             </div>
 
-            <div className="flex items-center justify-start gap-[10px]">
+            <div className="flex items-center justify-start gap-[10px] text-[16px]">
               <div className="flex gap-[5px]">
                 <input
                   onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
@@ -205,7 +209,7 @@ const EditProduct = () => {
 
             <button
               type="submit"
-              className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+              className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[16px]"
             >
             Cập nhật
             </button>

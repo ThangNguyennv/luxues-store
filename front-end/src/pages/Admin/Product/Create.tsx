@@ -31,7 +31,7 @@ const CreateProduct = () => {
               type="text"
               id="title"
               name="title"
-              className='py-[3px]'
+              className='py-[3px] text-[16px]'
               required
             />
           </div>
@@ -41,7 +41,7 @@ const CreateProduct = () => {
             <select
               name="product_category_id"
               id="product_category_id"
-              className="outline-none border rounded-[5px] border-[#00171F] py-[3px]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={productInfo.product_category_id}
               onChange={(event) => setProductInfo({ ...productInfo, product_category_id: event.target.value })}
             >
@@ -60,7 +60,7 @@ const CreateProduct = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-start gap-[10px]">
+          <div className="flex items-center justify-start gap-[10px] text-[16px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductInfo({ ...productInfo, featured: event.target.value })}
@@ -108,6 +108,7 @@ const CreateProduct = () => {
               type="number"
               id="price"
               name="price"
+              className='text-[16px] py-[3px]'
               defaultValue={0}
               min={0}/>
           </div>
@@ -119,6 +120,7 @@ const CreateProduct = () => {
               type="number"
               id="discount"
               name="discountPercentage"
+              className='text-[16px] py-[3px]'
               defaultValue={0}
               min={0}/>
           </div>
@@ -131,6 +133,7 @@ const CreateProduct = () => {
               id="stock"
               name="stock"
               defaultValue={0}
+              className='text-[16px] py-[3px]'
               min={0}/>
           </div>
 
@@ -147,7 +150,7 @@ const CreateProduct = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
             >
               Chọn ảnh
             </button>
@@ -169,11 +172,12 @@ const CreateProduct = () => {
               name="position"
               placeholder="Tự động tăng"
               value={productInfo ? productInfo.position : ''}
+              className='text-[16px] py-[3px]'
               min={1}
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[5px] text-[16px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductInfo({ ...productInfo, status: event.target.value })}
@@ -203,7 +207,7 @@ const CreateProduct = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
+            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
           >
             Tạo mới
           </button>

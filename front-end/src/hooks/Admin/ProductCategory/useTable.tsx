@@ -15,7 +15,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateProductCategory, dispatchProductCategory } = useProductCategoryContext()
   const { productCategories, accounts, loading } = stateProductCategory
 
-  console.log("🚀 ~ useTable.tsx ~ useTable ~ productCategories con:", productCategories);
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [open, setOpen] = useState(false)
