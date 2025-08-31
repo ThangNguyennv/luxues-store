@@ -140,7 +140,7 @@ const EditProduct = () => {
                 min={0}/>
             </div>
 
-            <div className="flex flex-col gap-[5px]">
+            <div className="flex flex-col gap-[10px]">
               <label htmlFor="thumbnail">Ảnh</label>
               <input
                 onChange={(event) => handleChange(event)}
@@ -153,7 +153,7 @@ const EditProduct = () => {
               />
               <button
                 onClick={event => handleClick(event)}
-                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
+                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
               >
               Chọn ảnh
               </button>
@@ -209,7 +209,7 @@ const EditProduct = () => {
 
             <button
               type="submit"
-              className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[16px]"
+              className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
             >
             Cập nhật
             </button>

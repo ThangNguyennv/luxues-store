@@ -113,7 +113,7 @@ const EditProductCategory = () => {
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px] text-[16px]">
+          <div className="flex items-center justify-start gap-[10px] text-[16px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setProductCategoryInfo(productCategoryInfo ? { ...productCategoryInfo, status: event.target.value }: productCategoryInfo)}

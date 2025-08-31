@@ -150,7 +150,7 @@ const CreateProduct = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
             >
               Chọn ảnh
             </button>
@@ -207,7 +207,7 @@ const CreateProduct = () => {
 
           <button
             type="submit"
-            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] hover:opacity-80 transition-all duration-200 ease-in-out"
+            className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
           >
             Tạo mới
           </button>
