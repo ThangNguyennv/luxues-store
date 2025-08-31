@@ -75,6 +75,7 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
+    console.log("🚀 ~ product.controller.ts ~ index ~ accounts:", accounts);
 
     res.json({
       code: 200,
