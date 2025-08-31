@@ -19,14 +19,16 @@ const EditMyAccount = () => {
     <>
       {accountInfo ? (
         <>
-          <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa thông tin cá nhân</h1>
           <form
             onSubmit={(event) => handleSubmit(event)}
-            className="flex flex-col gap-[15px] w-[30%]"
+            className="flex flex-col gap-[15px] w-full text-[17px] bg-[#FFFFFF] py-[15px] px-[50px] shadow-md mt-[15px]"
             encType="multipart/form-data"
           >
-            <div className="flex flex-col gap-[5px]">
-              <label htmlFor="avatar" className='text-[16px]'><b>Avatar</b></label>
+            <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa thông tin cá nhân</h1>
+            <div className="flex flex-col gap-[10px]">
+              <label htmlFor="avatar">
+                <b>Avatar</b>
+              </label>
               <input
                 onChange={(event) => handleChange(event)}
                 ref={uploadImageInputRef}
@@ -37,9 +39,9 @@ const EditMyAccount = () => {
               />
               <button
                 onClick={event => handleClick(event)}
-                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[20%] py-[4px] text-[14px]"
+                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
               >
-              Chọn ảnh
+                  Chọn ảnh
               </button>
               <img
                 ref={uploadImagePreviewRef}
@@ -49,7 +51,9 @@ const EditMyAccount = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="fullName" className='text-[16px]'><b>Họ và tên</b></label>
+              <label htmlFor="fullName">
+                <b>Họ và tên</b>
+              </label>
               <input
                 onChange={(event) =>
                   setAccountInfo({ ...accountInfo, fullName: event.target.value })
@@ -63,7 +67,9 @@ const EditMyAccount = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="email" className='text-[16px]'><b>Email</b></label>
+              <label htmlFor="email">
+                <b>Email</b>
+              </label>
               <input onChange={(event) =>
                 setAccountInfo({ ...accountInfo, email: event.target.value })
               }
@@ -76,7 +82,9 @@ const EditMyAccount = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="phone" className='text-[16px]'><b>Số điện thoại</b></label>
+              <label htmlFor="phone">
+                <b>Số điện thoại</b>
+              </label>
               <input onChange={(event) =>
                 setAccountInfo({ ...accountInfo, phone: event.target.value })
               }
@@ -88,7 +96,9 @@ const EditMyAccount = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="password" className='text-[16px]'><b>Mật khẩu</b></label>
+              <label htmlFor="password">
+                <b>Mật khẩu</b>
+              </label>
               <input
                 onChange={(event) => setPassword(event.target.value)}
                 type="text"
@@ -101,36 +111,36 @@ const EditMyAccount = () => {
             </div>
             <button
               type="submit"
-              className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[18%] text-[16px]"
+              className=" cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[6%] text-[14px]"
             >
-            Cập nhật
+                Cập nhật
             </button>
           </form>
         </>
       ) : (
         <>
-          <Skeleton variant="text" width={350} height={35} sx={{ bgcolor: 'grey.400' }}/>
-          <div className="flex flex-col gap-[10px] w-[30%]">
-            <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-[15px] w-[50%] text-[17px] bg-[#FFFFFF] py-[15px] px-[50px] shadow-md mt-[15px]">
+            <Skeleton variant="text" width={350} height={35} sx={{ bgcolor: 'grey.400' }}/>
+            <div className="flex flex-col gap-[10px]">
               <Skeleton variant="text" width={48} height={20} sx={{ bgcolor: 'grey.400' }}/>
               <Skeleton variant="rectangular" width={90} height={35} sx={{ bgcolor: 'grey.400' }}/>
               <Skeleton variant="circular" width={150} height={150} sx={{ bgcolor: 'grey.400' }}/>
             </div>
             <div className="form-group">
-              <Skeleton variant="text" width={70} height={20} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="text" width={48} height={20} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={668} height={32} sx={{ bgcolor: 'grey.400' }}/>
             </div>
             <div className="form-group">
-              <Skeleton variant="text" width={40} height={20} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="text" width={48} height={20} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={668} height={32} sx={{ bgcolor: 'grey.400' }}/>
             </div>
             <div className="form-group">
-              <Skeleton variant="text" width={97} height={20} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="text" width={48} height={20} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={668} height={32} sx={{ bgcolor: 'grey.400' }}/>
             </div>
             <div className="form-group">
-              <Skeleton variant="text" width={68} height={20} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="text" width={48} height={20} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={668} height={32} sx={{ bgcolor: 'grey.400' }}/>
             </div>
             <Skeleton variant="rectangular" width={113} height={40} sx={{ bgcolor: 'grey.400' }}/>
           </div>

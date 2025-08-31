@@ -60,14 +60,16 @@ const EditSettingGeneral = () => {
     <>
       {general ? (
         <>
-          <h1 className='text-[24px] font-[700]'>Chỉnh sửa cài đặt chung</h1>
           <form
             onSubmit={(event) => handleSubmit(event)}
-            className='flex flex-col gap-[15px] mt-[20px]'
+            className='flex flex-col gap-[15px] w-full text-[17px] bg-[#FFFFFF] py-[15px] px-[50px] shadow-md mt-[15px]'
             encType="multipart/form-data"
           >
+            <h1 className='text-[24px] font-[700]'>Chỉnh sửa cài đặt chung</h1>
             <div className='form-group'>
-              <label htmlFor='websiteName' className='text-[18px] font-[600]'>Tên website</label>
+              <label htmlFor='websiteName'>
+                <b>Tên website</b>
+              </label>
               <input
                 onChange={(event) => setGeneral({ ...general, websiteName: event.target.value })}
                 type='text'
@@ -78,8 +80,10 @@ const EditSettingGeneral = () => {
                 required
               />
             </div>
-            <div className='flex flex-col gap-[5px]'>
-              <label htmlFor='logo' className='text-[18px] font-[600]'>Logo</label>
+            <div className='flex flex-col gap-[10px]'>
+              <label htmlFor='logo'>
+                <b>Logo: </b>
+              </label>
               <input
                 onChange={(event) => handleChange(event)}
                 ref={uploadImageInputRef}
@@ -94,7 +98,7 @@ const EditSettingGeneral = () => {
                   onClick={event => handleClick(event)}
                   className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
                 >
-              Chọn ảnh
+                    Chọn ảnh
                 </button>
                 <img
                   ref={uploadImagePreviewRef}
@@ -105,7 +109,9 @@ const EditSettingGeneral = () => {
               </div>
             </div>
             <div className='form-group'>
-              <label htmlFor='phone' className='text-[18px] font-[600]'>Số điện thoại</label>
+              <label htmlFor='phone'>
+                <b>Số điện thoại</b>
+              </label>
               <input
                 onChange={(event) => setGeneral({ ...general, phone: event.target.value })}
                 type='text'
@@ -116,7 +122,9 @@ const EditSettingGeneral = () => {
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='email' className='text-[18px] font-[600]'>Email</label>
+              <label htmlFor='email'>
+                <b>Email</b>
+              </label>
               <input
                 onChange={(event) => setGeneral({ ...general, email: event.target.value })}
                 type='email'
@@ -128,7 +136,9 @@ const EditSettingGeneral = () => {
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='address' className='text-[18px] font-[600]'>Địa chỉ</label>
+              <label htmlFor='address'>
+                <b>Địa chỉ</b>
+              </label>
               <input
                 onChange={(event) => setGeneral({ ...general, address: event.target.value })}
                 type='text'
@@ -139,7 +149,9 @@ const EditSettingGeneral = () => {
               />
             </div>
             <div className='form-group'>
-              <label htmlFor='copyright' className='text-[18px] font-[600]'>Bản quyền</label>
+              <label htmlFor='copyright'>
+                <b>Bản quyền</b>
+              </label>
               <input
                 onChange={(event) => setGeneral({ ...general, copyright: event.target.value })}
                 type='text'
@@ -154,7 +166,7 @@ const EditSettingGeneral = () => {
               type='submit'
               className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[7%] text-[16px]'
             >
-            Cập nhật
+                Cập nhật
             </button>
           </form>
         </>

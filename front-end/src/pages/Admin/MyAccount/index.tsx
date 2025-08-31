@@ -12,8 +12,8 @@ const MyAccountAdmin = () => {
     <>
       {accountInfo ? (
         <>
-          <h1 className="text-[24px] font-[700] mt-[20px] ml-[20px]">Thông tin tài khoản</h1>
-          <div className="text-[16px] border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
+          <div className="text-[16px] mt-[15px] flex flex-col gap-[15px] w-[50%] bg-[#FFFFFF] py-[15px] pl-[50px] shadow-md">
+            <h1 className="text-[24px] font-[700] mt-[10px]">Thông tin tài khoản</h1>
             <img
               src={accountInfo.avatar}
               alt="Avatar"
@@ -55,15 +55,15 @@ const MyAccountAdmin = () => {
         </>
       ) : (
         <>
-          <Skeleton variant="text" width={300} height={32} sx={{ bgcolor: 'grey.400' }}/>
-          <div className="border rounded-[5px] p-[20px] m-[20px] flex flex-col gap-[10px] w-[50%]">
+          <div className="text-[16px] mt-[15px] flex flex-col gap-[15px] w-[50%] bg-[#FFFFFF] py-[15px] pl-[50px] shadow-md">
+            <Skeleton variant="text" width={250} height={32} sx={{ bgcolor: 'grey.400' }}/>
             <Skeleton variant="circular" width={150} height={150} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={175} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={200} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={180} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={175} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={170} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={94} height={31} sx={{ bgcolor: 'grey.400' }}/>
           </div>
         </>
       )}

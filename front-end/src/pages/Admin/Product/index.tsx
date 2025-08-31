@@ -35,7 +35,6 @@ const ProductAdmin = () => {
     handleClose,
     handleConfirmDeleteAll
   } = useProduct()
-    console.log("🚀 ~ index.tsx ~ ProductAdmin ~ products:", products);
 
   return (
     <>
