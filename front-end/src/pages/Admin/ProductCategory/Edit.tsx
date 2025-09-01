@@ -9,7 +9,7 @@ const EditProductCategory = () => {
     productCategoryInfo,
     setProductCategoryInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
+    preview,
     handleChange,
     handleSubmit,
     handleClick
@@ -74,7 +74,7 @@ const EditProductCategory = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-[10px]">
             <label htmlFor="thumbnail">Ảnh</label>
             <input
               onChange={(event) => handleChange(event)}
@@ -87,16 +87,17 @@ const EditProductCategory = () => {
             />
             <button
               onClick={event => handleClick(event)}
-              className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
             >
               Chọn ảnh
             </button>
-            <img
-              ref={uploadImagePreviewRef}
-              src={productCategoryInfo.thumbnail}
-              alt="Avatar preview"
-              className="border w-[150px] h-[150px]"
-            />
+            {preview && (
+              <img
+                src={preview}
+                alt="Thumbnail preview"
+                className="border rounded-[5px] w-[150px] h-[150px]"
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -143,7 +144,7 @@ const EditProductCategory = () => {
 
           <button
             type="submit"
-            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[16px]"
+            className="w-[6%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
           >
             Cập nhật
           </button>

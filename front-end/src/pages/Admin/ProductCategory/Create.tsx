@@ -25,9 +25,7 @@ const CreateProductCategory = () => {
         >
           <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới danh mục sản phẩm</h1>
           <div className="form-group">
-            <label htmlFor="title">
-              Tiêu đề
-            </label>
+            <label htmlFor="title">Tiêu đề</label>
             <input
               onChange={(event) => setProductCategoryInfo({ ...productCategoryInfo, title: event.target.value })}
               type="text"
@@ -144,7 +142,7 @@ const CreateProductCategory = () => {
 
           <button
             type="submit"
-            className="w-[7%] border rounded-[5px] bg-[#525FE1] text-white p-[5px] text-[16px]"
+            className="w-[6%] border rounded-[5px] bg-[#525FE1] text-white p-[5px] text-[14px]"
           >
             Tạo mới
           </button>

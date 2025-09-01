@@ -10,10 +10,10 @@ const EditProduct = () => {
     productInfo,
     setProductInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
     handleChange,
     handleSubmit,
-    handleClick
+    handleClick,
+    preview
   } = useEdit()
 
   return (
@@ -153,16 +153,17 @@ const EditProduct = () => {
               />
               <button
                 onClick={event => handleClick(event)}
-                className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+                className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
               >
               Chọn ảnh
               </button>
-              <img
-                ref={uploadImagePreviewRef}
-                src={productInfo.thumbnail}
-                alt="Avatar preview"
-                className="border w-[150px] h-[150px]"
-              />
+              {preview && (
+                <img
+                  src={preview}
+                  alt="Thumbnail preview"
+                  className="border rounded-[5px] w-[150px] h-[150px]"
+                />
+              )}
             </div>
 
             <div className="form-group">

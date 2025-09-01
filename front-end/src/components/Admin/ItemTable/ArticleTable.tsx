@@ -31,12 +31,12 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
         <Table sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
-            border: '1px solid #000000' // đường kẻ
+            border: '1px solid #757575' // đường kẻ
           }
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -45,14 +45,14 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Tên sản phẩm</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hình ảnh</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Vị trí</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Người tạo</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           {articles && articles.length > 0 ? (

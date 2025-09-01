@@ -23,12 +23,14 @@ export const useEdit = () => {
   }, [id])
 
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
-  const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+  // const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
-    if (file && uploadImagePreviewRef.current) {
-      uploadImagePreviewRef.current.src = URL.createObjectURL(file)
+    if (file) {
+      const imageUrl = URL.createObjectURL(file)
+      setPreview(imageUrl)
     }
   }
 
@@ -66,9 +68,9 @@ export const useEdit = () => {
     productInfo,
     setProductInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
     handleChange,
     handleSubmit,
-    handleClick
+    handleClick,
+    preview
   }
 }

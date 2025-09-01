@@ -9,20 +9,21 @@ const CreateArticleCategory = () => {
     articleCategoryInfo,
     setArticleCategoryInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    preview,
+    handleClick
   } = useCreate()
 
   return (
     <>
-      <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới danh mục bài viết</h1>
       {articleCategoryInfo && (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới danh mục bài viết</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -30,6 +31,7 @@ const CreateArticleCategory = () => {
               type="text"
               id="title"
               name="title"
+              className='py-[3px] text-[16px]'
               required
             />
           </div>
@@ -39,7 +41,7 @@ const CreateArticleCategory = () => {
             <select
               name="parent_id"
               id="parent_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={articleCategoryInfo.parent_id}
               onChange={(event) => setArticleCategoryInfo({ ...articleCategoryInfo, parent_id: event.target.value })}
             >
@@ -84,7 +86,7 @@ const CreateArticleCategory = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-[10px]">
             <label htmlFor="thumbnail">Ảnh</label>
             <input
               onChange={(event) => handleChange(event)}
@@ -92,12 +94,22 @@ const CreateArticleCategory = () => {
               type="file"
               id="thumbnail"
               name="thumbnail"
+              className='hidden'
               accept="image/*"
             />
-            <img
-              ref={uploadImagePreviewRef}
-              className="w-[150px] h-auto"
-            />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+            >
+              Chọn ảnh
+            </button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Thumbnail preview"
+                className="border rounded-[5px] w-[150px] h-[150px]"
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -108,11 +120,12 @@ const CreateArticleCategory = () => {
               id="position"
               name="position"
               placeholder="Tự động tăng"
+              className='py-[3px] text-[16px]'
               min={1}
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[10px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setArticleCategoryInfo({ ...articleCategoryInfo, status: event.target.value })}
@@ -142,7 +155,7 @@ const CreateArticleCategory = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
           >
             Tạo mới
           </button>

@@ -73,7 +73,7 @@ const ProductAdmin = () => {
               type="submit"
               className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
             >
-              Áp dụng
+                Áp dụng
             </button>
             <Dialog
               open={open}

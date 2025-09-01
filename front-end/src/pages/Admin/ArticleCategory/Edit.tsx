@@ -2,6 +2,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
 import { useEdit } from '~/hooks/admin/articleCategory/useEdit'
 import SelectTree from '~/components/admin/TableTree/SelectTreeArticle'
+import Skeleton from '@mui/material/Skeleton'
 
 const EditArticleCategory = () => {
   const {
@@ -9,20 +10,21 @@ const EditArticleCategory = () => {
     articleCategoryInfo,
     setArticleCategoryInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
+    preview,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   } = useEdit()
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa danh mục sản phẩm</h1>
-      {articleCategoryInfo && (
+      {articleCategoryInfo ? (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa danh mục bài viết</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -30,6 +32,7 @@ const EditArticleCategory = () => {
               type="text"
               id="title"
               name="title"
+              className='py-[3px] text-[16px]'
               value={articleCategoryInfo.title}
             />
           </div>
@@ -39,11 +42,11 @@ const EditArticleCategory = () => {
             <select
               name="parent_id"
               id="parent_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={articleCategoryInfo.parent_id}
               onChange={(event) => setArticleCategoryInfo({ ...articleCategoryInfo, parent_id: event.target.value })}
             >
-              <option value={''}>-- Chọn danh mục</option>
+              <option value={''}>-- Chọn danh mục --</option>
               {allArticleCategories && allArticleCategories.length > 0 && (
                 allArticleCategories.map(articleCategory => (
                   <SelectTree
@@ -94,13 +97,22 @@ const EditArticleCategory = () => {
               type="file"
               id="thumbnail"
               name="thumbnail"
+              className='hidden'
               accept="image/*"
             />
-            <img
-              ref={uploadImagePreviewRef}
-              src={articleCategoryInfo.thumbnail}
-              className="w-[150px] h-auto"
-            />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
+            >
+                Chọn ảnh
+            </button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Thumbnail preview"
+                className="border rounded-[5px] w-[150px] h-[150px]"
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -112,11 +124,12 @@ const EditArticleCategory = () => {
               name="position"
               placeholder="Tự động tăng"
               min={1}
+              className='py-[3px] text-[16px]'
               value={articleCategoryInfo.position}
             />
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[10px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setArticleCategoryInfo(articleCategoryInfo ? { ...articleCategoryInfo, status: event.target.value }: articleCategoryInfo)}
@@ -146,11 +159,47 @@ const EditArticleCategory = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="w-[6%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
           >
-            Cập nhật
+              Cập nhật
           </button>
         </form>
+      ) : (
+        <div className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md">
+          <Skeleton variant="text" width={385} height={48} sx={{ bgcolor: 'grey.400' }}/>
+          <div className="form-group">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={36} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="form-group">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={36} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="form-group">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={500} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <div className="form-group">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={500} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <div className="flex flex-col gap-[5px]">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={100} height={36} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={100} height={36} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <div className="form-group">
+            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={36} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <div className="flex items-center justify-start gap-[10px]">
+            <Skeleton variant="rectangular" width={40} height={36} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={140} height={36} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <Skeleton variant="rectangular" width={91} height={37} sx={{ bgcolor: 'grey.400' }}/>
+        </div>
       )}
     </>
   )

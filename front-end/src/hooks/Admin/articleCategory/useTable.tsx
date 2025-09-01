@@ -12,7 +12,7 @@ export interface Props {
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateArticleCategory, dispatchArticleCategory } = useArticleCategoryContext()
-  const { articleCategories, accounts } = stateArticleCategory
+  const { articleCategories, accounts, loading } = stateArticleCategory
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
 
@@ -79,6 +79,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const isCheckAll = (articleCategories.length > 0) && (selectedIds.length === articleCategories.length)
 
   return {
+    loading,
     dispatchArticleCategory,
     articleCategories,
     accounts,

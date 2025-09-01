@@ -41,12 +41,12 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
         <Table sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
-            border: '1px solid #000000' // đường kẻ
+            border: '1px solid #757575' // đường kẻ
           }
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -55,15 +55,15 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Tên sản phẩm</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hình ảnh</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Giá</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Vị trí</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Người tạo</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Giá</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -76,28 +76,28 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={350} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align="center">
-                  <Skeleton variant="text" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={70} height={40} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={85} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center' className='font-[700] '>
-                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
               </TableRow>
             ))}
@@ -113,13 +113,13 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
         <Table sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
-            border: '1px solid #000000', // đường kẻ
+            border: '1px solid #757575', // đường kẻ
             fontSize: '14px'
           }
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -128,15 +128,15 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Tên sản phẩm</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hình ảnh</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Giá</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Vị trí</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Người tạo</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#00A7E6' }}>Hành động</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Giá</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           {products && products.length > 0 ? (
@@ -182,7 +182,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                           min={1}
                           data-id={product._id}
                           name='position'
-                          className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
+                          className='border rounded-[5px] border-[#003459] w-[50px] p-[2px]'
                         />
                       </TableCell>
                       <TableCell align='center'>

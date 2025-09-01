@@ -32,13 +32,14 @@ export const useCreate = () => {
   const { allArticleCategories } = stateArticleCategory
 
   const navigate = useNavigate()
-
+  const [preview, setPreview] = useState<string | null>(null)
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
-  const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
+  // const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
   const handleChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const file = event.target.files?.[0]
-    if (file && uploadImagePreviewRef.current) {
-      uploadImagePreviewRef.current.src = URL.createObjectURL(file)
+    if (file) {
+      const imageUrl = URL.createObjectURL(file)
+      setPreview(imageUrl)
     }
   }
 
@@ -63,13 +64,19 @@ export const useCreate = () => {
       }, 2000)
     }
   }
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    uploadImageInputRef.current?.click()
+  }
   return {
     allArticleCategories,
     articleCategoryInfo,
     setArticleCategoryInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
+    preview,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   }
 }
