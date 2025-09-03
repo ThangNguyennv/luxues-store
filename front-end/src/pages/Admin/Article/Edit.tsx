@@ -2,6 +2,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
 import { useEdit } from '~/hooks/admin/article/useEdit'
 import SelectTree from '~/components/admin/TableTree/SelectTreeArticle'
+import Skeleton from '@mui/material/Skeleton'
 
 const EditArticle = () => {
   const {
@@ -9,20 +10,21 @@ const EditArticle = () => {
     articleInfo,
     setArticleInfo,
     uploadImageInputRef,
-    uploadImagePreviewRef,
+    preview,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    handleClick
   } = useEdit()
 
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Chỉnh sửa sản phẩm</h1>
-      {articleInfo && (
+      {articleInfo ? (
         <form
           onSubmit={(event) => handleSubmit(event)}
-          action="" className="flex flex-col gap-[10px]"
+          className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
           encType="multipart/form-data"
         >
+          <h1 className="text-[24px] font-[600] text-[#192335]">Chỉnh sửa bài viết</h1>
           <div className="form-group">
             <label htmlFor="title">Tiêu đề</label>
             <input
@@ -30,6 +32,7 @@ const EditArticle = () => {
               type="text"
               id="title"
               name="title"
+              className='py-[3px] text-[16px]'
               value={articleInfo.title}
             />
           </div>
@@ -39,7 +42,7 @@ const EditArticle = () => {
             <select
               name="article_category_id"
               id="article_category_id"
-              className="outline-none border rounded-[5px] border-[#00171F]"
+              className="outline-none border rounded-[5px] border-[#00171F] py-[3px] text-[16px]"
               value={articleInfo.article_category_id}
               onChange={(event) => setArticleInfo({ ...articleInfo, article_category_id: event.target.value })}
             >
@@ -58,7 +61,7 @@ const EditArticle = () => {
             </select>
           </div>
 
-          <div className="flex items-center justify-start gap-[5px]">
+          <div className="flex items-center justify-start gap-[10px]">
             <div className="flex gap-[5px]">
               <input
                 onChange={(event) => setArticleInfo(articleInfo ? { ...articleInfo, featured: event.target.value }: articleInfo)}
@@ -121,13 +124,22 @@ const EditArticle = () => {
               type="file"
               id="thumbnail"
               name="thumbnail"
+              className='hidden'
               accept="image/*"
             />
-            <img
-              ref={uploadImagePreviewRef}
-              src={articleInfo.thumbnail}
-              className="w-[150px] h-auto"
-            />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
+            >
+              Chọn ảnh
+            </button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Thumbnail preview"
+                className="border rounded-[5px] w-[150px] h-[150px]"
+              />
+            )}
           </div>
 
           <div className="form-group">
@@ -173,11 +185,56 @@ const EditArticle = () => {
 
           <button
             type="submit"
-            className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
           >
             Cập nhật
           </button>
         </form>
+      ) : (
+        <div className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md">
+          <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+          <div className="form-group">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+          <div className="form-group">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="flex items-center justify-start gap-[10px]">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="form-group">
+            <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={400} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="form-group">
+            <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={1000} height={400} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="flex flex-col gap-[5px]">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={150} height={150} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="form-group">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <div className="flex items-center justify-start gap-[5px]">
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+          </div>
+
+          <Skeleton variant="rectangular" width={100} height={50} sx={{ bgcolor: 'grey.400' }}/>
+        </div>
       )}
     </>
   )

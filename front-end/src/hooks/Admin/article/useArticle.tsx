@@ -161,6 +161,7 @@ export const useArticle = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    articles
   }
 }

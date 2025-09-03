@@ -4,6 +4,7 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
 import type { UpdatedBy } from '~/types/helper.type'
 import { useArticleContext } from '~/contexts/admin/ArticleContext'
+import { useState } from 'react'
 
 export interface Props {
   selectedIds: string[],
@@ -12,11 +13,23 @@ export interface Props {
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateArticle, dispatchArticle } = useArticleContext()
-  const { articles, accounts } = stateArticle
+  const { articles, accounts, loading } = stateArticle
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams] = useSearchParams()
   const currentStatus = searchParams.get('status') || ''
+  const [open, setOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+
+  const handleOpen = (id: string) => {
+    setSelectedId(id)
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setSelectedId(null)
+    setOpen(false)
+  }
 
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
@@ -46,22 +59,22 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteArticle = async (id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa bài viết này?')
-    const response = await fetchDeleteArticleAPI(id)
+  const handleDelete = async () => {
+    if (!selectedId) return
+
+    const response = await fetchDeleteArticleAPI(selectedId)
     if (response.code === 204) {
-      if (isConfirm) {
-        dispatchArticle({
-          type: 'SET_DATA',
-          payload: {
-            articles: articles.filter((article) => article._id != id)
-          }
-        })
-        dispatchAlert({
-          type: 'SHOW_ALERT',
-          payload: { message: response.message, severity: 'success' }
-        })
-      }
+      dispatchArticle({
+        type: 'SET_DATA',
+        payload: {
+          articles: articles.filter((article) => article._id !== selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -88,14 +101,18 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const isCheckAll = (articles.length > 0) && (selectedIds.length === articles.length)
 
   return {
+    loading,
     currentStatus,
     articles,
     dispatchArticle,
     accounts,
     handleToggleStatus,
-    handleDeleteArticle,
     handleCheckbox,
     handleCheckAll,
-    isCheckAll
+    isCheckAll,
+    open,
+    handleOpen,
+    handleClose,
+    handleDelete
   }
 }

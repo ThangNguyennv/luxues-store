@@ -4,6 +4,7 @@ import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursiveForArticle'
 import type { UpdatedBy } from '~/types/helper.type'
+import { useState } from 'react'
 
 export interface Props {
   selectedIds: string[],
@@ -15,7 +16,16 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { articleCategories, accounts, loading } = stateArticleCategory
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
-
+  const [open, setOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const handleOpen = (id: string) => {
+    setSelectedId(id)
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setSelectedId(null)
+    setOpen(false)
+  }
   const handleToggleStatus = async (currentStatus: string, id: string): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount ? myAccount._id : '',
@@ -40,27 +50,27 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleDeleteArticleCategory = async (id: string) => {
-    const isConfirm = confirm('Bạn có chắc muốn xóa danh mục bài viết này?')
-    const response = await fetchDeleteArticleCategoryAPI(id)
+  const handleDelete = async () => {
+    if (!selectedId) return
+    const response = await fetchDeleteArticleCategoryAPI(selectedId)
     if (response.code === 204) {
-      if (isConfirm) {
-        dispatchArticleCategory({
-          type: 'SET_DATA',
-          payload: {
-            articleCategories: articleCategories.filter((articleCategory) => articleCategory._id != id)
-          }
-        })
-        dispatchAlert({
-          type: 'SHOW_ALERT',
-          payload: { message: response.message, severity: 'success' }
-        })
-      }
+      dispatchArticleCategory({
+        type: 'SET_DATA',
+        payload: {
+          articleCategories: articleCategories.filter((articleCategory) => articleCategory._id != selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
     }
   }
+
   const handleCheckbox = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedIds((prev) => [...prev, id])
@@ -84,10 +94,13 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     articleCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteArticleCategory,
+    handleDelete,
     handleCheckbox,
     handleCheckAll,
-    isCheckAll
+    isCheckAll,
+    open,
+    handleOpen,
+    handleClose
   }
 }
 

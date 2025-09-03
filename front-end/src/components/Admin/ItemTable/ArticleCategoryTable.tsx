@@ -9,6 +9,12 @@ import ArticleTree from '../TableTree/ArticleTree'
 import TableContainer from '@mui/material/TableContainer'
 import { useTable, type Props } from '~/hooks/admin/articleCategory/useTable'
 import Skeleton from '@mui/material/Skeleton'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
@@ -17,11 +23,15 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
     articleCategories,
     accounts,
     handleToggleStatus,
-    handleDeleteArticleCategory,
+    handleDelete,
     handleCheckbox,
     handleCheckAll,
-    isCheckAll
+    isCheckAll,
+    open,
+    handleOpen,
+    handleClose
   } = useTable({ selectedIds, setSelectedIds })
+
   if (loading) {
     return (
       <TableContainer sx={{ maxHeight: 600 }}>
@@ -125,9 +135,12 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                   accounts={accounts}
                   handleCheckbox={handleCheckbox}
                   handleToggleStatus={handleToggleStatus}
-                  handleDeleteArticleCategory={handleDeleteArticleCategory}
+                  handleDelete={handleDelete}
                   articleCategories={articleCategories}
                   dispatchArticleCategory={dispatchArticleCategory}
+                  open={open}
+                  handleOpen={handleOpen}
+                  handleClose={handleClose}
                 />
               ))
             ) : (
@@ -158,6 +171,24 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                 </TableCell>
               </TableRow>
             )}
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="delete-dialog-title"
+            >
+              <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Bạn có chắc chắn muốn xóa vật phẩm này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Hủy</Button>
+                <Button onClick={handleDelete} color="error" variant="contained">
+                  Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
           </TableBody>
         </Table>
       </TableContainer>

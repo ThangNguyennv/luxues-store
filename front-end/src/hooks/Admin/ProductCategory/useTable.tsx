@@ -4,7 +4,7 @@ import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryConte
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursiveForProduct } from '~/helpers/updateStatusRecursiveForProduct'
 import type { UpdatedBy } from '~/types/helper.type'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export interface Props {
   selectedIds: string[],
@@ -72,6 +72,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
+
   const handleCheckbox = (id: string, checked: boolean) => {
     if (checked) {
       setSelectedIds((prev) => [...prev, id])

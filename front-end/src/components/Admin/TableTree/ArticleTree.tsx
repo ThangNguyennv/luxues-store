@@ -13,9 +13,12 @@ interface Props {
   accounts: AccountInfoInterface[]
   handleCheckbox: (_id: string, checked: boolean) => void
   handleToggleStatus: (_id: string, status: string) => void
-  handleDeleteArticleCategory: (_id: string) => void
   dispatchArticleCategory: React.Dispatch<ArticleCategoryActions>
   articleCategories: ArticleCategoryInfoInterface[]
+  open: boolean
+  handleOpen: (_id: string) => void
+  handleClose: () => void
+  handleDelete: () => void
 }
 
 const ArticleTree = ({
@@ -25,9 +28,12 @@ const ArticleTree = ({
   accounts,
   handleCheckbox,
   handleToggleStatus,
-  handleDeleteArticleCategory,
   dispatchArticleCategory,
-  articleCategories
+  articleCategories,
+  open,
+  handleOpen,
+  handleClose,
+  handleDelete
 }: Props) => {
   const prefix = '— '.repeat(level)
 
@@ -122,7 +128,7 @@ const ArticleTree = ({
             Sửa
           </Link>
           <button
-            onClick={() => handleDeleteArticleCategory(articleCategory._id)}
+            onClick={() => handleOpen(articleCategory._id)}
             className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
           >
             Xóa
@@ -138,9 +144,12 @@ const ArticleTree = ({
           accounts={accounts}
           handleCheckbox={handleCheckbox}
           handleToggleStatus={handleToggleStatus}
-          handleDeleteArticleCategory={handleDeleteArticleCategory}
           articleCategories={articleCategories}
           dispatchArticleCategory={dispatchArticleCategory}
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
         />
       ))}
     </>
