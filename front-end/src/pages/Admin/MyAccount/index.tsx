@@ -49,7 +49,7 @@ const MyAccountAdmin = () => {
               to={'/admin/my-account/edit'}
               className='nav-link text-[14px] border rounded-[5px] bg-[#2F57EF] p-[4px] text-white w-[13%] text-center'
             >
-              Chỉnh sửa
+                Chỉnh sửa
             </Link>
           </div>
         </>

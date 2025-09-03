@@ -80,10 +80,18 @@ const Role = () => {
             </Link>
           </div>
           <TableContainer sx={{ maxHeight: 600 }}>
-            <Table sx={{
+            <Table stickyHeader sx={{
               borderCollapse: 'collapse',
               '& th, & td': {
-                border: '1px solid #757575' // đường kẻ
+                border: '1px solid #000000', // đường kẻ,
+                zIndex: 1
+              },
+              '& th': {
+                backgroundColor: '#252733', // nền header
+                color: '#fff',
+                zIndex: 2,
+                borderTop: '1px solid #000000 !important',
+                borderBottom: '1px solid #000000 !important'
               }
             }}>
               <TableHead>

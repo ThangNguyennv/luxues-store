@@ -9,7 +9,7 @@ const EditProductCategory = () => {
     productCategoryInfo,
     setProductCategoryInfo,
     uploadImageInputRef,
-    preview,
+    uploadImagePreviewRef,
     handleChange,
     handleSubmit,
     handleClick
@@ -91,13 +91,12 @@ const EditProductCategory = () => {
             >
               Chọn ảnh
             </button>
-            {preview && (
-              <img
-                src={preview}
-                alt="Thumbnail preview"
-                className="border rounded-[5px] w-[150px] h-[150px]"
-              />
-            )}
+            <img
+              ref={uploadImagePreviewRef}
+              src={productCategoryInfo.thumbnail}
+              alt="Thumbnail preview"
+              className="border rounded-[5px] w-[150px] h-[150px]"
+            />
           </div>
 
           <div className="form-group">
