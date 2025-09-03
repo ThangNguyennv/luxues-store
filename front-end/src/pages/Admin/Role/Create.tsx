@@ -35,11 +35,11 @@ const CreateRole = () => {
   }
   return (
     <>
-      <h1 className="text-[40px] font-[600] text-[#192335]">Thêm mới nhóm quyền</h1>
       <form
         onSubmit={(event) => handleSubmit(event)}
-        className='flex flex-col gap-[10px]'
+        className='flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md mt-[40px]'
       >
+        <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới nhóm quyền</h1>
         <div className="form-group">
           <label htmlFor="title">Tiêu đề</label>
           <input
@@ -47,6 +47,7 @@ const CreateRole = () => {
             type="text"
             id="title"
             name="title"
+            className='py-[3px] text-[16px]'
             required
           />
         </div>
@@ -64,7 +65,7 @@ const CreateRole = () => {
         </div>
         <button
           type="submit"
-          className="cursor-pointer w-[10%] border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+          className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
         >
           Tạo mới
         </button>

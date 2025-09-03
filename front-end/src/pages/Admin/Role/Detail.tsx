@@ -1,3 +1,4 @@
+import Skeleton from '@mui/material/Skeleton'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchDetailRoleAPI } from '~/apis/admin/role.api'
@@ -13,29 +14,35 @@ const DetailRole = () => {
       setRoleDetail(response.role)
     })
   }, [id])
+
   return (
     <>
-      {roleDetail && (
-        <>
-          <h1 className='text-[20px] font-[700] text-[#0A033C]'>
-          Nhóm quyền:
-            <span className='text-[20px] font-[500] text-[#C366E7]'>
+      {roleDetail ? (
+        <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[25px] shadow-md mt-[15px] text-[18px]'>
+          <div>
+            <b>Nhóm quyền: </b>
+            <span className='text-[16px]'>
               {roleDetail.title}
             </span>
-          </h1>
-          <h1 className='text-[20px] font-[700] text-[#0A033C]'>
-            Mô tả ngắn:
-            <span className='-[700] text-[#0A033C]") Mô tả ngắn: <span class="'>
-              <div dangerouslySetInnerHTML={{ __html: roleDetail.description }} />
-            </span>
-          </h1>
+          </div>
+          <div>
+            <b>Mô tả ngắn: </b>
+            <div className='text-[16px]' dangerouslySetInnerHTML={{ __html: roleDetail.description }} />
+          </div>
           <Link
             to={`/admin/roles/edit/${id}`}
-            className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[100px] text-center'
+            className='border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[6%] text-[14px] text-center'
           >
             Chỉnh sửa
           </Link>
-        </>
+        </div>
+      ) : (
+        <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[25px] shadow-md mt-[15px] text-[18px]'>
+          <Skeleton variant="text" width={140} height={48} sx={{ bgcolor: 'grey.400' }}/>
+          <Skeleton variant="text" width={120} height={48} sx={{ bgcolor: 'grey.400' }}/>
+          <Skeleton variant="text" width={130} height={48} sx={{ bgcolor: 'grey.400' }}/>
+          <Skeleton variant="rectangular" width={78} height={34} sx={{ bgcolor: 'grey.400' }}/>
+        </div>
       )}
     </>
   )

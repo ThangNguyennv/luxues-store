@@ -179,7 +179,7 @@ const ArticleCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
               <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Bạn có chắc chắn muốn xóa vật phẩm này không?
+                  Bạn có chắc chắn muốn xóa danh mục này không?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

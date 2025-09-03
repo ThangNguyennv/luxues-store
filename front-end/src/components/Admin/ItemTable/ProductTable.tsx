@@ -268,7 +268,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                 <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    Bạn có chắc chắn muốn xóa vật phẩm này không?
+                    Bạn có chắc chắn muốn xóa sản phẩm này không?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
