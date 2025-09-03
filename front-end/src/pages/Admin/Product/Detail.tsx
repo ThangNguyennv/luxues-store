@@ -11,7 +11,7 @@ const DetailProduct = () => {
   return (
     <>
       {productDetail ? (
-        <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[25px] shadow-md mt-[15px]'>
+        <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[25px] shadow-md mt-[15px] text-[17px]'>
           <div className='text-[24px] font-[600] text-[#00171F]'>
             Chi tiết sản phẩm
           </div>

@@ -144,24 +144,6 @@ const Account = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="delete-dialog-title"
-              >
-                <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Bạn có chắc chắn muốn xóa tài khoản này không?
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Hủy</Button>
-                  <Button onClick={handleDelete} color="error" variant="contained">
-                    Xóa
-                  </Button>
-                </DialogActions>
-              </Dialog>
             </TableBody>
           </Table>
         </TableContainer>

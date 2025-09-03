@@ -238,7 +238,7 @@ const Permission = () => {
                 onClick={handleSubmit}
                 className="border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
               >
-              Cập nhật
+                  Cập nhật
               </button>
             </div>
             <TableContainer sx={{ maxHeight: 600 }}>
@@ -303,8 +303,8 @@ const Permission = () => {
         <div>
         Chưa có nhóm quyền nào, vui lòng click vào tạo nhóm quyền để tạo nhóm quyền mới
           <br />
-          <Link to="/admin/roles/create" className="border rounded-[5px] bg-[#525FE1] text-white p-[7px]">
-          Đi tới tạo nhóm quyền
+          <Link to="/admin/roles/create" className="nav-link border rounded-[5px] bg-[#525FE1] text-white p-[7px]">
+            Đi tới tạo nhóm quyền
           </Link>
         </div>
       )}
