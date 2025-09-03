@@ -96,7 +96,7 @@ const EditSettingGeneral = () => {
               <div className='flex flex-col gap-[10px]'>
                 <button
                   onClick={event => handleClick(event)}
-                  className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[6%] py-[4px] text-[14px]"
+                  className="bg-[#9D9995] text-black font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
                 >
                     Chọn ảnh
                 </button>
@@ -164,7 +164,7 @@ const EditSettingGeneral = () => {
             </div>
             <button
               type='submit'
-              className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[7%] text-[16px]'
+              className='cursor-pointer border rounded-[5px] bg-[#525FE1] text-white p-[5px] w-[6%] text-[14px]'
             >
                 Cập nhật
             </button>
