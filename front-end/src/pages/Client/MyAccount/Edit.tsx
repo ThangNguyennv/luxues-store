@@ -42,6 +42,11 @@ const EditMyAccountClient = () => {
     }
   }
 
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    uploadImageInputRef.current?.click()
+  }
+
   return (
     <>
       {accountUser && (
@@ -91,9 +96,9 @@ const EditMyAccountClient = () => {
               </div>
               <button
                 type='submit'
-                className='cursor-pointer border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[40%]'
+                className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[20%] text-[14px]'
               >
-                    Cập nhật
+                  Cập nhật
               </button>
             </div>
           </div>
@@ -108,10 +113,16 @@ const EditMyAccountClient = () => {
               onChange={(event) => handleChange(event)}
               ref={uploadImageInputRef}
               type="file"
-              className=""
+              className="hidden"
               name="avatar"
               accept="image/*"
             />
+            <button
+              onClick={event => handleClick(event)}
+              className="bg-[#9D9995] font-[500] border rounded-[5px] w-[32%] py-[3px] text-[14px]"
+            >
+              Chọn ảnh
+            </button>
             <img
               className='border rounded-[100%] w-[250px] h-[250px]'
               ref={uploadImagePreviewRef}

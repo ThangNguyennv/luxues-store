@@ -3,11 +3,10 @@ import { useAuth } from '~/contexts/client/AuthContext'
 
 const MyAccountClient = () => {
   const { accountUser } = useAuth()
-
   return (
     <>
       {accountUser && (
-        <div className='w-[70%] flex justify-around gap-[15px] border rounded-[15px] p-[10px]'>
+        <div className='w-[70%] flex justify-around gap-[15px] border rounded-[15px] p-[10px] text-[16px]'>
           <div className='flex flex-col gap-[15px]'>
             <div>
               <h1 className='text-[25px] font-[600]'>Hồ sơ của tôi</h1>
@@ -15,17 +14,20 @@ const MyAccountClient = () => {
             </div>
             <div className='flex flex-col gap-[10px]'>
               <div>
-                  Họ và tên: <b>{accountUser.fullName}</b>
+                <b>Họ và tên: </b>
+                {accountUser.fullName}
               </div>
               <div>
-                  Email: <b>{accountUser.email}</b>
+                <b>Email: </b>
+                {accountUser.email}
               </div>
               <div>
-                  Số điện thoại: <b>{accountUser.phone}</b>
+                <b>Số điện thoại: </b>
+                {accountUser.phone}
               </div>
               <Link
                 to={'/user/account/info/edit'}
-                className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[30%]'
+                className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[20%] text-[14px]'
               >
                   Chỉnh sửa
               </Link>

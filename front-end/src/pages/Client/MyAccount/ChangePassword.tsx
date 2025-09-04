@@ -4,6 +4,7 @@ import { fetchChangePasswordInfoUserAPI, fetchInfoUserAPI } from '~/apis/client/
 import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { IoEye, IoEyeOff } from 'react-icons/io5'
+import Skeleton from '@mui/material/Skeleton'
 
 const ChangePassword = () => {
   const [myAccount, setMyAccount] = useState<UserInfoInterface | null>(null)
@@ -46,7 +47,7 @@ const ChangePassword = () => {
 
   return (
     <>
-      {myAccount && (
+      {myAccount ? (
         <form
           onSubmit={(event) => handleSubmit(event)}
           className='w-[70%] flex items-center justify-center gap-[15px] border rounded-[15px] p-[10px]'
@@ -106,7 +107,7 @@ const ChangePassword = () => {
               <div className='flex items-center justify-center'>
                 <button
                   type='submit'
-                  className='cursor-pointer border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[40%]'
+                  className='cursor-pointer border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[20%] text-[14px]'
                 >
                 Cập nhật
                 </button>
@@ -114,6 +115,20 @@ const ChangePassword = () => {
             </div>
           </div>
         </form>
+      ) : (
+        <div className='w-[70%] flex items-center justify-center gap-[15px] border rounded-[15px] p-[10px]'>
+          <div className='flex flex-col w-[40%] gap-[15px]'>
+            <Skeleton variant="text" width={410} height={38} sx={{ bgcolor: 'grey.400' }}/>
+            <div className='flex flex-col gap-[10px]'>
+              <Skeleton variant="rectangular" width={410} height={46} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={410} height={46} sx={{ bgcolor: 'grey.400' }}/>
+              <Skeleton variant="rectangular" width={410} height={46} sx={{ bgcolor: 'grey.400' }}/>
+              <div className='flex items-center justify-center'>
+                <Skeleton variant="rectangular" width={82} height={37} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   )
