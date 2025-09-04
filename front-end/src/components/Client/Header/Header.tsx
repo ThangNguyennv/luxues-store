@@ -85,7 +85,7 @@ const Header = () => {
   return (
     <>
       {loading && (
-        <div className="bg-primary sm:py-[10px] py-[9px]">
+        <div className="bg-primary sm:py-[8px] py-[7px]">
           <div className="container mx-auto px-[16px]">
             <div className="flex items-center">
               <div className="flex-1 text-center">
@@ -113,7 +113,7 @@ const Header = () => {
       {/* Top header */}
       {!loading && !accountUser && (
 
-        <div className={`bg-primary sm:py-[10px] py-[9px] ${closeTopHeader ? 'hidden' : 'block'}`}>
+        <div className={`bg-primary sm:py-[8px] py-[7px] ${closeTopHeader ? 'hidden' : 'block'}`}>
           <div className="container mx-auto px-[16px]">
             <div className="flex">
               <div className="text-white flex-1 text-center sm:text-[14px] text-[12px]">
@@ -137,14 +137,14 @@ const Header = () => {
       )}
       {/* End Top header */}
       {/* Header */}
-      <header className="sm:py-[24px] py-[20px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
+      <header className="sm:py-[15px] py-[10px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
         <div className="container mx-auto px-[16px]">
           <div className="flex items-center md:gap-x-[40px] gap-x-[16px]">
             <button className=" text-[20px] md:hidden inline">
               <FaBars />
             </button>
             <Link
-              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[30px] text-[25px] text-primary lg:flex-none flex-1"
+              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[22px] text-[19px] text-primary lg:flex-none flex-1"
               to={'/'}
             >
               {settingGeneral ? (
@@ -152,7 +152,7 @@ const Header = () => {
                   <img
                     alt="logo"
                     src={settingGeneral[0].logo}
-                    className='w-[50px] h-[50px] bg-amber-900'
+                    className='w-[45px] h-[45px] bg-amber-900'
                   />
                   <span className='uppercase flex flex-col items-center'>
                     <p className='text-[#00171F]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>{settingGeneral[0].websiteName}</p>
@@ -186,7 +186,7 @@ const Header = () => {
               className="
                 flex-1 lg:flex
                 hidden items-center
-                gap-x-[12px] px-[16px] py-[12px]
+                gap-x-[12px] px-[16px] py-[8px]
                 bg-[#F0F0F0] rounded-[62px] text-[16px]"
               action="#"
             >
@@ -195,7 +195,7 @@ const Header = () => {
               </button>
               <input className="bg-transparent flex-1" type="" placeholder="Tìm kiếm sản phẩm..."/>
             </form>
-            <div className="flex items-center gap-x-[27px] text-[21px]">
+            <div className="flex items-center gap-x-[27px] text-[22px]">
               <a className="lg:hidden inline" href="#">
                 <IoSearch />
               </a>
@@ -211,8 +211,8 @@ const Header = () => {
                   onMouseLeave={handleClose}
                   className='flex items-center justify-center gap-[5px]'
                 >
-                  <img src={accountUser.avatar} alt='Avatar' className='border rounded-[50%] w-[40px] h-[40px] cover'/>
-                  <span>{accountUser.fullName}</span>
+                  <img src={accountUser.avatar} alt='Avatar' className='border rounded-[50%] w-[35px] h-[35px] cover'/>
+                  <span className='text-[17px]'>{accountUser.fullName}</span>
                   <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
