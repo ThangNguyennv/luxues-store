@@ -9,45 +9,56 @@ import MenuItem from '@mui/material/MenuItem'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
-import type { UserDetailInterface, UserInfoInterface } from '~/types/user.type'
+import type { UserInfoInterface } from '~/types/user.type'
 import { fetchInfoUserAPI } from '~/apis/client/user.api'
 import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
-import { fetchSettingGeneralAPI } from '~/apis/admin/settingGeneral.api'
-import type { SettingGeneralDetailInterface } from '~/types/setting.type'
+import { fetchSettingGeneralAPI } from '~/apis/client/settingGeneral.api'
 import { IoLogOutOutline } from 'react-icons/io5'
 import { CgProfile } from 'react-icons/cg'
 import { IoSettingsOutline } from 'react-icons/io5'
+import { IoIosLogIn } from 'react-icons/io'
+import { FaRegRegistered } from 'react-icons/fa'
+import Skeleton from '@mui/material/Skeleton'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
   const { settingGeneral, setSettingGeneral } = useSettingGeneral()
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { dispatchAlert } = useAlertContext()
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
-    // lấy từ localStorage khi khởi tạo
+    // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
     return saved === 'true'
   })
 
   useEffect(() => {
-    setLoading(true)
-    fetchSettingGeneralAPI().then((response: SettingGeneralDetailInterface) => {
-      setSettingGeneral(response.settingGeneral)
-    })
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const [settingRes, userRes] = await Promise.all([
+          fetchSettingGeneralAPI(),
+          fetchInfoUserAPI()
+        ])
+        setSettingGeneral(settingRes.settingGeneral)
+        setAccountUser(userRes.accountUser)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('error' + error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [setSettingGeneral])
 
-  useEffect(() => {
-    fetchInfoUserAPI().then((response: UserDetailInterface) => {
-      setAccountUser(response.accountUser)
-    })
-  }, [])
-
-  const navigate = useNavigate()
-  const { dispatchAlert } = useAlertContext()
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
+
   const handleClose = () => setAnchorEl(null)
+
   const handleLogout = async () => {
     const response = await fetchLogoutAPI()
     if (response.code === 200) {
@@ -66,15 +77,42 @@ const Header = () => {
       return
     }
   }
+
   const handleCloseTopHeader = () => {
     setCloseTopHeader(true)
     sessionStorage.setItem('closeTopHeader', 'true')
   }
-
   return (
     <>
+      {loading && (
+        <div className="bg-primary sm:py-[10px] py-[9px]">
+          <div className="container mx-auto px-[16px]">
+            <div className="flex items-center">
+              <div className="flex-1 text-center">
+                {/* Skeleton cho text */}
+                <Skeleton
+                  variant="text"
+                  width="60%"
+                  height={20}
+                  sx={{ bgcolor: 'rgba(255,255,255,0.3)', margin: '0 auto' }}
+                  animation="wave"
+                />
+              </div>
+              {/* Skeleton cho nút close */}
+              <Skeleton
+                variant="circular"
+                width={20}
+                height={20}
+                sx={{ bgcolor: 'rgba(255,255,255,0.3)' }}
+                animation="wave"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       {/* Top header */}
-      {!accountUser && (
+      {!loading && !accountUser && (
+
         <div className={`bg-primary sm:py-[10px] py-[9px] ${closeTopHeader ? 'hidden' : 'block'}`}>
           <div className="container mx-auto px-[16px]">
             <div className="flex">
@@ -82,8 +120,9 @@ const Header = () => {
                 <span className="font-[400]">Đăng ký để được giảm giá 20%.</span>
                 <Link
                   className="font-[500] hover:underline ml-[5px]"
-                  to="/user/register">
-                Đăng Ký Ngay
+                  to="/user/register"
+                >
+                    Đăng Ký Ngay
                 </Link>
               </div>
               <button
@@ -108,15 +147,27 @@ const Header = () => {
               className="flex items-center justify-between gap-[4px] font-[700] sm:text-[30px] text-[25px] text-primary lg:flex-none flex-1"
               to={'/'}
             >
-              <img
-                alt="logo"
-                src={settingGeneral ? settingGeneral[0].logo : 'logo'}
-                className='w-[50px] h-[50px] bg-amber-900'
-              />
-              <span className='uppercase flex flex-col items-center'>
-                <p className='text-[#00171F]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>{settingGeneral ? settingGeneral[0].websiteName : ''}</p>
-                <p className='text-[10px] font-bold text-[#0A033C]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>Lịch lãm - Sang trọng - Quý phái</p>
-              </span>
+              {settingGeneral ? (
+                <>
+                  <img
+                    alt="logo"
+                    src={settingGeneral[0].logo}
+                    className='w-[50px] h-[50px] bg-amber-900'
+                  />
+                  <span className='uppercase flex flex-col items-center'>
+                    <p className='text-[#00171F]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>{settingGeneral[0].websiteName}</p>
+                    <p className='text-[10px] font-bold text-[#0A033C]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>Lịch lãm - Sang trọng - Quý phái</p>
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Skeleton variant="rectangular" width={50} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                  <span className='uppercase flex flex-col items-center'>
+                    <Skeleton variant="text" width={213} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                    <Skeleton variant="text" width={176} height={15} sx={{ bgcolor: 'grey.400' }}/>
+                  </span>
+                </>
+              )}
             </Link>
             <nav className="md:block hidden">
               <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
@@ -144,15 +195,15 @@ const Header = () => {
               </button>
               <input className="bg-transparent flex-1" type="" placeholder="Tìm kiếm sản phẩm..."/>
             </form>
-            <div className="flex items-center gap-x-[14px] text-[21px]">
+            <div className="flex items-center gap-x-[27px] text-[21px]">
               <a className="lg:hidden inline" href="#">
                 <IoSearch />
               </a>
               <a href='#'>
-                <IoIosNotifications />
+                <IoIosNotifications className='hover:text-[#00A7E6]'/>
               </a>
               <a href="#">
-                <IoMdCart />
+                <IoMdCart className='hover:text-[#00A7E6]'/>
               </a>
               {accountUser ? (
                 <div
@@ -160,7 +211,7 @@ const Header = () => {
                   onMouseLeave={handleClose}
                   className='flex items-center justify-center gap-[5px]'
                 >
-                  <FaRegUserCircle />
+                  <img src={accountUser.avatar} alt='Avatar' className='border rounded-[50%] w-[40px] h-[40px] cover'/>
                   <span>{accountUser.fullName}</span>
                   <Menu
                     anchorEl={anchorEl}
@@ -232,7 +283,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <Link to={'/user/login'}>Đăng nhập</Link>
+                      <Link to={'/user/login'} className='flex items-center justify-start gap-[10px]'>
+                        <IoIosLogIn />
+                        <span>Đăng nhập</span>
+                      </Link>
                     </MenuItem>
                     <MenuItem sx={{
                       '&:hover': {
@@ -240,7 +294,10 @@ const Header = () => {
                         color: '#00A7E6'
                       }
                     }}>
-                      <Link to={'/user/register'}>Đăng ký</Link>
+                      <Link to={'/user/register'} className='flex items-center justify-start gap-[10px]'>
+                        <FaRegRegistered />
+                        <span>Đăng ký</span>
+                      </Link>
                     </MenuItem>
                   </Menu>
                 </div>
