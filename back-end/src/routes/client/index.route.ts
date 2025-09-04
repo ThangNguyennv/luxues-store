@@ -12,6 +12,7 @@ import { searchRoutes } from './search.route'
 import { cartRoutes } from './cart.route'
 import { checkoutRoutes } from './checkout.route'
 import { userRoutes } from './user.route'
+import { settingRoutes } from './setting.route'
 // import chatRoutes from "./chat.route";
 
 const routeClient = (app: Express): void => {
@@ -29,6 +30,8 @@ const routeClient = (app: Express): void => {
   app.use('/cart', cartRoutes)
   app.use('/checkout', checkoutRoutes)
   app.use('/user', userRoutes)
+  app.use('/settings', settingRoutes)
+
   // app.use("/chat", authMiddleware.requireAuth, chatRoutes);
 }
 
