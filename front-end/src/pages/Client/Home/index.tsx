@@ -8,54 +8,6 @@ import Section7 from './Section7'
 import Section8 from './Section8'
 
 const Home = () => {
-  // let productListNew = [
-  //   {
-  //     image: 'assets/images/product-1.jpg',
-  //     title: 'Áo Thun Nam Đơn Giản',
-  //     link: '#',
-  //     stars: 4,
-  //     price: 600000
-  //   },
-  //   {
-  //     image: 'assets/images/product-1.jpg',
-  //     title: 'Áo Thun Nam Đơn Giản',
-  //     link: '#',
-  //     stars: 4,
-  //     price: 600000
-  //   },
-  //   {
-  //     image: 'assets/images/product-2.jpg',
-  //     title: 'Quần Jean Nam Phong Cách',
-  //     link: '#',
-  //     stars: 5,
-  //     price: 600000,
-  //     priceSpecial: 480000,
-  //     discount: 20
-  //   },
-  //   {
-  //     image: 'assets/images/product-3.jpg',
-  //     title: 'Áo Sơ Mi Caro',
-  //     link: '#',
-  //     stars: 3,
-  //     price: 220000
-  //   },
-  //   {
-  //     image: 'assets/images/product-3.jpg',
-  //     title: 'Áo Sơ Mi Caro',
-  //     link: '#',
-  //     stars: 3,
-  //     price: 220000
-  //   },
-  //   {
-  //     image: 'assets/images/product-4.jpg',
-  //     title: 'Áo Thun Nam Sọc Cam',
-  //     link: '#',
-  //     stars: 0,
-  //     price: 180000,
-  //     priceSpecial: 126000,
-  //     discount: 30
-  //   }
-  // ]
   return (
     <>
       <Section1 />

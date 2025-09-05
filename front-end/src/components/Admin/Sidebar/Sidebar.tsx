@@ -109,7 +109,7 @@ const Sidebar = () => {
             >
               <ul className="flex flex-col gap-2 items-center">
                 <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/products-category'}>Danh mục trang phục</Link>
+                  <Link to={'/admin/products-category'}>Danh mục sản phẩm</Link>
                 </li>
                 <li className="border-b border-[#9D9995] pb-[7px]">
                   <Link to={'/admin/accessories-category'}>Danh mục phụ kiện</Link>
@@ -141,7 +141,7 @@ const Sidebar = () => {
             >
               <ul className="flex flex-col gap-2 items-center">
                 <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/products'}>Danh sách trang phục</Link>
+                  <Link to={'/admin/products'}>Danh sách sản phẩm</Link>
                 </li>
                 <li className="border-b border-[#9D9995] pb-[7px]">
                   <Link to={'/admin/accessories'}>Danh sách phụ kiện</Link>

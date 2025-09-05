@@ -19,6 +19,10 @@ import { IoSettingsOutline } from 'react-icons/io5'
 import { IoIosLogIn } from 'react-icons/io'
 import { FaRegRegistered } from 'react-icons/fa'
 import Skeleton from '@mui/material/Skeleton'
+import { fetchHomeAPI } from '~/apis/client/home.api'
+import SubMenu from '../SubMenu/SubMenu'
+import type { HomeInterface } from '~/types/home.type'
+import { motion } from 'framer-motion'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -27,6 +31,8 @@ const Header = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
+  const [open, setOpen] = useState(false)
+
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
@@ -82,6 +88,14 @@ const Header = () => {
     setCloseTopHeader(true)
     sessionStorage.setItem('closeTopHeader', 'true')
   }
+
+  const [dataHome, setDataHome] = useState<HomeInterface | null>(null)
+  useEffect(() => {
+    fetchHomeAPI().then((res: HomeInterface) => {
+      setDataHome(res)
+    })
+  }, [])
+
   return (
     <>
       {loading && (
@@ -89,7 +103,6 @@ const Header = () => {
           <div className="container mx-auto px-[16px]">
             <div className="flex items-center">
               <div className="flex-1 text-center">
-                {/* Skeleton cho text */}
                 <Skeleton
                   variant="text"
                   width="60%"
@@ -98,7 +111,6 @@ const Header = () => {
                   animation="wave"
                 />
               </div>
-              {/* Skeleton cho nút close */}
               <Skeleton
                 variant="circular"
                 width={20}
@@ -110,9 +122,9 @@ const Header = () => {
           </div>
         </div>
       )}
+
       {/* Top header */}
       {!loading && !accountUser && (
-
         <div className={`bg-primary sm:py-[8px] py-[7px] ${closeTopHeader ? 'hidden' : 'block'}`}>
           <div className="container mx-auto px-[16px]">
             <div className="flex">
@@ -122,7 +134,7 @@ const Header = () => {
                   className="font-[500] hover:underline ml-[5px]"
                   to="/user/register"
                 >
-                    Đăng Ký Ngay
+                  Đăng Ký Ngay
                 </Link>
               </div>
               <button
@@ -136,15 +148,16 @@ const Header = () => {
         </div>
       )}
       {/* End Top header */}
+
       {/* Header */}
-      <header className="sm:py-[15px] py-[10px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
+      <header className="sm:py-[24px] py-[19px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
         <div className="container mx-auto px-[16px]">
           <div className="flex items-center md:gap-x-[40px] gap-x-[16px]">
             <button className=" text-[20px] md:hidden inline">
               <FaBars />
             </button>
             <Link
-              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[22px] text-[19px] text-primary lg:flex-none flex-1"
+              className="flex items-center justify-between gap-[4px] font-[700] sm:text-[30px] text-[27px] text-primary lg:flex-none flex-1"
               to={'/'}
             >
               {settingGeneral ? (
@@ -152,7 +165,7 @@ const Header = () => {
                   <img
                     alt="logo"
                     src={settingGeneral[0].logo}
-                    className='w-[45px] h-[45px] bg-amber-900'
+                    className='w-[60px] h-[60px] bg-amber-900'
                   />
                   <span className='uppercase flex flex-col items-center'>
                     <p className='text-[#00171F]' style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.5)' }}>{settingGeneral[0].websiteName}</p>
@@ -176,17 +189,65 @@ const Header = () => {
                     Trang chủ
                   </Link>
                 </li>
-                <li><Link to="">Trang phục</Link></li>
-                <li><Link to="">Phụ kiện</Link></li>
-                <li><Link to="">Thương hiệu</Link></li>
-                <li><Link to="">Bài Viết</Link></li>
+                <li
+                  className='relative'
+                  onMouseEnter={() => setOpen(true)}
+                  onMouseLeave={() => setOpen(false)}
+                >
+                  <Link to={'/products'}>
+                    Sản phẩm
+                  </Link>
+                  {open && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="absolute top-[20px] left-[-428px] p-[12px] w-[1527px] z-50">
+                        {dataHome && dataHome.productCategories && (
+                          <SubMenu
+                            dataDropdown={
+                              dataHome.productCategories.map((category) => ({
+                                ...category,
+                                slug: category.slug ?? '',
+                                children: category.children
+                                  ? category.children.map((sub) => ({
+                                    ...sub,
+                                    slug: sub.slug ?? '',
+                                    children: sub.children
+                                      ? sub.children.map((child) => ({
+                                        ...child,
+                                        slug: child.slug ?? ''
+                                      }))
+                                      : undefined
+                                  }))
+                                  : undefined
+                              }))
+                            }
+                          />
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </li>
+                <li>
+                  <Link to={''}>Phụ kiện</Link>
+                </li>
+                <li>
+                  <Link to={''}>Thương hiệu</Link>
+                </li>
+                <li>
+                  <Link to={'/articles'}>Bài Viết</Link>
+                </li>
               </ul>
             </nav>
             <form
               className="
                 flex-1 lg:flex
                 hidden items-center
-                gap-x-[12px] px-[16px] py-[8px]
+                gap-x-[12px] px-[16px] py-[10px]
                 bg-[#F0F0F0] rounded-[62px] text-[16px]"
               action="#"
             >
@@ -211,8 +272,8 @@ const Header = () => {
                   onMouseLeave={handleClose}
                   className='flex items-center justify-center gap-[5px]'
                 >
-                  <img src={accountUser.avatar} alt='Avatar' className='border rounded-[50%] w-[35px] h-[35px] cover'/>
-                  <span className='text-[17px]'>{accountUser.fullName}</span>
+                  <img src={accountUser.avatar} alt='Avatar' className='border rounded-[50%] w-[40px] h-[40px] cover'/>
+                  <span className='text-[20px]'>{accountUser.fullName}</span>
                   <Menu
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
