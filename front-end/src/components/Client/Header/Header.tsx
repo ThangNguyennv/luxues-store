@@ -31,7 +31,8 @@ const Header = () => {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
-  const [open, setOpen] = useState(false)
+  const [openProduct, setOpenProduct] = useState(false)
+  const [openArticle, setOpenArticle] = useState(false)
 
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
@@ -191,13 +192,13 @@ const Header = () => {
                 </li>
                 <li
                   className='relative'
-                  onMouseEnter={() => setOpen(true)}
-                  onMouseLeave={() => setOpen(false)}
+                  onMouseEnter={() => setOpenProduct(true)}
+                  onMouseLeave={() => setOpenProduct(false)}
                 >
                   <Link to={'/products'}>
                     Sản phẩm
                   </Link>
-                  {open && (
+                  {openProduct && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
@@ -238,8 +239,48 @@ const Header = () => {
                 <li>
                   <Link to={''}>Thương hiệu</Link>
                 </li>
-                <li>
-                  <Link to={'/articles'}>Bài Viết</Link>
+                <li
+                  className='relative'
+                  onMouseEnter={() => setOpenArticle(true)}
+                  onMouseLeave={() => setOpenArticle(false)}
+                >
+                  <Link to={'/articles'}>
+                    Bài Viết
+                  </Link>
+                  {openArticle && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: 'easeInOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="absolute top-[20px] left-[-600px] p-[12px] w-[1527px] z-50">
+                        {dataHome && dataHome.articleCategories && (
+                          <SubMenu
+                            dataDropdown={
+                              dataHome.articleCategories.map((category) => ({
+                                ...category,
+                                slug: category.slug ?? '',
+                                children: category.children
+                                  ? category.children.map((sub) => ({
+                                    ...sub,
+                                    slug: sub.slug ?? '',
+                                    children: sub.children
+                                      ? sub.children.map((child) => ({
+                                        ...child,
+                                        slug: child.slug ?? ''
+                                      }))
+                                      : undefined
+                                  }))
+                                  : undefined
+                              }))
+                            }
+                          />
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
                 </li>
               </ul>
             </nav>
