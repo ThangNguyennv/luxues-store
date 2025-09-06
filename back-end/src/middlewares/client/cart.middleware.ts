@@ -13,7 +13,9 @@ export const cartId = async (
 
     const expiresCookie = 365 * 24 * 60 * 60 * 1000 // Thời hạn 1 năm
     res.cookie('cartId', cart.id, {
-      expires: new Date(Date.now() + expiresCookie)
+      expires: new Date(Date.now() + expiresCookie),
+      httpOnly: true,
+      sameSite: 'lax'
     })
   } else {
     // Lấy ra

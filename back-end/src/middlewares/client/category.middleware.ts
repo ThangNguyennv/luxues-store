@@ -12,7 +12,7 @@ export const categoryProduct = async (
     deleted: false
   })
   const newProductsCategory = buildTree(productsCategory as unknown as TreeItem[])
-  req['layoutProductsCategory'] = newProductsCategory // biến local để sử dụng trong layout, file pug
+  req['layoutProductsCategory'] = newProductsCategory 
   next()
 }
 
@@ -25,6 +25,6 @@ export const categoryArticle = async (
     deleted: false
   })
   const newArticlesCategory = buildTree(articlesCategory as unknown as TreeItem[])
-  req['layoutArticlesCategory'] = newArticlesCategory // biến local để sử dụng trong layout, file pug
+  req['layoutArticlesCategory'] = newArticlesCategory
   next()
 }

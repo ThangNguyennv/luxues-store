@@ -3,6 +3,7 @@ import Product from '~/models/product.model'
 import Article from '~/models/article.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+
 // [GET] /
 export const index = async (req: Request, res: Response) => {
   try {
@@ -11,7 +12,7 @@ export const index = async (req: Request, res: Response) => {
       featured: '1',
       deleted: false,
       status: 'active'
-    }).limit(6)
+    }).limit(4)
     const newProductsFeatured = productsHelper.priceNewProducts(
       productsFeatured as OneProduct[]
     )
@@ -22,7 +23,7 @@ export const index = async (req: Request, res: Response) => {
       status: 'active'
     })
       .sort({ position: 'desc' })
-      .limit(6)
+      .limit(5)
 
     const newProductsNew = productsHelper.priceNewProducts(
       productsNew as OneProduct[]
@@ -42,13 +43,16 @@ export const index = async (req: Request, res: Response) => {
     })
       .sort({ position: 'desc' })
       .limit(6)
+    
     res.json({
       code: 200,
       message: ' Thành công!',
       productsFeatured: newProductsFeatured,
       productsNew: newProductsNew,
       articlesFeatured: articlesFeatured,
-      articlesNew: articlesNew
+      articlesNew: articlesNew,
+      productCategories: req['layoutProductsCategory'],
+      articleCategories: req['layoutArticlesCategory']
     })
   } catch (error) {
     res.json({
