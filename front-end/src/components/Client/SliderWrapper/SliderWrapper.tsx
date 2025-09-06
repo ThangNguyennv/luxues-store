@@ -21,7 +21,7 @@ interface SliderWrapperProps {
 export default function SliderWrapper({
   items,
   slidesPerView = 4,
-  autoplayDelay = 3000,
+  autoplayDelay = 3000
 }: SliderWrapperProps) {
   return (
     <Swiper
@@ -33,7 +33,7 @@ export default function SliderWrapper({
       loop={true}
       autoplay={{
         delay: autoplayDelay,
-        disableOnInteraction: false,
+        disableOnInteraction: false
       }}
     >
       {items.map((item, index) => (
