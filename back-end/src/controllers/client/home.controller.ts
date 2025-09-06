@@ -12,7 +12,7 @@ export const index = async (req: Request, res: Response) => {
       featured: '1',
       deleted: false,
       status: 'active'
-    }).limit(4)
+    }).limit(5)
     const newProductsFeatured = productsHelper.priceNewProducts(
       productsFeatured as OneProduct[]
     )
@@ -34,7 +34,7 @@ export const index = async (req: Request, res: Response) => {
       featured: '1',
       deleted: false,
       status: 'active'
-    }).limit(6)
+    }).limit(5)
 
     // Lấy ra bài viết mới nhất
     const articlesNew = await Article.find({
@@ -42,7 +42,7 @@ export const index = async (req: Request, res: Response) => {
       status: 'active'
     })
       .sort({ position: 'desc' })
-      .limit(6)
+      .limit(5)
     
     res.json({
       code: 200,
