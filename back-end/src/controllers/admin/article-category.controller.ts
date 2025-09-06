@@ -55,27 +55,25 @@ export const index = async (req: Request, res: Response) => {
     }
     // // End Sort
 
-    const articleCategories = await ArticleCategory
-      .find(find)
-      .sort(sort)
-
-    const parentCategories = await ArticleCategory
-      .find(parentFind)
-      .sort(sort)
-      .limit(objectPagination.limitItems)
-      .skip(objectPagination.skip)
+    // 👉 Query song song bằng Promise.all (giảm round-trip)
+    const [allCategories, parentCategories, accounts] = await Promise.all([
+      ArticleCategory.find(find).sort(sort), // all categories
+      ArticleCategory.find(parentFind)
+        .sort(sort)
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip), // chỉ parent
+      Account.find({ deleted: false }) // account info
+    ])
 
     // Tạo cây phân cấp
-    const newArticleCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], articleCategories as unknown as TreeItem[])
-    const newAllArticleCategories = buildTree(articleCategories as unknown as TreeItem[])
+    const newArticleCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], allCategories as unknown as TreeItem[])
+    const newAllArticleCategories = buildTree(allCategories as unknown as TreeItem[])
 
-    // Thêm thông tin log
-    await addLogInfoToTree(newArticleCategories as LogNode[])
-    await addLogInfoToTree(newAllArticleCategories as LogNode[])
+    // Gắn account info cho tree
+    const accountMap = new Map(accounts.map(acc => [acc._id.toString(), acc.fullName]))
+    addLogInfoToTree(newArticleCategories as LogNode[], accountMap)
+    addLogInfoToTree(newAllArticleCategories as LogNode[], accountMap)
 
-    const accounts = await Account.find({
-      deleted: false
-    })
     res.json({
       code: 200,
       message: 'Thành công!',

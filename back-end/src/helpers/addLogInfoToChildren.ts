@@ -13,30 +13,24 @@ export interface LogNode extends TreeItem {
 }
 
 //  Add thông tin cho mỗi node
-export const addLogInfoToTree = async (nodes: LogNode[]): Promise<void> => {
+export const addLogInfoToTree = async (nodes: LogNode[], accountMap: Map<string, string>): Promise<void> => {
   for (const node of nodes) {
     // Lấy thông tin người tạo
     const creator = node.createdBy?.[0]
-    if (creator) {
-      const user = await Account.findById(creator.account_id).exec()
-      if (user) {
-        node.accountFullName = user.fullName
-      }
+    if (creator && accountMap.has(creator.account_id.toString())) {
+      node.accountFullName = accountMap.get(creator.account_id.toString())
     }
 
     // Lấy thông tin người cập nhật gần nhất
     // const lastUpdater = node.updatedBy?.slice(-1)[0]
     const lastUpdater = node.updatedBy[node.updatedBy.length - 1]
-    if (lastUpdater) {
-      const userUpdated = await Account.findById(lastUpdater.account_id).exec()
-      if (userUpdated) {
-        lastUpdater.accountFullName = userUpdated.fullName
-      }
+    if (lastUpdater && accountMap.has(lastUpdater.account_id.toString())) {
+      lastUpdater.accountFullName = accountMap.get(lastUpdater.account_id.toString())
     }
 
     // Đệ quy xử lý children
     if (node.children && node.children.length > 0) {
-      await addLogInfoToTree(node.children as LogNode[])
+      await addLogInfoToTree(node.children as LogNode[], accountMap)
     }
   }
 }

@@ -19,9 +19,7 @@ export const index = async (req: Request, res: Response) => {
       parent_id?: string
     }
 
-    const find: Find = { 
-      deleted: false
-    }
+    const find: Find = { deleted: false }
 
     if (req.query.status) {
       find.status = req.query.status.toString()
@@ -38,17 +36,14 @@ export const index = async (req: Request, res: Response) => {
     const parentFind: Find = { ...find, parent_id: '' }
     const countParents = await ProductCategory.countDocuments(parentFind)
     const objectPagination = paginationHelpers(
-      {
-        currentPage: 1,
-        limitItems: 2
-      },
+      { currentPage: 1, limitItems: 2 },
       req.query,
       countParents
     )
     // End Pagination
 
     // Sort
-    const sort = {}
+    const sort: Record<string, any> = {}
     if (req.query.sortKey && req.query.sortValue) {
       const sortKey = req.query.sortKey.toLocaleString()
       sort[sortKey] = req.query.sortValue
@@ -56,30 +51,27 @@ export const index = async (req: Request, res: Response) => {
       sort['position'] = 'desc'
     }
     // // End Sort
-  
-    const productCategories = await ProductCategory
-      .find(find)
-      .sort(sort)
 
-    const parentCategories = await ProductCategory
-      .find(parentFind)
-      .sort(sort)
-      .limit(objectPagination.limitItems)
-      .skip(objectPagination.skip)
+    // 👉 Query song song bằng Promise.all (giảm round-trip)
+    const [allCategories, parentCategories, accounts] = await Promise.all([
+      ProductCategory.find(find).sort(sort), // all categories
+      ProductCategory.find(parentFind)
+        .sort(sort)
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip), // chỉ parent
+      Account.find({ deleted: false }) // account info
+    ])
     
-    // Add children vào cha (Đã phân trang giới hạn 1 item)
-    const newProductCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], productCategories as unknown as TreeItem[])
+    // Add children vào cha (Đã phân trang giới hạn 2 item)
+    const newProductCategories = buildTreeForPagedItems(parentCategories as unknown as TreeItem[], allCategories as unknown as TreeItem[])
   
     // Add children vào cha (Không có phân trang, lấy tất cả item)
-    const newAllProductCategories = buildTree(productCategories as unknown as TreeItem[])
+    const newAllProductCategories = buildTree(allCategories as unknown as TreeItem[])
 
-    // Thêm thông tin accountFullName + updatedBy cho tất cả các node (cả cha và con)
-    await addLogInfoToTree(newProductCategories as LogNode[])
-    await addLogInfoToTree(newAllProductCategories as LogNode[])
-
-    const accounts = await Account.find({
-      deleted: false
-    })
+    // Gắn account info cho tree
+    const accountMap = new Map(accounts.map(acc => [acc._id.toString(), acc.fullName]))
+    addLogInfoToTree(newProductCategories as LogNode[], accountMap)
+    addLogInfoToTree(newAllProductCategories as LogNode[], accountMap)
 
     res.json({
       code: 200,
