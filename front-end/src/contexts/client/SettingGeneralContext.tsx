@@ -3,8 +3,8 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 import type { SettingGeneralDetailInterface } from '~/types/setting.type'
 
 interface SettingGeneralContextType {
-    settingGeneral: SettingGeneralDetailInterface['settingGeneral'] | null
-    setSettingGeneral: (settingGeneral: SettingGeneralDetailInterface['settingGeneral'] | null) => void
+  settingGeneral: SettingGeneralDetailInterface['settingGeneral'] | null
+  setSettingGeneral: (settingGeneral: SettingGeneralDetailInterface['settingGeneral'] | null) => void
 }
 
 const SettingContext = createContext<SettingGeneralContextType | undefined>(undefined)

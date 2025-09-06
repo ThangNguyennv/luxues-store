@@ -10,6 +10,7 @@ import { ArticleProvider } from './contexts/admin/ArticleContext'
 import { ArticleCategoryProvider } from './contexts/admin/ArticleCategory'
 import { AuthClientProvider } from './contexts/client/AuthContext'
 import { SettingGeneralProvider } from './contexts/client/SettingGeneralContext'
+import { HomeClientProvider } from './contexts/client/HomeContext'
 
 function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>
@@ -21,6 +22,7 @@ export const AppProviders = composeProviders(
   AlertProvider,
   AuthAdminProvider,
   AuthClientProvider,
+  HomeClientProvider,
   SettingGeneralProvider,
   ProductCategoryProvider,
   ProductProvider,

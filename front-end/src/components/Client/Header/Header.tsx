@@ -23,6 +23,7 @@ import { fetchHomeAPI } from '~/apis/client/home.api'
 import SubMenu from '../SubMenu/SubMenu'
 import type { HomeInterface } from '~/types/home.type'
 import { motion } from 'framer-motion'
+import { useHome } from '~/contexts/client/HomeContext'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -33,7 +34,6 @@ const Header = () => {
   const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
-
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
@@ -90,7 +90,7 @@ const Header = () => {
     sessionStorage.setItem('closeTopHeader', 'true')
   }
 
-  const [dataHome, setDataHome] = useState<HomeInterface | null>(null)
+  const { dataHome, setDataHome } = useHome()
   useEffect(() => {
     fetchHomeAPI().then((res: HomeInterface) => {
       setDataHome(res)

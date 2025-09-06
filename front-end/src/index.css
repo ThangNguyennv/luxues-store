@@ -128,3 +128,10 @@ button:hover,
 } */
 
 /* End sub-menu */
+
+.swiper-pagination {
+    margin-top: 20px;
+    /* dịch xuống 20px */
+    position: relative !important;
+    /* bỏ fixed bottom */
+}

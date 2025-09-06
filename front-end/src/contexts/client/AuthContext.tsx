@@ -3,8 +3,8 @@ import { createContext, useContext, useState, type ReactNode } from 'react'
 import type { UserDetailInterface } from '~/types/user.type'
 
 interface AuthContextType {
-    accountUser: UserDetailInterface['accountUser'] | null
-    setAccountUser: (user: UserDetailInterface['accountUser'] | null) => void
+  accountUser: UserDetailInterface['accountUser'] | null
+  setAccountUser: (user: UserDetailInterface['accountUser'] | null) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)

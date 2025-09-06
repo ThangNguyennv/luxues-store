@@ -24,18 +24,24 @@ interface SubMenuProps {
   dataDropdown: Parent[]
 }
 
-const SubMenu: React.FC<SubMenuProps> = ({ dataDropdown }: SubMenuProps) => {
+const SubMenu = ({ dataDropdown }: SubMenuProps) => {
   return (
     <div className="grid grid-cols-3 gap-[10px] p-[24px] bg-white shadow-lg w-full divide-x divide-black">
       {dataDropdown.map((parent) => (
         <div key={parent._id}>
-          <Link to={`/products/${parent.slug}`} className="font-[600] uppercase mb-[12px] border-b-[2px] border-black inline-block">
+          <Link
+            to={`/products/${parent.slug}`}
+            className="font-[600] uppercase mb-[12px] border-b-[2px] border-black inline-block"
+          >
             {parent.title}
           </Link>
           <div className="mt-[8px] space-y-[10px]">
             {parent.children?.map((sub) => (
               <div key={sub._id}>
-                <Link to={`/products/${parent.slug}/${sub.slug}`} className="font-semibold text-gray-800 border-b-[2px] border-black inline-block">
+                <Link
+                  to={`/products/${parent.slug}/${sub.slug}`}
+                  className="font-semibold text-gray-800 hover:text-[#FFAB19]"
+                >
                   {sub.title}
                 </Link>
                 {sub.children && (
