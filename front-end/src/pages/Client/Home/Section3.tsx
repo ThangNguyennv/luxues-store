@@ -8,7 +8,7 @@ const Section3 = () => {
   return (
     <>
       {/* Section 3 */}
-      <div className="sm:py-[62px] py-[40px]">
+      <div className="sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
           <BoxHead title={'Thời trang mới'}/>
           {dataHome?.productsNew && (

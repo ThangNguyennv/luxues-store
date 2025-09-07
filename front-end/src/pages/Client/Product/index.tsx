@@ -43,10 +43,10 @@ const ProductClient = () => {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="container flex flex-col gap-[20px] mb-[80px]">
+        <div className="container flex flex-col mb-[100px]">
           <BoxHead title={'Tất cả sản phẩm'}/>
           {products && (
-            <div className='grid grid-cols-4 gap-[15px] pt-[30px]'>
+            <div className='grid grid-cols-4 gap-[15px]'>
               {products.map((product, index) => (
                 <Link to={''} key={index}>
                   <CardItem {...product}/>

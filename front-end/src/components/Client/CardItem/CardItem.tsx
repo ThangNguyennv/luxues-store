@@ -28,7 +28,7 @@ const CardItem = ({
             className="w-[293px] h-[290px] object-cover"
           />
           {featured === '1' && (
-            <div className='absolute top-[-20px] right-[-50px] border rounded-[5px] px-[3px] py-[2px] border-[#607D00] text-white bg-[#0542AB]'>Nổi bật</div>
+            <div className='absolute top-[-10px] left-[-35px] border rounded-[5px] px-[3px] py-[2px] border-[#607D00] text-white bg-[#0542AB]'>Nổi bật</div>
           )}
         </div>
         <div className="flex flex-col items-center gap-2">

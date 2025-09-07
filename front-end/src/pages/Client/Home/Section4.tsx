@@ -8,15 +8,23 @@ const Section4 = () => {
   return (
     <>
       {/* Section 4 */}
-      <div className="sm:pt-[62px] pt-[40px] border-t border-[#0000001A]">
+      <div className="border-t border-[#0000001A] sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
           <BoxHead title={'Sản phẩm nổi bật'}/>
           {dataHome?.productsFeatured && (
             <SliderWrapper items={dataHome.productsFeatured} />
           )}
-          <div className="text-center border-[#0000001A] sm:pt-[40px] pt-[30px] sm:pb-[76px] pb-[40px]">
+          <div className="text-center sm:bt-[40px] mt-[30px]">
             <Link
-              className="nav-link border-[1px] text-[16px] font-[500] px-[63px] py-[16px] rounded-[62px] text-black inline-block sm:w-auto w-[100%] hover:bg-amber-300" to="#">
+              className="
+                nav-link border border-[#0000001A]
+                rounded-[62px] py-[16px] px-[63px]
+                font-[500] sm:text-[16px] text-[14px]
+                text-black inline-block sm:w-auto
+                w-[100%] hover:bg-amber-300
+              "
+              to="#"
+            >
               Xem Tất Cả
             </Link>
           </div>
