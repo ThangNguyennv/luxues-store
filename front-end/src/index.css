@@ -135,3 +135,7 @@ button:hover,
     position: relative !important;
     /* bỏ fixed bottom */
 }
+
+.swiper-wrapper {
+    padding: 5px;
+}

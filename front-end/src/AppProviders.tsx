@@ -5,6 +5,7 @@ import { AlertProvider } from './contexts/alert/AlertContext'
 import { AuthAdminProvider } from './contexts/admin/AuthContext'
 import { ProductCategoryProvider } from './contexts/admin/ProductCategoryContext'
 import { ProductProvider } from './contexts/admin/ProductContext'
+import { ProductClientProvider } from './contexts/client/ProductContext'
 import { composeProviders } from './composeProviders'
 import { ArticleProvider } from './contexts/admin/ArticleContext'
 import { ArticleCategoryProvider } from './contexts/admin/ArticleCategory'
@@ -26,6 +27,7 @@ export const AppProviders = composeProviders(
   SettingGeneralProvider,
   ProductCategoryProvider,
   ProductProvider,
+  ProductClientProvider,
   ArticleProvider,
   ArticleCategoryProvider
 )

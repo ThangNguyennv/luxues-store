@@ -4,12 +4,14 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import CardItem from '../CardItem/CardItem'
+import { Link } from 'react-router-dom'
 
 type BaseItem = {
   title: string
   thumbnail: string
   price?: number
-  discountPercentage?: number
+  discountPercentage?: number,
+  featured?: string
 }
 
 interface SliderWrapperProps {
@@ -38,7 +40,9 @@ export default function SliderWrapper({
     >
       {items.map((item, index) => (
         <SwiperSlide key={index}>
-          <CardItem {...item} />
+          <Link to={'/pp'}>
+            <CardItem {...item} />
+          </Link>
         </SwiperSlide>
       ))}
     </Swiper>

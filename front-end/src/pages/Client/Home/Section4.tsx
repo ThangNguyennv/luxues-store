@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import BoxHead from '~/components/client/BoxHead/BoxHead'
 import SliderWrapper from '~/components/client/SliderWrapper/SliderWrapper'
 import { useHome } from '~/contexts/client/HomeContext'
 
@@ -9,7 +10,7 @@ const Section4 = () => {
       {/* Section 4 */}
       <div className="sm:pt-[62px] pt-[40px] border-t border-[#0000001A]">
         <div className="container mx-auto px-[16px]">
-          <h2 className="text-center font-[700] sm:text-[48px] text-[32px] text-primary sm:mb-[54px] mb-[32px] uppercase">Sản phẩm nổi bật</h2>
+          <BoxHead title={'Sản phẩm nổi bật'}/>
           {dataHome?.productsFeatured && (
             <SliderWrapper items={dataHome.productsFeatured} />
           )}

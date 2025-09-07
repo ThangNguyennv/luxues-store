@@ -141,12 +141,14 @@ export const useProduct = () => {
       setSearchParams(newParams)
     }
   }
+
   const clearSortParams = (): void => {
     const newParams = new URLSearchParams(searchParams)
     newParams.delete('sortKey')
     newParams.delete('sortValue')
     setSearchParams(newParams)
   }
+
   const handleFilterStatus = (status: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {

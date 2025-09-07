@@ -24,6 +24,7 @@ import SubMenu from '../SubMenu/SubMenu'
 import type { HomeInterface } from '~/types/home.type'
 import { motion } from 'framer-motion'
 import { useHome } from '~/contexts/client/HomeContext'
+import { IoChevronDown } from 'react-icons/io5'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -195,8 +196,9 @@ const Header = () => {
                   onMouseEnter={() => setOpenProduct(true)}
                   onMouseLeave={() => setOpenProduct(false)}
                 >
-                  <Link to={'/products'}>
-                    Sản phẩm
+                  <Link to={'/products'} className='flex items-center gap-[5px]'>
+                    <span>Sản phẩm</span>
+                    <IoChevronDown />
                   </Link>
                   {openProduct && (
                     <motion.div
@@ -234,18 +236,25 @@ const Header = () => {
                   )}
                 </li>
                 <li>
-                  <Link to={''}>Phụ kiện</Link>
+                  <Link to={''} className='flex items-center gap-[5px]'>
+                    <span>Phụ kiện</span>
+                    <IoChevronDown />
+                  </Link>
                 </li>
                 <li>
-                  <Link to={''}>Thương hiệu</Link>
+                  <Link to={''} className='flex items-center gap-[5px]'>
+                    <span>Thương hiệu</span>
+                    <IoChevronDown />
+                  </Link>
                 </li>
                 <li
                   className='relative'
                   onMouseEnter={() => setOpenArticle(true)}
                   onMouseLeave={() => setOpenArticle(false)}
                 >
-                  <Link to={'/articles'}>
-                    Bài Viết
+                  <Link to={'/articles'} className='flex items-center gap-[5px]'>
+                    <span>Bài Viết</span>
+                    <IoChevronDown />
                   </Link>
                   {openArticle && (
                     <motion.div
