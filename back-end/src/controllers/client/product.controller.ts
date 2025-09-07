@@ -3,21 +3,42 @@ import Product from '~/models/product.model'
 import ProductCategory from '~/models/product-category.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+import paginationHelpers from '~/helpers/pagination'
 
 // [GET] /products
 export const index = async (req: Request, res: Response) => {
   try {
-    const products = await Product.find({
-      deleted: false
-    }).sort({ position: 'desc' })
+    interface Find {
+      deleted: boolean;
+      status?: string;
+      title?: RegExp;
+    }
+    const find: Find = { deleted: false }
+
+    // Pagination
+    const countProducts = await Product.countDocuments(find)
+    const objectPagination = paginationHelpers(
+      { currentPage: 1, limitItems: 20 },
+      req.query,
+      countProducts
+    )
+    // End Pagination
+
+    const products = await Product
+      .find(find)
+      .sort({ position: 'desc' })
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip)
 
     const newProducts = productsHelper.priceNewProducts(
       products as OneProduct[]
     )
+    
     res.json({
       code: 200,
       message: 'Thành công!',
-      products: newProducts
+      products: newProducts,
+      pagination: objectPagination,
     })
   } catch (error) {
     res.json({
