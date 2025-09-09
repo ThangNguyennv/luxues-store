@@ -18,9 +18,7 @@ export const index = async (req: Request, res: Response) => {
       title?: RegExp,
       parent_id?: string
     }
-    const find: Find = {
-      deleted: false
-    }
+    const find: Find = { deleted: false }
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
