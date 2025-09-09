@@ -6,13 +6,14 @@ export const cartId = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
+  console.log(req.cookies.cart)
   if (!req.cookies.cartId) {
     // Tạo giỏ hàng
     const cart = new Cart()
     await cart.save()
 
     const expiresCookie = 365 * 24 * 60 * 60 * 1000 // Thời hạn 1 năm
-    res.cookie('cartId', cart.id, {
+    res.cookie('cartId', cart._id, {
       expires: new Date(Date.now() + expiresCookie),
       httpOnly: true,
       sameSite: 'lax'
