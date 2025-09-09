@@ -7,6 +7,7 @@ import CardItem from '../CardItem/CardItem'
 import { Link } from 'react-router-dom'
 
 type BaseItem = {
+  slug?: string,
   title: string
   thumbnail: string
   price?: number
@@ -40,7 +41,7 @@ export default function SliderWrapper({
     >
       {items.map((item, index) => (
         <SwiperSlide key={index}>
-          <Link to={'/pp'}>
+          <Link to={`/products/detail/${item.slug}`}>
             <CardItem {...item} />
           </Link>
         </SwiperSlide>

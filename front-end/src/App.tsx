@@ -5,7 +5,6 @@ import Home from './pages/client/Home'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { useEffect } from 'react'
-import Product from './pages/client/Product'
 import Dashboard from './pages/admin/Dashboard/Dashboard'
 import Account from './pages/admin/Account'
 import ArticleAdmin from './pages/admin/Article'
@@ -56,6 +55,9 @@ import EditMyAccountClient from './pages/client/MyAccount/Edit'
 import ChangePassword from './pages/client/MyAccount/ChangePassword'
 import LayoutUser from './layouts/client/layoutUser/LayoutUser'
 import ForgotPassword from './pages/admin/Auth/ForgotPassword'
+import ProductClient from './pages/client/Product'
+import Detail from './pages/client/Product/Detail'
+import Cart from './pages/client/Cart'
 
 function App() {
   useEffect(() => {
@@ -72,7 +74,11 @@ function App() {
         <Routes>
           <Route path='/' element={<LayoutDefault />}>
             <Route index element={<Home />}/>
-            <Route path='products' element={<Product />}/>
+            <Route path='products'>
+              <Route index element={<ProductClient />}/>
+              <Route path='detail/:slug' element={<Detail />}/>
+            </Route>
+            <Route path='cart' element={<Cart />}/>
             <Route path='user' element={<PrivateRouteClient><LayoutUser /></PrivateRouteClient>}>
               <Route path='notification'></Route>
               <Route path='account'>
@@ -89,7 +95,6 @@ function App() {
               <Route path='voucher-wallet'></Route>
               <Route path='coin'></Route>
             </Route>
-            <Route path='cart'></Route>
           </Route>
           <Route path='user' element={<LayoutAuth />}>
             <Route path='login' element={<LoginClient />} />

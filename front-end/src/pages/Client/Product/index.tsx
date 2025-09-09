@@ -48,7 +48,7 @@ const ProductClient = () => {
           {products && (
             <div className='grid grid-cols-4 gap-[15px]'>
               {products.map((product, index) => (
-                <Link to={''} key={index}>
+                <Link to={`/products/detail/${product.slug}`} key={index}>
                   <CardItem {...product}/>
                 </Link>
               ))}
