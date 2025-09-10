@@ -34,8 +34,8 @@ export const loginPost = async (req: Request, res: Response) => {
     }
     // Tạo token lưu trên cookie
     res.cookie('token', accountAdmin.token, {
-      httpOnly: true,     // ngăn JS đọc được token
-      secure: true,       // chỉ gửi qua HTTPS
+      httpOnly: true,     // ngăn JS đọc được token qua document.cookie
+      secure: true,       // chỉ gửi qua HTTPS, còn HTTP ko đc gửi
       sameSite: 'none',    //  'None' nếu dùng nhiều domain
       maxAge: 24 * 60 * 60 * 1000  // 1 ngày
     })

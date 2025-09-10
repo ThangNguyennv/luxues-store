@@ -6,8 +6,8 @@ export const cartId = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log(req.cookies.cart)
-  if (!req.cookies.cartId) {
+  const cartId = req.cookies.cartId
+  if (!cartId) {
     // Tạo giỏ hàng
     const cart = new Cart()
     await cart.save()
@@ -15,14 +15,11 @@ export const cartId = async (
     const expiresCookie = 365 * 24 * 60 * 60 * 1000 // Thời hạn 1 năm
     res.cookie('cartId', cart._id, {
       expires: new Date(Date.now() + expiresCookie),
-      httpOnly: true,
-      sameSite: 'lax'
     })
+    req['miniCart'] = cart
   } else {
     // Lấy ra
-    const cart = await Cart.findOne({
-      _id: req.cookies.cartId
-    })
+    const cart = await Cart.findById(cartId)
     if (cart.products.length > 0) {
       cart['totalProduct'] = cart.products.length
     }

@@ -86,7 +86,7 @@ export const addPost = async (req: Request, res: Response) => {
     }
     res.json({
       code: 200,
-      message: 'Đã thêm sản phẩm vào giỏ hàng!'
+      message: 'Thêm thành công sản phẩm vào giỏ hàng!'
     })
   } catch (error) {
     res.json({
@@ -113,7 +113,7 @@ export const deleteCart = async (req: Request, res: Response) => {
     )
     res.json({
       code: 200,
-      message: 'Đã xóa sản phẩm khỏi giỏ hàng!'
+      message: 'Xóa thành công sản phẩm khỏi giỏ hàng!'
     })
   } catch (error) {
     res.json({

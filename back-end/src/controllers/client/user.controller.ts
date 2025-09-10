@@ -34,12 +34,6 @@ export const registerPost = async (req: Request, res: Response) => {
     req.body.confirmPassword = md5(req.body.confirmPassword)
     const user = new User(req.body)
     await user.save()
-    // res.cookie('tokenUser', user.tokenUser, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: 'none',
-    //   maxAge: 24 * 60 * 60 * 1000
-    // })
     res.json({
       code: 200,
       message: 'Đăng ký tài khoản thành công, mời bạn đăng nhập lại để tiếp tục!'
@@ -84,17 +78,17 @@ export const loginPost = async (req: Request, res: Response) => {
       return
     }
     const cart = await Cart.findOne({
-      user_id: user.id
+      user_id: user._id
     })
     if (cart) {
-      res.cookie('cartId', cart.id)
+      res.cookie('cartId', cart._id)
     } else {
       await Cart.updateOne(
         {
           _id: req.cookies.cartId
         },
         {
-          user_id: user.id
+          user_id: user._id
         }
       )
     }

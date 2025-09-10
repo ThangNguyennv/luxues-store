@@ -19,7 +19,6 @@ const routeClient = (app: Express): void => {
   // Middleware để lấy danh mục sản phẩm và bài viết
   app.use(categoryMiddleware.categoryProduct)
   app.use(categoryMiddleware.categoryArticle)
-  app.use(cartMiddleware.cartId)
   app.use(userMiddleware.infoUser)
   app.use(settingMiddleware.settingsGeneral)
 
@@ -27,8 +26,8 @@ const routeClient = (app: Express): void => {
   app.use('/products', productRoutes)
   app.use('/articles', articleRoutes)
   app.use('/search', searchRoutes)
-  app.use('/cart', cartRoutes)
-  app.use('/checkout', checkoutRoutes)
+  app.use('/cart', cartMiddleware.cartId, cartRoutes)
+  app.use('/checkout', cartMiddleware.cartId, checkoutRoutes)
   app.use('/user', userRoutes)
   app.use('/settings', settingRoutes)
 

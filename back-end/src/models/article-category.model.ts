@@ -43,13 +43,11 @@ const articleCategorySchema = new mongoose.Schema(
     ],
     recoveredAt: Date
   },
-  //timestamps là một cách tiện lợi để tự động thêm và quản lý hai trường thời gian tiêu chuẩn trong mỗi document: createdAt – thời điểm document được tạo, updatedAt – thời điểm document được cập nhật lần cuối
   {
     timestamps: true
   }
 )
 
-// Tham số thứ ba là tên collection trong database
 const ArticleCategory = mongoose.model(
   'ArticleCategory',
   articleCategorySchema,
