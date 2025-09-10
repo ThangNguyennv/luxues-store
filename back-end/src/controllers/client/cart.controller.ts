@@ -6,6 +6,8 @@ import { OneProduct } from '~/helpers/product'
 
 // [GET] /cart
 export const index = async (req: Request, res: Response) => {
+  console.log(req["cartId"])
+  console.log(req.cookies.cartId)
   try {
     const cartId = req.cookies.cartId
     const cart = await Cart.findOne({
@@ -48,7 +50,7 @@ export const addPost = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId
     const quantity = parseInt(req.body.quantity)
-    const cartId = req.cookies.cartId
+    const cartId = req["cartId"]
     const objectCart = {
       product_id: productId,
       quantity: quantity

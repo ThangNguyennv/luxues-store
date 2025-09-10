@@ -13,9 +13,10 @@ export const cartId = async (
     await cart.save()
 
     const expiresCookie = 365 * 24 * 60 * 60 * 1000 // Thời hạn 1 năm
-    res.cookie('cartId', cart._id, {
+    res.cookie('cartId', cart.id, {
       expires: new Date(Date.now() + expiresCookie),
     })
+    req["cartId"] = cart.id,
     req['miniCart'] = cart
   } else {
     // Lấy ra
@@ -23,6 +24,7 @@ export const cartId = async (
     if (cart.products.length > 0) {
       cart['totalProduct'] = cart.products.length
     }
+    req["cartId"] = cart.id
     req['miniCart'] = cart
   }
   next()
