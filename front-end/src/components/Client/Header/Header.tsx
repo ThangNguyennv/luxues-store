@@ -25,6 +25,8 @@ import type { HomeInterface } from '~/types/home.type'
 import { motion } from 'framer-motion'
 import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
+import { fetchCartAPI } from '~/apis/client/cart.api'
+import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -95,6 +97,13 @@ const Header = () => {
   useEffect(() => {
     fetchHomeAPI().then((res: HomeInterface) => {
       setDataHome(res)
+    })
+  }, [])
+
+  const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
+  useEffect(() => {
+    fetchCartAPI().then((res: CartDetailInterface) => {
+      setCartDetail(res.cartDetail)
     })
   }, [])
 
@@ -306,16 +315,19 @@ const Header = () => {
               </button>
               <input className="bg-transparent flex-1" type="" placeholder="Tìm kiếm sản phẩm..."/>
             </form>
-            <div className="flex items-center gap-x-[27px] text-[22px]">
+            <div className="flex items-center gap-x-[27px] text-[26px]">
               <a className="lg:hidden inline" href="#">
                 <IoSearch />
               </a>
               <a href='#'>
                 <IoIosNotifications className='hover:text-[#00A7E6]'/>
               </a>
-              <a href="#">
+              <Link to={'/cart'} className='relative'>
                 <IoMdCart className='hover:text-[#00A7E6]'/>
-              </a>
+                {cartDetail && cartDetail.products.length > 0 ? (
+                  <div className='absolute border rounded-[15px] text-center text-[13px] px-[5px] right-[-10px] top-[-10px] bg-amber-50'>{cartDetail.products.length}</div>
+                ) : ''}
+              </Link>
               {accountUser ? (
                 <div
                   onMouseEnter={(event) => handleOpen(event)}

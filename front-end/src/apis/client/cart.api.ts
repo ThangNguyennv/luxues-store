@@ -1,7 +1,8 @@
 import axios from 'axios'
+import type { CartDetailInterface } from '~/types/cart.type'
 import { API_ROOT } from '~/utils/constants'
 
-export const fetchCartAPI = async () => {
+export const fetchCartAPI = async (): Promise<CartDetailInterface> => {
   const response = await axios.get(
     `${API_ROOT}/cart`,
     { withCredentials: true }
