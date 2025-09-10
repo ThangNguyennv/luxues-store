@@ -20,6 +20,7 @@ const Detail = () => {
         setProductDetail(response.product)
       })
   }, [slug])
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const quantity = event.currentTarget.quantity.value
@@ -31,6 +32,7 @@ const Detail = () => {
       })
     }
   }
+
   return (
     <>
       {productDetail && (
