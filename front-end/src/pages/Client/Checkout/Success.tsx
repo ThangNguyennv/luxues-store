@@ -8,34 +8,161 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import TableContainer from '@mui/material/TableContainer'
+import Skeleton from '@mui/material/Skeleton'
 
 
 const Success = () => {
   const params = useParams()
   const orderId = params.orderId as string
   const [order, setOrder] = useState<OrderInfoInterface | null>(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    fetchSuccessAPI(orderId).then((res: OrderDetailInterface) => {
-      setOrder(res.order)
-    })
+    if (!orderId) return
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const res: OrderDetailInterface = await fetchSuccessAPI(orderId)
+        setOrder(res.order)
+      } catch (error) {
+      // eslint-disable-next-line no-console
+        console.error('Lỗi khi fetch đơn hàng:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [orderId])
+
   const totalBill = order?.products.reduce((acc, item) => {
     const priceNewForOneProduct =
         item.price * (100 - item.discountPercentage) / 100
 
     return acc + priceNewForOneProduct * item.quantity
   }, 0)
-
+  if (loading) {
+    return (
+      <>
+        <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
+          <div className='container flex flex-col gap-[20px]'>
+            <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <div className="flex flex-col gap-[15px]">
+              <Skeleton variant="text" width={250} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              <div className='flex flex-col gap-[10px]'>
+                <div>
+                  <Skeleton variant="text" width={78} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={78} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+                <div>
+                  <Skeleton variant="text" width={89} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={89} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+                <div>
+                  <Skeleton variant="text" width={89} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={89} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-[10px]">
+              <Skeleton variant="text" width={250} height={45} sx={{ bgcolor: 'grey.400' }}/>
+              <div>
+                <TableContainer sx={{ maxHeight: 600 }}>
+                  <Table stickyHeader sx={{
+                    borderCollapse: 'collapse',
+                    '& th, & td': {
+                      border: '1px solid #757575' // đường kẻ
+                    }
+                  }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={30} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={40} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={50} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={50} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={50} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={50} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="text" width={411} height={18} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="rectangular" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                        <TableCell align="center">
+                          <div className='flex items-center justify-center'>
+                            <Skeleton variant="rectangular" width={50} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+              <div className='flex items-center justify-end gap-[10px]'>
+                <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
   return (
     <>
       {order && (
         <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
-          <div className='container flex flex-col gap-[15px]'>
+          <div className='container flex flex-col gap-[20px]'>
             <div className='text-[30px] uppercase font-[600]'>Đơn hàng</div>
-            <div className="flex flex-col gap-[10px]">
-              <div className='text-[24px] font-[500]'>Thông tin cá nhân</div>
-              <div>
+            <div className="flex flex-col gap-[15px]">
+              <div className='text-[24px] font-[500]'>Thông tin người đặt: </div>
+              <div className='flex flex-col gap-[10px]'>
                 <div>
                   <b>Họ và tên: </b>
                   {order.userInfo.fullName}
@@ -51,7 +178,7 @@ const Success = () => {
               </div>
             </div>
             <div className="flex flex-col gap-[10px]">
-              <div className='text-[24px] font-[500]'>Thông tin đơn hàng</div>
+              <div className='text-[24px] font-[500]'>Thông tin đơn hàng: </div>
               <div>
                 <TableContainer sx={{ maxHeight: 600 }}>
                   <Table stickyHeader sx={{
@@ -78,9 +205,11 @@ const Success = () => {
                               {index + 1}
                             </TableCell>
                             <TableCell align="center">
-                              <img src={product.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                              <div className='flex items-center justify-center'>
+                                <img src={product.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                              </div>
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="center">
                               <span>
                                 {product.title}
                               </span>
@@ -104,8 +233,8 @@ const Success = () => {
                 </TableContainer>
               </div>
               <div className='flex items-center justify-end gap-[10px]'>
-                <b>Tổng đơn hàng: </b>
-                <span className='font-[600] text-[20px] text-[#BC3433]'>{totalBill?.toLocaleString()}đ</span>
+                <b className='text-[20px]'>Tổng đơn hàng: </b>
+                <span className='font-[600] text-[25px] text-[#BC3433]'>{totalBill?.toLocaleString()}đ</span>
               </div>
             </div>
           </div>
