@@ -6,10 +6,8 @@ import { OneProduct } from '~/helpers/product'
 
 // [GET] /cart
 export const index = async (req: Request, res: Response) => {
-  console.log(req["cartId"])
-  console.log(req.cookies.cartId)
   try {
-    const cartId = req.cookies.cartId
+    const cartId = req["cartId"]
     const cart = await Cart.findOne({
       _id: cartId
     })
@@ -87,7 +85,7 @@ export const addPost = async (req: Request, res: Response) => {
       )
     }
     res.json({
-      code: 200,
+      code: 201,
       message: 'Thêm thành công sản phẩm vào giỏ hàng!'
     })
   } catch (error) {
@@ -114,7 +112,7 @@ export const deleteCart = async (req: Request, res: Response) => {
       }
     )
     res.json({
-      code: 200,
+      code: 204,
       message: 'Xóa thành công sản phẩm khỏi giỏ hàng!'
     })
   } catch (error) {
