@@ -23,7 +23,9 @@ export const index = async (req: Request, res: Response) => {
       countProducts
     )
     // End Pagination
-
+    const allProducts = await Product
+      .find(find)
+      .sort({ position: 'desc' })
     const products = await Product
       .find(find)
       .sort({ position: 'desc' })
@@ -39,6 +41,7 @@ export const index = async (req: Request, res: Response) => {
       message: 'Thành công!',
       products: newProducts,
       pagination: objectPagination,
+      allProducts: allProducts
     })
   } catch (error) {
     res.json({

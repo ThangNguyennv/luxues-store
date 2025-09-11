@@ -3,6 +3,7 @@ import Cart from '~/models/cart.model'
 import Product from '~/models/product.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+import { version } from 'mongoose'
 
 // [GET] /cart
 export const index = async (req: Request, res: Response) => {
@@ -58,7 +59,7 @@ export const addPost = async (req: Request, res: Response) => {
     })
     // find() trong js (Khác find trong mongoose là tìm nhiều) -> Tìm 1 bản ghi
     const isExistProductInCart = cart.products.find(
-      (item) => item.product_id == productId
+      (item) => item.product_id === productId
     )
 
     // Thêm sản phẩm để không bị tạo object mới
@@ -146,6 +147,63 @@ export const update = async (req: Request, res: Response) => {
       code: 200,
       message: 'Cập nhật số lượng thành công!'
     })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
+
+// [PATCH] /cart/change-multi
+export const changeMulti = async (req: Request, res: Response) => {
+  try {
+    const cartId = req.cookies.cartId
+    const body = req.body as { type: string; ids: string[] }
+    const type = body.type
+    const ids = body.ids
+    enum Key {
+      DELETEALL = 'delete-all',
+      CHANGEQUANTITY = 'change-quantity',
+    }
+    switch (type) {
+      case Key.DELETEALL:
+        await Product.updateMany(
+          { _id: { $in: ids } },
+          { deleted: true, deletedAt: new Date() }
+        )
+        res.json({
+          code: 204,
+          message: `Xóa thành công ${ids.length} sản phẩm!`
+        })
+        break
+      case Key.CHANGEQUANTITY:
+        for (const item of ids) {
+          const [id, quantity] = item.split('-')
+          await Cart.updateOne(
+            { _id: cartId,
+              'products.product_id': id
+            },
+            {
+              $set: {
+                'products.$.quantity': quantity
+              }
+            }
+          )
+        }
+        res.json({
+          code: 200,
+          message: `Cập nhật thành công số lượng ${ids.length} sản phẩm!`
+        })
+        break
+      default:
+        res.json({
+          code: 404,
+          message: 'Không tồn tại sản phẩm!'
+        })
+        break
+    }
   } catch (error) {
     res.json({
       code: 400,
