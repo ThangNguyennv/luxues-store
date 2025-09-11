@@ -12,6 +12,7 @@ export interface ProductInfoInterface extends GeneralInfoInterface {
 
 export interface ProductAllResponseInterface extends HelperInterface, CurrentParamsInterface {
   products: ProductInfoInterface[],
+  allProducts: ProductInfoInterface[]
 }
 
 export interface ProductStates extends HelperInterface, ParamsInterface {

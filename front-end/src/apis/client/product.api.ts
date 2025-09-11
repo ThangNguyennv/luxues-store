@@ -20,6 +20,13 @@ export const fetchAllProductsAPI = async (
   return response.data
 }
 
+export const fetchProductsAPI = async (): Promise<ProductAllResponseInterface> => {
+  const response = await axios.get(
+    `${API_ROOT}/products`
+  )
+  return response.data
+}
+
 export const fetchDetailProductAPI = async (slug: string): Promise<ProductDetailInterface> => {
   const response = await axios.get(
     `${API_ROOT}/products/detail/${slug}`,

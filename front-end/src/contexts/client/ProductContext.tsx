@@ -50,9 +50,6 @@ export const ProductClientProvider = ({ children }: { children: React.ReactNode 
         dispatchProduct({ type: 'SET_LOADING', payload: false })
       }
     }, [])
-  useEffect(() => {
-    fetchProduct()
-  }, [fetchProduct])
   return (
     <ProductContext.Provider value={{ stateProduct, fetchProduct, dispatchProduct }}>
       {children}

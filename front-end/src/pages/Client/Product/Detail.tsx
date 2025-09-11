@@ -52,8 +52,12 @@ const Detail = () => {
                   <div className="font-medium text-[26px]">
                     {Math.floor(((productDetail.price * (100 - productDetail.discountPercentage)) / 100)).toLocaleString()}đ
                   </div>
-                  <div className='line-through text-gray-400 text-[26px]'>{(productDetail.price).toLocaleString()}đ</div>
-                  <div className="text-[#BC3433] font-semibold p-[2px] bg-amber-100 text-[20px]">-{productDetail.discountPercentage}</div>
+                  {productDetail.discountPercentage > 0 && (
+                    <>
+                      <div className='line-through text-gray-400 text-[26px]'>{(productDetail.price).toLocaleString()}đ</div>
+                      <div className="text-[#BC3433] font-semibold p-[2px] bg-amber-100 text-[20px]">-{productDetail.discountPercentage}%</div>
+                    </>
+                  )}
                 </div>
                 <div className='flex items-center gap-[5px] text-[26px]'>
                   <b>Còn lại:</b>
