@@ -89,7 +89,12 @@ export const order = async (req: Request, res: Response) => {
     order.position = req.body.position
 
     order.save()
-
+    for (const item of products) {
+      await Product.updateOne(
+        { _id: item.product_id },
+        { $inc: { stock: -item.quantity } } // trừ số lượng
+      )
+    }
     await Cart.updateOne(
       {
         _id: cartId
