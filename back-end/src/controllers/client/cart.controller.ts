@@ -169,9 +169,18 @@ export const changeMulti = async (req: Request, res: Response) => {
     }
     switch (type) {
       case Key.DELETEALL:
-        await Product.updateMany(
-          { _id: { $in: ids } },
-          { deleted: true, deletedAt: new Date() }
+        let arrayId = []
+        for (const item of ids) {
+          const [id] = item.split('-')
+          arrayId.push(id)
+        }
+        await Cart.updateOne(
+          {
+            _id: cartId,
+          },
+          {
+            $pull: { products: { product_id: { $in: arrayId } } }
+          }
         )
         res.json({
           code: 204,
