@@ -76,12 +76,9 @@ const Cart = () => {
     if (!selectedId) return
     const response = await fetchDeleteProductInCartAPI(selectedId)
     if (response.code === 204) {
-      dispatchProduct({
-        type: 'SET_DATA',
-        payload: {
-          products: products.filter((product) => product._id !== selectedId)
-        }
-      })
+      if (cartDetail) {
+        setCartDetail({ ...cartDetail, products: cartDetail.products.filter((product) => product.product_id !== selectedId) })
+      }
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
@@ -323,13 +320,13 @@ const Cart = () => {
                       <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                       <DialogContent>
                         <DialogContentText>
-                    Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?
+                          Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>Hủy</Button>
                         <Button onClick={handleDelete} color="error" variant="contained">
-                    Xóa
+                          Xóa
                         </Button>
                       </DialogActions>
                     </Dialog>
