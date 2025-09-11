@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { fetchCartAPI, fetchChangeMultiAPI, fetchDeleteProductInCartAPI } from '~/apis/client/cart.api'
-import { useProductContext } from '~/contexts/client/ProductContext'
 import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -23,12 +22,11 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 
 const Cart = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
-  const [quantity, setQuantity] = useState<number>(1)
-  const [open, setOpen] = useState(false)
+  const [openDeleteOne, setOpenDeleteOne] = useState(false)
+  const [openDeleteAll, setOpenDeleteAll] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const { dispatchAlert } = useAlertContext()
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
-  const { dispatchProduct } = useProductContext()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
   const [pendingAction, setPendingAction] = useState<string | null>(null)
@@ -54,12 +52,12 @@ const Cart = () => {
   }
   const handleOpen = (id: string) => {
     setSelectedId(id)
-    setOpen(true)
+    setOpenDeleteOne(true)
   }
 
   const handleClose = () => {
     setSelectedId(null)
-    setOpen(false)
+    setOpenDeleteOne(false)
   }
 
   const totalBill = cartDetail?.products.reduce((acc, item) => {
@@ -83,7 +81,7 @@ const Cart = () => {
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
-      setOpen(false)
+      setOpenDeleteOne(false)
     } else if (response.code === 400) {
       alert('error: ' + response.error)
       return
@@ -111,7 +109,7 @@ const Cart = () => {
 
     if (typeChange === 'delete-all') {
       setPendingAction('delete-all')
-      setOpen(true)
+      setOpenDeleteAll(true)
       return
     }
     await executeAction(typeChange)
@@ -143,6 +141,14 @@ const Cart = () => {
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
+        if (typeChange === 'delete-all') {
+          setCartDetail({
+            ...cartDetail,
+            products: cartDetail.products.filter(
+              (p) => !selectedIds.includes(p.product_id)
+            )
+          })
+        }
       } else {
         dispatchAlert({
           type: 'SHOW_ALERT',
@@ -153,8 +159,9 @@ const Cart = () => {
       setSelectedIds([])
       setActionType('')
       setPendingAction(null)
-    // Refetch
-    // reloadData()
+      // Refetch
+      // reloadData()
+      
     }
   }
 
@@ -170,7 +177,7 @@ const Cart = () => {
     if (pendingAction === 'delete-all') {
       await executeAction('delete-all')
     }
-    setOpen(false)
+    setOpenDeleteAll(false)
   }
 
   return (
@@ -197,7 +204,7 @@ const Cart = () => {
                 Áp dụng
               </button>
               <Dialog
-                open={open}
+                open={openDeleteAll}
                 onClose={handleClose}
                 aria-labelledby="delete-dialog-title"
               >
@@ -313,7 +320,7 @@ const Cart = () => {
                       )
                     })}
                     <Dialog
-                      open={open}
+                      open={openDeleteOne}
                       onClose={handleClose}
                       aria-labelledby="delete-dialog-title"
                     >
@@ -348,7 +355,7 @@ const Cart = () => {
                   <input placeholder='Nhập mã giảm giá...' className='border rounded-[5px] flex-1 py-[10px] px-[7px]'/>
                   <button className='border rounded-[30px] bg-[#00171F] p-[10px] text-white w-[30%]'>Áp dụng</button>
                 </div>
-                <div className='border rounded-[10px] bg-[#00171F] py-[15px] text-white text-center text-[20px]'>Thanh toán</div>
+                <button className='border rounded-[10px] bg-[#00171F] py-[15px] text-white text-center text-[20px]'>Thanh toán</button>
               </div>
             </div>
 
