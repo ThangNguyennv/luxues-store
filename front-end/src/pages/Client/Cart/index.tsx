@@ -285,6 +285,7 @@ const Cart = () => {
       </>
     )
   }
+
   return (
     <>
       {cartDetail && (
@@ -307,7 +308,7 @@ const Cart = () => {
                   type="submit"
                   className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
                 >
-                Áp dụng
+                  Áp dụng
                 </button>
                 <Dialog
                   open={openDeleteAll}
@@ -317,7 +318,7 @@ const Cart = () => {
                   <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                   <DialogContent>
                     <DialogContentText>
-                    Bạn có chắc chắn muốn xóa {selectedIds.length} sản phẩm này khỏi giỏ hàng không?
+                      Bạn có chắc chắn muốn xóa {selectedIds.length} sản phẩm này khỏi giỏ hàng không?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -327,7 +328,7 @@ const Cart = () => {
                       color="error"
                       variant="contained"
                     >
-                    Xóa
+                      Xóa
                     </Button>
                   </DialogActions>
                 </Dialog>

@@ -12,6 +12,7 @@ import type { ProductInfoInterface } from '~/types/product.type'
 import { fetchProductsAPI } from '~/apis/client/product.api'
 import { useNavigate } from 'react-router-dom'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
+import Skeleton from '@mui/material/Skeleton'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
@@ -72,7 +73,109 @@ const Checkout = () => {
       }, 2000)
     }
   }
-
+  if (loading) {
+    return (
+      <>
+        <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
+          <div className='container flex flex-col gap-[15px]'>
+            <Skeleton variant="text" width={200} height={45} sx={{ bgcolor: 'grey.400' }}/>
+            <div className='flex flex-col gap-[20px]'>
+              <TableContainer sx={{ maxHeight: 600 }}>
+                <Table stickyHeader sx={{
+                  borderCollapse: 'collapse',
+                  '& th, & td': {
+                    border: '1px solid #757575' // đường kẻ
+                  }
+                }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={70} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={50} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center">
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={412} height={17} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                      <TableCell align="center">
+                        <div className='flex items-center justify-center'>
+                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className='flex items-center justify-end gap-[5px]'>
+                <Skeleton variant="text" width={125} height={24} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="text" width={89} height={30} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
+              <Skeleton variant="text" width={300} height={45} sx={{ bgcolor: 'grey.400' }}/>
+              <form onSubmit={handleSubmit} className='flex flex-col gap-[15px]'>
+                <input type="hidden" name="position" value={1} />
+                <div className='form-group'>
+                  <Skeleton variant="text" width={74} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+                <div className='form-group'>
+                  <Skeleton variant="text" width={101} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+                <div className='form-group'>
+                  <Skeleton variant="text" width={55} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+                <div className='flex items-center justify-end'>
+                  <Skeleton variant="rectangular" width={122} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
   return (
     <>
       {cartDetail && (
@@ -107,9 +210,11 @@ const Checkout = () => {
                                 {index + 1}
                               </TableCell>
                               <TableCell align="center">
-                                <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                                <div className='flex items-center justify-center'>
+                                  <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                                </div>
                               </TableCell>
-                              <TableCell align="left">
+                              <TableCell align="center">
                                 <span>
                                   {item.title}
                                 </span>
@@ -154,7 +259,10 @@ const Checkout = () => {
                 <div className='flex items-center justify-end'>
                   <button
                     type='submit'
-                    className='uppercase border rounded-[10px] text-center px-[20px] py-[12px] bg-[#BC3433] text-white'>Đặt hàng</button>
+                    className='uppercase border rounded-[10px] text-center px-[20px] py-[12px] bg-[#BC3433] text-white'
+                  >
+                    Đặt hàng
+                  </button>
                 </div>
               </form>
             </div>
