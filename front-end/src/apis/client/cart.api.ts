@@ -18,3 +18,11 @@ export const fetchAddProductToCartAPI = async (productId: string, quantity: stri
   )
   return response.data
 }
+
+export const fetchDeleteProductInCartAPI = async (productId: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/cart/delete/${productId}`,
+    { withCredentials: true }
+  )
+  return response.data
+}

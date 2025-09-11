@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchCartAPI } from '~/apis/client/cart.api'
+import { fetchCartAPI, fetchDeleteProductInCartAPI } from '~/apis/client/cart.api'
 import { useProductContext } from '~/contexts/client/ProductContext'
 import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
 import Table from '@mui/material/Table'
@@ -17,19 +17,32 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { RiDeleteBin5Line } from 'react-icons/ri'
+import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 const Cart = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
+  const [open, setOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const { dispatchAlert } = useAlertContext()
   useEffect(() => {
     fetchCartAPI().then((res: CartDetailInterface) => {
       setCartDetail(res.cartDetail)
     })
   }, [])
-  const { stateProduct } = useProductContext()
+  const { stateProduct, dispatchProduct } = useProductContext()
   const { products } = stateProduct
   const handleCheckAll = (checked: boolean) => {
 
+  }
+  const handleOpen = (id: string) => {
+    setSelectedId(id)
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setSelectedId(null)
+    setOpen(false)
   }
   const isCheckAll = true
   const totalBill = cartDetail?.products.reduce((acc, item) => {
@@ -41,6 +54,26 @@ const Cart = () => {
 
     return acc + priceNewForOneProduct * item.quantity
   }, 0)
+  const handleDelete = async () => {
+    if (!selectedId) return
+    const response = await fetchDeleteProductInCartAPI(selectedId)
+    if (response.code === 204) {
+      dispatchProduct({
+        type: 'SET_DATA',
+        payload: {
+          products: products.filter((product) => product._id !== selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
   return (
     <>
       {cartDetail && (
@@ -118,15 +151,35 @@ const Cart = () => {
                                 />
                               </TableCell>
                               <TableCell align="center">
-                                <div className='flex items-center justify-center text-red-500'>
+                                <button
+                                  onClick={() => handleOpen(item._id)}
+                                  className='flex items-center justify-center text-red-500'>
                                   <RiDeleteBin5Line className='text-[17px]'/>
-                                </div>
+                                </button>
                               </TableCell>
                             </TableRow>
                           )}
                         </>
                       )
                     })}
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="delete-dialog-title"
+                    >
+                      <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                    Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleClose}>Hủy</Button>
+                        <Button onClick={handleDelete} color="error" variant="contained">
+                    Xóa
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -135,7 +188,7 @@ const Cart = () => {
                 <div className='flex flex-col gap-[20px]'>
                   <div className='flex items-center justify-between'>
                     <b>Tổng đơn hàng: </b>
-                    <div className='font-[600]'>{Math.floor(totalBill).toLocaleString()}đ</div>
+                    <div className='font-[600]'>{Math.floor(totalBill ?? 0).toLocaleString()}đ</div>
                   </div>
                   <b>Giảm giá: </b>
                   <b>Phí vận chuyển: </b>

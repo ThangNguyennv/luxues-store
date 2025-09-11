@@ -25,7 +25,7 @@ const Detail = () => {
     event.preventDefault()
     const quantity = event.currentTarget.quantity.value
     const res = await fetchAddProductToCartAPI(productId, quantity)
-    if (res.code === 200) {
+    if (res.code === 201) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: res.message, severity: 'success' }
