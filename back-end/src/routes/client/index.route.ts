@@ -27,7 +27,7 @@ const routeClient = (app: Express): void => {
   app.use('/articles', articleRoutes)
   app.use('/search', searchRoutes)
   app.use('/cart', cartMiddleware.cartId, cartRoutes)
-  app.use('/checkout', checkoutRoutes)
+  app.use('/checkout', cartMiddleware.cartId, checkoutRoutes)
   app.use('/user', userRoutes)
   app.use('/settings', settingRoutes)
 
