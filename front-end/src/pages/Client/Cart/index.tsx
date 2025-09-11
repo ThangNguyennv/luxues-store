@@ -19,6 +19,7 @@ import { RiDeleteBin5Line } from 'react-icons/ri'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { ProductAllResponseInterface, ProductInfoInterface } from '~/types/product.type'
 import { fetchProductsAPI } from '~/apis/client/product.api'
+import { Link } from 'react-router-dom'
 
 const Cart = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
@@ -159,9 +160,6 @@ const Cart = () => {
       setSelectedIds([])
       setActionType('')
       setPendingAction(null)
-      // Refetch
-      // reloadData()
-      
     }
   }
 
@@ -247,6 +245,7 @@ const Cart = () => {
                           sx={{ padding: 0 }}
                         />
                       </TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
                       <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
                       <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
                       <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Đơn giá</TableCell>
@@ -270,6 +269,9 @@ const Cart = () => {
                                   sx={{ padding: 0 }}
                                   value={item._id}
                                 />
+                              </TableCell>
+                              <TableCell align="center">
+                                {index + 1}
                               </TableCell>
                               <TableCell align="center">
                                 <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
@@ -355,7 +357,7 @@ const Cart = () => {
                   <input placeholder='Nhập mã giảm giá...' className='border rounded-[5px] flex-1 py-[10px] px-[7px]'/>
                   <button className='border rounded-[30px] bg-[#00171F] p-[10px] text-white w-[30%]'>Áp dụng</button>
                 </div>
-                <button className='border rounded-[10px] bg-[#00171F] py-[15px] text-white text-center text-[20px]'>Thanh toán</button>
+                <Link to={'/checkout'} className='nav-link border rounded-[10px] bg-[#00171F] py-[15px] text-white text-center text-[20px]'>Thanh toán</Link>
               </div>
             </div>
 

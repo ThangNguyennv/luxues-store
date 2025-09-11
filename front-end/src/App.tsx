@@ -3,7 +3,7 @@ import LayoutDefault from './layouts/client/layoutDefault/LayoutDefault'
 import LayoutDefaultAdmin from './layouts/admin/layoutDefault/LayoutDefault'
 import Home from './pages/client/Home'
 import AOS from 'aos'
-import 'aos/dist/aos.css'
+import 'aos'
 import { useEffect } from 'react'
 import Dashboard from './pages/admin/Dashboard/Dashboard'
 import Account from './pages/admin/Account'
@@ -58,6 +58,7 @@ import ForgotPassword from './pages/admin/Auth/ForgotPassword'
 import ProductClient from './pages/client/Product'
 import Detail from './pages/client/Product/Detail'
 import Cart from './pages/client/Cart'
+import Checkout from './pages/client/Checkout'
 
 function App() {
   useEffect(() => {
@@ -79,6 +80,7 @@ function App() {
               <Route path='detail/:slug' element={<Detail />}/>
             </Route>
             <Route path='cart' element={<Cart />}/>
+            <Route path='checkout' element={<Checkout />}/>
             <Route path='user' element={<PrivateRouteClient><LayoutUser /></PrivateRouteClient>}>
               <Route path='notification'></Route>
               <Route path='account'>
