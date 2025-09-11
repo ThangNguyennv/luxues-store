@@ -14,6 +14,7 @@ const Success = () => {
   const params = useParams()
   const orderId = params.orderId as string
   const [order, setOrder] = useState<OrderInfoInterface | null>(null)
+
   useEffect(() => {
     fetchSuccessAPI(orderId).then((res: OrderDetailInterface) => {
       setOrder(res.order)
@@ -25,6 +26,7 @@ const Success = () => {
 
     return acc + priceNewForOneProduct * item.quantity
   }, 0)
+
   return (
     <>
       {order && (

@@ -18,6 +18,7 @@ const Checkout = () => {
   const { dispatchAlert } = useAlertContext()
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
   const navigate = useNavigate()
+
   useEffect(() => {
     fetchCartAPI().then((res: CartDetailInterface) => {
       setCartDetail(res.cartDetail)
@@ -42,7 +43,7 @@ const Checkout = () => {
     const formData = new FormData(event.currentTarget)
     const payload = {
       position: Number(formData.get('position')),
-      fullname: String(formData.get('fullName') ?? ''),
+      fullName: String(formData.get('fullName') ?? ''),
       phone: String(formData.get('phone') ?? ''),
       address: String(formData.get('address') ?? '')
     }
