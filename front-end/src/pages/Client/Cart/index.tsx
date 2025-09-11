@@ -17,6 +17,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { RiDeleteBin5Line } from 'react-icons/ri'
+
 const Cart = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
@@ -28,51 +29,25 @@ const Cart = () => {
   const { stateProduct } = useProductContext()
   const { products } = stateProduct
   const handleCheckAll = (checked: boolean) => {
-  
-  }  
-  const isCheckAll = true
 
+  }
+  const isCheckAll = true
+  const totalBill = cartDetail?.products.reduce((acc, item) => {
+    const product = products.find(p => p._id === item.product_id)
+    if (!product) return acc
+
+    const priceNewForOneProduct =
+    product.price * (100 - product.discountPercentage) / 100
+
+    return acc + priceNewForOneProduct * item.quantity
+  }, 0)
   return (
     <>
       {cartDetail && (
         <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
           <div className='container flex flex-col gap-[15px]'>
-            <div className='text-[30px] uppercase'>Giỏ hàng của bạn</div>
-            <div className='flex items-center justify-between gap-[20px]'>
-              {/* <div className='flex flex-col gap-[48px] px-[24px] py-[20px] w-[50%]'>
-                {cartDetail.products.map((cart, index) => {
-                  const item = products.find((product) => product._id === cart.product_id)
-                  return (
-                    <>
-                      {item && (
-                        <div className='flex items-center justify-between gap-[5px]' key={index}>
-                          <div>
-                            <img src={item.thumbnail} className='w-[150px] h-[150px] object-cover'/>
-                          </div>
-                          <div className='flex flex-col'>
-                            <span>{item.title}</span>
-                            <span>{item.price}</span>
-                          </div>
-                          <div className='flex flex-col'>
-                            <button>
-                              <RiDeleteBin5Line />
-                            </button>
-                            <input
-                              onChange={(event) => setQuantity(Number(event.target.value))}
-                              className='border rounded-[5px] text-center'
-                              type='number'
-                              name='quantity'
-                              value={cart.quantity}
-                              min={1}
-                              max={item.stock}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  )
-                })}
-              </div> */}
+            <div className='text-[30px] uppercase font-[600]'>Giỏ hàng của bạn</div>
+            <div className='flex items-start justify-between gap-[20px]'>
               <TableContainer sx={{ maxHeight: 600 }}>
                 <Table stickyHeader sx={{
                   borderCollapse: 'collapse',
@@ -92,7 +67,10 @@ const Cart = () => {
                         />
                       </TableCell>
                       <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Thông tin</TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Đơn giá</TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Giảm giá</TableCell>
+                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Số lượng</TableCell>
                       <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
                     </TableRow>
                   </TableHead>
@@ -102,29 +80,6 @@ const Cart = () => {
                       return (
                         <>
                           {item && (
-                            // <div className='flex items-center justify-between gap-[5px]' key={index}>
-                            //   <div>
-                            //     <img src={item.thumbnail} className='w-[150px] h-[150px] object-cover'/>
-                            //   </div>
-                            //   <div className='flex flex-col'>
-                            //     <span>{item.title}</span>
-                            //     <span>{item.price}</span>
-                            //   </div>
-                            //   <div className='flex flex-col'>
-                            //     <button>
-                            //       <RiDeleteBin5Line />
-                            //     </button>
-                            //     <input
-                            //       onChange={(event) => setQuantity(Number(event.target.value))}
-                            //       className='border rounded-[5px] text-center'
-                            //       type='number'
-                            //       name='quantity'
-                            //       value={cart.quantity}
-                            //       min={1}
-                            //       max={item.stock}
-                            //     />
-                            //   </div>
-                            // </div>
                             <TableRow key={index}>
                               <TableCell align="center">
                                 <Checkbox
@@ -137,13 +92,21 @@ const Cart = () => {
                                 <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
                               </TableCell>
                               <TableCell align="left">
-                                <span>{item.title}</span>
-                                <span>{item.price}</span>
+                                <span>
+                                  {item.title}
+                                </span>
                               </TableCell>
                               <TableCell align="left">
-                                <button>
-                                  <RiDeleteBin5Line />
-                                </button>
+                                <span>
+                                  {item.price.toLocaleString()}đ
+                                </span>
+                              </TableCell>
+                              <TableCell align="center">
+                                <span>
+                                  {item.discountPercentage}%
+                                </span>
+                              </TableCell>
+                              <TableCell align="center">
                                 <input
                                   onChange={(event) => setQuantity(Number(event.target.value))}
                                   className='border rounded-[5px] text-center'
@@ -154,46 +117,35 @@ const Cart = () => {
                                   max={item.stock}
                                 />
                               </TableCell>
-
+                              <TableCell align="center">
+                                <div className='flex items-center justify-center text-red-500'>
+                                  <RiDeleteBin5Line className='text-[17px]'/>
+                                </div>
+                              </TableCell>
                             </TableRow>
                           )}
                         </>
                       )
                     })}
-                    {/* <Dialog
-                      open={open}
-                      onClose={handleClose}
-                      aria-labelledby="delete-dialog-title"
-                    >
-                      <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
-                      <DialogContent>
-                        <DialogContentText>
-                  Bạn có chắc chắn muốn xóa danh mục này không?
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Hủy</Button>
-                        <Button onClick={handleDelete} color="error" variant="contained">
-                  Xóa
-                        </Button>
-                      </DialogActions>
-                    </Dialog> */}
                   </TableBody>
                 </Table>
               </TableContainer>
               <div className='flex flex-col gap-[24px] w-[50%] border rounded-[5px] py-[20px] px-[24px]'>
                 <div className='text-[26px] font-[600]'>Tóm tắt đơn hàng</div>
                 <div className='flex flex-col gap-[20px]'>
-                  <b>Tổng đơn hàng: </b>
+                  <div className='flex items-center justify-between'>
+                    <b>Tổng đơn hàng: </b>
+                    <div className='font-[600]'>{Math.floor(totalBill).toLocaleString()}đ</div>
+                  </div>
                   <b>Giảm giá: </b>
                   <b>Phí vận chuyển: </b>
                 </div>
                 <div><b>Tổng tiền phải trả: </b></div>
                 <div className='flex items-center gap-[12px]'>
-                  <input placeholder='Nhập mã giảm giá...' className='border rounded-[5px] flex-1 py-[2px] px-[5px]'/>
-                  <button className='border rounded-[10px] bg-[#00171F] p-[10px] text-white w-[30%]'>Áp dụng</button>
+                  <input placeholder='Nhập mã giảm giá...' className='border rounded-[5px] flex-1 py-[10px] px-[7px]'/>
+                  <button className='border rounded-[30px] bg-[#00171F] p-[10px] text-white w-[30%]'>Áp dụng</button>
                 </div>
-                <div className='border rounded-[5px] bg-[#00171F] p-[10px] text-white'>Thanh toán</div>
+                <div className='border rounded-[10px] bg-[#00171F] py-[15px] text-white text-center text-[20px]'>Thanh toán</div>
               </div>
             </div>
 
