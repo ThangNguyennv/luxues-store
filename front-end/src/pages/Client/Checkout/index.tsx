@@ -36,6 +36,7 @@ const Checkout = () => {
 
     return acc + priceNewForOneProduct * item.quantity
   }, 0)
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
@@ -52,10 +53,11 @@ const Checkout = () => {
         payload: { message: response.message, severity: 'success' }
       })
       setTimeout(() => {
-        navigate('/checkout/success')
+        navigate(`/checkout/success/${response.order._id}`)
       }, 2000)
     }
   }
+
   return (
     <>
       {cartDetail && (

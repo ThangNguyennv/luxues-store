@@ -59,6 +59,7 @@ import ProductClient from './pages/client/Product'
 import Detail from './pages/client/Product/Detail'
 import Cart from './pages/client/Cart'
 import Checkout from './pages/client/Checkout'
+import Success from './pages/client/Checkout/Success'
 
 function App() {
   useEffect(() => {
@@ -81,6 +82,7 @@ function App() {
             </Route>
             <Route path='cart' element={<Cart />}/>
             <Route path='checkout' element={<Checkout />}/>
+            <Route path='checkout/success/:orderId' element={<Success />}/>
             <Route path='user' element={<PrivateRouteClient><LayoutUser /></PrivateRouteClient>}>
               <Route path='notification'></Route>
               <Route path='account'>
