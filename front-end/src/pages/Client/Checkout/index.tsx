@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchCartAPI } from '~/apis/client/cart.api'
-import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
+import type { CartInfoInterface } from '~/types/cart.type'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
@@ -8,7 +8,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import TableContainer from '@mui/material/TableContainer'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import type { ProductAllResponseInterface, ProductInfoInterface } from '~/types/product.type'
+import type { ProductInfoInterface } from '~/types/product.type'
 import { fetchProductsAPI } from '~/apis/client/product.api'
 import { useNavigate } from 'react-router-dom'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
@@ -18,14 +18,28 @@ const Checkout = () => {
   const { dispatchAlert } = useAlertContext()
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    fetchCartAPI().then((res: CartDetailInterface) => {
-      setCartDetail(res.cartDetail)
-    })
-    fetchProductsAPI().then((res: ProductAllResponseInterface) => {
-      setProducts(res.allProducts)
-    })
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const [cartRes, productRes] = await Promise.all([
+          fetchCartAPI(),
+          fetchProductsAPI()
+        ])
+
+        setCartDetail(cartRes.cartDetail)
+        setProducts(productRes.allProducts)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Lỗi khi fetch dữ liệu:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
   }, [])
 
   const totalBill = cartDetail?.products.reduce((acc, item) => {
