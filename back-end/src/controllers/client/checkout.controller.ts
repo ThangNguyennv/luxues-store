@@ -15,9 +15,9 @@ export const index = async (req: Request, res: Response) => {
     if (cart.products.length > 0) {
       for (const item of cart.products) {
         const productId = item.product_id
-        const productInfo = await Product.findOne({
-          _id: productId
-        }).select('title thumbnail slug price discountPercentage')
+        const productInfo = await Product
+          .findOne({ _id: productId })
+          .select('title thumbnail slug price discountPercentage')
 
         productInfo['priceNew'] = productsHelper.priceNewProduct(
           productInfo as OneProduct
@@ -63,9 +63,9 @@ export const order = async (req: Request, res: Response) => {
         discountPercentage: 0
       }
 
-      const productInfo = await Product.findOne({
-        _id: product.product_id
-      }).select('price discountPercentage title thumbnail')
+      const productInfo = await Product
+        .findOne({ _id: product.product_id })
+        .select('price discountPercentage title thumbnail')
 
       objectProduct.price = productInfo.price
       objectProduct.discountPercentage = productInfo.discountPercentage
@@ -100,7 +100,8 @@ export const order = async (req: Request, res: Response) => {
     )
     res.json({
       code: 201,
-      message: 'Đặt hàng thành công!'
+      message: 'Chúc mừng bạn đã đặt hàng thành công, Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất!',
+      order: order
     })
   } catch (error) {
     res.json({
@@ -118,9 +119,9 @@ export const success = async (req: Request, res: Response) => {
       _id: req.params.orderId
     })
     for (const product of order.products) {
-      const productInfo = await Product.findOne({
-        _id: product.product_id
-      }).select('title thumbnail')
+      const productInfo = await Product
+        .findOne({ _id: product.product_id })
+        .select('title thumbnail')
       product['productInfo'] = productInfo
       product['priceNew'] = productsHelper.priceNewProduct(
         product as OneProduct
