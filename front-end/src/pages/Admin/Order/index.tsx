@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import { fetchOrdersAPI } from '~/apis/admin/order.api'
-import FilterStatusOrder from '~/components/Admin/FilterStatus/FilterStatusOrder'
-import OrderTable from '~/components/Admin/ItemTable/OrderTable'
+import { Link } from 'react-router-dom'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortOrder from '~/components/admin/Sort/SortOrder'
 import { useOrder } from '~/hooks/admin/Order/useOrder'
-import type { OrderAllResponseInterface, OrderInfoInterface } from '~/types/order.type'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
+import FilterStatusOrder from '~/components/admin/FilterStatus/FilterStatusOrder'
+import OrderTable from '~/components/admin/ItemTable/OrderTable'
 
 const OrderAdmin = () => {
   const {
@@ -71,6 +74,24 @@ const OrderAdmin = () => {
             >
               Áp dụng
             </button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="delete-dialog-title"
+            >
+              <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Bạn có chắc chắn muốn xóa {selectedIds.length} vật phẩm này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Hủy</Button>
+                <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
+                  Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
           </form>
           <SortOrder
             handleSort={handleSort}
