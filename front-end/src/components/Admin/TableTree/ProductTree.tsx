@@ -53,7 +53,7 @@ const ProductTree = ({
           />
         </TableCell>
         <TableCell align="left">{prefix}{productCategory.title}</TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '10px 0px' }}>
           <div className="flex justify-center items-center">
             <img
               src={productCategory.thumbnail}
@@ -85,7 +85,7 @@ const ProductTree = ({
           <button
             onClick={() => handleToggleStatus(productCategory.status, productCategory._id)}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-              ${productCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+              ${productCategory.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
           >
             {productCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
@@ -117,7 +117,7 @@ const ProductTree = ({
         <TableCell align="center">
           <Link
             to={`/admin/products-category/detail/${productCategory._id}`}
-            className="nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white"
+            className="nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white"
           >
             Chi tiết
           </Link>

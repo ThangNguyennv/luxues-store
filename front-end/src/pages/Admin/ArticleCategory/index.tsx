@@ -75,7 +75,7 @@ const ArticleCategoryAdmin = () => {
           <div>
             <Link
               to={'/admin/articles-category/create'}
-              className='border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+              className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
             >
               + Thêm mới
             </Link>

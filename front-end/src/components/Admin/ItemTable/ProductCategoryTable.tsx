@@ -72,7 +72,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="text" width={220} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400', padding: '10px 0px' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
@@ -166,7 +166,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
           </Table>
         </TableContainer>
       ) : (
-        <div className='flex items-center justify-center'>Không có danh mục sản phẩm nào!</div>
+        <div className='flex items-center justify-center'>Không tồn tại danh mục sản phẩm nào.</div>
       )}
     </>
   )

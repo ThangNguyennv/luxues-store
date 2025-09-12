@@ -44,7 +44,7 @@ const ArticleTree = ({
   return (
     <>
       <TableRow key={articleCategory._id}>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '0px 8px' }}>
           <Checkbox
             checked={selectedIds.includes(articleCategory._id)}
             onChange={(e) => handleCheckbox(articleCategory._id, e.target.checked)}
@@ -53,7 +53,7 @@ const ArticleTree = ({
           />
         </TableCell>
         <TableCell align="left">{prefix}{articleCategory.title}</TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '10px 0px' }}>
           <div className="flex justify-center items-center">
             <img
               src={articleCategory.thumbnail}
