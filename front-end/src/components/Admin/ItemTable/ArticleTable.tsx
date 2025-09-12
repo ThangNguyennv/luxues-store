@@ -38,7 +38,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
   if (loading) {
     return (
       <TableContainer sx={{ maxHeight: 600 }}>
-        <Table sx={{
+        <Table size='small' sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
             border: '1px solid #757575' // đường kẻ
@@ -46,7 +46,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -66,10 +66,10 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 3 }).map((_item, index) => (
+            {Array.from({ length: 6 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
@@ -78,7 +78,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
@@ -106,7 +106,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
   return (
     <>
       <TableContainer sx={{ maxHeight: 600 }}>
-        <Table sx={{
+        <Table size='small' sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
             border: '1px solid #757575' // đường kẻ
@@ -114,7 +114,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -123,9 +123,9 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên bài viết</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 8px' }}>STT</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên bài viết</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '10px 0px' }}>Hình ảnh</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
@@ -139,7 +139,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                 {articles
                   .map((article, index) => (
                     <TableRow key={article._id}>
-                      <TableCell align='center'>
+                      <TableCell align='center' sx={{ padding: '0px 8px' }}>
                         <Checkbox
                           checked={selectedIds.includes(article._id)}
                           onChange={(event) => handleCheckbox(article._id, event.target.checked)}
@@ -151,9 +151,9 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                       </TableCell>
                       <TableCell align='center'>{index + 1}</TableCell>
                       <TableCell align='center'>{article.title}</TableCell>
-                      <TableCell align='center'>
-                        <div className='flex justify-center items-center '>
-                          <img src={article.thumbnail} alt={article.title} className='w-[100px] h-[100px]'/>
+                      <TableCell align='center' sx={{ padding: '10px 16px' }}>
+                        <div className='flex justify-center items-center'>
+                          <img src={article.thumbnail} alt={article.title} className='w-[70px] h-[70px]'/>
                         </div>
                       </TableCell>
                       <TableCell align='center'>
@@ -182,7 +182,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                         <button
                           onClick={() => handleToggleStatus(article._id, article.status)}
                           className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-                          ${article.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                          ${article.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
                         >
                           {article.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                         </button>
@@ -231,7 +231,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                       <TableCell align='center'>
                         <Link
                           to={`/admin/articles/detail/${article._id}`}
-                          className='border rounded-[5px] bg-[#757575] p-[5px] text-white'>
+                          className='border rounded-[5px] bg-[#0542AB] p-[5px] text-white'>
                       Chi tiết
                         </Link>
                         <Link

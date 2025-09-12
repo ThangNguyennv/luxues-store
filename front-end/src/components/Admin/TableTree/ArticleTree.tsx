@@ -85,7 +85,7 @@ const ArticleTree = ({
           <button
             onClick={() => handleToggleStatus(articleCategory.status, articleCategory._id)}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-              ${articleCategory.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+              ${articleCategory.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
           >
             {articleCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
@@ -117,7 +117,7 @@ const ArticleTree = ({
         <TableCell align="center">
           <Link
             to={`/admin/articles-category/detail/${articleCategory._id}`}
-            className="border rounded-[5px] bg-[#757575] p-[5px] text-white"
+            className="border rounded-[5px] bg-[#0542AB] p-[5px] text-white"
           >
             Chi tiết
           </Link>
