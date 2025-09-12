@@ -82,7 +82,7 @@ const ProductAdmin = () => {
               <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Bạn có chắc chắn muốn xóa {selectedIds.length} vật phẩm này không?
+                  Bạn có chắc chắn muốn xóa {selectedIds.length} sản phẩm này không?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

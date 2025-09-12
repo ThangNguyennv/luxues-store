@@ -62,7 +62,7 @@ const ProductCategoryAdmin = () => {
             <button
               type='submit'
               className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
-                Áp dụng
+              Áp dụng
             </button>
           </form>
           <SortRecords
@@ -74,7 +74,7 @@ const ProductCategoryAdmin = () => {
           <div>
             <Link
               to={'/admin/products-category/create'}
-              className='border rounded-[5px] px-[55px] py-[5px] border-[#607D00] font-[600] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+              className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
             >
               + Thêm mới
             </Link>

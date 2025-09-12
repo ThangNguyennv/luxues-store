@@ -44,7 +44,7 @@ const ProductTree = ({
   return (
     <>
       <TableRow key={productCategory._id}>
-        <TableCell align="center" padding='checkbox'>
+        <TableCell align="center" sx={{ padding: '0px 8px' }}>
           <Checkbox
             checked={selectedIds.includes(productCategory._id)}
             onChange={(e) => handleCheckbox(productCategory._id, e.target.checked)}

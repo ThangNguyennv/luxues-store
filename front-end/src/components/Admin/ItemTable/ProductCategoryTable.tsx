@@ -36,7 +36,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   if (loading) {
     return (
       <TableContainer sx={{ maxHeight: 600 }}>
-        <Table sx={{
+        <Table size='small' sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
             border: '1px solid #757575' // đường kẻ
@@ -44,7 +44,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -63,16 +63,16 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 3 }).map((_item, index) => (
+            {Array.from({ length: 6 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="text" width={220} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
@@ -98,36 +98,36 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   }
   return (
     <>
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <Table size="small" stickyHeader sx={{
-          borderCollapse: 'collapse',
-          '& th, & td': {
-            border: '1px solid #757575' // đường kẻ
-          }
-        }}>
-          <TableHead>
-            <TableRow>
-              <TableCell padding='checkbox' align='center' sx={{ backgroundColor: '#003459' }}>
-                <Checkbox
-                  checked={isCheckAll}
-                  onChange={(event) => handleCheckAll(event.target.checked)}
-                  {...label}
-                  size="small"
-                  sx={{ padding: 0 }}
-                />
-              </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tiêu đề</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {productCategories && productCategories.length > 0 ? (
-              productCategories.map(productCategory => (
+      {productCategories && productCategories.length > 0 ? (
+        <TableContainer sx={{ maxHeight: 600 }}>
+          <Table size="small" stickyHeader sx={{
+            borderCollapse: 'collapse',
+            '& th, & td': {
+              border: '1px solid #757575' // đường kẻ
+            }
+          }}>
+            <TableHead>
+              <TableRow>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+                  <Checkbox
+                    checked={isCheckAll}
+                    onChange={(event) => handleCheckAll(event.target.checked)}
+                    {...label}
+                    size="small"
+                    sx={{ padding: 0 }}
+                  />
+                </TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tiêu đề</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {productCategories.map(productCategory => (
                 <ProductTree
                   key={productCategory._id}
                   productCategory={productCategory}
@@ -143,35 +143,8 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                   handleOpen={handleOpen}
                   handleClose={handleClose}
                 />
-              ))
-            ) : (
-              <TableRow>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="text" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center' className='font-[700] '>
-                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={200} height={40} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-              </TableRow>
-            )}
+              ))}
+            </TableBody>
             <Dialog
               open={open}
               onClose={handleClose}
@@ -190,9 +163,11 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
                 </Button>
               </DialogActions>
             </Dialog>
-          </TableBody>
-        </Table>
-      </TableContainer>
+          </Table>
+        </TableContainer>
+      ) : (
+        <div className='flex items-center justify-center'>Không có danh mục sản phẩm nào!</div>
+      )}
     </>
   )
 }
