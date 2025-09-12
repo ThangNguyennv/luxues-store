@@ -39,7 +39,7 @@ export const index = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 3
+        limitItems: 10
       },
       req.query,
       countOrders
@@ -56,7 +56,8 @@ export const index = async (req: Request, res: Response) => {
     }
     // End Sort
 
-    const orders = await Order.find(find)
+    const orders = await Order
+      .find(find)
       .sort(sort)
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip)
