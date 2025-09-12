@@ -1,12 +1,10 @@
 import { fetchChangeStatusAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useProductContext } from '~/contexts/admin/ProductContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
 import type { UpdatedBy } from '~/types/helper.type'
-import { useEffect, useState } from 'react'
-import type { OrderAllResponseInterface, OrderInfoInterface } from '~/types/order.type'
-import { fetchOrdersAPI } from '~/apis/admin/order.api'
+import { useState } from 'react'
+import { useOrderContext } from '~/contexts/admin/OrderContext'
 
 export interface Props {
   selectedIds: string[],
@@ -14,20 +12,14 @@ export interface Props {
 }
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const currentStatus = searchParams.get('status') || ''
+  const { stateOrder, dispatchOrder } = useOrderContext()
+  const { orders, loading } = stateOrder
+  const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
+  const [searchParams] = useSearchParams()
+  const currentStatus = searchParams.get('status') || ''
   const [open, setOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [orders, setOrders] = useState<OrderInfoInterface[]>([])
-  const { myAccount } = useAuth()
-
-
-  useEffect(() => {
-    fetchOrdersAPI(status).then((res: OrderAllResponseInterface) => {
-      setOrders(res.orders)
-    })
-  }, [])
 
   const handleOpen = (id: string) => {
     setSelectedId(id)
@@ -42,12 +34,12 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   // const handleDelete = async () => {
   //   if (!selectedId) return
 
-  //   const response = await fetchDeleteProductAPI(selectedId)
+  //   const response = await fetchDeleteOrderAPI(selectedId)
   //   if (response.code === 204) {
-  //     dispatchProduct({
+  //     dispatchOrder({
   //       type: 'SET_DATA',
   //       payload: {
-  //         products: products.filter((product) => product._id !== selectedId)
+  //         orders: orders.filter((order) => order._id !== selectedId)
   //       }
   //     })
   //     dispatchAlert({
@@ -66,14 +58,19 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       account_id: myAccount ? myAccount._id : '',
       updatedAt: new Date()
     }
-    const newStatus = currentStatus === 'waiting' ? 'confirmed' : 'waiting'
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
-      setOrders( orders.map((order) => order._id === id ? {
-        ...order,
-        status: newStatus,
-        updatedBy: [...(order.updatedBy || []), currentUser]
-      }: order) )
+      dispatchOrder({
+        type: 'SET_DATA',
+        payload: {
+          Orders: Orders.map((order) => order._id === id ? {
+            ...order,
+            status: newStatus,
+            updatedBy: [...(order.updatedBy || []), currentUser]
+          }: order)
+        }
+      })
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
@@ -84,27 +81,37 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  // const handleCheckbox = (id: string, checked: boolean) => {
-  //   if (checked) {
-  //     setSelectedIds((prev) => [...prev, id])
-  //   } else {
-  //     setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
-  //   }
-  // }
+  const handleCheckbox = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedIds((prev) => [...prev, id])
+    } else {
+      setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id))
+    }
+  }
 
-  // const handleCheckAll = (checked: boolean) => {
-  //   if (checked) {
-  //     const allIds = products.map((product) => product._id)
-  //     setSelectedIds(allIds)
-  //   } else {
-  //     setSelectedIds([])
-  //   }
-  // }
+  const handleCheckAll = (checked: boolean) => {
+    if (checked) {
+      const allIds = orders.map((order) => order._id)
+      setSelectedIds(allIds)
+    } else {
+      setSelectedIds([])
+    }
+  }
 
-  // const isCheckAll = (products.length > 0) && (selectedIds.length === products.length)
+  const isCheckAll = (orders.length > 0) && (selectedIds.length === orders.length)
 
   return {
+    currentStatus,
     orders,
-    handleToggleStatus
+    loading,
+    dispatchOrder,
+    handleToggleStatus,
+    open,
+    handleOpen,
+    handleClose,
+    handleCheckbox,
+    handleCheckAll,
+    isCheckAll,
+    selectedId
   }
 }

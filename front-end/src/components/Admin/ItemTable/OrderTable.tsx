@@ -23,8 +23,18 @@ import { getTotalBill } from '~/helpers/TotalBill'
 const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const {
+    currentStatus,
     orders,
-    handleToggleStatus
+    loading,
+    dispatchOrder,
+    handleToggleStatus,
+    open,
+    handleOpen,
+    handleClose,
+    handleCheckbox,
+    handleCheckAll,
+    isCheckAll,
+    selectedId
   } = useTable({ selectedIds, setSelectedIds })
 
   //   if (loading) {

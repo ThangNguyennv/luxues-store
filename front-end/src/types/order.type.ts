@@ -1,4 +1,4 @@
-import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, UpdatedBy } from './helper.type'
+import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, ParamsInterface, UpdatedBy } from './helper.type'
 
 export interface OrderInfoInterface {
     _id: string,
@@ -35,3 +35,13 @@ export interface OrderAllResponseInterface extends CurrentParamsInterface {
     filterOrder: FilterStatusInterface[],
 }
 
+export interface OrderStates extends ParamsInterface {
+  orders: OrderInfoInterface[],
+  filterOrder: FilterStatusInterface[],
+  pagination: PaginationInterface,
+}
+
+export type OrderActions =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DATA'; payload: Partial<OrderStates> }
+  | { type: 'RESET' }

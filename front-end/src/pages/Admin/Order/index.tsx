@@ -27,18 +27,17 @@ const OrderAdmin = () => {
         <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
-            {/* <FilterStatusOrder
+            <FilterStatusOrder
               filterStatus={filterStatus}
               currentStatus={currentStatus}
               handleFilterStatus={handleFilterStatus}
-            /> */}
+            />
             {/* <Search
               keyword={keyword}
               handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}
             /> */}
-            <div>filter</div>
-            <div>search</div>
+]            <div>search</div>
           </div>
         </div>
         <div className='flex items-center justify-between text-[15px]'>
