@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { fetchOrdersAPI } from '~/apis/admin/order.api'
 import FilterStatusOrder from '~/components/Admin/FilterStatus/FilterStatusOrder'
 import OrderTable from '~/components/Admin/ItemTable/OrderTable'
+import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortOrder from '~/components/admin/Sort/SortOrder'
 import { useOrder } from '~/hooks/admin/Order/useOrder'
@@ -78,26 +79,25 @@ const OrderAdmin = () => {
             clearSortParams={clearSortParams}
           />
           <div>
-            {/* <Link
-              to={'/admin/products/create'}
+            <Link
+              to={'/admin/orders/create'}
               className='border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white'
             >
-                  + Thêm mới
-            </Link> */}
-            <div>them moi</div>
+              + Thêm mới
+            </Link>
           </div>
         </div>
         <OrderTable
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />
-        {/* <Pagination
+        <Pagination
           pagination={pagination}
           handlePagination={(page) => updateSearchParams('page', (page).toString())}
           handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
-          items={products}
-        /> */}
+          items={orders}
+        />
         <div>pagination</div>
       </div>
     </>
