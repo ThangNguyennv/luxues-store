@@ -4,6 +4,7 @@ import { fetchOrdersAPI } from '~/apis/admin/order.api'
 import FilterStatusOrder from '~/components/Admin/FilterStatus/FilterStatusOrder'
 import OrderTable from '~/components/Admin/ItemTable/OrderTable'
 import Search from '~/components/admin/Search/Search'
+import SortOrder from '~/components/admin/Sort/SortOrder'
 import { useOrder } from '~/hooks/admin/Order/useOrder'
 import type { OrderAllResponseInterface, OrderInfoInterface } from '~/types/order.type'
 
@@ -31,7 +32,6 @@ const OrderAdmin = () => {
     handleConfirmDeleteAll
   } = useOrder()
 
-
   return (
     <>
       <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md'>
@@ -52,7 +52,7 @@ const OrderAdmin = () => {
           </div>
         </div>
         <div className='flex items-center justify-between text-[15px]'>
-          {/* <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
+          <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
             <select
               name="type"
               value={actionType}
@@ -60,26 +60,23 @@ const OrderAdmin = () => {
               className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
             >
               <option disabled value={''}>-- Chọn hành động --</option>
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Dừng hoạt động</option>
-              <option value="delete-all">Xóa tất cả</option>
-              <option value="change-position">Thay đổi vị trí</option>
+              <option value="waiting">Chờ duyệt</option>
+              <option value="confirmed">Đã xác nhận</option>
+              <option value="delete-all">Hủy tất cả</option>
             </select>
             <button
               type="submit"
               className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
             >
-                  Áp dụng
+              Áp dụng
             </button>
-          </form> */}
-          <div>formfilter</div>
-          {/* <SortProduct
+          </form>
+          <SortOrder
             handleSort={handleSort}
             sortKey={sortKey}
             sortValue={sortValue}
             clearSortParams={clearSortParams}
-          /> */}
-          <div>sort</div>
+          />
           <div>
             {/* <Link
               to={'/admin/products/create'}
@@ -94,7 +91,6 @@ const OrderAdmin = () => {
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
         />
-        <div>table</div>
         {/* <Pagination
           pagination={pagination}
           handlePagination={(page) => updateSearchParams('page', (page).toString())}

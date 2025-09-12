@@ -1,6 +1,6 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
+import { fetchChangeMultiAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useOrderContext } from '~/contexts/admin/OrderContext'
 
@@ -93,17 +93,7 @@ export const useOrder = () => {
     )
 
     let result: string[] = []
-    if (typeChange === 'change-position') {
-      result = selectedOrders.map(order => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${order._id}"]`
-        )
-        const position = positionInput?.value || ''
-        return `${order._id}-${position}`
-      })
-    } else {
-      result = selectedOrders.map(order => order._id)
-    }
+    result = selectedOrders.map(order => order._id)
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 

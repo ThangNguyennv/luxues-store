@@ -23,7 +23,6 @@ import { getTotalBill } from '~/helpers/TotalBill'
 const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const {
-    currentStatus,
     orders,
     loading,
     dispatchOrder,
@@ -122,14 +121,13 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
           <TableHead>
             <TableRow>
               <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
-                {/* <Checkbox
+                <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
                   {...label}
                   size="small"
                   sx={{ padding: 0 }}
-                /> */}
-                checkbok
+                />
               </TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên đơn hàng</TableCell>
@@ -147,15 +145,14 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                   .map((order, index) => (
                     <TableRow key={index}>
                       <TableCell align='center'>
-                        {/* <Checkbox
+                        <Checkbox
                           checked={selectedIds.includes(order._id)}
                           onChange={(event) => handleCheckbox(order._id, event.target.checked)}
                           {...label}
                           size="small"
                           sx={{ padding: 0 }}
                           value={order._id}
-                        /> */}
-                        checkbox
+                        />
                       </TableCell>
                       <TableCell align='center'>{index + 1}</TableCell>
                       <TableCell>

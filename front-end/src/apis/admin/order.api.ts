@@ -31,3 +31,12 @@ export const fetchChangeStatusAPI = async (status: string, id: string) => {
   )
   return response.data
 }
+
+export const fetchChangeMultiAPI = async (data: { ids: string[], type: string }) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/orders/change-multi`,
+    data,
+    { withCredentials: true }
+  )
+  return response.data
+}
