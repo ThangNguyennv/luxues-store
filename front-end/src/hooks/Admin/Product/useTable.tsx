@@ -64,7 +64,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       dispatchProduct({
         type: 'SET_DATA',
         payload: {
-          products:  products.map((product) => product._id === id ? {
+          products: products.map((product) => product._id === id ? {
             ...product,
             status: newStatus,
             updatedBy: [...(product.updatedBy || []), currentUser]

@@ -1,0 +1,42 @@
+/* eslint-disable no-unused-vars */
+import Skeleton from '@mui/material/Skeleton'
+import type { FilterStatusInterface } from '~/types/helper.type'
+
+interface Props {
+  filterStatus: FilterStatusInterface[]
+  currentStatus: string
+  handleFilterStatus: (status: string) => void
+}
+
+const FilterStatusOrder = ({ filterStatus, currentStatus, handleFilterStatus }: Props) => {
+  return (
+    <>
+      {filterStatus && filterStatus.length > 0 ? (
+        <div className='flex gap-[15px] items-center'>
+          {filterStatus.map((item, index) => {
+            const isActive = currentStatus === item.status
+            return (
+              <button
+                key={index}
+                onClick={() => handleFilterStatus(item.status)}
+                className={`p-[5px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] 
+                  ${isActive ? 'bg-[#525FE1] border-[#525FE1]' : 'bg-white'}`}
+              >
+                {item.name}
+              </button>
+            )
+          })}
+        </div>
+      ) : (
+        <div className='flex gap-[15px] items-center'>
+          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={74} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={122} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+        </div>
+      )}
+    </>
+  )
+}
+
+export default FilterStatusOrder

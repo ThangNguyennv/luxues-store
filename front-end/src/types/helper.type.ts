@@ -26,7 +26,7 @@ export interface HelperInterface {
 
 export interface CurrentParamsInterface {
   keyword: string,
-  currentSortkey: string,
+  currentSortKey: string,
   currentSortValue: string
 }
 

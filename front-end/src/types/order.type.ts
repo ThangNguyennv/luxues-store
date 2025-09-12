@@ -1,4 +1,7 @@
+import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, UpdatedBy } from './helper.type'
+
 export interface OrderInfoInterface {
+    _id: string,
     cartId: string,
     userInfo: {
         fullName: string,
@@ -14,8 +17,21 @@ export interface OrderInfoInterface {
     }[]
     status: string,
     position: number,
+    createdBy: {
+      account_id: string,
+    },
+    updatedBy: UpdatedBy[],
+    createdAt: Date | null
+    updatedAt: Date | null
 }
 
 export interface OrderDetailInterface {
     order: OrderInfoInterface
 }
+
+export interface OrderAllResponseInterface extends CurrentParamsInterface {
+    orders: OrderInfoInterface[],
+    pagination: PaginationInterface,
+    filterOrder: FilterStatusInterface[],
+}
+

@@ -28,3 +28,4 @@ export interface ProductDetailInterface {
   product: ProductInfoInterface
 }
 
+
