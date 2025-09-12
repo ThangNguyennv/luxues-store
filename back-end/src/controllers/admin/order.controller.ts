@@ -100,13 +100,17 @@ export const index = async (req: Request, res: Response) => {
       const dir = req.query.sortValue === 'desc' ? -1 : 1
       orders.sort((a, b) => dir * (a['price'] - b['price']))
     }
+    const accounts = await Account.find({
+      deleted: false
+    })
     res.json({
       code: 200,
       message: 'Thành công!',
       orders: orders,
       filterOrder: filterOrderHelpers(req.query),
       keyword: objectSearch.keyword,
-      pagination: objectPagination
+      pagination: objectPagination,
+      accounts: accounts
     })
   } catch (error) {
     res.json({
