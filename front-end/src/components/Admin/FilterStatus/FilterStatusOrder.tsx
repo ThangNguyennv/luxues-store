@@ -3,17 +3,17 @@ import Skeleton from '@mui/material/Skeleton'
 import type { FilterStatusInterface } from '~/types/helper.type'
 
 interface Props {
-  filterStatus: FilterStatusInterface[]
+  filterOrder: FilterStatusInterface[]
   currentStatus: string
   handleFilterStatus: (status: string) => void
 }
 
-const FilterStatusOrder = ({ filterStatus, currentStatus, handleFilterStatus }: Props) => {
+const FilterStatusOrder = ({ filterOrder, currentStatus, handleFilterStatus }: Props) => {
   return (
     <>
-      {filterStatus && filterStatus.length > 0 ? (
+      {filterOrder && filterOrder.length > 0 ? (
         <div className='flex gap-[15px] items-center'>
-          {filterStatus.map((item, index) => {
+          {filterOrder.map((item, index) => {
             const isActive = currentStatus === item.status
             return (
               <button
@@ -29,10 +29,10 @@ const FilterStatusOrder = ({ filterStatus, currentStatus, handleFilterStatus }: 
         </div>
       ) : (
         <div className='flex gap-[15px] items-center'>
-          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={55} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
           <Skeleton variant="rectangular" width={74} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
           <Skeleton variant="rectangular" width={122} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
-          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={55} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
         </div>
       )}
     </>

@@ -3,21 +3,33 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchOrdersAPI } from '~/apis/admin/order.api'
 import FilterStatusOrder from '~/components/Admin/FilterStatus/FilterStatusOrder'
 import OrderTable from '~/components/Admin/ItemTable/OrderTable'
+import Search from '~/components/admin/Search/Search'
+import { useOrder } from '~/hooks/admin/Order/useOrder'
 import type { OrderAllResponseInterface, OrderInfoInterface } from '~/types/order.type'
 
 const OrderAdmin = () => {
-  
-  // const handleFilterStatus = (status: string): void => {
-  //   const newParams = new URLSearchParams(searchParams)
-  //   if (status) {
-  //     newParams.set('status', status)
-  //     newParams.set('page', '1')
-  //   } else {
-  //     newParams.delete('status')
-  //   }
-  //   setSearchParams(newParams)
-  // }
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const {
+    dispatchOrder,
+    orders,
+    filterOrder,
+    pagination,
+    keyword,
+    sortKey,
+    sortValue,
+    selectedIds,
+    setSelectedIds,
+    actionType,
+    setActionType,
+    currentStatus,
+    updateSearchParams,
+    handleSubmit,
+    handleSort,
+    clearSortParams,
+    handleFilterStatus,
+    open,
+    handleClose,
+    handleConfirmDeleteAll
+  } = useOrder()
 
 
   return (
@@ -28,16 +40,15 @@ const OrderAdmin = () => {
           <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatusOrder
-              filterStatus={filterStatus}
+              filterOrder={filterOrder}
               currentStatus={currentStatus}
               handleFilterStatus={handleFilterStatus}
             />
-            {/* <Search
+            <Search
               keyword={keyword}
-              handleChangeKeyword={(value) => dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })}
+              handleChangeKeyword={(value) => dispatchOrder({ type: 'SET_DATA', payload: { keyword: value } })}
               handleSearch={(keyword) => updateSearchParams('keyword', keyword)}
-            /> */}
-]            <div>search</div>
+            />
           </div>
         </div>
         <div className='flex items-center justify-between text-[15px]'>

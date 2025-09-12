@@ -2,11 +2,11 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useProductContext } from '~/contexts/admin/ProductContext'
-import type { OrderInfoInterface } from '~/types/order.type'
-import { fetchOrdersAPI } from '~/apis/admin/order.api'
+import { useOrderContext } from '~/contexts/admin/OrderContext'
 
-export const useProduct = () => {
+export const useOrder = () => {
+  const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
+  const { orders, pagination, filterOrder, keyword } = stateOrder
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -18,11 +18,16 @@ export const useProduct = () => {
   const currentKeyword = searchParams.get('keyword') || ''
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
-  const [orders, setOrders] = useState<OrderInfoInterface[]>([])
 
   useEffect(() => {
-    fetchOrdersAPI()
-  }, [])
+    fetchOrder({
+      status: currentStatus,
+      page: currentPage,
+      keyword: currentKeyword,
+      sortKey: currentSortKey,
+      sortValue: currentSortValue
+    })
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchOrder])
 
   const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
@@ -42,7 +47,7 @@ export const useProduct = () => {
   }
 
   const reloadData = (): void => {
-    fetchProduct({
+    fetchOrder({
       status: currentStatus,
       page: currentPage,
       keyword: currentKeyword,
@@ -83,21 +88,21 @@ export const useProduct = () => {
   }
 
   const executeAction = async (typeChange: string) => {
-    const selectedProducts = products.filter(product =>
-      selectedIds.includes(product._id)
+    const selectedOrders = orders.filter(order =>
+      selectedIds.includes(order._id)
     )
 
     let result: string[] = []
     if (typeChange === 'change-position') {
-      result = selectedProducts.map(product => {
+      result = selectedOrders.map(order => {
         const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${product._id}"]`
+          `input[name="position"][data-id="${order._id}"]`
         )
         const position = positionInput?.value || ''
-        return `${product._id}-${position}`
+        return `${order._id}-${position}`
       })
     } else {
-      result = selectedProducts.map(product => product._id)
+      result = selectedOrders.map(order => order._id)
     }
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
@@ -156,9 +161,9 @@ export const useProduct = () => {
   }
 
   return {
-    dispatchProduct,
-    products,
-    filterStatus,
+    dispatchOrder,
+    orders,
+    filterOrder,
     pagination,
     keyword,
     sortKey: currentSortKey,

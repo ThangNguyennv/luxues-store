@@ -58,13 +58,13 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       account_id: myAccount ? myAccount._id : '',
       updatedAt: new Date()
     }
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
+    const newStatus = currentStatus === 'confirmed' ? 'waiting' : 'confirmed'
     const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
       dispatchOrder({
         type: 'SET_DATA',
         payload: {
-          Orders: Orders.map((order) => order._id === id ? {
+          orders: orders.map((order) => order._id === id ? {
             ...order,
             status: newStatus,
             updatedBy: [...(order.updatedBy || []), currentUser]
