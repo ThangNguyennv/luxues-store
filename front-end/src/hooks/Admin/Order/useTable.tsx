@@ -13,7 +13,7 @@ export interface Props {
 
 export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { stateOrder, dispatchOrder } = useOrderContext()
-  const { orders, loading } = stateOrder
+  const { orders, accounts, loading } = stateOrder
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams] = useSearchParams()
@@ -112,6 +112,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleCheckbox,
     handleCheckAll,
     isCheckAll,
-    selectedId
+    selectedId,
+    accounts
   }
 }

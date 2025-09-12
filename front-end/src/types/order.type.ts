@@ -1,3 +1,4 @@
+import type { AccountInfoInterface } from './account.type'
 import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, ParamsInterface, UpdatedBy } from './helper.type'
 
 export interface OrderInfoInterface {
@@ -31,12 +32,14 @@ export interface OrderDetailInterface {
 
 export interface OrderAllResponseInterface extends CurrentParamsInterface {
     orders: OrderInfoInterface[],
+    accounts: AccountInfoInterface[],
     pagination: PaginationInterface,
     filterOrder: FilterStatusInterface[],
 }
 
 export interface OrderStates extends ParamsInterface {
   orders: OrderInfoInterface[],
+  accounts: AccountInfoInterface[],
   filterOrder: FilterStatusInterface[],
   pagination: PaginationInterface,
 }

@@ -44,7 +44,7 @@ const ProductTree = ({
   return (
     <>
       <TableRow key={productCategory._id}>
-        <TableCell align="center">
+        <TableCell align="center" padding='checkbox'>
           <Checkbox
             checked={selectedIds.includes(productCategory._id)}
             onChange={(e) => handleCheckbox(productCategory._id, e.target.checked)}
@@ -58,7 +58,7 @@ const ProductTree = ({
             <img
               src={productCategory.thumbnail}
               alt={productCategory.title}
-              className="w-[100px] h-[100px]"
+              className="w-[70px] h-[70px]"
             />
           </div>
         </TableCell>

@@ -33,7 +33,8 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleCheckbox,
     handleCheckAll,
     isCheckAll,
-    selectedId
+    selectedId,
+    accounts
   } = useTable({ selectedIds, setSelectedIds })
 
   //   if (loading) {
@@ -198,22 +199,11 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         </button>
                       </TableCell>
                       <TableCell align='center' className='font-[700] '>
-                        {/* {(() => {
-                          const creator = accounts.find(
-                            (account) => account._id === order.createdBy?.account_id
-                          )
-                          return creator ? (
-                            <>
-                              <span className="text-sm font-medium text-gray-800">
-                                {creator.fullName}
-                              </span>
-                              <FormatDateTime time={order.createdAt}/>
-                            </>
-                          ) : (
-                            <span className="text-sm italic text-gray-400">Không xác định</span>
-                          )
-                        })()} */}
-                        Nguoi dat hang
+                        <div className='flex flex-col gap-[10px]'>
+                          <span>{order.userInfo.fullName}</span>
+                          <span>{order.userInfo.phone}</span>
+                          <span>{order.userInfo.address}</span>
+                        </div>
                       </TableCell>
                       <TableCell align='center'>
                         {/* {(() => {

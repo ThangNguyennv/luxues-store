@@ -42,6 +42,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
           type: 'SET_DATA',
           payload: {
             orders: res.orders,
+            accounts: res.accounts,
             pagination: res.pagination,
             filterOrder: res.filterOrder,
             keyword: res.keyword,

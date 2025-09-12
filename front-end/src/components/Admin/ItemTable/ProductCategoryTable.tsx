@@ -99,7 +99,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
   return (
     <>
       <TableContainer sx={{ maxHeight: 600 }}>
-        <Table stickyHeader sx={{
+        <Table size="small" stickyHeader sx={{
           borderCollapse: 'collapse',
           '& th, & td': {
             border: '1px solid #757575' // đường kẻ
@@ -107,7 +107,7 @@ const ProductCategoryTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459' }}>
+              <TableCell padding='checkbox' align='center' sx={{ backgroundColor: '#003459' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
