@@ -36,7 +36,10 @@ export const index = async (req: Request, res: Response) => {
     const parentFind: Find = { ...find, parent_id: '' }
     const countParents = await ProductCategory.countDocuments(parentFind)
     const objectPagination = paginationHelpers(
-      { currentPage: 1, limitItems: 2 },
+      { 
+        currentPage: 1, 
+        limitItems: 2 
+      },
       req.query,
       countParents
     )
