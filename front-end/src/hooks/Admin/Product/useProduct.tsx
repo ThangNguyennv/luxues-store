@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductContext } from '~/contexts/admin/ProductContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useProduct = () => {
   const { stateProduct, fetchProduct, dispatchProduct } = useProductContext()
@@ -18,6 +19,7 @@ export const useProduct = () => {
   const currentKeyword = searchParams.get('keyword') || ''
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
+  const { role } = useAuth()
 
   useEffect(() => {
     fetchProduct({
@@ -180,6 +182,7 @@ export const useProduct = () => {
     handleFilterStatus,
     open,
     handleClose,
-    handleConfirmDeleteAll
+    handleConfirmDeleteAll,
+    role
   }
 }

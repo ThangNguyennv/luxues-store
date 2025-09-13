@@ -1,6 +1,9 @@
+
 const Notification = () => {
   return (
-    <div>Đang cập nhật...</div>
+    <>
+      <div>Đang cập nhật...</div>
+    </>
   )
 }
 

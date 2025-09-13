@@ -9,6 +9,7 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { PermissionsInterface, RolesInfoInterface, RolesResponseInterface } from '~/types/role.type'
 import Box from '@mui/material/Box'
 import Skeleton from '@mui/material/Skeleton'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 const permissionSections = [
   {
@@ -142,9 +143,12 @@ const permissionSections = [
 
 const Permission = () => {
   const [roles, setRoles] = useState<RolesInfoInterface[]>([])
+  console.log("🚀 ~ Permission.tsx ~ Permission ~ roles:", roles);
   const [permissionsData, setPermissionsData] = useState<PermissionsInterface[]>([])
+  console.log("🚀 ~ Permission.tsx ~ Permission ~ permissionsData:", permissionsData);
   const { dispatchAlert } = useAlertContext()
   const [loading, setLoading] = useState(false)
+  const { role } = useAuth()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,6 +185,12 @@ const Permission = () => {
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
+        setRoles(prev =>
+          prev.map(role => {
+            const updated = permissionsData.find(p => p._id === String(role._id))
+            return updated ? { ...role, permissions: updated.permissions } : role
+          })
+        )
       }
     } catch (error) {
       alert('error'+ error)
@@ -264,84 +274,91 @@ const Permission = () => {
 
   return (
     <>
-      {roles && roles.length > 0 ? (
-        <div className='flex flex-col gap-[5px] bg-[#FFFFFF] p-[15px] shadow-md h-[800px] fixed w-[80%]'>
-          <h1 className='text-[24px] font-[600] text-[#192335]'>Phân quyền</h1>
-          <div className='flex flex-col gap-[10px]'>
-            <div className="flex items-center justify-end">
-              <button
-                onClick={handleSubmit}
-                className="border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
-              >
-                Cập nhật
-              </button>
-            </div>
-            <TableContainer sx={{ maxHeight: 650 }}>
-              <Table stickyHeader sx={{
-                borderCollapse: 'collapse',
-                '& th, & td': {
-                  border: '1px solid #000000', // đường kẻ,
-                  zIndex: 1
-                },
-                '& th': {
-                  backgroundColor: '#252733', // nền header
-                  color: '#fff',
-                  zIndex: 2,
-                  borderTop: '1px solid #000000 !important',
-                  borderBottom: '1px solid #000000 !important'
-                }
-              }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{
-                      position: 'sticky',
-                      width: 250,
-                      height: 80,
-                      backgroundImage: 'linear-gradient(to top right, transparent 49%, black 50%, transparent 51%)'
-                    }}>
-                      <Box sx={{ position: 'absolute', top: 40, left: 15 }}>Phân loại</Box>
-                      <Box sx={{ position: 'absolute', bottom: 30, right: 15 }}>Nhóm quyền</Box>
-                    </TableCell>
-                    {roles.map((role, index) => (
-                      <TableCell key={index} align='center'>{role.title}</TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {permissionsData.length > 0 && permissionSections.map((section, index) => (
-                    <React.Fragment key={index}>
-                      <TableRow>
-                        <TableCell sx={{ background: '#192335', color: 'white' }}><b>{section.title}</b></TableCell>
-                      </TableRow>
-                      {section.permissions.map((permission, index) => (
-                        <TableRow key={index}>
-                          <TableCell sx={{ fontWeight: '500' }}>{permission.label}</TableCell>
-                          {permissionsData.map((role, roleIndex) => (
-                            <TableCell key={roleIndex} align="center">
-                              <input
-                                type="checkbox"
-                                checked={role.permissions.includes(permission.key)}
-                                onChange={(event) => handleCheckboxChange(roleIndex, permission.key, event.target.checked)}
-                              />
-                            </TableCell>
-                          ))}
-                        </TableRow>
+      {role && role.permissions.includes('roles_permissions') && (
+        roles && roles.length > 0 ? (
+          <div className='flex flex-col gap-[5px] bg-[#FFFFFF] p-[15px] shadow-md h-[800px] fixed w-[80%]'>
+            <h1 className='text-[24px] font-[600] text-[#192335]'>Phân quyền</h1>
+            <div className='flex flex-col gap-[10px]'>
+              <div className="flex items-center justify-end">
+                <button
+                  onClick={handleSubmit}
+                  className="border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
+                >
+                  Cập nhật
+                </button>
+              </div>
+              <TableContainer sx={{ maxHeight: 650 }}>
+                <Table stickyHeader sx={{
+                  borderCollapse: 'collapse',
+                  '& th, & td': {
+                    border: '1px solid #000000', // đường kẻ,
+                    zIndex: 1
+                  },
+                  '& th': {
+                    backgroundColor: '#252733', // nền header
+                    color: '#fff',
+                    zIndex: 2,
+                    borderTop: '1px solid #000000 !important',
+                    borderBottom: '1px solid #000000 !important'
+                  }
+                }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{
+                        position: 'sticky',
+                        width: 250,
+                        height: 80,
+                        backgroundImage: 'linear-gradient(to top right, transparent 49%, black 50%, transparent 51%)'
+                      }}>
+                        <Box sx={{ position: 'absolute', top: 40, left: 15 }}>Phân loại</Box>
+                        <Box sx={{ position: 'absolute', bottom: 30, right: 15 }}>Nhóm quyền</Box>
+                      </TableCell>
+                      {roles.map((role, index) => (
+                        <TableCell key={index} align='center'>{role.title}</TableCell>
                       ))}
-                    </React.Fragment>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {permissionsData.length > 0 && permissionSections.map((section, index) => (
+                      <React.Fragment key={index}>
+                        <TableRow>
+                          <TableCell sx={{ background: '#192335', color: 'white' }}>
+                            <b>{section.title}</b>
+                          </TableCell>
+                        </TableRow>
+                        {section.permissions.map((permission, index) => (
+                          <TableRow key={index}>
+                            <TableCell sx={{ fontWeight: '500' }}>{permission.label}</TableCell>
+                            {permissionsData.map((role, roleIndex) => (
+                              <TableCell key={roleIndex} align="center">
+                                <input
+                                  type="checkbox"
+                                  checked={role.permissions.includes(permission.key)}
+                                  onChange={(event) => handleCheckboxChange(roleIndex, permission.key, event.target.checked)}
+                                />
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-        Chưa có nhóm quyền nào, vui lòng click vào tạo nhóm quyền để tạo nhóm quyền mới
-          <br />
-          <Link to="/admin/roles/create" className="nav-link border rounded-[5px] bg-[#525FE1] text-white p-[7px]">
-            Đi tới tạo nhóm quyền
-          </Link>
-        </div>
+        ) : (
+          <div>
+            Chưa có nhóm quyền nào, vui lòng click vào tạo nhóm quyền để tạo nhóm quyền mới
+            <br />
+            <Link
+              to="/admin/roles/create"
+              className="nav-link border rounded-[5px] bg-[#525FE1] text-white p-[7px]"
+            >
+              Đi tới tạo nhóm quyền
+            </Link>
+          </div>
+        )
       )}
     </>
   )

@@ -4,6 +4,7 @@ import { fetchDetailProductAPI, fetchEditProductAPI } from '~/apis/admin/product
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useEdit = () => {
   const [productInfo, setProductInfo] = useState<ProductInfoInterface | null>(null)
@@ -13,6 +14,7 @@ export const useEdit = () => {
   const { allProductCategories } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
+  const { role } = useAuth()
 
   useEffect(() => {
     if (!id) return
@@ -69,6 +71,7 @@ export const useEdit = () => {
     handleChange,
     handleSubmit,
     handleClick,
-    uploadImagePreviewRef
+    uploadImagePreviewRef,
+    role
   }
 }

@@ -4,6 +4,7 @@ import { fetchCreateArticleCategoryAPI } from '~/apis/admin/articleCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
 import type { ArticleCategoryInfoInterface } from '~/types/articleCategory.type'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useCreate = () => {
   const initialArticleCategory: ArticleCategoryInfoInterface = {
@@ -15,7 +16,7 @@ export const useCreate = () => {
     descriptionDetail: '',
     thumbnail: '',
     createdBy: {
-      account_id: '',
+      account_id: ''
       // createdAt: new Date()
     },
     updatedBy: [],
@@ -30,7 +31,7 @@ export const useCreate = () => {
   const { stateArticleCategory } = useArticleCategoryContext()
   const { dispatchAlert } = useAlertContext()
   const { allArticleCategories } = stateArticleCategory
-
+  const { role } = useAuth()
   const navigate = useNavigate()
   const [preview, setPreview] = useState<string | null>(null)
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
@@ -77,6 +78,7 @@ export const useCreate = () => {
     preview,
     handleChange,
     handleSubmit,
-    handleClick
+    handleClick,
+    role
   }
 }

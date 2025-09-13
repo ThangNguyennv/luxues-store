@@ -72,7 +72,7 @@ const OrderAdmin = () => {
                 type="submit"
                 className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
               >
-              Áp dụng
+                Áp dụng
               </button>
               <Dialog
                 open={open}
@@ -82,13 +82,13 @@ const OrderAdmin = () => {
                 <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                  Bạn có chắc chắn muốn hủy {selectedIds.length} đơn hàng này không?
+                    Bạn có chắc chắn muốn hủy {selectedIds.length} đơn hàng này không?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Hủy</Button>
                   <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
-                  Xóa
+                    Xóa
                   </Button>
                 </DialogActions>
               </Dialog>

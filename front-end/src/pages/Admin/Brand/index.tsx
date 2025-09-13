@@ -1,6 +1,13 @@
+import { useAuth } from '~/contexts/admin/AuthContext'
+
 const Brand = () => {
+  const { role } = useAuth()
   return (
-    <div>Đang cập nhật...</div>
+    <>
+      {role && role.permissions.includes('brands_view') && (
+        <div>Đang cập nhật...</div>
+      )}
+    </>
   )
 }
 

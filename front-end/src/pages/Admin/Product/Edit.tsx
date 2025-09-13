@@ -13,13 +13,14 @@ const EditProduct = () => {
     handleChange,
     handleSubmit,
     handleClick,
-    uploadImagePreviewRef
+    uploadImagePreviewRef,
+    role
   } = useEdit()
 
   return (
     <>
-      {productInfo ? (
-        <>
+      {role && role.permissions.includes('products_edit') && (
+        productInfo ? (
           <form
             onSubmit={(event) => handleSubmit(event)}
             className="flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md"
@@ -214,67 +215,67 @@ const EditProduct = () => {
             Cập nhật
             </button>
           </form>
-        </>
-      ) : (
-        <>
-          <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
-          <form
-            onSubmit={(event) => handleSubmit(event)}
-            className="flex flex-col gap-[10px] text-[17px] font-[500]"
-            encType="multipart/form-data">
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+        ) : (
+          <>
+            <Skeleton variant="text" width={470} height={30} sx={{ bgcolor: 'grey.400' }}/>
+            <form
+              onSubmit={(event) => handleSubmit(event)}
+              className="flex flex-col gap-[10px] text-[17px] font-[500]"
+              encType="multipart/form-data">
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="flex items-center justify-start gap-[10px]">
-              <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="flex items-center justify-start gap-[10px]">
+                <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={1000} height={400} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={1000} height={400} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="flex flex-col gap-[5px]">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={400} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="flex flex-col gap-[5px]">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={400} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="form-group">
-              <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="form-group">
+                <Skeleton variant="text" width={100} height={30} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={452} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <div className="flex items-center justify-start gap-[10px]">
-              <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
-              <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
-            </div>
+              <div className="flex items-center justify-start gap-[10px]">
+                <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="rectangular" width={100} height={32} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
 
-            <Skeleton variant="rectangular" width={100} height={50} sx={{ bgcolor: 'grey.400' }}/>
-          </form>
-        </>
+              <Skeleton variant="rectangular" width={100} height={50} sx={{ bgcolor: 'grey.400' }}/>
+            </form>
+          </>
+        )
       )}
     </>
   )

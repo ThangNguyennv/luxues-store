@@ -2,13 +2,14 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/articleCategory.api'
 import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import { useAuth } from '~/contexts/admin/AuthContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 export const useArticleCategory = () => {
   const { stateArticleCategory, fetchArticleCategory, dispatchArticleCategory } = useArticleCategoryContext()
   const { articleCategories, filterStatus, pagination, keyword } = stateArticleCategory
   const { dispatchAlert } = useAlertContext()
-
+  const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
@@ -156,6 +157,7 @@ export const useArticleCategory = () => {
     handleSort,
     clearSortParams,
     handleFilterStatus,
-    articleCategories
+    articleCategories,
+    role
   }
 }

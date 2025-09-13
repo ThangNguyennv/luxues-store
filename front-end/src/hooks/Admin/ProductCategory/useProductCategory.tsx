@@ -3,12 +3,13 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/productCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useProductCategory = () => {
   const { stateProductCategory, fetchProductCategory, dispatchProductCategory } = useProductCategoryContext()
   const { productCategories, filterStatus, pagination, keyword } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
-
+  const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
@@ -156,6 +157,7 @@ export const useProductCategory = () => {
     handleSubmit,
     handleSort,
     clearSortParams,
-    handleFilterStatus
+    handleFilterStatus,
+    role
   }
 }

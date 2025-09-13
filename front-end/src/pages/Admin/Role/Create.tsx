@@ -2,6 +2,7 @@ import { Editor } from '@tinymce/tinymce-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchCreateRoleAPI } from '~/apis/admin/role.api'
+import { useAuth } from '~/contexts/admin/AuthContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { RolesInfoInterface } from '~/types/role.type'
 import { API_KEY } from '~/utils/constants'
@@ -19,6 +20,8 @@ const CreateRole = () => {
   const [roleInfo, setRoleInfo] = useState<RolesInfoInterface>(initialRole)
   const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
+  const { role } = useAuth()
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     const response = await fetchCreateRoleAPI(roleInfo)
@@ -33,43 +36,46 @@ const CreateRole = () => {
       }, 2000)
     }
   }
+
   return (
     <>
-      <form
-        onSubmit={(event) => handleSubmit(event)}
-        className='flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md mt-[40px]'
-      >
-        <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới nhóm quyền</h1>
-        <div className="form-group">
-          <label htmlFor="title">Tiêu đề</label>
-          <input
-            onChange={(event) => setRoleInfo({ ...roleInfo, title: event.target.value })}
-            type="text"
-            id="title"
-            name="title"
-            className='py-[3px] text-[16px]'
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="desc">Mô tả</label>
-          <Editor
-            apiKey={API_KEY}
-            init={{
-              plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-              toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
-            }}
-            onEditorChange={(newValue) => setRoleInfo({ ...roleInfo, description: newValue })}
-            id="desc"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
+      {role && role.permissions.includes('roles_create') && (
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className='flex flex-col gap-[15px] text-[17px] font-[500] bg-[#FFFFFF] p-[15px] shadow-md mt-[40px]'
         >
+          <h1 className="text-[24px] font-[600] text-[#192335]">Thêm mới nhóm quyền</h1>
+          <div className="form-group">
+            <label htmlFor="title">Tiêu đề</label>
+            <input
+              onChange={(event) => setRoleInfo({ ...roleInfo, title: event.target.value })}
+              type="text"
+              id="title"
+              name="title"
+              className='py-[3px] text-[16px]'
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="desc">Mô tả</label>
+            <Editor
+              apiKey={API_KEY}
+              init={{
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat'
+              }}
+              onEditorChange={(newValue) => setRoleInfo({ ...roleInfo, description: newValue })}
+              id="desc"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-[5%] border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
+          >
           Tạo mới
-        </button>
-      </form>
+          </button>
+        </form>
+      )}
     </>
   )
 }

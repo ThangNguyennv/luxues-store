@@ -3,12 +3,13 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/article.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useArticleContext } from '~/contexts/admin/ArticleContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useArticle = () => {
   const { stateArticle, fetchArticle, dispatchArticle } = useArticleContext()
   const { articles, pagination, filterStatus, keyword } = stateArticle
   const { dispatchAlert } = useAlertContext()
-
+  const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
@@ -162,6 +163,7 @@ export const useArticle = () => {
     handleSort,
     clearSortParams,
     handleFilterStatus,
-    articles
+    articles,
+    role
   }
 }

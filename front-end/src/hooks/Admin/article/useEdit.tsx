@@ -4,10 +4,12 @@ import { fetchDetailArticleAPI, fetchEditArticleAPI } from '~/apis/admin/article
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
 import type { ArticleDetailInterface, ArticleInfoInterface } from '~/types/article.type'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useEdit = () => {
   const [articleInfo, setArticleInfo] = useState<ArticleInfoInterface | null>(null)
   const params = useParams()
+  const { role } = useAuth()
   const id = params.id as string
   const { stateArticleCategory } = useArticleCategoryContext()
   const { allArticleCategories } = stateArticleCategory
@@ -69,6 +71,7 @@ export const useEdit = () => {
     uploadImagePreviewRef,
     handleChange,
     handleSubmit,
-    handleClick
+    handleClick,
+    role
   }
 }

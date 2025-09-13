@@ -4,6 +4,7 @@ import { fetchCreateProductAPI } from '~/apis/admin/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useProductCategoryContext } from '~/contexts/admin/ProductCategoryContext'
 import type { ProductInfoInterface } from '~/types/product.type'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useCreate = () => {
   const initialProduct: ProductInfoInterface = {
@@ -33,6 +34,7 @@ export const useCreate = () => {
   const { allProductCategories } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
   const navigate = useNavigate()
+  const { role } = useAuth()
   const uploadImageInputRef = useRef<HTMLInputElement | null>(null)
   // const uploadImagePreviewRef = useRef<HTMLImageElement | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
@@ -76,6 +78,7 @@ export const useCreate = () => {
     handleChange,
     handleSubmit,
     preview,
-    handleClick
+    handleClick,
+    role
   }
 }
