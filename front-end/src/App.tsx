@@ -116,7 +116,6 @@ function App() {
             <Route path='orders'>
               <Route index element={ <OrderAdmin />}/>
               <Route path='detail/:id' element={<DetailOrder />}/>
-              <Route path='edit/:id'/>
             </Route>
             <Route path='products'>
               <Route index element={ <ProductAdmin />}/>

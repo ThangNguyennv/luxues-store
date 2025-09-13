@@ -1,11 +1,9 @@
 import Skeleton from '@mui/material/Skeleton'
-import { Link } from 'react-router-dom'
 import { useDetail } from '~/hooks/admin/Order/useDetail'
 
 const DetailOrder = () => {
   const {
-    orderDetail,
-    id
+    orderDetail
   } = useDetail()
 
   return (
@@ -49,12 +47,6 @@ const DetailOrder = () => {
                     <span className="text-red-500 font-[600]">Chờ duyệt</span>
                 }
               </div>
-              <Link
-                to={`/admin/orders/edit/${id}`}
-                className='nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[20%] text-center text-[14px]'
-              >
-                Chỉnh sửa
-              </Link>
             </div>
             <div className='flex flex-col gap-[15px]'>
               <div className='font-[600] text-[20px]'>Thông tin người đặt hàng</div>
@@ -90,13 +82,6 @@ const DetailOrder = () => {
                   </div>
                 </div>
                 <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
-
-                <Link
-                  to={`/admin/orders/edit/${id}`}
-                  className='nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white w-[20%] text-center text-[14px]'
-                >
-                Chỉnh sửa
-                </Link>
               </div>
               <div className='flex flex-col gap-[15px]'>
                 <Skeleton variant="text" width={385} height={48} sx={{ bgcolor: 'grey.400' }}/>

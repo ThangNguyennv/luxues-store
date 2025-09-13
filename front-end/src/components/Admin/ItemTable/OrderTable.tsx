@@ -32,7 +32,8 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleCheckAll,
     handleDelete,
     isCheckAll,
-    accounts
+    accounts,
+    handleRecover
   } = useTable({ selectedIds, setSelectedIds })
 
   if (loading) {
@@ -220,24 +221,37 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                       })()}
                     </TableCell>
                     <TableCell align='center'>
-                      <Link
-                        to={`/admin/orders/detail/${order._id}`}
-                        className='nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white'
-                      >
-                        Chi tiết
-                      </Link>
-                      <Link
-                        to={`/admin/orders/edit/${order._id}`}
-                        className='nav-link border rounded-[5px] bg-[#FFAB19] p-[5px] text-white'
-                      >
-                        Sửa
-                      </Link>
-                      <button
-                        onClick={() => handleOpen(order._id)}
-                        className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
-                      >
-                        Xóa
-                      </button>
+                      {order.deleted ? (
+                        <>
+                          <button
+                            onClick={() => handleRecover(order._id)}
+                            className='nav-link border rounded-[5px] bg-[#525FE1] p-[5px] text-white'
+                          >
+                            Mua lại
+                          </button>
+                          <button
+                            onClick={() => handleOpen(order._id)}
+                            className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
+                          >
+                            Hủy
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <Link
+                            to={`/admin/orders/detail/${order._id}`}
+                            className='nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white'
+                          >
+                            Chi tiết
+                          </Link>
+                          <button
+                            onClick={() => handleOpen(order._id)}
+                            className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
+                          >
+                            Hủy
+                          </button>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -250,7 +264,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
               <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Bạn có chắc chắn muốn xóa sản phẩm này không?
+                  Bạn có chắc chắn muốn hủy đơn hàng này không?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

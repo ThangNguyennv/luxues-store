@@ -2,6 +2,7 @@ import type { AccountInfoInterface } from './account.type'
 import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, ParamsInterface, UpdatedBy } from './helper.type'
 
 export interface OrderInfoInterface {
+    deleted?: boolean,
     _id: string,
     cartId: string,
     userInfo: {

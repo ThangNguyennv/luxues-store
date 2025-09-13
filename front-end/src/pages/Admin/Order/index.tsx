@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortOrder from '~/components/admin/Sort/SortOrder'
@@ -81,7 +80,7 @@ const OrderAdmin = () => {
               <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
               <DialogContent>
                 <DialogContentText>
-                  Bạn có chắc chắn muốn xóa {selectedIds.length} vật phẩm này không?
+                  Bạn có chắc chắn muốn hủy {selectedIds.length} đơn hàng này không?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -98,14 +97,6 @@ const OrderAdmin = () => {
             sortValue={sortValue}
             clearSortParams={clearSortParams}
           />
-          <div>
-            <Link
-              to={'/admin/orders/create'}
-              className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
-            >
-              + Thêm mới
-            </Link>
-          </div>
         </div>
         <OrderTable
           selectedIds={selectedIds}

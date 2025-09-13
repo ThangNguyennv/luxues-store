@@ -1,4 +1,4 @@
-import { fetchChangeStatusAPI, fetchDeleteOrderAPI } from '~/apis/admin/order.api'
+import { fetchChangeStatusAPI, fetchDeleteOrderAPI, fetchRecoverOrderAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
@@ -40,6 +40,27 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
         type: 'SET_DATA',
         payload: {
           orders: orders.filter((order) => order._id !== selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
+
+  const handleRecover = async (id: string) => {
+    if (!id) return
+    const response = await fetchRecoverOrderAPI(id)
+    if (response.code === 200) {
+      dispatchOrder({
+        type: 'SET_DATA',
+        payload: {
+          orders: orders.filter((order) => order._id !== id)
         }
       })
       dispatchAlert({
@@ -113,6 +134,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     isCheckAll,
     selectedId,
     accounts,
-    handleDelete
+    handleDelete,
+    handleRecover
   }
 }

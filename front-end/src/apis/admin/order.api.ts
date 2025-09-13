@@ -56,3 +56,12 @@ export const fetchDetailOrderAPI = async (id: string): Promise<OrderDetailInterf
   )
   return response.data
 }
+
+export const fetchRecoverOrderAPI = async (id: string) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/orders/recover/${id}`,
+    {},
+    { withCredentials: true }
+  )
+  return response.data
+}
