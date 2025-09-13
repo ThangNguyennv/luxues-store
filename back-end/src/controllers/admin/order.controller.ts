@@ -241,6 +241,26 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 }
 
+// [DELETE] /admin/orders/permanentlyDelete/:id
+export const permanentlyDeleteItem = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id
+    await Order.deleteOne(
+      { _id: id }
+    )
+    res.json({
+      code: 204,
+      message: 'Đã xóa vĩnh viễn thành công đơn hàng!'
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
+
 // [GET] /admin/orders/detail/:id
 export const detail = async (req: Request, res: Response) => {
   try {
