@@ -3,10 +3,12 @@ import { useSearchParams } from 'react-router-dom'
 import { fetchChangeMultiAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useOrderContext } from '~/contexts/admin/OrderContext'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useOrder = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
   const { orders, pagination, filterOrder, keyword } = stateOrder
+  const { role } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -170,6 +172,7 @@ export const useOrder = () => {
     handleFilterStatus,
     open,
     handleClose,
-    handleConfirmDeleteAll
+    handleConfirmDeleteAll,
+    role
   }
 }

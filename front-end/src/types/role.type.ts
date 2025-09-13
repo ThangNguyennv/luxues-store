@@ -5,7 +5,7 @@ export interface RolesInfoInterface {
   _id: string,
   title: string,
   description: string,
-  permissions?: string[],
+  permissions: string[],
   updatedBy?: UpdatedBy[],
   createdAt: Date | null
   updatedAt: Date | null

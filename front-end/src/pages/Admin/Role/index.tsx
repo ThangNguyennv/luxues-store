@@ -138,7 +138,7 @@ const Role = () => {
         <div className="flex items-center justify-end">
           <Link
             to={'/admin/roles/create'}
-            className='border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+            className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
           >
           + Thêm mới
           </Link>
@@ -204,7 +204,7 @@ const Role = () => {
                     <TableCell align='center'>
                       <Link
                         to={`/admin/roles/detail/${role._id}`}
-                        className='nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white'
+                        className='nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white'
                       >
                           Chi tiết
                       </Link>

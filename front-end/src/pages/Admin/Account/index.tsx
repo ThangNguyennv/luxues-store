@@ -84,7 +84,7 @@ const Account = () => {
   if (loading) {
     return (
       <div className='flex flex-col gap-[10px] bg-[#FFFFFF] p-[15px] shadow-md mt-[15px]'>
-        <Skeleton variant="text" width={190} height={32} sx={{ bgcolor: 'grey.400' }}/>
+        <Skeleton variant="text" width={270} height={32} sx={{ bgcolor: 'grey.400' }}/>
         <div className="flex items-center justify-end">
           <Skeleton variant="rectangular" width={120} height={32} sx={{ bgcolor: 'grey.400' }}/>
         </div>
@@ -119,28 +119,44 @@ const Account = () => {
               {Array.from({ length: 4 }).map((_item, index) => (
                 <TableRow key={index}>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={20} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={20} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={130} height={130} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="circular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="rectangular" width={90} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="rectangular" width={90} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -154,11 +170,11 @@ const Account = () => {
   return (
     <>
       <div className='flex flex-col gap-[10px] bg-[#FFFFFF] p-[15px] shadow-md mt-[15px]'>
-        <h1 className="text-[24px] font-[700] text-[#000000]">Danh sách tài khoản</h1>
+        <h1 className="text-[24px] font-[700] text-[#000000]">Danh sách tài khoản admin</h1>
         <div className="flex items-center justify-end">
           <Link
             to={'/admin/accounts/create'}
-            className="border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white"
+            className="nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white"
           >
               + Thêm mới
           </Link>
@@ -196,7 +212,9 @@ const Account = () => {
                   <TableRow key={index}>
                     <TableCell align='center'>{index + 1}</TableCell>
                     <TableCell align='center'>
-                      <img src={account.avatar} className='border rounded-[50%] w-[150px] h-[150px]'/>
+                      <div className='flex items-center justify-center'>
+                        <img src={account.avatar} className='border rounded-[50%] w-[100px] h-[100px]'/>
+                      </div>
                     </TableCell>
                     <TableCell align='center'>{account.fullName}</TableCell>
                     <TableCell align='center'>
@@ -210,7 +228,7 @@ const Account = () => {
                       <button
                         onClick={() => handleToggleStatus(account._id, account.status)}
                         className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-                          ${account.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                          ${account.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
                       >
                         {account.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                       </button>
@@ -218,7 +236,7 @@ const Account = () => {
                     <TableCell align='center'>
                       <Link
                         to={`/admin/accounts/detail/${account._id}`}
-                        className='nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white'
+                        className='nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white'
                       >
                       Chi tiết
                       </Link>

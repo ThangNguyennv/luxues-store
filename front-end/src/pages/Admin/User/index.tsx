@@ -86,7 +86,7 @@ const User = () => {
   if (loading) {
     return (
       <div className='flex flex-col gap-[10px] bg-[#FFFFFF] p-[15px] shadow-md mt-[15px]'>
-        <Skeleton variant="text" width={190} height={32} sx={{ bgcolor: 'grey.400' }}/>
+        <Skeleton variant="text" width={230} height={32} sx={{ bgcolor: 'grey.400' }}/>
         <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader sx={{
             borderCollapse: 'collapse',
@@ -117,25 +117,39 @@ const User = () => {
               {Array.from({ length: 4 }).map((_item, index) => (
                 <TableRow key={index}>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={20} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={20} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={130} height={130} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="circular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="rectangular" width={90} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="rectangular" width={90} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -182,11 +196,13 @@ const User = () => {
                   <TableRow key={index}>
                     <TableCell align='center'>{index + 1}</TableCell>
                     <TableCell align='center'>
-                      <img
-                        src={user.avatar}
-                        className='w-[150px] h-[150px] rounded-full object-cover'
-                        alt="Avatar"
-                      />
+                      <div className='flex items-center justify-center'>
+                        <img
+                          src={user.avatar}
+                          className='w-[100px] h-[100px] rounded-full object-cover'
+                          alt="Avatar"
+                        />
+                      </div>
                     </TableCell>
                     <TableCell align='center'>{user.fullName}</TableCell>
                     <TableCell align='center'>{user.email}</TableCell>
@@ -195,7 +211,7 @@ const User = () => {
                       <button
                         onClick={() => handleToggleStatus(user._id, user.status)}
                         className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
-                          ${user.status === 'active' ? 'bg-[#607D00]' : 'bg-[#BC3433]'}`}
+                          ${user.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
                       >
                         {user.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                       </button>
@@ -203,7 +219,7 @@ const User = () => {
                     <TableCell align='center'>
                       <Link
                         to={`/admin/users/detail/${user._id}`}
-                        className='nav-link border rounded-[5px] bg-[#757575] p-[5px] text-white'
+                        className='nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white'
                       >
                         Chi tiết
                       </Link>

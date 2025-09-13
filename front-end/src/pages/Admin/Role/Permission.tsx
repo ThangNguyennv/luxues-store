@@ -19,7 +19,7 @@ const permissionSections = [
     ]
   },
   {
-    title: 'Danh mục thời trang',
+    title: 'Danh mục sản phẩm',
     permissions: [
       { key: 'products-category_view', label: 'Xem' },
       { key: 'products-category_create', label: 'Thêm mới' },
@@ -28,7 +28,7 @@ const permissionSections = [
     ]
   },
   {
-    title: 'Danh sách thời trang',
+    title: 'Danh sách sản phẩm',
     permissions: [
       { key: 'products_view', label: 'Xem' },
       { key: 'products_create', label: 'Thêm mới' },
@@ -55,11 +55,39 @@ const permissionSections = [
     ]
   },
   {
-    title: 'Thùng rác',
+    title: 'Danh mục thương hiệu',
     permissions: [
-      { key: 'trashs_view', label: 'Xem' },
-      { key: 'trashs_recover', label: 'Khôi phục' },
-      { key: 'trashs_delete', label: 'Xóa' }
+      { key: 'brands-category_view', label: 'Xem' },
+      { key: 'brands-category_create', label: 'Thêm mới' },
+      { key: 'brands-category_edit', label: 'Chỉnh sửa' },
+      { key: 'brands-category_delete', label: 'Xóa' }
+    ]
+  },
+  {
+    title: 'Danh sách thương hiệu',
+    permissions: [
+      { key: 'brands_view', label: 'Xem' },
+      { key: 'brands_create', label: 'Thêm mới' },
+      { key: 'brands_edit', label: 'Chỉnh sửa' },
+      { key: 'brands_delete', label: 'Xóa' }
+    ]
+  },
+  {
+    title: 'Danh mục phụ kiện',
+    permissions: [
+      { key: 'accessories-category_view', label: 'Xem' },
+      { key: 'accessories-category_create', label: 'Thêm mới' },
+      { key: 'accessories-category_edit', label: 'Chỉnh sửa' },
+      { key: 'accessories-category_delete', label: 'Xóa' }
+    ]
+  },
+  {
+    title: 'Danh sách phụ kiện',
+    permissions: [
+      { key: 'accessories_view', label: 'Xem' },
+      { key: 'accessories_create', label: 'Thêm mới' },
+      { key: 'accessories_edit', label: 'Chỉnh sửa' },
+      { key: 'accessories_delete', label: 'Xóa' }
     ]
   },
   {
@@ -85,7 +113,6 @@ const permissionSections = [
     title: 'Tài khoản người dùng',
     permissions: [
       { key: 'users_view', label: 'Xem' },
-      { key: 'users_create', label: 'Thêm mới' },
       { key: 'users_edit', label: 'Chỉnh sửa' },
       { key: 'users_delete', label: 'Xóa' }
     ]
@@ -100,6 +127,14 @@ const permissionSections = [
     title: 'Cài đặt nâng cao',
     permissions: [
       { key: 'settings-advance_view', label: 'Xem' }
+    ]
+  },
+  {
+    title: 'Thùng rác',
+    permissions: [
+      { key: 'trashs_view', label: 'Xem' },
+      { key: 'trashs_recover', label: 'Khôi phục' },
+      { key: 'trashs_delete', label: 'Xóa' }
     ]
   }
 ]
@@ -230,7 +265,7 @@ const Permission = () => {
   return (
     <>
       {roles && roles.length > 0 ? (
-        <div className='flex flex-col gap-[5px] bg-[#FFFFFF] p-[15px] shadow-md mt-[20px]'>
+        <div className='flex flex-col gap-[5px] bg-[#FFFFFF] p-[15px] shadow-md h-[800px] fixed w-[80%]'>
           <h1 className='text-[24px] font-[600] text-[#192335]'>Phân quyền</h1>
           <div className='flex flex-col gap-[10px]'>
             <div className="flex items-center justify-end">
@@ -238,10 +273,10 @@ const Permission = () => {
                 onClick={handleSubmit}
                 className="border rounded-[5px] bg-[#525FE1] text-white p-[7px] text-[14px]"
               >
-                  Cập nhật
+                Cập nhật
               </button>
             </div>
-            <TableContainer sx={{ maxHeight: 600 }}>
+            <TableContainer sx={{ maxHeight: 650 }}>
               <Table stickyHeader sx={{
                 borderCollapse: 'collapse',
                 '& th, & td': {

@@ -35,7 +35,9 @@ const Header = () => {
               <p className='uppercase'>ADMIN</p>
             </Link>
             <div className='flex items-center justify-between gap-[25px]'>
-              <IoIosNotificationsOutline />
+              <Link to={'/admin/notification'} className='hover:text-green-600'>
+                <IoIosNotificationsOutline />
+              </Link>
               <Link
                 to={'/admin/my-account'}
                 onMouseEnter={(event) => handleOpen(event)}

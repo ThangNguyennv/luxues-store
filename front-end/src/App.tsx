@@ -61,6 +61,9 @@ import Checkout from './pages/client/Checkout'
 import Success from './pages/client/Checkout/Success'
 import OrderAdmin from './pages/admin/Order'
 import DetailOrder from './pages/admin/Order/Detail'
+import Brand from './pages/admin/Brand'
+import BrandCategory from './pages/admin/BrandCategory'
+import Notification from './pages/admin/Notification'
 
 function App() {
   useEffect(() => {
@@ -116,6 +119,13 @@ function App() {
             <Route path='orders'>
               <Route index element={ <OrderAdmin />}/>
               <Route path='detail/:id' element={<DetailOrder />}/>
+            </Route>
+            <Route path='notification' element={<Notification />}/>
+            <Route path='brands'>
+              <Route index element={<Brand />}/>
+            </Route>
+            <Route path='brands-category'>
+              <Route index element={<BrandCategory />}/>
             </Route>
             <Route path='products'>
               <Route index element={ <ProductAdmin />}/>

@@ -1,9 +1,5 @@
 import type { RolesInfoInterface } from './role.type'
 
-export interface RoleInfoInterface {
-  title: string,
-}
-
 export interface AccountInfoInterface {
   _id: string,
   avatar: string,
@@ -18,7 +14,7 @@ export interface AccountInfoInterface {
 
 export interface MyAccountDetailInterface {
   myAccount: AccountInfoInterface,
-  role: RoleInfoInterface
+  role: RolesInfoInterface
 }
 
 export interface AccountsDetailInterface {

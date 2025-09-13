@@ -1,7 +1,7 @@
-const Advance = () => {
+const Brand = () => {
   return (
     <div>Đang cập nhật...</div>
   )
 }
 
-export default Advance
+export default Brand

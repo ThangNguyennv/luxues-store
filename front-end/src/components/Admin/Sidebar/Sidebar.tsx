@@ -13,6 +13,7 @@ import { FaTrash } from 'react-icons/fa'
 import { TbMenu4 } from 'react-icons/tb'
 import { IoMenu } from 'react-icons/io5'
 import { BsChatLeftText } from 'react-icons/bs'
+import { useAuth } from '~/contexts/admin/AuthContext'
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -24,6 +25,7 @@ const Sidebar = () => {
   const [isOpenArticle, setIsOpenArticle] = useState(false)
   const [isOpenRole, setIsOpenRole] = useState(false)
   const [isOpenDashboard, setIsOpenDashboard] = useState(false)
+  const { role } = useAuth()
 
   return (
     <div
@@ -79,237 +81,252 @@ const Sidebar = () => {
                 <li className="border-b border-[#9D9995] pb-[7px]">
                   <Link to={'/admin/dashboard'}>Doanh thu</Link>
                 </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/orders'}>Danh sách đơn hàng</Link>
-                </li>
+                {role && role.permissions.includes('orders_view') && (
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/orders'}>Danh sách đơn hàng</Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
           {/* Hết tổng quan */}
 
           {/* Danh mục */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenCategory(!isOpenCategory)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <MdCategory className='text-[18px]'/>
-                <p>Danh mục</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenCategory ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('products-category_view') && role.permissions.includes('accessories-category_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenCategory ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenCategory(!isOpenCategory)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/products-category'}>Danh mục sản phẩm</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/accessories-category'}>Danh mục phụ kiện</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <MdCategory className='text-[18px]'/>
+                  <p>Danh mục</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenCategory ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenCategory ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/products-category'}>Danh mục sản phẩm</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/accessories-category'}>Danh mục phụ kiện</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết danh mục */}
 
           {/* Sản phẩm */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenProduct(!isOpenProduct)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <FaProductHunt className='text-[18px]'/>
-                <p>Sản phẩm</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenProduct ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('products_view') && role.permissions.includes('accessories_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenProduct ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenProduct(!isOpenProduct)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/products'}>Danh sách sản phẩm</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/accessories'}>Danh sách phụ kiện</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <FaProductHunt className='text-[18px]'/>
+                  <p>Sản phẩm</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenProduct ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenProduct ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/products'}>Danh sách sản phẩm</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/accessories'}>Danh sách phụ kiện</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết sản phẩm */}
 
           {/* Thương hiệu */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenBranch(!isOpenBranch)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <FaCodeBranch className='text-[18px]'/>
-                <p>Thương hiệu</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenBranch ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('brands-category_view') && role.permissions.includes('brands_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenBranch ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenBranch(!isOpenBranch)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/brands-category'}>Danh mục thương hiệu</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/brands'}>Danh sách thương hiệu</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <FaCodeBranch className='text-[18px]'/>
+                  <p>Thương hiệu</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenBranch ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenBranch ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/brands-category'}>Danh mục thương hiệu</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/brands'}>Danh sách thương hiệu</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết thương hiệu */}
 
           {/* Bài viết */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenArticle(!isOpenArticle)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <MdArticle className='text-[18px]'/>
-                <p>Bài viết</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenArticle ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('articles-category_view') && role.permissions.includes('articles_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenArticle ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenArticle(!isOpenArticle)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/articles-category'}>Danh mục bài viết</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/articles'}>Danh sách bài viết</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <MdArticle className='text-[18px]'/>
+                  <p>Bài viết</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenArticle ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenArticle ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/articles-category'}>Danh mục bài viết</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/articles'}>Danh sách bài viết</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết bài viết */}
 
           {/* Quyền */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenRole(!isOpenRole)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <FaCriticalRole className='text-[18px]'/>
-                <p>Quyền</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenRole ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('roles_view') && role.permissions.includes('roles_permissions') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenRole ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenRole(!isOpenRole)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/roles'}>Nhóm quyền</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/roles/permissions'}>Phân quyền</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <FaCriticalRole className='text-[18px]'/>
+                  <p>Quyền</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenRole ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenRole ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/roles'}>Nhóm quyền</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/roles/permissions'}>Phân quyền</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết quyền */}
 
           {/* Tài khoản */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenAccount(!isOpenAccount)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <MdOutlineSupervisorAccount className='text-[18px]'/>
-                <p>Tài khoản</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenAccount ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('accounts_view') && role.permissions.includes('users_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenAccount ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenAccount(!isOpenAccount)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/accounts'}>Tài khoản Admin</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/users'}>Tài khoản người dùng</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <MdOutlineSupervisorAccount className='text-[18px]'/>
+                  <p>Tài khoản</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenAccount ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenAccount ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/accounts'}>Tài khoản Admin</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/users'}>Tài khoản người dùng</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
-
+          )}
           {/* Hết tài khoản */}
 
           {/* Cài đặt */}
-          <div
-            className='hover-sidebar flex flex-col text-white cursor-pointer'
-            onClick={() => setIsOpenSetting(!isOpenSetting)}
-          >
-            <div className='title-sidebar flex justify-between items-center p-[5px]'>
-              <div className='flex items-center justify-start gap-[15px]'>
-                <IoIosSettings className='text-[18px]'/>
-                <p>Cài đặt</p>
-              </div>
-              {isOpen && (
-                <span>{isOpenSetting ? <FaChevronUp /> : <FaChevronDown />}</span>
-              )}
-            </div>
+          {role && role.permissions.includes('general_view') && (
             <div
-              className={`
-            overflow-hidden transition-all duration-700 ease-in-out
-            ${isOpenSetting ? 'max-h-40 mt-2' : 'max-h-0'}
-          `}
+              className='hover-sidebar flex flex-col text-white cursor-pointer'
+              onClick={() => setIsOpenSetting(!isOpenSetting)}
             >
-              <ul className="flex flex-col gap-2 items-center">
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/settings/general'}>Cài đặt chung</Link>
-                </li>
-                <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/settings/advance'}>Cài đặt nâng cao</Link>
-                </li>
-              </ul>
+              <div className='title-sidebar flex justify-between items-center p-[5px]'>
+                <div className='flex items-center justify-start gap-[15px]'>
+                  <IoIosSettings className='text-[18px]'/>
+                  <p>Cài đặt</p>
+                </div>
+                {isOpen && (
+                  <span>{isOpenSetting ? <FaChevronUp /> : <FaChevronDown />}</span>
+                )}
+              </div>
+              <div
+                className={`
+                  overflow-hidden transition-all duration-700 ease-in-out
+                  ${isOpenSetting ? 'max-h-40 mt-2' : 'max-h-0'}
+                `}
+              >
+                <ul className="flex flex-col gap-2 items-center">
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/settings/general'}>Cài đặt chung</Link>
+                  </li>
+                  <li className="border-b border-[#9D9995] pb-[7px]">
+                    <Link to={'/admin/settings/advance'}>Cài đặt nâng cao</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
           {/* Hết cài đặt */}
 
           {/* Chat */}
@@ -323,27 +340,49 @@ const Sidebar = () => {
           {/* Hết chat */}
 
           {/* Thùng rác */}
-          <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
-            <FaTrash className='text-[17px]'/>
-            {isOpen && (
-              <span>Thùng rác</span>
-            )}
-          </Link>
+          {role && role.permissions.includes('trashs_view') && (
+            <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
+              <FaTrash className='text-[17px]'/>
+              {isOpen && (
+                <span>Thùng rác</span>
+              )}
+            </Link>
+          )}
           {/* Hết thùng rác */}
         </>
       ) : (
         <>
           <div className='flex flex-col text-[18px] gap-[35px] items-center justify-center'>
             <MdDashboard />
-            <MdCategory />
-            <FaProductHunt />
-            <FaCodeBranch />
-            <MdArticle />
-            <FaCriticalRole />
-            <MdOutlineSupervisorAccount />
-            <IoIosSettings />
-            <BsChatLeftText />
-            <FaTrash />
+            {role && (
+              <>
+                {role.permissions.includes('products-category_view') && role.permissions.includes('accessories-category_view') && (
+                  <MdCategory />
+                )}
+                {role.permissions.includes('products_view') && role.permissions.includes('accessories_view') && (
+                  <FaProductHunt />
+                )}
+                {role.permissions.includes('brands-category_view') && role.permissions.includes('brands_view') && (
+                  <FaCodeBranch />
+                )}
+                {role.permissions.includes('articles-category_view') && role.permissions.includes('articles_view') && (
+                  <MdArticle />
+                )}
+                {role.permissions.includes('roles_view') && role.permissions.includes('roles_permissions') && (
+                  <FaCriticalRole />
+                )}
+                {role.permissions.includes('accounts_view') && role.permissions.includes('users_view') && (
+                  <MdOutlineSupervisorAccount />
+                )}
+                {role.permissions.includes('general_view') && (
+                  <IoIosSettings />
+                )}
+                <BsChatLeftText />
+                {role.permissions.includes('trashs_view') && (
+                  <FaTrash />
+                )}
+              </>
+            )}
           </div>
         </>
       )}

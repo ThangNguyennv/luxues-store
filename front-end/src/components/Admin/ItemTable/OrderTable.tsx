@@ -26,14 +26,18 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
     loading,
     handleToggleStatus,
     open,
+    openPermanentlyDelete,
     handleOpen,
     handleClose,
+    handleOpenPermanentlyDelete,
+    handleClosePermanentlyDelete,
     handleCheckbox,
     handleCheckAll,
-    handleDelete,
     isCheckAll,
     accounts,
-    handleRecover
+    handleDelete,
+    handleRecover,
+    handlePermanentlyDelete
   } = useTable({ selectedIds, setSelectedIds })
 
   if (loading) {
@@ -230,7 +234,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                             Mua lại
                           </button>
                           <button
-                            onClick={() => handleOpen(order._id)}
+                            onClick={() => handleOpenPermanentlyDelete(order._id)}
                             className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
                           >
                             Hủy
@@ -256,6 +260,24 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                   </TableRow>
                 ))}
             </TableBody>
+            <Dialog
+              open={openPermanentlyDelete}
+              onClose={handleClose}
+              aria-labelledby="delete-dialog-title"
+            >
+              <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Bạn có chắc chắn muốn xóa vĩnh viễn đơn hàng này không?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClosePermanentlyDelete}>Hủy</Button>
+                <Button onClick={handlePermanentlyDelete} color="error" variant="contained">
+                    Xóa
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Dialog
               open={open}
               onClose={handleClose}

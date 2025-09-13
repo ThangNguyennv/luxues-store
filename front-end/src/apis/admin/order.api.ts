@@ -49,6 +49,14 @@ export const fetchDeleteOrderAPI = async (id: string) => {
   return response.data
 }
 
+export const fetchPermanentlyDeleteOrderAPI = async (id: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/admin/orders/permanentlyDelete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
 export const fetchDetailOrderAPI = async (id: string): Promise<OrderDetailInterface> => {
   const response = await axios.get(
     `${API_ROOT}/admin/orders/detail/${id}`,

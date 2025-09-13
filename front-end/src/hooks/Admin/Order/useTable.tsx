@@ -1,7 +1,6 @@
-import { fetchChangeStatusAPI, fetchDeleteOrderAPI, fetchRecoverOrderAPI } from '~/apis/admin/order.api'
+import { fetchChangeStatusAPI, fetchDeleteOrderAPI, fetchPermanentlyDeleteOrderAPI, fetchRecoverOrderAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
-import { useSearchParams } from 'react-router-dom'
 import type { UpdatedBy } from '~/types/helper.type'
 import { useState } from 'react'
 import { useOrderContext } from '~/contexts/admin/OrderContext'
@@ -16,19 +15,51 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const { orders, accounts, loading } = stateOrder
   const { myAccount } = useAuth()
   const { dispatchAlert } = useAlertContext()
-  const [searchParams] = useSearchParams()
-  const currentStatus = searchParams.get('status') || ''
   const [open, setOpen] = useState(false)
+  const [openPermanentlyDelete, setOpenPermanentlyDelete] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedIdPermanentlyDelete, setSelectedIdPermanentlyDelete] = useState<string | null>(null)
 
   const handleOpen = (id: string) => {
     setSelectedId(id)
     setOpen(true)
   }
 
+  const handleOpenPermanentlyDelete = (id: string) => {
+    setSelectedIdPermanentlyDelete(id)
+    setOpenPermanentlyDelete(true)
+  }
+
+  const handleClosePermanentlyDelete = () => {
+    setSelectedIdPermanentlyDelete(null)
+    setOpenPermanentlyDelete(false)
+  }
+
   const handleClose = () => {
     setSelectedId(null)
     setOpen(false)
+  }
+
+  const handlePermanentlyDelete = async () => {
+    if (!selectedIdPermanentlyDelete) return
+
+    const response = await fetchPermanentlyDeleteOrderAPI(selectedIdPermanentlyDelete)
+    if (response.code === 204) {
+      dispatchOrder({
+        type: 'SET_DATA',
+        payload: {
+          orders: orders.filter((order) => order._id !== selectedIdPermanentlyDelete)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
   }
 
   const handleDelete = async () => {
@@ -122,19 +153,21 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   const isCheckAll = (orders.length > 0) && (selectedIds.length === orders.length)
 
   return {
-    currentStatus,
     orders,
     loading,
     handleToggleStatus,
     open,
+    openPermanentlyDelete,
     handleOpen,
     handleClose,
+    handleOpenPermanentlyDelete,
+    handleClosePermanentlyDelete,
     handleCheckbox,
     handleCheckAll,
     isCheckAll,
-    selectedId,
     accounts,
     handleDelete,
-    handleRecover
+    handleRecover,
+    handlePermanentlyDelete
   }
 }
