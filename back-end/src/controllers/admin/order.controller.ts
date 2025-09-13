@@ -47,7 +47,7 @@ export const index = async (req: Request, res: Response) => {
     // End Pagination
 
     // Sort
-    const sort = {}
+    let sort: Record<string, any> = {}
     if (req.query.sortKey && req.query.sortValue) {
       const sortKey = req.query.sortKey.toLocaleString()
       sort[sortKey] = req.query.sortValue
@@ -100,6 +100,7 @@ export const index = async (req: Request, res: Response) => {
       const dir = req.query.sortValue === 'desc' ? -1 : 1
       orders.sort((a, b) => dir * (a['price'] - b['price']))
     }
+    
     const accounts = await Account.find({
       deleted: false
     })

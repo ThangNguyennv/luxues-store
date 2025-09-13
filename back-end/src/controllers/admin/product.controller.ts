@@ -31,7 +31,7 @@ export const index = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 6
+        limitItems: 5
       },
       req.query,
       countProducts
