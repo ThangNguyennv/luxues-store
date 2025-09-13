@@ -1,4 +1,4 @@
-import { fetchChangeStatusAPI } from '~/apis/admin/order.api'
+import { fetchChangeStatusAPI, fetchDeleteOrderAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useSearchParams } from 'react-router-dom'
@@ -31,27 +31,27 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     setOpen(false)
   }
 
-  // const handleDelete = async () => {
-  //   if (!selectedId) return
+  const handleDelete = async () => {
+    if (!selectedId) return
 
-  //   const response = await fetchDeleteOrderAPI(selectedId)
-  //   if (response.code === 204) {
-  //     dispatchOrder({
-  //       type: 'SET_DATA',
-  //       payload: {
-  //         orders: orders.filter((order) => order._id !== selectedId)
-  //       }
-  //     })
-  //     dispatchAlert({
-  //       type: 'SHOW_ALERT',
-  //       payload: { message: response.message, severity: 'success' }
-  //     })
-  //     setOpen(false)
-  //   } else if (response.code === 400) {
-  //     alert('error: ' + response.error)
-  //     return
-  //   }
-  // }
+    const response = await fetchDeleteOrderAPI(selectedId)
+    if (response.code === 204) {
+      dispatchOrder({
+        type: 'SET_DATA',
+        payload: {
+          orders: orders.filter((order) => order._id !== selectedId)
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
 
   const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
     const currentUser: UpdatedBy = {
@@ -104,7 +104,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     currentStatus,
     orders,
     loading,
-    dispatchOrder,
     handleToggleStatus,
     open,
     handleOpen,
@@ -113,6 +112,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     handleCheckAll,
     isCheckAll,
     selectedId,
-    accounts
+    accounts,
+    handleDelete
   }
 }

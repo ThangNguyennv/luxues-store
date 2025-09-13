@@ -49,7 +49,7 @@ const Pagination = ({ pagination, handlePagination, handlePaginationPrevious, ha
   return (
     <>
       {items && items.length > 0 && pagination && (
-        <nav className='flex items-center justify-center p-[30px]'>
+        <nav className='flex items-center justify-center p-[10px]'>
           <ul className='flex items-center justify-center gap-[10px]'>
             <li>
               <button

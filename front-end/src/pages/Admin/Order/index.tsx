@@ -38,10 +38,9 @@ const OrderAdmin = () => {
 
   return (
     <>
-      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md'>
+      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md h-[820px] fixed w-[80%]'>
         <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách đơn hàng</h1>
         <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
-          <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatusOrder
               filterOrder={filterOrder}
@@ -102,7 +101,7 @@ const OrderAdmin = () => {
           <div>
             <Link
               to={'/admin/orders/create'}
-              className='border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] text-[#607D00] hover:bg-[#607D00] hover:text-white'
+              className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
             >
               + Thêm mới
             </Link>
@@ -119,7 +118,6 @@ const OrderAdmin = () => {
           handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
           items={orders}
         />
-        <div>pagination</div>
       </div>
     </>
   )

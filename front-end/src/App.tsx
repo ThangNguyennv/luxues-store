@@ -10,7 +10,6 @@ import Account from './pages/admin/Account'
 import ArticleAdmin from './pages/admin/Article'
 import ArticleCategoryAdmin from './pages/admin/ArticleCategory'
 import MyAccountAdmin from './pages/admin/MyAccount'
-import OrderAdmin from './pages/Admin/Order'
 import ProductAdmin from './pages/admin/Product'
 import ProductCategoryAdmin from './pages/admin/ProductCategory'
 import Role from './pages/admin/Role'
@@ -60,6 +59,8 @@ import Detail from './pages/client/Product/Detail'
 import Cart from './pages/client/Cart'
 import Checkout from './pages/client/Checkout'
 import Success from './pages/client/Checkout/Success'
+import OrderAdmin from './pages/admin/Order'
+import DetailOrder from './pages/admin/Order/Detail'
 
 function App() {
   useEffect(() => {
@@ -112,7 +113,11 @@ function App() {
           <Route path='admin' element={<PrivateRouteAdmin><LayoutDefaultAdmin /></PrivateRouteAdmin>}>
             <Route index element={ <Dashboard />} />
             <Route path='dashboard' element={ <Dashboard />}/>
-            <Route path='orders' element={ <OrderAdmin />}/>
+            <Route path='orders'>
+              <Route index element={ <OrderAdmin />}/>
+              <Route path='detail/:id' element={<DetailOrder />}/>
+              <Route path='edit/:id'/>
+            </Route>
             <Route path='products'>
               <Route index element={ <ProductAdmin />}/>
               <Route path='create' element={<CreateProduct />}/>

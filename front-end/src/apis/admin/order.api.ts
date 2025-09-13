@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { OrderAllResponseInterface } from '~/types/order.type'
+import type { OrderAllResponseInterface, OrderDetailInterface } from '~/types/order.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchOrdersAPI = async (
@@ -36,6 +36,22 @@ export const fetchChangeMultiAPI = async (data: { ids: string[], type: string })
   const response = await axios.patch(
     `${API_ROOT}/admin/orders/change-multi`,
     data,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchDeleteOrderAPI = async (id: string) => {
+  const response = await axios.delete(
+    `${API_ROOT}/admin/orders/delete/${id}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchDetailOrderAPI = async (id: string): Promise<OrderDetailInterface> => {
+  const response = await axios.get(
+    `${API_ROOT}/admin/orders/detail/${id}`,
     { withCredentials: true }
   )
   return response.data

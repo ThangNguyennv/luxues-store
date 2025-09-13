@@ -29,10 +29,9 @@ const ArticleAdmin = () => {
 
   return (
     <>
-      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md'>
+      <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md h-[820px] fixed w-[80%]'>
         <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách bài viết</h1>
         <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
-          <div>Bộ lọc và tìm kiếm</div>
           <div className='flex items-center justify-between text-[15px]'>
             <FilterStatus
               filterStatus={filterStatus}
