@@ -2,6 +2,8 @@ import { useInView } from 'react-intersection-observer'
 import backgroundHome from '~/assets/images/Home/background-home.png'
 import star from '~/assets/images/Home/star.svg'
 import CountUp from 'react-countup'
+import { Link } from 'react-scroll'
+import Section3 from './Section3'
 
 const Section1 = () => {
   const { ref, inView } = useInView({ triggerOnce: true }) // chỉ chạy 1 lần khi vào view
@@ -18,9 +20,17 @@ const Section1 = () => {
               <p className="font-[400] xl:text-[16px] text-[14px] text-[#00000099] xl:mb-[50px] mb-[30px]" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="200">
                 Chúng tôi chuyên cung cấp nhiều loại quần áo được chế tác tỉ mỉ, được thiết kế để làm nổi bật cá tính của bạn và đáp ứng phong cách của bạn.
               </p>
-              <a className="sm:inline-block block text-center bg-primary rounded-[62px] py-[16px] px-[64px] font-[500] text-[16px] text-white" href="#" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="150">
+              <Link
+                className="sm:inline-block block text-center bg-primary rounded-[62px] py-[16px] px-[64px] font-[500] text-[16px] text-white"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+                data-aos-delay="150"
+                to={'section3'}
+                smooth={true}
+                duration={500}
+              >
                 Xem Ngay
-              </a>
+              </Link>
               <div className="flex flex-wrap xl:mt-[50px] mt-[30px] sm:justify-start justify-center sm:text-left text-center sm:gap-[0] gap-x-[75px] gap-y-[10px]">
                 <div ref={ref} className="sm:pr-[32px] sm:border-r border-[#0000001A] sm:mr-[32px]">
                   <div className="text-primary xl:text-[40px] text-[24px] font-[700]">

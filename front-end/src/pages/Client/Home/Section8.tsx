@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import BoxHead from '~/components/client/BoxHead/BoxHead'
-import SliderWrapper from '~/components/client/SliderWrapper/SliderWrapper'
+import BrandSlider from '~/components/Client/BrandSlider/BrandSlider'
 import { useHome } from '~/contexts/client/HomeContext'
 
 const Section8 = () => {
@@ -13,12 +13,12 @@ const Section8 = () => {
           <div className="sm:px-[64px] px-[24px] sm:rounded-[40px] rounded-[20px]">
             <BoxHead title={'Bài viết nổi bật'}/>
             {dataHome?.articlesFeatured && (
-              <SliderWrapper items={dataHome.articlesFeatured} />
+              <BrandSlider items={dataHome.articlesFeatured} />
             )}
             <div className="text-center border-[#0000001A] sm:pt-[40px] pt-[30px] sm:pb-[62px] pb-[26px]">
               <Link
                 className="nav-link border-[1px] text-[16px] font-[500] px-[63px] py-[16px] rounded-[62px] text-black inline-block sm:w-auto w-[100%] hover:bg-amber-300" to="#">
-              Xem Tất Cả
+                Xem Tất Cả
               </Link>
             </div>
           </div>

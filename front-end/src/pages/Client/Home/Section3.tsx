@@ -8,7 +8,8 @@ const Section3 = () => {
   return (
     <>
       {/* Section 3 */}
-      <div className="sm:pb-[62px] pb-[40px]">
+      <div
+        className="sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
           <BoxHead title={'Thời trang mới'}/>
           {dataHome?.productsNew && (
@@ -23,7 +24,7 @@ const Section3 = () => {
                 text-black inline-block sm:w-auto
                 w-[100%] hover:bg-amber-300
               "
-              to="#"
+              to=""
             >
               Xem Tất Cả
             </Link>

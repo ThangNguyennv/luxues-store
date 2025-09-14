@@ -6,7 +6,7 @@ import 'swiper/css/pagination'
 import CardItem from '../CardItem/CardItem'
 import { Link } from 'react-router-dom'
 
-type BaseItem = {
+export type BaseItem = {
   slug?: string,
   title: string
   thumbnail: string
