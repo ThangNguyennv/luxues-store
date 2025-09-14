@@ -1,7 +1,10 @@
+import { useInView } from 'react-intersection-observer'
 import backgroundHome from '~/assets/images/Home/background-home.png'
 import star from '~/assets/images/Home/star.svg'
+import CountUp from 'react-countup'
 
 const Section1 = () => {
+  const { ref, inView } = useInView({ triggerOnce: true }) // chỉ chạy 1 lần khi vào view
   return (
     <>
       {/* Section 1 */}
@@ -19,16 +22,24 @@ const Section1 = () => {
                 Xem Ngay
               </a>
               <div className="flex flex-wrap xl:mt-[50px] mt-[30px] sm:justify-start justify-center sm:text-left text-center sm:gap-[0] gap-x-[75px] gap-y-[10px]">
-                <div className="sm:pr-[32px] sm:border-r border-[#0000001A] sm:mr-[32px]">
-                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">200+</div>
-                  <div className="font-[400] xl:text-[16px] text-[12px] text-[#00000099]">Thương Hiệu</div>
+                <div ref={ref} className="sm:pr-[32px] sm:border-r border-[#0000001A] sm:mr-[32px]">
+                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">
+                    {inView && <CountUp start={0} end={200} duration={2} />}+
+                  </div>
+                  <div className="font-[400] xl:text-[16px] text-[12px] text-[#00000099]">
+                    Thương Hiệu
+                  </div>
                 </div>
                 <div className="sm:pr-[32px] sm:border-r border-[#0000001A] sm:mr-[32px]">
-                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">2,000+</div>
+                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">
+                    {inView && <CountUp start={0} end={2000} duration={2} />}+
+                  </div>
                   <div className="font-[400] xl:text-[16px] text-[12px] text-[#00000099]">Sản Phẩm Chất Lượng</div>
                 </div>
                 <div className="sm:pr-[32px] sm:border-r border-[#0000001A] sm:mr-[32px]">
-                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">30,000+</div>
+                  <div className="text-primary xl:text-[40px] text-[24px] font-[700]">
+                    {inView && <CountUp start={0} end={30000} duration={2} />}+
+                  </div>
                   <div className="font-[400] xl:text-[16px] text-[12px] text-[#00000099]">Khách Hàng</div>
                 </div>
               </div>
