@@ -23,6 +23,7 @@ export const index = async (req: Request, res: Response) => {
       countProducts
     )
     // End Pagination
+    
     const allProducts = await Product
       .find(find)
       .sort({ position: 'desc' })
@@ -80,10 +81,12 @@ export const category = async (req: Request, res: Response) => {
 
     const listSubCategoryId = listSubCategory.map((item) => item.id)
 
-    const products = await Product.find({
-      deleted: false,
-      product_category_id: { $in: [category.id, ...listSubCategoryId] }
-    }).sort({ position: 'desc' })
+    const products = await Product
+      .find({
+        deleted: false,
+        product_category_id: { $in: [category.id, ...listSubCategoryId] }
+      })
+      .sort({ position: 'desc' })
 
     const newProducts = productsHelper.priceNewProducts(
       products as OneProduct[]

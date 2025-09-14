@@ -1,17 +1,42 @@
 import { Request, Response } from 'express'
 import Article from '~/models/article.model'
 import ArticleCategory from '~/models/article-category.model'
+import paginationHelpers from '~/helpers/pagination'
 
 // [GET] /articles
 export const index = async (req: Request, res: Response) => {
   try {
-    const articles = await Article.find({
-      deleted: false
-    }).sort({ position: 'desc' })
+    interface Find {
+      deleted: boolean;
+      status?: string;
+      title?: RegExp;
+    }
+    const find: Find = { deleted: false }
+
+    // Pagination
+      const countProducts = await Article.countDocuments(find)
+      const objectPagination = paginationHelpers(
+        { currentPage: 1, limitItems: 20 },
+        req.query,
+        countProducts
+      )
+    // End Pagination
+
+    const allArticles = await Article
+      .find(find)
+      .sort({ position: 'desc' })
+    const articles = await Article
+      .find(find)
+      .sort({ position: 'desc' })
+      .limit(objectPagination.limitItems)
+      .skip(objectPagination.skip)
+
     res.json({
       code: 200,
       message: 'Thành công!',
-      articles: articles
+      articles: articles,
+      pagination: objectPagination,
+      allArticles: allArticles
     })
   } catch (error) {
     res.json({
@@ -47,14 +72,18 @@ export const category = async (req: Request, res: Response) => {
     const listSubCategory = await getSubArticle(category.id)
     const listSubCategoryId = listSubCategory.map((item) => item.id)
 
-    const articles = await Article.find({
-      deleted: false,
-      article_category_id: { $in: [category.id, ...listSubCategoryId] }
-    }).sort({ position: 'desc' })
+    const articles = await Article
+      .find({
+        deleted: false,
+        article_category_id: { $in: [category.id, ...listSubCategoryId] }
+      })
+      .sort({ position: 'desc' })
+  
     res.json({
       code: 200,
       message: 'Thành công!',
-      articles: articles
+      articles: articles,
+      pageTitle: category.title
     })
   } catch (error) {
     res.json({
