@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchCreateArticleAPI } from '~/apis/admin/article.api'
-import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { ArticleInfoInterface } from '~/types/article.type'

@@ -1,6 +1,6 @@
 import { fetchChangeStatusWithChildren, fetchDeleteArticleCategoryAPI } from '~/apis/admin/articleCategory.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
 import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursiveForArticle'
 import type { UpdatedBy } from '~/types/helper.type'

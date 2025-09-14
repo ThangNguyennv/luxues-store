@@ -25,3 +25,7 @@ export interface ArticleDetailInterface {
   article: ArticleInfoInterface
 }
 
+export interface ArticlesWithCategoryDetailInterface {
+  articles: ArticleInfoInterface[],
+  pageTitle: string
+}

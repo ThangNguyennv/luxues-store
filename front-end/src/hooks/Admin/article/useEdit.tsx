@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { fetchDetailArticleAPI, fetchEditArticleAPI } from '~/apis/admin/article.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
-import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategory'
+import { useArticleCategoryContext } from '~/contexts/admin/ArticleCategoryContext'
 import type { ArticleDetailInterface, ArticleInfoInterface } from '~/types/article.type'
 import { useAuth } from '~/contexts/admin/AuthContext'
 

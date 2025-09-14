@@ -20,14 +20,14 @@ import User from './pages/admin/User'
 import Login from './pages/admin/Auth/Login'
 import Permission from './pages/admin/Role/Permission'
 import EditMyAccount from './pages/admin/MyAccount/Edit'
-import DetailProduct from './pages/admin/Product/Detail'
+import DetailProduct from './pages/Client/Product/Detail'
 import EditProduct from './pages/admin/Product/Edit'
 import CreateProduct from './pages/admin/Product/Create'
 import CreateProductCategory from './pages/admin/ProductCategory/Create'
 import DetailProductCategory from './pages/admin/ProductCategory/Detail'
 import EditProductCategory from './pages/admin/ProductCategory/Edit'
 import CreateArticle from './pages/admin/Article/Create'
-import DetailArticle from './pages/admin/Article/Detail'
+import DetailArticle from './pages/Client/Article/Detail'
 import EditArticle from './pages/admin/Article/Edit'
 import DetailArticleCategory from './pages/admin/ArticleCategory/Detail'
 import EditArticleCategory from './pages/admin/ArticleCategory/Edit'
@@ -55,7 +55,6 @@ import ChangePassword from './pages/client/MyAccount/ChangePassword'
 import LayoutUser from './layouts/client/layoutUser/LayoutUser'
 import ForgotPassword from './pages/admin/Auth/ForgotPassword'
 import ProductClient from './pages/client/Product'
-import Detail from './pages/client/Product/Detail'
 import Cart from './pages/client/Cart'
 import Checkout from './pages/client/Checkout'
 import Success from './pages/client/Checkout/Success'
@@ -69,6 +68,8 @@ import ProductsNew from './pages/Client/Product/ProductsNew'
 import ProductsFeatured from './pages/Client/Product/ProductsFeatured'
 import ArticlesNew from './pages/Client/Article/ArticlesNew'
 import ArticlesFeatured from './pages/Client/Article/ArticlesFeatured'
+import ArticleClient from './pages/Client/Article'
+import ArticleCategory from './pages/Client/Article/Category'
 
 function App() {
   useEffect(() => {
@@ -88,14 +89,14 @@ function App() {
             <Route path='products'>
               <Route index element={<ProductClient />}/>
               <Route path=':slugCategory' element={<ProductCategory />}/>
-              <Route path='detail/:slugProduct' element={<Detail />}/>
+              <Route path='detail/:slugProduct' element={<DetailProduct />}/>
               <Route path='productsNew' element={<ProductsNew />}/>
               <Route path='productsFeatured' element={<ProductsFeatured />}/>
             </Route>
             <Route path='articles'>
-              <Route index element={''}/>
-              <Route path=':slugArticle' element={''}/>
-              <Route path='detail/:slugArticle' element={''}/>
+              <Route index element={<ArticleClient />}/>
+              <Route path=':slugCategory' element={<ArticleCategory />}/>
+              <Route path='detail/:slugArticle' element={<DetailArticle />}/>
               <Route path='articlesNew' element={<ArticlesNew />}/>
               <Route path='articlesFeatured' element={<ArticlesFeatured />}/>
             </Route>

@@ -238,6 +238,7 @@ const Header = () => {
                                   : undefined
                               }))
                             }
+                            items={'products'}
                           />
                         )}
                       </div>
@@ -294,6 +295,7 @@ const Header = () => {
                                   : undefined
                               }))
                             }
+                            items={'articles'}
                           />
                         )}
                       </div>

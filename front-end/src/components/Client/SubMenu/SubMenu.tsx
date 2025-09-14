@@ -21,16 +21,17 @@ interface Parent {
 }
 
 interface SubMenuProps {
-  dataDropdown: Parent[]
+  dataDropdown: Parent[],
+  items: string
 }
 
-const SubMenu = ({ dataDropdown }: SubMenuProps) => {
+const SubMenu = ({ dataDropdown, items }: SubMenuProps) => {
   return (
     <div className="grid grid-cols-3 gap-[10px] p-[24px] bg-white shadow-lg w-full divide-x divide-black">
       {dataDropdown.map((parent) => (
         <div key={parent._id}>
           <Link
-            to={`/products/${parent.slug}`}
+            to={`/${items}/${parent.slug}`}
             className="font-[600] uppercase mb-[12px] border-b-[2px] border-black inline-block"
           >
             {parent.title}
@@ -39,7 +40,7 @@ const SubMenu = ({ dataDropdown }: SubMenuProps) => {
             {parent.children?.map((sub) => (
               <div key={sub._id}>
                 <Link
-                  to={`/products/${sub.slug}`}
+                  to={`/${items}/${sub.slug}`}
                   className="font-semibold text-gray-800 hover:text-[#FFAB19]"
                 >
                   {sub.title}
@@ -49,7 +50,7 @@ const SubMenu = ({ dataDropdown }: SubMenuProps) => {
                     {sub.children.map((child) => (
                       <Link
                         key={child._id}
-                        to={`/products/${child.slug}`}
+                        to={`/${items}/${child.slug}`}
                         className="hover:text-[#FFAB19]"
                       >
                         {child.title}

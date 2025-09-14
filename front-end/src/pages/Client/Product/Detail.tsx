@@ -5,7 +5,7 @@ import { fetchDetailProductAPI } from '~/apis/client/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
 
-const Detail = () => {
+const DetailProduct = () => {
   const [productDetail, setProductDetail] = useState<ProductInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
   const params = useParams()
@@ -93,4 +93,4 @@ const Detail = () => {
   )
 }
 
-export default Detail
+export default DetailProduct

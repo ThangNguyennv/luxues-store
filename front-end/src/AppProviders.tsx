@@ -8,11 +8,12 @@ import { ProductProvider } from './contexts/admin/ProductContext'
 import { ProductClientProvider } from './contexts/client/ProductContext'
 import { composeProviders } from './composeProviders'
 import { ArticleProvider } from './contexts/admin/ArticleContext'
-import { ArticleCategoryProvider } from './contexts/admin/ArticleCategory'
+import { ArticleCategoryProvider } from './contexts/admin/ArticleCategoryContext'
 import { AuthClientProvider } from './contexts/client/AuthContext'
 import { SettingGeneralProvider } from './contexts/client/SettingGeneralContext'
 import { HomeClientProvider } from './contexts/client/HomeContext'
 import { OrderProvider } from './contexts/admin/OrderContext'
+import { ArticleClientProvider } from './contexts/client/ArticleContext'
 
 function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>
@@ -29,6 +30,7 @@ export const AppProviders = composeProviders(
   ProductCategoryProvider,
   ProductProvider,
   OrderProvider,
+  ArticleClientProvider,
   ProductClientProvider,
   ArticleProvider,
   ArticleCategoryProvider
