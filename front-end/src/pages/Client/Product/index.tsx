@@ -7,7 +7,7 @@ import { useProductContext } from '~/contexts/client/ProductContext'
 
 const ProductClient = () => {
   const { stateProduct, fetchProduct } = useProductContext()
-  const { products, pagination, keyword } = stateProduct
+  const { products, pagination } = stateProduct
   const [searchParams, setSearchParams] = useSearchParams()
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''

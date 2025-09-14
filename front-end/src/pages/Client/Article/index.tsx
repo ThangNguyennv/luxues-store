@@ -7,7 +7,7 @@ import { useArticleContext } from '~/contexts/client/ArticleContext'
 
 const ArticleClient = () => {
   const { stateArticle, fetchArticle } = useArticleContext()
-  const { articles, pagination, keyword } = stateArticle
+  const { articles, pagination } = stateArticle
   const [searchParams, setSearchParams] = useSearchParams()
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''

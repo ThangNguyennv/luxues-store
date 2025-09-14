@@ -9,7 +9,7 @@ const ArticlesFeatured = () => {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="container flex flex-col mb-[100px]">
+        <div className="container flex flex-col mb-[150px]">
           <BoxHead title={'Bài viết nổi bật'}/>
           {dataHome && (
             <div className='grid grid-cols-4 gap-[15px]'>

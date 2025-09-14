@@ -22,7 +22,7 @@ const Search = () => {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="container flex flex-col gap-[10px] py-[40px]">
+        <div className="container flex flex-col gap-[10px] mb-[150px]">
           <BoxHead title="Kết quả tìm kiếm"/>
           {products && (
             <div className='grid grid-cols-4 gap-[15px]'>

@@ -21,40 +21,64 @@ import { FaRegRegistered } from 'react-icons/fa'
 import Skeleton from '@mui/material/Skeleton'
 import { fetchHomeAPI } from '~/apis/client/home.api'
 import SubMenu from '../SubMenu/SubMenu'
-import type { HomeInterface } from '~/types/home.type'
 import { motion } from 'framer-motion'
 import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
 import { fetchCartAPI } from '~/apis/client/cart.api'
-import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
-import { fetchSearchAPI } from '~/apis/client/search.api'
+import type { CartInfoInterface } from '~/types/cart.type'
 import { useProductContext } from '~/contexts/client/ProductContext'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
-  const { settingGeneral, setSettingGeneral } = useSettingGeneral()
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
-  const { stateProduct, dispatchProduct, fetchProduct } = useProductContext()
-  const { products, keyword } = stateProduct
+  const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
+  const { stateProduct, dispatchProduct } = useProductContext()
+  const { keyword } = stateProduct
+  const { dataHome, setDataHome } = useHome()
+  const { settingGeneral, setSettingGeneral } = useSettingGeneral()
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const currentPage = parseInt(searchParams.get('page') || '1', 10)
-  const currentKeyword = searchParams.get('keyword') || ''
-  const currentSortKey = searchParams.get('sortKey') || ''
-  const currentSortValue = searchParams.get('sortValue') || ''
 
-  // useEffect(() => {
-  //   fetchProduct({
-  //     page: currentPage,
-  //     keyword: currentKeyword,
-  //     sortKey: currentSortKey,
-  //     sortValue: currentSortValue
-  //   })
-  // }, [currentPage, currentKeyword, currentSortKey, currentSortValue, fetchProduct])
+  const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
+    // lấy từ sessionStorage khi khởi tạo
+    const saved = sessionStorage.getItem('closeTopHeader')
+    return saved === 'true'
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const [settingRes, userRes, homeRes, cartRes] = await Promise.all([
+          fetchSettingGeneralAPI(),
+          fetchInfoUserAPI(),
+          fetchHomeAPI(),
+          fetchCartAPI()
+        ])
+        setSettingGeneral(settingRes.settingGeneral)
+        setAccountUser(userRes.accountUser)
+        setDataHome(homeRes)
+        setCartDetail(cartRes.cartDetail)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log('error' + error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    const kw = searchParams.get('keyword') || ''
+    if (kw !== keyword) {
+      dispatchProduct({ type: 'SET_DATA', payload: { keyword: kw } })
+    }
+  }, [dispatchProduct, keyword, searchParams])
 
   const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
@@ -69,34 +93,8 @@ const Header = () => {
       newParams.delete('sortKey')
       newParams.delete('sortValue')
     }
-
     setSearchParams(newParams)
   }
-  const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
-    // lấy từ sessionStorage khi khởi tạo
-    const saved = sessionStorage.getItem('closeTopHeader')
-    return saved === 'true'
-  })
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true)
-        const [settingRes, userRes] = await Promise.all([
-          fetchSettingGeneralAPI(),
-          fetchInfoUserAPI()
-        ])
-        setSettingGeneral(settingRes.settingGeneral)
-        setAccountUser(userRes.accountUser)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('error' + error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [setSettingGeneral])
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -128,29 +126,14 @@ const Header = () => {
     sessionStorage.setItem('closeTopHeader', 'true')
   }
 
-  const { dataHome, setDataHome } = useHome()
-  useEffect(() => {
-    fetchHomeAPI().then((res: HomeInterface) => {
-      setDataHome(res)
-    })
-  }, [])
-
-  const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
-  useEffect(() => {
-    fetchCartAPI().then((res: CartDetailInterface) => {
-      setCartDetail(res.cartDetail)
-    })
-  }, [])
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     updateSearchParams('keyword', keyword)
-    setTimeout(() => {
-      navigate(`/search?keyword=${keyword}`)
-    })
+    navigate(`/search?keyword=${keyword}`)
   }
   const handleChangeKeyword = (value: string) => {
     dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })
+    updateSearchParams('keyword', value)
   }
 
   return (
