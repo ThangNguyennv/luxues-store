@@ -4,9 +4,9 @@ import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import MenuItem from '@mui/material/MenuItem'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
 import type { UserInfoInterface } from '~/types/user.type'
@@ -27,6 +27,8 @@ import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
 import { fetchCartAPI } from '~/apis/client/cart.api'
 import type { CartDetailInterface, CartInfoInterface } from '~/types/cart.type'
+import { fetchSearchAPI } from '~/apis/client/search.api'
+import { useProductContext } from '~/contexts/client/ProductContext'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -37,6 +39,39 @@ const Header = () => {
   const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
+  const { stateProduct, dispatchProduct, fetchProduct } = useProductContext()
+  const { products, keyword } = stateProduct
+  const [searchParams, setSearchParams] = useSearchParams()
+  const currentPage = parseInt(searchParams.get('page') || '1', 10)
+  const currentKeyword = searchParams.get('keyword') || ''
+  const currentSortKey = searchParams.get('sortKey') || ''
+  const currentSortValue = searchParams.get('sortValue') || ''
+
+  // useEffect(() => {
+  //   fetchProduct({
+  //     page: currentPage,
+  //     keyword: currentKeyword,
+  //     sortKey: currentSortKey,
+  //     sortValue: currentSortValue
+  //   })
+  // }, [currentPage, currentKeyword, currentSortKey, currentSortValue, fetchProduct])
+
+  const updateSearchParams = (key: string, value: string): void => {
+    const newParams = new URLSearchParams(searchParams)
+    if (value) {
+      newParams.set(key, value)
+    } else {
+      newParams.delete(key)
+    }
+
+    // Nếu xóa sortKey hoặc sortValue → xóa cả 2
+    if ((key === 'sortKey' || key === 'sortValue') && !value) {
+      newParams.delete('sortKey')
+      newParams.delete('sortValue')
+    }
+
+    setSearchParams(newParams)
+  }
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
@@ -106,6 +141,17 @@ const Header = () => {
       setCartDetail(res.cartDetail)
     })
   }, [])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    updateSearchParams('keyword', keyword)
+    setTimeout(() => {
+      navigate(`/search?keyword=${keyword}`)
+    })
+  }
+  const handleChangeKeyword = (value: string) => {
+    dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })
+  }
 
   return (
     <>
@@ -305,17 +351,24 @@ const Header = () => {
               </ul>
             </nav>
             <form
+              onSubmit={handleSubmit}
               className="
-                flex-1 lg:flex
-                hidden items-center
-                gap-x-[12px] px-[16px] py-[10px]
-                bg-[#F0F0F0] rounded-[62px] text-[16px]"
-              action="#"
+                flex-1 lg:flex hidden
+                items-center gap-x-[12px]
+                px-[16px] py-[10px] bg-[#F0F0F0]
+                rounded-[62px] text-[16px]"
             >
-              <button className="text-[#00000066]">
+              <button type='submit' className="text-[#00000066]">
                 <IoSearch />
               </button>
-              <input className="bg-transparent flex-1" type="" placeholder="Tìm kiếm sản phẩm..."/>
+              <input
+                onChange={(event) => handleChangeKeyword(event.target.value)}
+                className="bg-transparent flex-1"
+                type="text"
+                name='keyword'
+                value={keyword}
+                placeholder="Tìm kiếm sản phẩm..."
+              />
             </form>
             <div className="flex items-center gap-x-[27px] text-[26px]">
               <a className="lg:hidden inline" href="#">
@@ -327,7 +380,9 @@ const Header = () => {
               <Link to={'/cart'} className='relative'>
                 <IoMdCart className='hover:text-[#00A7E6]'/>
                 {cartDetail && cartDetail.products.length > 0 ? (
-                  <div className='absolute border rounded-[15px] text-center text-[13px] px-[5px] right-[-10px] top-[-10px] bg-amber-50'>{cartDetail.products.length}</div>
+                  <div className='absolute border rounded-[15px] text-center text-[13px] px-[5px] right-[-10px] top-[-10px] bg-amber-50'>
+                    {cartDetail.products.length}
+                  </div>
                 ) : ''}
               </Link>
               {accountUser ? (

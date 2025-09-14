@@ -50,7 +50,6 @@ const ArticleAdmin = () => {
             <form onSubmit={(event) => handleSubmit(event)} className='flex gap-[5px]'>
               <select
                 name="type"
-                id=""
                 value={actionType}
                 onChange={(e) => setActionType(e.target.value)}
                 className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'

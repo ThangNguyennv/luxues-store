@@ -70,6 +70,7 @@ import ArticlesNew from './pages/Client/Article/ArticlesNew'
 import ArticlesFeatured from './pages/Client/Article/ArticlesFeatured'
 import ArticleClient from './pages/Client/Article'
 import ArticleCategory from './pages/Client/Article/Category'
+import Search from './pages/Client/Search/Search'
 
 function App() {
   useEffect(() => {
@@ -86,6 +87,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LayoutDefault />}>
             <Route index element={<Home />}/>
+            <Route path='search' element={<Search />}/>
             <Route path='products'>
               <Route index element={<ProductClient />}/>
               <Route path=':slugCategory' element={<ProductCategory />}/>
