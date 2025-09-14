@@ -143,12 +143,12 @@ export const permissionsPatch = async (req: Request, res: Response) => {
   try {
     const permissionRequireList = req.body.permissions
     for (const item of permissionRequireList) {
-      const existing = await Role.findById(item.id)
+      const existing = await Role.findById(item._id)
       if (!existing) {
         continue
       }
       await Role.updateOne(
-        { _id: item.id },
+        { _id: item._id },
         { permissions: item.permissions }
       )
     }
