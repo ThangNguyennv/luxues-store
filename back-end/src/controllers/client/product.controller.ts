@@ -88,10 +88,12 @@ export const category = async (req: Request, res: Response) => {
     const newProducts = productsHelper.priceNewProducts(
       products as OneProduct[]
     )
+
     res.json({
       code: 200,
       message: 'Thành công!',
-      products: newProducts
+      products: newProducts,
+      pageTitle: category.title
     })
   } catch (error) {
     res.json({
