@@ -28,4 +28,7 @@ export interface ProductDetailInterface {
   product: ProductInfoInterface
 }
 
-
+export interface ProductsWithCategoryDetailInterface {
+  products: ProductInfoInterface[],
+  pageTitle: string
+}

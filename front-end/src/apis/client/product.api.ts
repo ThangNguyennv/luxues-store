@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { ProductAllResponseInterface, ProductDetailInterface } from '~/types/product.type'
+import type { ProductAllResponseInterface, ProductDetailInterface, ProductsWithCategoryDetailInterface } from '~/types/product.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchAllProductsAPI = async (
@@ -27,9 +27,17 @@ export const fetchProductsAPI = async (): Promise<ProductAllResponseInterface> =
   return response.data
 }
 
-export const fetchDetailProductAPI = async (slug: string): Promise<ProductDetailInterface> => {
+export const fetchDetailProductAPI = async (slugProduct: string): Promise<ProductDetailInterface> => {
   const response = await axios.get(
-    `${API_ROOT}/products/detail/${slug}`,
+    `${API_ROOT}/products/detail/${slugProduct}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchDetailProductCategoryAPI = async (slugCategory: string): Promise<ProductsWithCategoryDetailInterface> => {
+  const response = await axios.get(
+    `${API_ROOT}/products/${slugCategory}`,
     { withCredentials: true }
   )
   return response.data

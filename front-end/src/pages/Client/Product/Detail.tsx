@@ -9,17 +9,17 @@ const Detail = () => {
   const [productDetail, setProductDetail] = useState<ProductInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
   const params = useParams()
-  const slug = params.slug as string
+  const slugProduct = params.slugProduct as string
   const productId = productDetail?._id as string
   const { dispatchAlert } = useAlertContext()
 
   useEffect(() => {
-    if (!slug) return
-    fetchDetailProductAPI(slug)
+    if (!slugProduct) return
+    fetchDetailProductAPI(slugProduct)
       .then((response: ProductDetailInterface) => {
         setProductDetail(response.product)
       })
-  }, [slug])
+  }, [slugProduct])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()

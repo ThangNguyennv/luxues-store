@@ -39,7 +39,7 @@ const SubMenu = ({ dataDropdown }: SubMenuProps) => {
             {parent.children?.map((sub) => (
               <div key={sub._id}>
                 <Link
-                  to={`/products/${parent.slug}/${sub.slug}`}
+                  to={`/products/${sub.slug}`}
                   className="font-semibold text-gray-800 hover:text-[#FFAB19]"
                 >
                   {sub.title}

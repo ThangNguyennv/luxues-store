@@ -64,6 +64,7 @@ import DetailOrder from './pages/admin/Order/Detail'
 import Brand from './pages/admin/Brand'
 import BrandCategory from './pages/admin/BrandCategory'
 import Notification from './pages/admin/Notification'
+import ProductCategory from './pages/Client/Product/Category'
 
 function App() {
   useEffect(() => {
@@ -82,7 +83,8 @@ function App() {
             <Route index element={<Home />}/>
             <Route path='products'>
               <Route index element={<ProductClient />}/>
-              <Route path='detail/:slug' element={<Detail />}/>
+              <Route path=':slugCategory' element={<ProductCategory />}/>
+              <Route path='detail/:slugProduct' element={<Detail />}/>
             </Route>
             <Route path='cart' element={<Cart />}/>
             <Route path='checkout' element={<Checkout />}/>

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
+import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchAllProductsAPI } from '~/apis/client/product.api'
 import { initialState } from '~/reducers/admin/productReducer'
 import { productReducer } from '~/reducers/admin/productReducer'

@@ -22,5 +22,5 @@ export type ProductCategoryActions =
   | { type: 'RESET' }
 
 export interface ProductCategoryDetailInterface {
-    productCategory: ProductCategoryInfoInterface
+  productCategory: ProductCategoryInfoInterface
 }
