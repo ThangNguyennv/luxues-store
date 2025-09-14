@@ -10,7 +10,7 @@ export const fetchCartAPI = async (): Promise<CartDetailInterface> => {
   return response.data
 }
 
-export const fetchAddProductToCartAPI = async (productId: string, quantity: string) => {
+export const fetchAddProductToCartAPI = async (productId: string, quantity: number) => {
   const response = await axios.post(
     `${API_ROOT}/cart/add/${productId}`,
     { quantity },

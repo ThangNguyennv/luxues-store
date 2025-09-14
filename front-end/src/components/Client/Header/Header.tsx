@@ -24,9 +24,8 @@ import SubMenu from '../SubMenu/SubMenu'
 import { motion } from 'framer-motion'
 import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
-import { fetchCartAPI } from '~/apis/client/cart.api'
-import type { CartInfoInterface } from '~/types/cart.type'
 import { useProductContext } from '~/contexts/client/ProductContext'
+import { useCart } from '~/contexts/client/CartContext'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -35,14 +34,13 @@ const Header = () => {
   const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
-  const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
   const { stateProduct, dispatchProduct } = useProductContext()
   const { keyword } = stateProduct
   const { dataHome, setDataHome } = useHome()
   const { settingGeneral, setSettingGeneral } = useSettingGeneral()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-
+  const { cartDetail } = useCart()
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
@@ -53,16 +51,14 @@ const Header = () => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [settingRes, userRes, homeRes, cartRes] = await Promise.all([
+        const [settingRes, userRes, homeRes] = await Promise.all([
           fetchSettingGeneralAPI(),
           fetchInfoUserAPI(),
-          fetchHomeAPI(),
-          fetchCartAPI()
+          fetchHomeAPI()
         ])
         setSettingGeneral(settingRes.settingGeneral)
         setAccountUser(userRes.accountUser)
         setDataHome(homeRes)
-        setCartDetail(cartRes.cartDetail)
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error' + error)

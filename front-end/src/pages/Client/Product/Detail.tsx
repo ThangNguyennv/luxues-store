@@ -1,8 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchAddProductToCartAPI } from '~/apis/client/cart.api'
 import { fetchDetailProductAPI } from '~/apis/client/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { useCart } from '~/contexts/client/CartContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
 
 const DetailProduct = () => {
@@ -10,8 +10,8 @@ const DetailProduct = () => {
   const [quantity, setQuantity] = useState<number>(1)
   const params = useParams()
   const slugProduct = params.slugProduct as string
-  const productId = productDetail?._id as string
   const { dispatchAlert } = useAlertContext()
+  const { addToCart } = useCart()
 
   useEffect(() => {
     if (!slugProduct) return
@@ -23,12 +23,17 @@ const DetailProduct = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const quantity = event.currentTarget.quantity.value
-    const res = await fetchAddProductToCartAPI(productId, quantity)
-    if (res.code === 201) {
+    if (!productDetail) return
+    try {
+      await addToCart(productDetail._id, quantity)
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: res.message, severity: 'success' }
+        payload: { message: 'Đã thêm vào giỏ hàng', severity: 'success' }
+      })
+    } catch (error) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Lỗi khi thêm vào giỏ', severity: 'error' }
       })
     }
   }
