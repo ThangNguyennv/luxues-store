@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import Product from '~/models/product.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+import { convertToSlug } from '~/helpers/convertToSlug';
 
 interface ObjectSearch {
   keyword: string;
@@ -16,9 +17,14 @@ export const index = async (req: Request, res: Response) => {
     let newProducts = []
     if (req.query.keyword) {
       objectSearch.keyword = req.query.keyword as string | never
+      const stringSlug = convertToSlug(String(req.query.keyword))
+      const stringSlugRegex = new RegExp(stringSlug, 'i')
       const regex = new RegExp(objectSearch.keyword, 'i')
       const products = await Product.find({
-        title: regex,
+        $or: [
+          { title: regex },
+          { slug: stringSlugRegex }
+        ],
         deleted: false,
         status: 'active'
       })
