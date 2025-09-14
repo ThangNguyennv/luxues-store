@@ -140,12 +140,9 @@ const permissionSections = [
   }
 ]
 
-
 const Permission = () => {
   const [roles, setRoles] = useState<RolesInfoInterface[]>([])
-  console.log("🚀 ~ Permission.tsx ~ Permission ~ roles:", roles);
   const [permissionsData, setPermissionsData] = useState<PermissionsInterface[]>([])
-  console.log("🚀 ~ Permission.tsx ~ Permission ~ permissionsData:", permissionsData);
   const { dispatchAlert } = useAlertContext()
   const [loading, setLoading] = useState(false)
   const { role } = useAuth()
@@ -185,12 +182,6 @@ const Permission = () => {
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
-        setRoles(prev =>
-          prev.map(role => {
-            const updated = permissionsData.find(p => p._id === String(role._id))
-            return updated ? { ...role, permissions: updated.permissions } : role
-          })
-        )
       }
     } catch (error) {
       alert('error'+ error)
