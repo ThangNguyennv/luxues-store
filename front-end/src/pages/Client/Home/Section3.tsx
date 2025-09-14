@@ -24,7 +24,7 @@ const Section3 = () => {
                 text-black inline-block sm:w-auto
                 w-[100%] hover:bg-amber-300
               "
-              to=""
+              to="/products/productsNew"
             >
               Xem Tất Cả
             </Link>

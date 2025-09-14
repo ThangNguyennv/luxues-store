@@ -65,6 +65,10 @@ import Brand from './pages/admin/Brand'
 import BrandCategory from './pages/admin/BrandCategory'
 import Notification from './pages/admin/Notification'
 import ProductCategory from './pages/Client/Product/Category'
+import ProductsNew from './pages/Client/Product/ProductsNew'
+import ProductsFeatured from './pages/Client/Product/ProductsFeatured'
+import ArticlesNew from './pages/Client/Article/ArticlesNew'
+import ArticlesFeatured from './pages/Client/Article/ArticlesFeatured'
 
 function App() {
   useEffect(() => {
@@ -85,6 +89,15 @@ function App() {
               <Route index element={<ProductClient />}/>
               <Route path=':slugCategory' element={<ProductCategory />}/>
               <Route path='detail/:slugProduct' element={<Detail />}/>
+              <Route path='productsNew' element={<ProductsNew />}/>
+              <Route path='productsFeatured' element={<ProductsFeatured />}/>
+            </Route>
+            <Route path='articles'>
+              <Route index element={''}/>
+              <Route path=':slugArticle' element={''}/>
+              <Route path='detail/:slugArticle' element={''}/>
+              <Route path='articlesNew' element={<ArticlesNew />}/>
+              <Route path='articlesFeatured' element={<ArticlesFeatured />}/>
             </Route>
             <Route path='cart' element={<Cart />}/>
             <Route path='checkout' element={<Checkout />}/>

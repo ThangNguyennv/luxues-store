@@ -23,7 +23,7 @@ const Section4 = () => {
                 text-black inline-block sm:w-auto
                 w-[100%] hover:bg-amber-300
               "
-              to="#"
+              to="/products/productsFeatured"
             >
               Xem Tất Cả
             </Link>
