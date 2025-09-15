@@ -54,10 +54,10 @@ export const index = async (req: Request, res: Response) => {
       sort['position'] = 'desc'
     }
     // // End Sort
-
+    const allCategories = await ProductCategory.find({ deleted: false }).sort(sort)
+  
     // 👉 Query song song bằng Promise.all (giảm round-trip)
-    const [allCategories, parentCategories, accounts] = await Promise.all([
-      ProductCategory.find(find).sort(sort), // all categories
+    const [parentCategories, accounts] = await Promise.all([
       ProductCategory.find(parentFind)
         .sort(sort)
         .limit(objectPagination.limitItems)
@@ -163,7 +163,6 @@ export const changeMulti = async (req: Request, res: Response) => {
       ACTIVE = 'active',
       INACTIVE = 'inactive',
       DELETEALL = 'delete-all',
-      CHANGEPOSITION = 'change-position',
     }
     switch (type) {
       case Key.ACTIVE:
@@ -194,19 +193,6 @@ export const changeMulti = async (req: Request, res: Response) => {
         res.json({
           code: 204,
           message: `Xóa thành công ${ids.length} danh mục sản phẩm!`
-        })
-        break
-      case Key.CHANGEPOSITION:
-        for (const item of ids) {
-          const [id, position] = item.split('-')
-          await ProductCategory.updateOne(
-            { _id: { $in: id } },
-            { position: Number(position), $push: { updatedBy: updatedBy } }
-          )
-        }
-        res.json({
-          code: 200,
-          message: `Đổi vị trí thành công ${ids.length} danh mục sản phẩm!`
         })
         break
       default:

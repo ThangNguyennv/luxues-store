@@ -75,6 +75,9 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
+    const allProducts = await Product.find({
+      deleted: false
+    })
 
     res.json({
       code: 200,
@@ -83,7 +86,8 @@ export const index = async (req: Request, res: Response) => {
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
       pagination: objectPagination,
-      accounts: accounts
+      accounts: accounts,
+      allProducts: allProducts
     })
   } catch (error) {
     res.json({
@@ -137,7 +141,6 @@ export const changeMulti = async (req: Request, res: Response) => {
       ACTIVE = 'active',
       INACTIVE = 'inactive',
       DELETEALL = 'delete-all',
-      CHANGEPOSITION = 'change-position',
     }
     switch (type) {
       case Key.ACTIVE:
@@ -168,19 +171,6 @@ export const changeMulti = async (req: Request, res: Response) => {
         res.json({
           code: 204,
           message: `Xóa thành công ${ids.length} sản phẩm!`
-        })
-        break
-      case Key.CHANGEPOSITION:
-        for (const item of ids) {
-          const [id, position] = item.split('-')
-          await Product.updateOne(
-            { _id: { $in: id } },
-            { position: Number(position), $push: { updatedBy: updatedBy } }
-          )
-        }
-        res.json({
-          code: 200,
-          message: `Đổi vị trí thành công ${ids.length} sản phẩm!`
         })
         break
       default:
