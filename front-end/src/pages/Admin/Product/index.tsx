@@ -16,6 +16,7 @@ const ProductAdmin = () => {
   const {
     dispatchProduct,
     products,
+    allProducts,
     filterStatus,
     pagination,
     keyword,
@@ -41,13 +42,14 @@ const ProductAdmin = () => {
     <>
       {role && role.permissions.includes('products_view') && (
         <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md fixed w-[82%]'>
-          <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách trang phục</h1>
+          <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách sản phẩm</h1>
           <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
             <div className='flex items-center justify-between text-[15px]'>
               <FilterStatus
                 filterStatus={filterStatus}
                 currentStatus={currentStatus}
                 handleFilterStatus={handleFilterStatus}
+                items={allProducts}
               />
               <Search
                 keyword={keyword}
@@ -68,7 +70,6 @@ const ProductAdmin = () => {
                 <option value="active">Hoạt động</option>
                 <option value="inactive">Dừng hoạt động</option>
                 <option value="delete-all">Xóa tất cả</option>
-                <option value="change-position">Thay đổi vị trí</option>
               </select>
               <button
                 type="submit"

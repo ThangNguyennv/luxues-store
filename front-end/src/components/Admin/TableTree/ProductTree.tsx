@@ -44,7 +44,7 @@ const ProductTree = ({
   return (
     <>
       <TableRow key={productCategory._id}>
-        <TableCell align="center" sx={{ padding: '0px 8px' }}>
+        <TableCell align="center" sx={{ padding: '0px 2px' }}>
           <Checkbox
             checked={selectedIds.includes(productCategory._id)}
             onChange={(e) => handleCheckbox(productCategory._id, e.target.checked)}
@@ -62,26 +62,7 @@ const ProductTree = ({
             />
           </div>
         </TableCell>
-        <TableCell align="center">
-          <input
-            type="number"
-            value={productCategory ? productCategory.position : ''}
-            min={1}
-            onChange={(e) => {
-              const newPosition = parseInt(e.target.value, 10)
-              dispatchProductCategory({
-                type: 'SET_DATA',
-                payload: {
-                  productCategories: productCategories.map((p) =>
-                    p._id === productCategory._id ? { ...p, position: newPosition } : p
-                  )
-                }
-              })
-            }}
-            className="border rounded-[5px] border-[#00171F] w-[50px] p-[2px]"
-          />
-        </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           <button
             onClick={() => handleToggleStatus(productCategory.status, productCategory._id)}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
@@ -90,7 +71,7 @@ const ProductTree = ({
             {productCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           {creator ? (
             <>
               <p className="text-sm font-medium text-gray-800">{creator.fullName}</p>
@@ -100,7 +81,7 @@ const ProductTree = ({
             <p className="text-sm italic text-gray-400">Không xác định</p>
           )}
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           {updatedBy ? (
             updater ? (
               <>
@@ -114,7 +95,7 @@ const ProductTree = ({
             <p className="text-xs italic text-gray-400">Chưa có ai cập nhật</p>
           )}
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           <Link
             to={`/admin/products-category/detail/${productCategory._id}`}
             className="nav-link border rounded-[5px] bg-[#0542AB] p-[5px] text-white"

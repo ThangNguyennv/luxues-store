@@ -5,7 +5,7 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useCart } from '~/contexts/client/CartContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
 
-const DetailProduct = () => {
+const DetailProductClient = () => {
   const [productDetail, setProductDetail] = useState<ProductInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
   const params = useParams()
@@ -98,4 +98,4 @@ const DetailProduct = () => {
   )
 }
 
-export default DetailProduct
+export default DetailProductClient

@@ -9,6 +9,7 @@ import { useProductCategory } from '~/hooks/admin/productCategory/useProductCate
 const ProductCategoryAdmin = () => {
   const {
     productCategories,
+    allProductCategories,
     dispatchProductCategory,
     filterStatus,
     pagination,
@@ -32,13 +33,14 @@ const ProductCategoryAdmin = () => {
     <>
       {role && role.permissions.includes('products-category_view') && (
         <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md h-[820px] fixed w-[80%]'>
-          <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục trang phục</h1>
+          <h1 className="text-[24px] font-[700] text-[#000000]">Danh mục sản phẩm</h1>
           <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
             <div className='flex items-center justify-between text-[15px]'>
               <FilterStatus
                 filterStatus={filterStatus}
                 currentStatus={currentStatus}
                 handleFilterStatus={handleFilterStatus}
+                items={allProductCategories}
               />
               <Search
                 keyword={keyword}
@@ -59,7 +61,6 @@ const ProductCategoryAdmin = () => {
                 <option value="active">Hoạt động</option>
                 <option value="inactive">Dừng hoạt động</option>
                 <option value="delete-all">Xóa tất cả</option>
-                <option value="change-position">Thay đổi vị trí</option>
               </select>
               <button
                 type='submit'

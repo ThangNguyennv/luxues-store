@@ -17,6 +17,7 @@ export interface ProductAllResponseInterface extends HelperInterface, CurrentPar
 
 export interface ProductStates extends HelperInterface, ParamsInterface {
   products: ProductInfoInterface[],
+  allProducts: ProductInfoInterface[]
 }
 
 export type ProductActions =

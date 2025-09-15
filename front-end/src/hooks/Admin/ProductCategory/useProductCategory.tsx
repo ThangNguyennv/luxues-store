@@ -7,7 +7,7 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useProductCategory = () => {
   const { stateProductCategory, fetchProductCategory, dispatchProductCategory } = useProductCategoryContext()
-  const { productCategories, filterStatus, pagination, keyword } = stateProductCategory
+  const { productCategories, filterStatus, pagination, keyword, allProductCategories } = stateProductCategory
   const { dispatchAlert } = useAlertContext()
   const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -80,17 +80,7 @@ export const useProductCategory = () => {
 
     const selectedProducts = productCategories.filter(productCategory => selectedIds.includes(productCategory._id))
     let result: string[] = []
-
-    if (actionType === 'change-position') {
-      result = selectedProducts.map(productCategory => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${productCategory._id}"]`
-        )
-        return `${productCategory._id}-${positionInput?.value || ''}`
-      })
-    } else {
-      result = selectedProducts.map(productCategory => productCategory._id)
-    }
+    result = selectedProducts.map(productCategory => productCategory._id)
 
     const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
 
@@ -142,6 +132,7 @@ export const useProductCategory = () => {
 
   return {
     productCategories,
+    allProductCategories,
     dispatchProductCategory,
     filterStatus,
     pagination,

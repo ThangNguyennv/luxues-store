@@ -7,7 +7,7 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useProduct = () => {
   const { stateProduct, fetchProduct, dispatchProduct } = useProductContext()
-  const { products, pagination, filterStatus, keyword } = stateProduct
+  const { products, pagination, allProducts, filterStatus, keyword } = stateProduct
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
@@ -95,17 +95,7 @@ export const useProduct = () => {
     )
 
     let result: string[] = []
-    if (typeChange === 'change-position') {
-      result = selectedProducts.map(product => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${product._id}"]`
-        )
-        const position = positionInput?.value || ''
-        return `${product._id}-${position}`
-      })
-    } else {
-      result = selectedProducts.map(product => product._id)
-    }
+    result = selectedProducts.map(product => product._id)
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
@@ -165,6 +155,7 @@ export const useProduct = () => {
   return {
     dispatchProduct,
     products,
+    allProducts,
     filterStatus,
     pagination,
     keyword,

@@ -5,7 +5,7 @@ export const initialState: ProductStates = {
   products: [],
   accounts: [],
   filterStatus: [],
-  pagination:  {
+  pagination: {
     currentPage: 1,
     limitItems: 3,
     skip: 0,
@@ -14,7 +14,8 @@ export const initialState: ProductStates = {
   keyword: '',
   sortKey: '',
   sortValue: '',
-  loading: false
+  loading: false,
+  allProducts: []
 }
 
 export function productReducer(

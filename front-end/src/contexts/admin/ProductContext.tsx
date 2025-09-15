@@ -47,6 +47,7 @@ export const ProductProvider = ({ children }: { children: React.ReactNode }) => 
             pagination: res.pagination,
             filterStatus: res.filterStatus,
             keyword: res.keyword,
+            allProducts: res.allProducts,
             sortKey,
             sortValue
           }

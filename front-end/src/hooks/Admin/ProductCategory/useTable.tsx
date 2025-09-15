@@ -37,10 +37,16 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusWithChildren(newStatus, id)
     if (response.code === 200) {
+      const updatedAllProductsCategory = stateProductCategory.allProductCategories.map(productCategory =>
+        productCategory._id === id
+          ? { ...productCategory, status: newStatus, updatedBy: [...(productCategory.updatedBy || []), currentUser] }
+          : productCategory
+      )
       dispatchProductCategory({
         type: 'SET_DATA',
         payload: {
-          productCategories: updateStatusRecursiveForProduct(productCategories, id, newStatus, currentUser)
+          productCategories: updateStatusRecursiveForProduct(productCategories, id, newStatus, currentUser),
+          allProductCategories: updatedAllProductsCategory
         }
       })
       dispatchAlert({
@@ -52,6 +58,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
       return
     }
   }
+
   const handleDelete = async () => {
     if (!selectedId) return
     const response = await fetchDeleteProductCategoryAPI(selectedId)
