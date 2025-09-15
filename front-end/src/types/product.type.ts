@@ -24,6 +24,12 @@ export type ProductActions =
   | { type: 'SET_DATA'; payload: Partial<ProductStates> }
   | { type: 'RESET' }
 
+export type ProductClientActions =
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DATA'; payload: Partial<ProductStates> }
+  | { type: 'RESET' }
+  | { type: 'SET_KEYWORD'; payload: string}
+
 export interface ProductDetailInterface {
   product: ProductInfoInterface
 }

@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchAllProductsAPI } from '~/apis/client/product.api'
-import { initialState } from '~/reducers/admin/productReducer'
-import { productReducer } from '~/reducers/admin/productReducer'
+import { initialState } from '~/reducers/client/productReducer'
+import { productReducer } from '~/reducers/client/productReducer'
 import type { ProductActions, ProductAllResponseInterface, ProductStates } from '~/types/product.type'
 
 interface ProductContextType {
@@ -41,10 +41,14 @@ export const ProductClientProvider = ({ children }: { children: React.ReactNode 
           payload: {
             products: res.products,
             pagination: res.pagination,
-            keyword: res.keyword,
             sortKey,
             sortValue
           }
+        })
+
+        dispatchProduct({
+          type: 'SET_KEYWORD',
+          payload: res.keyword // nếu dùng payload: string
         })
       } finally {
         dispatchProduct({ type: 'SET_LOADING', payload: false })

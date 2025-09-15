@@ -74,7 +74,7 @@ const Header = () => {
     if (kw !== keyword) {
       dispatchProduct({ type: 'SET_DATA', payload: { keyword: kw } })
     }
-  }, [dispatchProduct, keyword, searchParams])
+  }, [searchParams])
 
   const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
@@ -128,8 +128,7 @@ const Header = () => {
     navigate(`/search?keyword=${keyword}`)
   }
   const handleChangeKeyword = (value: string) => {
-    dispatchProduct({ type: 'SET_DATA', payload: { keyword: value } })
-    updateSearchParams('keyword', value)
+    dispatchProduct({ type: 'SET_KEYWORD', payload: { keyword: value } })
   }
 
   return (
