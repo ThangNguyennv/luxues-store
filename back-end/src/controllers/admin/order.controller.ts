@@ -11,14 +11,7 @@ import { OneProduct } from '~/helpers/product'
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
   try {
-    interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
-    }
-    const find: Find = {
-      deleted: false
-    }
+    const find: any = { deleted: false }
 
     if (req.query.status === 'canceled') {
       find.deleted = true
@@ -28,11 +21,22 @@ export const index = async (req: Request, res: Response) => {
         find.status = req.query.status.toString()
       }
     }
-
+    // Search
+    let productIds: string[] = []
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex) {
-      find['products.title'] = objectSearch.regex
+    if (objectSearch.regex || objectSearch.slug) {
+      const matchedProducts = await Product.find({
+        $or: [
+          { title: objectSearch.regex },
+          { slug: objectSearch.slug }
+        ]
+      }).select('_id')
+      productIds = matchedProducts.map(p => p._id.toString())    
+      if (productIds.length > 0) {
+        find['products.product_id'] = { $in: productIds }
+      }
     }
+    // End search
 
     // Pagination
     const countOrders = await Order.countDocuments(find)
@@ -104,6 +108,10 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
+    const allOrders = await Order.find({
+      deleted: false
+    })
+  
     res.json({
       code: 200,
       message: 'Thành công!',
@@ -111,7 +119,8 @@ export const index = async (req: Request, res: Response) => {
       filterOrder: filterOrderHelpers(req.query),
       keyword: objectSearch.keyword,
       pagination: objectPagination,
-      accounts: accounts
+      accounts: accounts,
+      allOrders: allOrders
     })
   } catch (error) {
     res.json({
