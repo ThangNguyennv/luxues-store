@@ -51,7 +51,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 2px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -60,41 +60,49 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên đơn hàng</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Thanh toán</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người đặt hàng</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Đơn hàng</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Khách hàng</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Tổng tiền</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái đơn</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Thanh toán</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Phương thức</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Ngày tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {Array.from({ length: 3 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 2px' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={420} height={70} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={500} height={80} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={90} height={30} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align="center">
-                  <Skeleton variant="text" width={91} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={128} height={80} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={76} height={32} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={175} height={80} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center'>
+                  <Skeleton variant="text" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center' className='font-[700] '>
-                  <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={155} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center' className='font-[700] '>
+                  <Skeleton variant="text" width={155} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                </TableCell>
+                <TableCell align='center' className='font-[700] '>
+                  <Skeleton variant="rectangular" width={110} height={29} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
               </TableRow>
             ))}
@@ -117,7 +125,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
           }}>
             <TableHead>
               <TableRow>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 2px' }}>
                   <Checkbox
                     checked={isCheckAll}
                     onChange={(event) => handleCheckAll(event.target.checked)}
@@ -126,20 +134,22 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                     sx={{ padding: 0 }}
                   />
                 </TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 8px' }}>STT</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên đơn hàng</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Thanh toán</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người đặt hàng</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Đơn hàng</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Khách hàng</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Tổng tiền</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái đơn</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Thanh toán</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Phương thức</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Ngày tạo</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Cập nhật lần cuối</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orders
                 .map((order, index) => (
                   <TableRow key={index}>
-                    <TableCell align='center' sx={{ padding: '0px 8px' }}>
+                    <TableCell align='center' sx={{ padding: '0px 2px' }}>
                       <Checkbox
                         checked={selectedIds.includes(order._id)}
                         onChange={(event) => handleCheckbox(order._id, event.target.checked)}
@@ -149,8 +159,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         value={order._id}
                       />
                     </TableCell>
-                    <TableCell align='center' sx={{ padding: '0px' }}>{index + 1}</TableCell>
-                    <TableCell>
+                    <TableCell sx={{ padding: '6px 0px' }}>
                       <div className='flex flex-col gap-[7px]'>
                         {order && (
                           order.products.map((product, index) => (
@@ -159,11 +168,11 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                                 <img src={product.thumbnail} className='w-[70px] h-[70px]'/>
                               </div>
                               <div className='flex flex-col justify-center'>
-                                <div className='text-[#00171F] font-[500]'>
+                                <div className='text-[#00171F] font-[500] line-clamp-1'>
                                   {product.title}
                                 </div>
                                 <div>
-                                  <b>Giá tiền: </b>
+                                  <b>Giá gốc: </b>
                                   {product.price.toLocaleString()}đ
                                 </div>
                                 <div>
@@ -182,10 +191,13 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         )}
                       </div>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align='center' className='font-[700]' sx={{ padding: '6px 0px' }}>
+                      <span>{order.userInfo.fullName}</span>
+                    </TableCell>
+                    <TableCell align="center" sx={{ padding: '6px 0px' }}>
                       {Math.floor(getTotalBill(order)).toLocaleString()}đ
                     </TableCell>
-                    <TableCell align='center'>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       <button
                         onClick={() => handleToggleStatus(order._id, order.status)}
                         className={`border rounded-[5px] p-[5px] text-white
@@ -194,10 +206,12 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         {order.status === 'confirmed' ? 'Đã xác nhận' : 'Chờ duyệt'}
                       </button>
                     </TableCell>
-                    <TableCell align='center' className='font-[700] '>
-                      <span>{order.userInfo.fullName}</span>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>Đã thanh toán</TableCell>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>VNPAY</TableCell>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }} className='font-[700] '>
+                      <FormatDateTime time={order.createdAt}/>
                     </TableCell>
-                    <TableCell align='center'>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       {(() => {
                         const updatedBy = order.updatedBy?.[(order.updatedBy as UpdatedBy[]).length - 1]
                         if (!updatedBy) {
@@ -224,7 +238,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         }
                       })()}
                     </TableCell>
-                    <TableCell align='center'>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       {order.deleted ? (
                         <>
                           <button

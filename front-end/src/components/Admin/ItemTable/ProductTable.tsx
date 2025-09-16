@@ -70,7 +70,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
             {Array.from({ length: 5 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
+                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 2px' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
@@ -195,7 +195,6 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                         <span className="text-sm italic text-gray-400">Không xác định</span>
                       )
                     })()}
-
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }} >{(() => {
                       const updatedBy = product.updatedBy?.[(product.updatedBy as UpdatedBy[]).length - 1]
