@@ -33,7 +33,7 @@ export const index = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 6
+        limitItems: 5
       },
       req.query,
       countArticles
@@ -77,6 +77,10 @@ export const index = async (req: Request, res: Response) => {
       deleted: false
     })
 
+    const allArticles = await Article.find({
+      deleted: false
+    })
+
     res.json({
       code: 200,
       message: 'Thành công!',
@@ -84,7 +88,8 @@ export const index = async (req: Request, res: Response) => {
       accounts: accounts,
       filterStatus: filterStatusHelpers(req.query),
       keyword: objectSearch.keyword,
-      pagination: objectPagination
+      pagination: objectPagination,
+      allArticles: allArticles
     })
   } catch (error) {
     res.json({
@@ -220,7 +225,6 @@ export const changeMulti = async (req: Request, res: Response) => {
       ACTIVE = 'active',
       INACTIVE = 'inactive',
       DELETEALL = 'delete-all',
-      CHANGEPOSITION = 'change-position',
     }
     switch (type) {
       case Key.ACTIVE:
@@ -251,19 +255,6 @@ export const changeMulti = async (req: Request, res: Response) => {
         res.json({
           code: 204,
           message: `Xóa thành công ${ids.length} bài viết!`
-        })
-        break
-      case Key.CHANGEPOSITION:
-        for (const item of ids) {
-          const [id, position] = item.split('-')
-          await Article.updateOne(
-            { _id: { $in: id } },
-            { position: Number(position), $push: { updatedBy: updatedBy } }
-          )
-        }
-        res.json({
-          code: 200,
-          message: `Đổi vị trí thành công ${ids.length} bài viết!`
         })
         break
       default:

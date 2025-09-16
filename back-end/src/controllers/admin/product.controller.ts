@@ -8,23 +8,13 @@ import paginationHelpers from '~/helpers/pagination'
 // [GET] /admin/products
 export const index = async (req: Request, res: Response) => {
   try {
-    interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
-    }
-    const find: Find = {
-      deleted: false
-    }
+    const find: any = { deleted: false }
 
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
 
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex) {
-      find.title = objectSearch.regex
-    }
 
     // Pagination
     const countProducts = await Product.countDocuments(find)
@@ -48,6 +38,12 @@ export const index = async (req: Request, res: Response) => {
     }
     // End Sort
 
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
+    }
     const products = await Product
       .find(find)
       .sort(sort)

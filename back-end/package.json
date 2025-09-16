@@ -45,6 +45,7 @@
     "@types/node": "^24.0.12",
     "@types/nodemailer": "^6.4.17",
     "@types/streamifier": "^0.1.2",
+    "@types/unidecode": "^1.1.0",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
     "eslint": "^9.31.0",
