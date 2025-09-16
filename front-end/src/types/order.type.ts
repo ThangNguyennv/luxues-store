@@ -6,16 +6,16 @@ export interface OrderInfoInterface {
     _id: string,
     cartId: string,
     userInfo: {
-        fullName: string,
-        phone: string,
-        address: string
+      fullName: string,
+      phone: string,
+      address: string
     },
     products: {
-        title: string,
-        price: number,
-        discountPercentage: number,
-        quantity: number,
-        thumbnail: string
+      title: string,
+      price: number,
+      discountPercentage: number,
+      quantity: number,
+      thumbnail: string
     }[]
     status: string,
     position: number,
@@ -36,6 +36,7 @@ export interface OrderAllResponseInterface extends CurrentParamsInterface {
     accounts: AccountInfoInterface[],
     pagination: PaginationInterface,
     filterOrder: FilterStatusInterface[],
+    allOrders: OrderInfoInterface[]
 }
 
 export interface OrderStates extends ParamsInterface {
@@ -43,6 +44,7 @@ export interface OrderStates extends ParamsInterface {
   accounts: AccountInfoInterface[],
   filterOrder: FilterStatusInterface[],
   pagination: PaginationInterface,
+  allOrders: OrderInfoInterface[]
 }
 
 export type OrderActions =

@@ -4,16 +4,18 @@ import type { OrderActions, OrderStates } from '~/types/order.type'
 export const initialState: OrderStates = {
   filterOrder: [],
   pagination: {
-  currentPage: 1,
-  limitItems: 3,
-  skip: 0,
-  totalPage: 0
+    currentPage: 1,
+    limitItems: 3,
+    skip: 0,
+    totalPage: 0
   },
   keyword: '',
   sortKey: '',
   sortValue: '',
   loading: false,
-  orders: []
+  orders: [],
+  accounts: [],
+  allOrders: []
 }
 
 export function orderReducer(

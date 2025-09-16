@@ -7,7 +7,7 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useOrder = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
-  const { orders, pagination, filterOrder, keyword } = stateOrder
+  const { orders, pagination, filterOrder, keyword, allOrders } = stateOrder
   const { role } = useAuth()
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -173,6 +173,7 @@ export const useOrder = () => {
     open,
     handleClose,
     handleConfirmDeleteAll,
-    role
+    role,
+    allOrders
   }
 }

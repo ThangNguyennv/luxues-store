@@ -33,7 +33,8 @@ const OrderAdmin = () => {
     open,
     handleClose,
     handleConfirmDeleteAll,
-    role
+    role,
+    allOrders
   } = useOrder()
 
   return (
@@ -47,6 +48,7 @@ const OrderAdmin = () => {
                 filterOrder={filterOrder}
                 currentStatus={currentStatus}
                 handleFilterStatus={handleFilterStatus}
+                items={allOrders}
               />
               <Search
                 keyword={keyword}
