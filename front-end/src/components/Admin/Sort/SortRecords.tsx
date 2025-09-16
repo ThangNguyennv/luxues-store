@@ -18,8 +18,6 @@ const SortRecords = ({ handleSort, sortKey, sortValue, clearSortParams }:SortPro
           value={sortKey && sortValue ? `${sortKey}-${sortValue}` : ''}
         >
           <option disabled value={''}>-- Sắp xếp --</option>
-          <option value="position-asc">Vị trí tăng dần</option>
-          <option value="position-desc">Vị trí giảm dần</option>
           <option value="title-asc">Tiêu đề A - Z</option>
           <option value="title-desc">Tiêu đề Z - A</option>
         </select>

@@ -34,10 +34,16 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusWithChildren(newStatus, id)
     if (response.code === 200) {
+      const updatedAllArticlesCategory = stateArticleCategory.allArticleCategories.map(articleCategory =>
+        articleCategory._id === id
+          ? { ...articleCategory, status: newStatus, updatedBy: [...(articleCategory.updatedBy || []), currentUser] }
+          : articleCategory
+      )
       dispatchArticleCategory({
         type: 'SET_DATA',
         payload: {
-          articleCategories: updateStatusRecursiveForArticle(articleCategories, id, newStatus, currentUser)
+          articleCategories: updateStatusRecursiveForArticle(articleCategories, id, newStatus, currentUser),
+          allArticleCategories: updatedAllArticlesCategory
         }
       })
       dispatchAlert({

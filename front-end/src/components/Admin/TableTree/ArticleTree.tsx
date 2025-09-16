@@ -44,7 +44,7 @@ const ArticleTree = ({
   return (
     <>
       <TableRow key={articleCategory._id}>
-        <TableCell align="center" sx={{ padding: '0px 8px' }}>
+        <TableCell align="center" sx={{ padding: '0px 2px' }}>
           <Checkbox
             checked={selectedIds.includes(articleCategory._id)}
             onChange={(e) => handleCheckbox(articleCategory._id, e.target.checked)}
@@ -52,36 +52,21 @@ const ArticleTree = ({
             sx={{ padding: 0 }}
           />
         </TableCell>
-        <TableCell align="left">{prefix}{articleCategory.title}</TableCell>
         <TableCell align="center" sx={{ padding: '10px 0px' }}>
           <div className="flex justify-center items-center">
             <img
               src={articleCategory.thumbnail}
               alt={articleCategory.title}
-              className="w-[100px] h-[100px]"
+              className="w-[70px] h-[70px]"
             />
           </div>
         </TableCell>
-        <TableCell align="center">
-          <input
-            type="number"
-            value={articleCategory ? articleCategory.position : ''}
-            min={1}
-            onChange={(e) => {
-              const newPosition = parseInt(e.target.value, 10)
-              dispatchArticleCategory({
-                type: 'SET_DATA',
-                payload: {
-                  articleCategories: articleCategories.map((p) =>
-                    p._id === articleCategory._id ? { ...p, position: newPosition } : p
-                  )
-                }
-              })
-            }}
-            className="border rounded-[5px] border-[#00171F] w-[50px] p-[2px]"
-          />
+        <TableCell align="left">
+          <div className='font-[600] text-[14px]'>
+            {prefix}{articleCategory.title}
+          </div>
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           <button
             onClick={() => handleToggleStatus(articleCategory.status, articleCategory._id)}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
@@ -90,7 +75,7 @@ const ArticleTree = ({
             {articleCategory.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
           </button>
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           {creator ? (
             <>
               <p className="text-sm font-medium text-gray-800">{creator.fullName}</p>
@@ -100,7 +85,7 @@ const ArticleTree = ({
             <p className="text-sm italic text-gray-400">Không xác định</p>
           )}
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           {updatedBy ? (
             updater ? (
               <>
@@ -114,7 +99,7 @@ const ArticleTree = ({
             <p className="text-xs italic text-gray-400">Chưa có ai cập nhật</p>
           )}
         </TableCell>
-        <TableCell align="center">
+        <TableCell align="center" sx={{ padding: '6px 0px' }}>
           <Link
             to={`/admin/articles-category/detail/${articleCategory._id}`}
             className="border rounded-[5px] bg-[#0542AB] p-[5px] text-white"

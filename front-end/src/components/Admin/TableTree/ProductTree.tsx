@@ -52,7 +52,6 @@ const ProductTree = ({
             sx={{ padding: 0 }}
           />
         </TableCell>
-        <TableCell align="left">{prefix}{productCategory.title}</TableCell>
         <TableCell align="center" sx={{ padding: '10px 0px' }}>
           <div className="flex justify-center items-center">
             <img
@@ -60,6 +59,11 @@ const ProductTree = ({
               alt={productCategory.title}
               className="w-[70px] h-[70px]"
             />
+          </div>
+        </TableCell>
+        <TableCell align="left">
+          <div className='font-[600] text-[14px]'>
+            {prefix}{productCategory.title}
           </div>
         </TableCell>
         <TableCell align="center" sx={{ padding: '6px 0px' }}>

@@ -28,7 +28,7 @@ export function productReducer(
     case 'SET_DATA':
       return { ...stateProduct, ...actionProduct.payload }
     case 'RESET':
-          return initialState
+      return initialState
     default:
       return stateProduct
   }

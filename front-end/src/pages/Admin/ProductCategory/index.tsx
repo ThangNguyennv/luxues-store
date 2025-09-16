@@ -5,6 +5,12 @@ import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortRecords from '~/components/admin/Sort/SortRecords'
 import { useProductCategory } from '~/hooks/admin/productCategory/useProductCategory'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ProductCategoryAdmin = () => {
   const {
@@ -26,7 +32,10 @@ const ProductCategoryAdmin = () => {
     handleSort,
     clearSortParams,
     handleFilterStatus,
-    role
+    role,
+    handleConfirmDeleteAll,
+    handleClose,
+    open
   } = useProductCategory()
 
   return (
@@ -67,6 +76,24 @@ const ProductCategoryAdmin = () => {
                 className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
               Áp dụng
               </button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="delete-dialog-title"
+              >
+                <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Bạn có chắc chắn muốn xóa {selectedIds.length} danh mục sản phẩm này không?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Hủy</Button>
+                  <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
+                    óa
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </form>
             <SortRecords
               handleSort={handleSort}

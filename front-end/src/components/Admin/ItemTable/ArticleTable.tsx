@@ -23,7 +23,6 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
   const {
     loading,
     articles,
-    dispatchArticle,
     accounts,
     handleToggleStatus,
     handleCheckbox,
@@ -46,7 +45,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 2px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -55,45 +54,51 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên bài viết</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên bài viết</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Người tạo /  Ngày tạo</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Cập nhật lần cuối</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 6 }).map((_item, index) => (
+            {Array.from({ length: 5 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={70} height={70} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={50} height={26} sx={{ bgcolor: 'grey.400' }}/>
-                </TableCell>
-                <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={85} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={85} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center' className='font-[700] '>
-                  <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={150} height={40} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex items-center justify-center'>
+                    <Skeleton variant="rectangular" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -115,7 +120,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
           }}>
             <TableHead>
               <TableRow>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 2px' }}>
                   <Checkbox
                     checked={isCheckAll}
                     onChange={(event) => handleCheckAll(event.target.checked)}
@@ -124,21 +129,19 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                     sx={{ padding: 0 }}
                   />
                 </TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 8px' }}>STT</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hình ảnh</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên bài viết</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '10px 0px' }}>Hình ảnh</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Vị trí</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Trạng thái</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Người tạo</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Cập nhật lần cuối</TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hành động</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Người tạo</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Cập nhật lần cuối</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hành động</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {articles
                 .map((article, index) => (
-                  <TableRow key={article._id}>
-                    <TableCell align='center' sx={{ padding: '0px 8px' }}>
+                  <TableRow key={index}>
+                    <TableCell align='center' sx={{ padding: '0px 2px' }}>
                       <Checkbox
                         checked={selectedIds.includes(article._id)}
                         onChange={(event) => handleCheckbox(article._id, event.target.checked)}
@@ -148,36 +151,15 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                         value={article._id}
                       />
                     </TableCell>
-                    <TableCell align='center'>{index + 1}</TableCell>
-                    <TableCell align='center'>{article.title}</TableCell>
-                    <TableCell align='center' sx={{ padding: '10px 16px' }}>
+                    <TableCell align='center' sx={{ padding: '10px 0px' }}>
                       <div className='flex justify-center items-center'>
                         <img src={article.thumbnail} alt={article.title} className='w-[70px] h-[70px]'/>
                       </div>
                     </TableCell>
-                    <TableCell align='center'>
-                      <input
-                        onChange={(event) => {
-                          const newPosition = parseInt(event.target.value, 10)
-                          const updatedArticles = articles.map((item) =>
-                            item._id === article._id ? { ...item, position: newPosition } : item
-                          )
-                          dispatchArticle({
-                            type: 'SET_DATA',
-                            payload: {
-                              articles: updatedArticles
-                            }
-                          })
-                        }}
-                        type='number'
-                        value={article.position? article.position : ''}
-                        min={'1'}
-                        data-id={article._id}
-                        name='position'
-                        className='border rounded-[5px] border-[#00171F] w-[50px] p-[2px]'
-                      />
+                    <TableCell align='center' sx={{ padding: '10px', width: '240px' }}>
+                      <span className='line-clamp-1 font-[600] text-[14px]'>{article.title}</span>
                     </TableCell>
-                    <TableCell align='center'>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       <button
                         onClick={() => handleToggleStatus(article._id, article.status)}
                         className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
@@ -186,48 +168,49 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                         {article.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}
                       </button>
                     </TableCell>
-                    <TableCell align='center' className='font-[700] '>{(() => {
-                      const creator = accounts.find(
-                        (account) => account._id === article.createdBy?.account_id
-                      )
-                      return creator ? (
-                        <>
-                          <span className="text-sm font-medium text-gray-800">
-                            {creator.fullName}
-                          </span>
-                          <FormatDateTime time={article.createdAt}/>
-                        </>
-                      ) : (
-                        <span className="text-sm italic text-gray-400">Không xác định</span>
-                      )
-                    })()}
-
-                    </TableCell>
-                    <TableCell align='center'>{(() => {
-                      const updatedBy = article.updatedBy?.[(article.updatedBy as UpdatedBy[]).length - 1]
-                      if (!updatedBy) {
-                        return (
-                          <>
-                            <p className="text-xs italic text-gray-400">Chưa có ai cập nhật</p>
-                          </>
+                    <TableCell align='center' className='font-[700]' sx={{ padding: '6px 0px' }}>
+                      {(() => {
+                        const creator = accounts.find(
+                          (account) => account._id === article.createdBy?.account_id
                         )
-                      }
-                      if (Array.isArray(article.updatedBy) && article.updatedBy.length > 0) {
-                        const updater = accounts.find((account) => account._id === updatedBy.account_id)
-                        return updater ? (
+                        return creator ? (
                           <>
                             <span className="text-sm font-medium text-gray-800">
-                              {updater.fullName}
+                              {creator.fullName}
                             </span>
-                            <FormatDateTime time={updatedBy.updatedAt}/>
+                            <FormatDateTime time={article.createdAt}/>
                           </>
                         ) : (
                           <span className="text-sm italic text-gray-400">Không xác định</span>
                         )
-                      }
-                    })()}
+                      })()}
                     </TableCell>
-                    <TableCell align='center'>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
+                      {(() => {
+                        const updatedBy = article.updatedBy?.[(article.updatedBy as UpdatedBy[]).length - 1]
+                        if (!updatedBy) {
+                          return (
+                            <>
+                              <p className="text-xs italic text-gray-400">Chưa có ai cập nhật</p>
+                            </>
+                          )
+                        }
+                        if (Array.isArray(article.updatedBy) && article.updatedBy.length > 0) {
+                          const updater = accounts.find((account) => account._id === updatedBy.account_id)
+                          return updater ? (
+                            <>
+                              <span className="text-sm font-medium text-gray-800">
+                                {updater.fullName}
+                              </span>
+                              <FormatDateTime time={updatedBy.updatedAt}/>
+                            </>
+                          ) : (
+                            <span className="text-sm italic text-gray-400">Không xác định</span>
+                          )
+                        }
+                      })()}
+                    </TableCell>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       <Link
                         to={`/admin/articles/detail/${article._id}`}
                         className='border rounded-[5px] bg-[#0542AB] p-[5px] text-white'>

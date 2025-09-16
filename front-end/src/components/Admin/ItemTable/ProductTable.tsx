@@ -45,7 +45,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
         }}>
           <TableHead>
             <TableRow>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 8px' }}>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', padding: '0px 2px' }}>
                 <Checkbox
                   checked={isCheckAll}
                   onChange={(event) => handleCheckAll(event.target.checked)}
@@ -54,7 +54,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '10px 0px' }}>Hình ảnh</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hình ảnh</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên sản phẩm</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Giá bán (đ)</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Giá gốc (đ)</TableCell>
@@ -67,7 +67,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.from({ length: 6 }).map((_item, index) => (
+            {Array.from({ length: 5 }).map((_item, index) => (
               <TableRow key={index}>
                 <TableCell align='center'>
                   <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 8px' }}/>
@@ -117,8 +117,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
           <Table size='small' sx={{
             borderCollapse: 'collapse',
             '& th, & td': {
-              border: '1px solid #757575', // đường kẻ
-              fontSize: '14px'
+              border: '1px solid #757575' // đường kẻ
             }
           }}>
             <TableHead>
@@ -132,7 +131,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                     sx={{ padding: 0 }}
                   />
                 </TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '10px 0px' }}>Hình ảnh</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Hình ảnh</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Tên sản phẩm</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Giá bán (đ)</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Giá gốc (đ)</TableCell>
@@ -164,7 +163,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                       </div>
                     </TableCell>
                     <TableCell align='left' sx={{ padding: '10px', width: '240px' }}>
-                      <span className='line-clamp-1'>{product.title}</span>
+                      <span className='line-clamp-1 font-[600] text-[14px]'>{product.title}</span>
                     </TableCell>
                     <TableCell align="center" sx={{ padding: '6px 0px' }}>
                       {Math.floor(product.price * (100 - product.discountPercentage) / 100).toLocaleString()}đ

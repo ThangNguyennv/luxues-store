@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom'
 import { useArticle } from '~/hooks/admin/article/useArticle'
 import ArticleTable from '~/components/admin/ItemTable/ArticleTable'
 import SortRecords from '~/components/admin/Sort/SortRecords'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ArticleAdmin = () => {
   const {
@@ -25,7 +31,11 @@ const ArticleAdmin = () => {
     clearSortParams,
     handleFilterStatus,
     articles,
-    role
+    role,
+    allArticles,
+    open,
+    handleClose,
+    handleConfirmDeleteAll
   } = useArticle()
 
   return (
@@ -39,6 +49,7 @@ const ArticleAdmin = () => {
                 filterStatus={filterStatus}
                 currentStatus={currentStatus}
                 handleFilterStatus={handleFilterStatus}
+                items={allArticles}
               />
               <Search
                 keyword={keyword}
@@ -58,7 +69,6 @@ const ArticleAdmin = () => {
                 <option value="active">Hoạt động</option>
                 <option value="inactive">Dừng hoạt động</option>
                 <option value="delete-all">Xóa tất cả</option>
-                <option value="change-position">Thay đổi vị trí</option>
               </select>
               <button
                 type='submit'
@@ -66,6 +76,24 @@ const ArticleAdmin = () => {
               >
                 Áp dụng
               </button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="delete-dialog-title"
+              >
+                <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Bạn có chắc chắn muốn xóa {selectedIds.length} bài viết này không?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Hủy</Button>
+                  <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
+                    óa
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </form>
             <SortRecords
               handleSort={handleSort}

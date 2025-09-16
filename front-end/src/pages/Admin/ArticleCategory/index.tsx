@@ -5,6 +5,12 @@ import Pagination from '~/components/admin/Pagination/Pagination'
 import Search from '~/components/admin/Search/Search'
 import SortRecords from '~/components/admin/Sort/SortRecords'
 import { useArticleCategory } from '~/hooks/admin/articleCategory/useArticleCategory'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 const ArticleCategoryAdmin = () => {
   const {
@@ -25,7 +31,11 @@ const ArticleCategoryAdmin = () => {
     clearSortParams,
     handleFilterStatus,
     articleCategories,
-    role
+    role,
+    allArticleCategories,
+    handleConfirmDeleteAll,
+    handleClose,
+    open
   } = useArticleCategory()
 
   return (
@@ -39,6 +49,7 @@ const ArticleCategoryAdmin = () => {
                 filterStatus={filterStatus}
                 currentStatus={currentStatus}
                 handleFilterStatus={handleFilterStatus}
+                items={allArticleCategories}
               />
               <Search
                 keyword={keyword}
@@ -59,13 +70,30 @@ const ArticleCategoryAdmin = () => {
                 <option value="active">Hoạt động</option>
                 <option value="inactive">Dừng hoạt động</option>
                 <option value="delete-all">Xóa tất cả</option>
-                <option value="change-position">Thay đổi vị trí</option>
               </select>
               <button
                 type='submit'
                 className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'>
                 Áp dụng
               </button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="delete-dialog-title"
+              >
+                <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Bạn có chắc chắn muốn xóa {selectedIds.length} danh mục bài viết này không?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>Hủy</Button>
+                  <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
+                    óa
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </form>
             <SortRecords
               handleSort={handleSort}
@@ -78,7 +106,7 @@ const ArticleCategoryAdmin = () => {
                 to={'/admin/articles-category/create'}
                 className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
               >
-              + Thêm mới
+                + Thêm mới
               </Link>
             </div>
           </div>

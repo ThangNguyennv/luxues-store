@@ -5,7 +5,7 @@ export const initialState: ArticleStates = {
   articles: [],
   accounts: [],
   filterStatus: [],
-  pagination:  {
+  pagination: {
     currentPage: 1,
     limitItems: 3,
     skip: 0,
@@ -14,7 +14,8 @@ export const initialState: ArticleStates = {
   keyword: '',
   sortKey: '',
   sortValue: '',
-  loading: false
+  loading: false,
+  allArticles: []
 }
 
 export function articleReducer(
@@ -27,7 +28,7 @@ export function articleReducer(
     case 'SET_DATA':
       return { ...stateArticle, ...actionArticle.payload }
     case 'RESET':
-          return initialState
+      return initialState
     default:
       return stateArticle
   }

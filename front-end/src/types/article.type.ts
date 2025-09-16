@@ -10,10 +10,12 @@ export interface ArticleInfoInterface extends GeneralInfoInterface {
 
 export interface ArticleAllResponseInterface extends HelperInterface, CurrentParamsInterface {
   articles: ArticleInfoInterface[],
+  allArticles: ArticleInfoInterface[]
 }
 
 export interface ArticleStates extends HelperInterface, ParamsInterface {
   articles: ArticleInfoInterface[],
+  allArticles: ArticleInfoInterface[]
 }
 
 export type ArticleActions =

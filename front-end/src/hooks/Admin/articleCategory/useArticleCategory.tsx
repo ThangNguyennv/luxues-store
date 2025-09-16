@@ -7,13 +7,14 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 export const useArticleCategory = () => {
   const { stateArticleCategory, fetchArticleCategory, dispatchArticleCategory } = useArticleCategoryContext()
-  const { articleCategories, filterStatus, pagination, keyword } = stateArticleCategory
+  const { articleCategories, filterStatus, pagination, keyword, allArticleCategories } = stateArticleCategory
   const { dispatchAlert } = useAlertContext()
   const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
-
+  const [open, setOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<string | null>(null)
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
@@ -57,8 +58,13 @@ export const useArticleCategory = () => {
     })
   }
 
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const typeChange = actionType
 
     if (!selectedIds.length) {
       dispatchAlert({
@@ -67,32 +73,27 @@ export const useArticleCategory = () => {
       })
       return
     }
-    if (!actionType) {
+    if (!typeChange) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Vui lòng chọn hành động!', severity: 'error' }
       })
       return
     }
-    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những danh mục bài viết này?')) {
+    if (typeChange === 'delete-all') {
+      setPendingAction('delete-all')
+      setOpen(true)
       return
     }
-
-    const selectedArticles = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id))
+    await executeAction(typeChange)
+  }
+  const executeAction = async (typeChange: string) => {
+    const selectedArticlesCategory = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id))
     let result: string[] = []
 
-    if (actionType === 'change-position') {
-      result = selectedArticles.map(articleCategory => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${articleCategory._id}"]`
-        )
-        return `${articleCategory._id}-${positionInput?.value || ''}`
-      })
-    } else {
-      result = selectedArticles.map(articleCategory => articleCategory._id)
-    }
+    result = selectedArticlesCategory.map(articleCategory => articleCategory._id)
 
-    const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
+    const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
     if ([200, 204].includes(response.code)) {
       dispatchAlert({
@@ -108,8 +109,16 @@ export const useArticleCategory = () => {
 
     setSelectedIds([])
     setActionType('')
+    setPendingAction(null)
 
     reloadData()
+  }
+
+  const handleConfirmDeleteAll = async () => {
+    if (pendingAction === 'delete-all') {
+      await executeAction('delete-all')
+    }
+    setOpen(false)
   }
 
   const handleSort = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -158,6 +167,10 @@ export const useArticleCategory = () => {
     clearSortParams,
     handleFilterStatus,
     articleCategories,
-    role
+    role,
+    allArticleCategories,
+    handleConfirmDeleteAll,
+    handleClose,
+    open
   }
 }

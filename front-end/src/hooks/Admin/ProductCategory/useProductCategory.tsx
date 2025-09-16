@@ -13,7 +13,8 @@ export const useProductCategory = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
-
+  const [open, setOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<string | null>(null)
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
@@ -57,8 +58,13 @@ export const useProductCategory = () => {
     })
   }
 
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const typeChange = actionType
 
     if (!selectedIds.length) {
       dispatchAlert({
@@ -67,22 +73,27 @@ export const useProductCategory = () => {
       })
       return
     }
-    if (!actionType) {
+    if (!typeChange) {
       dispatchAlert({
         type: 'SHOW_ALERT',
         payload: { message: 'Vui lòng chọn hành động!', severity: 'error' }
       })
       return
     }
-    if (actionType === 'delete-all' && !confirm('Bạn có chắc muốn xóa tất cả những danh mục sản phẩm này?')) {
+    if (typeChange === 'delete-all') {
+      setPendingAction('delete-all')
+      setOpen(true)
       return
     }
+    await executeAction(typeChange)
+  }
 
-    const selectedProducts = productCategories.filter(productCategory => selectedIds.includes(productCategory._id))
+  const executeAction = async (typeChange: string) => {
+    const selectedProductsCategory = productCategories.filter(productCategory => selectedIds.includes(productCategory._id))
     let result: string[] = []
-    result = selectedProducts.map(productCategory => productCategory._id)
+    result = selectedProductsCategory.map(productCategory => productCategory._id)
 
-    const response = await fetchChangeMultiAPI({ ids: result, type: actionType })
+    const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
     if ([200, 204].includes(response.code)) {
       dispatchAlert({
@@ -98,8 +109,16 @@ export const useProductCategory = () => {
 
     setSelectedIds([])
     setActionType('')
+    setPendingAction(null)
 
     reloadData()
+  }
+
+  const handleConfirmDeleteAll = async () => {
+    if (pendingAction === 'delete-all') {
+      await executeAction('delete-all')
+    }
+    setOpen(false)
   }
 
   const handleSort = (event: ChangeEvent<HTMLSelectElement>): void => {
@@ -149,6 +168,9 @@ export const useProductCategory = () => {
     handleSort,
     clearSortParams,
     handleFilterStatus,
-    role
+    role,
+    handleConfirmDeleteAll,
+    handleClose,
+    open
   }
 }

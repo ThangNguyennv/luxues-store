@@ -46,6 +46,7 @@ export const ArticleProvider = ({ children }: { children: React.ReactNode }) => 
             accounts: res.accounts,
             pagination: res.pagination,
             filterStatus: res.filterStatus,
+            allArticles: res.allArticles,
             keyword: res.keyword,
             sortKey,
             sortValue
@@ -64,6 +65,6 @@ export const ArticleProvider = ({ children }: { children: React.ReactNode }) => 
 
 export const useArticleContext = () => {
   const context = useContext(ArticleContext)
-  if (!context) throw new Error('useProductContext must be used inside ProductProvider')
+  if (!context) throw new Error('useArticleContext must be used inside ArticleProvider')
   return context
 }

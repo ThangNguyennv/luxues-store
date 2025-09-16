@@ -12,14 +12,15 @@ interface Props {
 
 const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus, items }: Props) => {
   const statusCounts = useMemo(() => {
-    const counts: Record<string, number> = (items as { status: string }[]).reduce((acc, product) => {
-      acc[product.status] = (acc[product.status] || 0) + 1
+    const counts: Record<string, number> = (items as { status: string }[]).reduce((acc, item) => {
+      acc[item.status] = (acc[item.status] || 0) + 1
       return acc
     }, {} as Record<string, number>)
 
     counts[''] = items.length
     return counts
   }, [items])
+
   return (
     <>
       {filterStatus && filterStatus.length > 0 ? (
@@ -41,9 +42,9 @@ const FilterStatus = ({ filterStatus, currentStatus, handleFilterStatus, items }
         </div>
       ) : (
         <div className='flex gap-[15px] items-center'>
-          <Skeleton variant="rectangular" width={45} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
-          <Skeleton variant="rectangular" width={74} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
-          <Skeleton variant="rectangular" width={122} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={87} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={116} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
+          <Skeleton variant="rectangular" width={145} height={35} sx={{ bgcolor: 'grey.400', borderRadius: 2 }}/>
         </div>
       )}
     </>

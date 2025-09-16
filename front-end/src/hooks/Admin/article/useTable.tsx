@@ -39,14 +39,21 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
     const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
+      const updatedAllArticles = stateArticle.allArticles.map(article =>
+        article._id === id
+          ? { ...article, status: newStatus, updatedBy: [...(article.updatedBy || []), currentUser] }
+          : article
+      )
+      const updatedArticles = stateArticle.articles.map(article =>
+        article._id === id
+          ? { ...article, status: newStatus, updatedBy: [...(article.updatedBy || []), currentUser] }
+          : article
+      )
       dispatchArticle({
         type: 'SET_DATA',
         payload: {
-          articles:  articles.map((article) => article._id === id ? {
-            ...article,
-            status: newStatus,
-            updatedBy: [...(article.updatedBy || []), currentUser]
-          }: article)
+          articles: updatedArticles,
+          allArticles: updatedAllArticles
         }
       })
       dispatchAlert({

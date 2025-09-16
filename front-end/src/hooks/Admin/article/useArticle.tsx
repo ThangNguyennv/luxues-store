@@ -7,13 +7,14 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 
 export const useArticle = () => {
   const { stateArticle, fetchArticle, dispatchArticle } = useArticleContext()
-  const { articles, pagination, filterStatus, keyword } = stateArticle
+  const { articles, pagination, filterStatus, keyword, allArticles } = stateArticle
   const { dispatchAlert } = useAlertContext()
   const { role } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [actionType, setActionType] = useState('')
-
+  const [open, setOpen] = useState(false)
+  const [pendingAction, setPendingAction] = useState<string | null>(null)
   const currentStatus = searchParams.get('status') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
@@ -45,6 +46,9 @@ export const useArticle = () => {
     }
 
     setSearchParams(newParams)
+  }
+  const handleClose = () => {
+    setOpen(false)
   }
 
   const reloadData = (): void => {
@@ -78,26 +82,21 @@ export const useArticle = () => {
     }
 
     if (typeChange === 'delete-all') {
-      const isConfirm = confirm('Bạn có chắc muốn xóa tất cả những bài viết này?')
-      if (!isConfirm) return
+      setPendingAction('delete-all')
+      setOpen(true)
+      return
     }
 
+    await executeAction(typeChange)
+  }
+
+  const executeAction = async (typeChange: string) => {
     const selectedArticles = articles.filter(article =>
       selectedIds.includes(article._id)
     )
 
     let result: string[] = []
-    if (typeChange === 'change-position') {
-      result = selectedArticles.map(article => {
-        const positionInput = document.querySelector<HTMLInputElement>(
-          `input[name="position"][data-id="${article._id}"]`
-        )
-        const position = positionInput?.value || ''
-        return `${article._id}-${position}`
-      })
-    } else {
-      result = selectedArticles.map(article => article._id)
-    }
+    result = selectedArticles.map(article => article._id)
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
@@ -115,9 +114,16 @@ export const useArticle = () => {
 
     setSelectedIds([])
     setActionType('')
+    setPendingAction(null)
 
     // Refetch
     reloadData()
+  }
+  const handleConfirmDeleteAll = async () => {
+    if (pendingAction === 'delete-all') {
+      await executeAction('delete-all')
+    }
+    setOpen(false)
   }
 
   const handleSort = (event: ChangeEvent<HTMLSelectElement>): void => {
@@ -164,6 +170,10 @@ export const useArticle = () => {
     clearSortParams,
     handleFilterStatus,
     articles,
-    role
+    role,
+    allArticles,
+    handleConfirmDeleteAll,
+    open,
+    handleClose
   }
 }

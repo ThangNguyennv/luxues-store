@@ -75,7 +75,7 @@ const ProductAdmin = () => {
                 type="submit"
                 className='border rounded-[5px] border-[#9D9995] p-[5px] bg-[#96D5FE]'
               >
-              Áp dụng
+                Áp dụng
               </button>
               <Dialog
                 open={open}
@@ -85,13 +85,13 @@ const ProductAdmin = () => {
                 <DialogTitle id="delete-dialog-title">Xác nhận xóa</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                  Bạn có chắc chắn muốn xóa {selectedIds.length} sản phẩm này không?
+                    Bạn có chắc chắn muốn xóa {selectedIds.length} sản phẩm này không?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Hủy</Button>
                   <Button onClick={handleConfirmDeleteAll} color="error" variant="contained">
-                  Xóa
+                    óa
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -107,7 +107,7 @@ const ProductAdmin = () => {
                 to={'/admin/products/create'}
                 className='nav-link border rounded-[5px] px-[15px] py-[5px] border-[#607D00] font-[700] bg-[#607D00] text-white'
               >
-              + Thêm mới
+                + Thêm mới
               </Link>
             </div>
           </div>
