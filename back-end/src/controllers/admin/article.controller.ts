@@ -9,27 +9,24 @@ import paginationHelpers from '~/helpers/pagination'
 export const index = async (req: Request, res: Response) => {
   // Bộ lọc
   try {
-    interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
-    }
-    const find: Find = {
-      deleted: false
-    }
+    const find: any = { deleted: false }
 
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
 
+    // Search
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex) {
-      find.title = objectSearch.regex
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
     }
+    // End search
 
     // Pagination
     const countArticles = await Article.countDocuments(find)
-
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,

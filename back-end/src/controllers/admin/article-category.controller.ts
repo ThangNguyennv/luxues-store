@@ -12,26 +12,23 @@ import { updateStatusRecursiveForArticle } from '~/helpers/updateStatusRecursive
 // [GET] /admin/articles-category
 export const index = async (req: Request, res: Response) => {
   try {
-    interface Find {
-      deleted: boolean,
-      status?: string,
-      title?: RegExp,
-      parent_id?: string
-    }
-    const find: Find = { deleted: false }
+    const find: any = { deleted: false }
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
 
     // Search
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex) {
-      find.title = objectSearch.regex
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
     }
     // End search
 
     // Pagination
-    const parentFind: Find = { ...find, parent_id: '' }
+    const parentFind = { ...find, parent_id: '' }
     const countParents = await ArticleCategory.countDocuments(parentFind)
     const objectPagination = paginationHelpers(
       {

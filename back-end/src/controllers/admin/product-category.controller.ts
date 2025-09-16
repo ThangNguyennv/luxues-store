@@ -12,28 +12,33 @@ import { updateStatusRecursiveForProduct } from '~/helpers/updateStatusRecursive
 // [GET] /admin/products-category
 export const index = async (req: Request, res: Response) => {
   try {
-    interface Find {
-      deleted: boolean,
-      status?: string,
-      title?: RegExp,
-      parent_id?: string
-    }
-
-    const find: Find = { deleted: false }
-
+    const find: any = { deleted: false }
     if (req.query.status) {
       find.status = req.query.status.toString()
     }
 
+    // Sort
+    const sort: Record<string, any> = {}
+    if (req.query.sortKey && req.query.sortValue) {
+      const sortKey = req.query.sortKey.toLocaleString()
+      sort[sortKey] = req.query.sortValue
+    } else {
+      sort['position'] = 'desc'
+    }
+    // // End Sort
+
     // Search
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex) {
-      find.title = objectSearch.regex
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
     }
     // End search
 
     // Pagination
-    const parentFind: Find = { ...find, parent_id: '' }
+    const parentFind = { ...find, parent_id: '' }
     const countParents = await ProductCategory.countDocuments(parentFind)
     const objectPagination = paginationHelpers(
       { 
@@ -45,20 +50,14 @@ export const index = async (req: Request, res: Response) => {
     )
     // End Pagination
 
-    // Sort
-    const sort: Record<string, any> = {}
-    if (req.query.sortKey && req.query.sortValue) {
-      const sortKey = req.query.sortKey.toLocaleString()
-      sort[sortKey] = req.query.sortValue
-    } else {
-      sort['position'] = 'desc'
-    }
-    // // End Sort
-    const allCategories = await ProductCategory.find({ deleted: false }).sort(sort)
+    const allCategories = await ProductCategory
+      .find({ deleted: false })
+      .sort(sort)
   
     // 👉 Query song song bằng Promise.all (giảm round-trip)
     const [parentCategories, accounts] = await Promise.all([
-      ProductCategory.find(parentFind)
+      ProductCategory
+        .find(parentFind)
         .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip), // chỉ parent

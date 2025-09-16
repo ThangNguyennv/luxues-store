@@ -14,7 +14,25 @@ export const index = async (req: Request, res: Response) => {
       find.status = req.query.status.toString()
     }
 
+    // Sort
+    const sort = {}
+    if (req.query.sortKey && req.query.sortValue) {
+      const sortKey = req.query.sortKey.toLocaleString()
+      sort[sortKey] = req.query.sortValue
+    } else {
+      sort['position'] = 'desc'
+    }
+    // End Sort
+
+    // Search
     const objectSearch = searchHelpers(req.query)
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
+    }
+    // End search
 
     // Pagination
     const countProducts = await Product.countDocuments(find)
@@ -27,23 +45,6 @@ export const index = async (req: Request, res: Response) => {
       countProducts
     )
     // End Pagination
-
-    // Sort
-    const sort = {}
-    if (req.query.sortKey && req.query.sortValue) {
-      const sortKey = req.query.sortKey.toLocaleString()
-      sort[sortKey] = req.query.sortValue
-    } else {
-      sort['position'] = 'desc'
-    }
-    // End Sort
-
-    if (objectSearch.regex || objectSearch.slug) {
-      find.$or = [
-        { title: objectSearch.regex },
-        { slug: objectSearch.slug }
-      ]
-    }
     const products = await Product
       .find(find)
       .sort(sort)
@@ -71,6 +72,7 @@ export const index = async (req: Request, res: Response) => {
     const accounts = await Account.find({
       deleted: false
     })
+
     const allProducts = await Product.find({
       deleted: false
     })
