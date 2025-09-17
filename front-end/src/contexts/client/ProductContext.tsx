@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchAllProductsAPI } from '~/apis/client/product.api'
 import { initialState } from '~/reducers/client/productReducer'
 import { productReducer } from '~/reducers/client/productReducer'
-import type { ProductActions, ProductAllResponseInterface, ProductStates } from '~/types/product.type'
+import type { ProductAllResponseInterface, ProductClientActions, ProductStates } from '~/types/product.type'
 
 interface ProductContextType {
   stateProduct: ProductStates
@@ -13,7 +13,7 @@ interface ProductContextType {
     sortKey?: string
     sortValue?: string
   }) => Promise<void>
-  dispatchProduct: React.Dispatch<ProductActions>
+  dispatchProduct: React.Dispatch<ProductClientActions>
 }
 
 const ProductContext = createContext<ProductContextType | null>(null)
@@ -45,10 +45,11 @@ export const ProductClientProvider = ({ children }: { children: React.ReactNode 
             sortValue
           }
         })
-
         dispatchProduct({
           type: 'SET_KEYWORD',
-          payload: res.keyword // nếu dùng payload: string
+          payload: {
+            keyword: res.keyword
+          }
         })
       } finally {
         dispatchProduct({ type: 'SET_LOADING', payload: false })

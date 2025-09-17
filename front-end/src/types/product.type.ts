@@ -29,7 +29,7 @@ export type ProductClientActions =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_DATA'; payload: Partial<ProductStates> }
   | { type: 'RESET' }
-  | { type: 'SET_KEYWORD'; payload: string}
+  | { type: 'SET_KEYWORD'; payload: { keyword: string }}
 
 export interface ProductDetailInterface {
   product: ProductInfoInterface

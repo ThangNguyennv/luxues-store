@@ -11,14 +11,14 @@ const Search = () => {
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
   const { stateProduct } = useProductContext()
   const { keyword } = stateProduct
-console.log(keyword)
+
   useEffect(() => {
     if (!keyword) return
     fetchSearchAPI(keyword).then((res: SearchInterface) => {
       setProducts(res.products)
     })
   }, [keyword])
-  console.log(products)
+
   return (
     <>
       <div className="flex items-center justify-center">

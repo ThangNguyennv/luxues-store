@@ -54,7 +54,8 @@ const ArticleCategoryAdmin = () => {
               <Search
                 keyword={keyword}
                 handleChangeKeyword={(value) => dispatchArticleCategory({ type: 'SET_DATA', payload: { keyword: value } })}
-                handleSearch={(keyword) => updateSearchParams('keyword', keyword)}/>
+                handleSearch={(keyword) => updateSearchParams('keyword', keyword)}
+              />
             </div>
           </div>
           <div className='flex items-center justify-between text-[15px]'>
