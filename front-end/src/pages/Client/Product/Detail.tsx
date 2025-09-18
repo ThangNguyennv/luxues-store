@@ -30,6 +30,7 @@ const DetailProductClient = () => {
         type: 'SHOW_ALERT',
         payload: { message: 'Đã thêm vào giỏ hàng', severity: 'success' }
       })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     } catch (error) {
       dispatchAlert({
         type: 'SHOW_ALERT',

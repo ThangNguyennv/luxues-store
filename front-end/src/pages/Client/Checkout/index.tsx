@@ -7,19 +7,17 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import TableContainer from '@mui/material/TableContainer'
-import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { ProductInfoInterface } from '~/types/product.type'
 import { fetchProductsAPI } from '~/apis/client/product.api'
-import { useNavigate } from 'react-router-dom'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
+import { useCart } from '~/contexts/client/CartContext'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
-  const { dispatchAlert } = useAlertContext()
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const { refreshCart } = useCart()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,20 +55,17 @@ const Checkout = () => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const payload = {
-      position: Number(formData.get('position')),
+      totalBill: Number(totalBill),
       fullName: String(formData.get('fullName') ?? ''),
       phone: String(formData.get('phone') ?? ''),
       address: String(formData.get('address') ?? '')
     }
     const response = await fetchOrderAPI(payload)
     if (response.code === 201) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'success' }
-      })
-      setTimeout(() => {
-        navigate(`/checkout/success/${response.order._id}`)
-      }, 2000)
+      await refreshCart()
+      if (response.paymentUrl) {
+        window.location.href = response.paymentUrl
+      }
     }
   }
   if (loading) {
@@ -247,15 +242,31 @@ const Checkout = () => {
                 <input type="hidden" name="position" value={1} />
                 <div className='form-group'>
                   <label htmlFor='fullName'><b>Họ và tên: </b></label>
-                  <input type='text' name='fullName' id='fullName' className=''/>
+                  <input
+                    type='text'
+                    name='fullName'
+                    id='fullName'
+                    className=''
+                    required
+                  />
                 </div>
                 <div className='form-group'>
                   <label htmlFor='phone'><b>Số điện thoại: </b></label>
-                  <input type='tel' name='phone' id='phone' className=''/>
+                  <input
+                    type='tel'
+                    name='phone'
+                    id='phone'
+                    required
+                  />
                 </div>
                 <div className='form-group'>
                   <label htmlFor='address'><b>Địa chỉ: </b></label>
-                  <input type='text' name='address' id='address' className=''/>
+                  <input
+                    type='text'
+                    name='address'
+                    id='address'
+                    required
+                  />
                 </div>
                 <div className='flex items-center justify-end'>
                   <button

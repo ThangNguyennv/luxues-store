@@ -46,6 +46,7 @@ const Success = () => {
         <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
           <div className='container flex flex-col gap-[20px]'>
             <Skeleton variant="text" width={200} height={32} sx={{ bgcolor: 'grey.400' }}/>
+            <Skeleton variant="text" width={1000} height={32} sx={{ bgcolor: 'grey.400' }}/>
             <div className="flex flex-col gap-[15px]">
               <Skeleton variant="text" width={250} height={32} sx={{ bgcolor: 'grey.400' }}/>
               <div className='flex flex-col gap-[10px]'>
@@ -145,8 +146,12 @@ const Success = () => {
                 </TableContainer>
               </div>
               <div className='flex items-center justify-end gap-[10px]'>
-                <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
-                <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="text" width={120} height={35} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="text" width={120} height={35} sx={{ bgcolor: 'grey.400' }}/>
+              </div>
+              <div className='flex items-center justify-end gap-[10px]'>
+                <Skeleton variant="text" width={120} height={35} sx={{ bgcolor: 'grey.400' }}/>
+                <Skeleton variant="text" width={120} height={35} sx={{ bgcolor: 'grey.400' }}/>
               </div>
             </div>
           </div>
@@ -160,6 +165,7 @@ const Success = () => {
         <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
           <div className='container flex flex-col gap-[20px]'>
             <div className='text-[30px] uppercase font-[600]'>Đơn hàng</div>
+            <div className='text-[24px] uppercase font-[500] text-[#168B35]'>Chúc mừng bạn đã đặt hàng thành công, Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất!</div>
             <div className="flex flex-col gap-[15px]">
               <div className='text-[24px] font-[500]'>Thông tin người đặt: </div>
               <div className='flex flex-col gap-[10px]'>
@@ -234,7 +240,19 @@ const Success = () => {
               </div>
               <div className='flex items-center justify-end gap-[10px]'>
                 <b className='text-[20px]'>Tổng đơn hàng: </b>
-                <span className='font-[600] text-[25px] text-[#BC3433]'>{totalBill?.toLocaleString()}đ</span>
+                <span className='font-[600] text-[25px] text-[#FFAB19]'>{totalBill?.toLocaleString()}đ</span>
+              </div>
+              <div className='flex items-center justify-end gap-[10px]'>
+                <b className='text-[20px]'>Trạng thái: </b>
+                {order.paymentInfo.status === 'PAID' ? (
+                  <span className='font-[600] text-[25px] text-[#18BA2A]'>
+                    Đã thanh toán
+                  </span>
+                ) : (
+                  <span className='font-[600] text-[25px] text-[#BC3433]'>
+                    Chưa thanh toán
+                  </span>
+                )}
               </div>
             </div>
           </div>

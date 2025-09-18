@@ -1,6 +1,17 @@
 import type { AccountInfoInterface } from './account.type'
 import type { CurrentParamsInterface, FilterStatusInterface, PaginationInterface, ParamsInterface, UpdatedBy } from './helper.type'
 
+interface PaymentDetails {
+  vnp_TxnRef?: string
+  vnp_TransactionNo?: string
+  vnp_BankCode?: string
+  vnp_BankTranNo?: string
+  vnp_CardType?: string
+  vnp_OrderInfo?: string
+  vnp_PayDate?: string
+  vnp_ResponseCode?: string
+}
+
 export interface OrderInfoInterface {
     deleted?: boolean,
     _id: string,
@@ -17,18 +28,24 @@ export interface OrderInfoInterface {
       quantity: number,
       thumbnail: string
     }[]
-    status: string,
+    status: 'PENDING' | 'CONFIRMED' | 'CANCELED',
     position: number,
     createdBy: {
       account_id: string,
     },
     updatedBy: UpdatedBy[],
     createdAt: Date | null
-    updatedAt: Date | null
+    updatedAt: Date | null,
+    paymentInfo: {
+      method: 'COD' | 'VNPAY' | 'MOMO' | 'ZALOPAY'
+      status: 'PENDING' | 'PAID' | 'FAILED'
+      details: PaymentDetails
+    }
 }
-
 export interface OrderDetailInterface {
-    order: OrderInfoInterface
+  order: OrderInfoInterface,
+  code: number,
+  message: string
 }
 
 export interface OrderAllResponseInterface extends CurrentParamsInterface {
