@@ -36,7 +36,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: '1'
     },
-    position: Number,
     slug: {
       type: String,
       slug: 'title', 

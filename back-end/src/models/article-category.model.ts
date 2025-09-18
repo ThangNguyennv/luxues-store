@@ -14,7 +14,6 @@ const articleCategorySchema = new mongoose.Schema(
     descriptionDetail: String,
     thumbnail: String,
     status: String,
-    position: Number,
     slug: {
       type: String,
       slug: 'title', // <-> San-pham-1

@@ -1,15 +1,35 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const orderSchema = new mongoose.Schema(
   {
-    // user_id: String,
+    user_id: {
+      type: String,
+      required: true
+    },
     cart_id: String,
     userInfo: {
       fullName: String,
       phone: String,
       address: String
     },
-    position: Number,
+    amount: {
+      type: Number,
+      required: true
+    },
+    paymentInfo: {
+      method: {
+        type: String,
+        enum: ['COD', 'VNPAY', 'MOMO', 'ZALOPAY'],
+      },
+      status: { 
+        type: String, 
+        enum: ['PENDING', 'PAID', 'FAILED'], 
+        default: 'PENDING' 
+      },
+      details: { 
+        type: Object, default: {} 
+      }
+    },
     products: [
       {
         product_id: String,
@@ -22,7 +42,8 @@ const orderSchema = new mongoose.Schema(
     ],
     status: {
       type: String,
-      default: 'waiting'
+      enum: ['PENDING', 'CONFIRMED', 'CANCELED'],
+      default: 'PENDING',
     },
     deleted: {
       type: Boolean,

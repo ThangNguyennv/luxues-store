@@ -172,15 +172,15 @@ export const changeMulti = async (req: Request, res: Response) => {
       updatedAt: new Date()
     }
     enum Key {
-      WAITING = 'waiting',
-      CONFIRMED = 'confirmed',
+      PENDING = 'PENDING',
+      CONFIRMED = 'CONFIRMED',
       DELETEALL = 'delete-all',
     }
     switch (type) {
-      case Key.WAITING:
+      case Key.PENDING:
         await Order.updateMany(
           { _id: { $in: ids } },
-          { status: Key.WAITING, $push: { updatedBy: updatedBy } }
+          { status: Key.PENDING, $push: { updatedBy: updatedBy } }
         )
         res.json({
           code: 200,

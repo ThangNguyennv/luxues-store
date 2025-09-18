@@ -20,7 +20,6 @@ const productCategorySchema = new mongoose.Schema(
       enum: ['active', 'inactive'],
       default: 'active'
     },
-    position: Number,
     slug: {
       type: String,
       slug: 'title', 

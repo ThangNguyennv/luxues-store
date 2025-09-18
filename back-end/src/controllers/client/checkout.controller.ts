@@ -4,6 +4,7 @@ import Product from '~/models/product.model'
 import Order from '~/models/order.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm, ReturnQueryFromVNPay } from 'vnpay'
 
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
@@ -48,8 +49,12 @@ export const index = async (req: Request, res: Response) => {
 export const order = async (req: Request, res: Response) => {
   try {
     const cartId = req["cartId"]
-    const userInfo = req.body
-
+    const body = req.body
+    const userInfo = {
+      fullName: body.fullName,
+      phone: body.phone, 
+      address: body.address
+    }
     const cart = await Cart.findOne({
       _id: cartId
     })
@@ -74,21 +79,43 @@ export const order = async (req: Request, res: Response) => {
       products.push(objectProduct)
     }
     const orderInfo = {
+      user_id: req["accountUser"].id,
       cart_id: cartId,
       userInfo: userInfo,
-      products: products
+      products: products,
+      userId: req['accountUser'].id,
+      amount: body.totalBill
     }
-
     const order = new Order(orderInfo)
-    if (req.body.position == '') {
-      const countOrders = await Order.countDocuments()
-      req.body.position = countOrders + 1
-    } else {
-      req.body.position = parseInt(req.body.position)
-    }
-    order.position = req.body.position
+    await order.save()
 
-    order.save()
+    const vnpay = new VNPay({
+      // ⚡ Cấu hình bắt buộc
+      tmnCode: process.env.VNP_TMN_CODE,
+      secureSecret: process.env.VNP_HASH_SECRET,
+      vnpayHost: 'https://sanbox.vnpayment.vn',
+
+      // 🔧 Cấu hình tùy chọn
+      testMode: true, // Chế độ test
+      hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
+      loggerFn: ignoreLogger // Custom logger
+    })
+
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1)
+
+    const vnpayResponse = vnpay.buildPaymentUrl({
+      vnp_Amount: body.totalBill,
+      vnp_IpAddr: '127.0.0.0.1', // ip test local
+      vnp_TxnRef: order.id,
+      vnp_OrderInfo: `Thanh toan don hang ${order.id}`,
+      vnp_OrderType: ProductCode.Other,
+      vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
+      vnp_Locale: VnpLocale.VN,
+      vnp_CreateDate: dateFormat(new Date()),
+      vnp_ExpireDate: dateFormat(tomorrow)
+    })
+
     for (const item of products) {
       await Product.updateOne(
         { _id: item.product_id },
@@ -105,17 +132,71 @@ export const order = async (req: Request, res: Response) => {
     )
     res.json({
       code: 201,
-      message: 'Chúc mừng bạn đã đặt hàng thành công, Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất!',
-      order: order
+      order: order,
+      paymentUrl: vnpayResponse
     })
   } catch (error) {
     res.json({
       code: 400,
-      message: 'Lỗi!',
+      message: 'Lỗi tạo đơn hàng!',
       error: error
     })
   }
 }
+
+// [GET] /checkout/check-payment-vnpay
+export const vnpayReturn = async (req: Request, res: Response) => {
+  try {
+    const vnpay = new VNPay({
+      // ⚡ Cấu hình bắt buộc
+      tmnCode: process.env.VNP_TMN_CODE,
+      secureSecret: process.env.VNP_HASH_SECRET,
+      vnpayHost: 'https://sanbox.vnpayment.vn',
+
+      // 🔧 Cấu hình tùy chọn
+      testMode: true, // Chế độ test
+      hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
+      loggerFn: ignoreLogger // Custom logger
+    })
+
+    // Verify query từ VNPay
+    const verified = vnpay.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
+    if (!verified.isVerified) {
+      return res.status(400).json({ message: 'Sai chữ ký VNPay' })
+    }
+
+    const orderId = req.query["vnp_TxnRef"] as string
+    const order = await Order.findById(orderId)
+
+    if (!order) {
+      return res.status(404).json({ message: 'Không tìm thấy đơn hàng' })
+    }
+
+    // Nếu thanh toán thành công
+    if (req.query["vnp_ResponseCode"] === "00") {
+      order.paymentInfo.status = 'PAID'
+    } else {
+      order.paymentInfo.status = 'FAILED'
+    }
+
+    // Lưu thông tin giao dịch
+    order.paymentInfo.details = {
+      vnp_TxnRef: req.query.vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
+      vnp_TransactionNo: req.query.vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
+      vnp_BankCode: req.query.vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
+      vnp_BankTranNo: req.query.vnp_BankTranNo,       // Mã giao dịch ngân hàng
+      vnp_CardType: req.query.vnp_CardType,
+      vnp_PayDate: req.query.vnp_PayDate,             // Thời gian thanh toán (quan trọng cho báo cáo & tracking).
+      vnp_ResponseCode: "00",                         // Trạng thái giao dịch ("00" = thành công).
+    }
+    await order.save()
+    res.status(200).json({ message: 'Đặt hàng thành công', order: order })
+    // // Redirect về frontend hiển thị kết quả
+    res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
+  } catch (err) {
+    res.status(500).json({ message: "Lỗi xử lý callback VNPay", error: err });
+  }
+};
 
 // [GET] /checkout/success/:orderId
 export const success = async (req: Request, res: Response) => {
