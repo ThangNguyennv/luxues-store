@@ -20,13 +20,24 @@ export const dashboard = async (req: Request, res: Response) => {
         total: 0,
       }
     }
-    
-    const orders = await Order.find({
-      'paymentInfo.status': 'PAID'
-    })
+    const result = await Order.aggregate([
+      { $match: { "paymentInfo.status": "PAID" } }, // chỉ tính đơn đã thanh toán
+      {
+        $group: {
+          _id: { $month: "$createdAt" },            // group theo tháng
+          totalRevenue: { $sum: "$amount" }     // cộng dồn doanh thu
+        }
+      },
+      { $sort: { "_id": 1 } } // sắp xếp theo tháng tăng dần
+    ])
+  
+    const currentMonth = new Date().getMonth() + 1
+    const currentMonthData = result.find(r => r._id === currentMonth)
+    const currentMonthRevenue = currentMonthData ? currentMonthData.totalRevenue : 0
 
-    const totalRevenue = orders.reduce((sum, order) => sum + order.amount, 0)
-
+    const labels = result.map(month => `Tháng ${month._id}`)
+    const data = result.map(revenue => revenue.totalRevenue)
+  
     statistic.user.total = await User.countDocuments({
       deleted: false
     })
@@ -39,12 +50,14 @@ export const dashboard = async (req: Request, res: Response) => {
       deleted: false
     })
 
-    statistic.revenue.total = totalRevenue
+    statistic.revenue.total = currentMonthRevenue
 
     res.json({
       code: 200,
       message: 'Thành công!',
-      statistic: statistic
+      statistic: statistic,
+      labels: labels,
+      data: data
     })
   } catch (error) {
     res.json({
