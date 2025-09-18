@@ -15,7 +15,6 @@ import { useSettingGeneral } from '~/contexts/client/SettingGeneralContext'
 import { fetchSettingGeneralAPI } from '~/apis/client/settingGeneral.api'
 import { IoLogOutOutline } from 'react-icons/io5'
 import { CgProfile } from 'react-icons/cg'
-import { IoSettingsOutline } from 'react-icons/io5'
 import { IoIosLogIn } from 'react-icons/io'
 import { FaRegRegistered } from 'react-icons/fa'
 import Skeleton from '@mui/material/Skeleton'
@@ -26,6 +25,7 @@ import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
 import { useProductContext } from '~/contexts/client/ProductContext'
 import { useCart } from '~/contexts/client/CartContext'
+import { RiBillLine } from 'react-icons/ri'
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -400,8 +400,8 @@ const Header = () => {
                       }
                     }}>
                       <Link to={''} className='flex items-center justify-start gap-[10px]'>
-                        <IoSettingsOutline />
-                        <span>Cài đặt</span>
+                        <RiBillLine />
+                        <span>Đơn mua</span>
                       </Link>
                     </MenuItem>
                     <MenuItem sx={{

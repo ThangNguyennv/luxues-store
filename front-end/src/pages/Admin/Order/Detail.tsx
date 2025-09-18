@@ -38,6 +38,12 @@ const DetailOrder = () => {
                             <b>Còn lại: </b>
                             {product.quantity}
                           </div>
+                          {orderDetail.note && (
+                            <div>
+                              <b>Lời nhắn: </b>
+                              {orderDetail.note}
+                            </div>
+                          )}
                         </div>
                         <div>
                           <img src={product.thumbnail} className='w-[150px] h-[150px]'/>
