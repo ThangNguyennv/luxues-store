@@ -217,7 +217,7 @@ const Checkout = () => {
                               </TableCell>
                               <TableCell align="center">
                                 <span>
-                                  {(item.price * (100 - item.discountPercentage) / 100).toLocaleString()}đ
+                                  {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
                                 </span>
                               </TableCell>
                               <TableCell align="center">

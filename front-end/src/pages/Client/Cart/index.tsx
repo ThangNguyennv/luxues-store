@@ -393,7 +393,7 @@ const Cart = () => {
                                 <TableCell align="left">
                                   <div className='flex items-center justify-between gap-[5px]'>
                                     <span>
-                                      {(item.price * (100 - item.discountPercentage) / 100).toLocaleString()}đ
+                                      {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
                                     </span>
                                     <span className='line-through text-gray-400'>
                                       {item.price.toLocaleString()}đ

@@ -240,7 +240,9 @@ const Success = () => {
               </div>
               <div className='flex items-center justify-end gap-[10px]'>
                 <b className='text-[20px]'>Tổng đơn hàng: </b>
-                <span className='font-[600] text-[25px] text-[#FFAB19]'>{totalBill?.toLocaleString()}đ</span>
+                {totalBill && (
+                  <span className='font-[600] text-[25px] text-[#FFAB19]'>{Math.floor(totalBill).toLocaleString()}đ</span>
+                )}
               </div>
               <div className='flex items-center justify-end gap-[10px]'>
                 <b className='text-[20px]'>Trạng thái: </b>
