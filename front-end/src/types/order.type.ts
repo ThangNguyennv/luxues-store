@@ -41,7 +41,7 @@ export interface OrderInfoInterface {
     paymentInfo: {
       method: 'COD' | 'VNPAY' | 'MOMO' | 'ZALOPAY'
       status: 'PENDING' | 'PAID' | 'FAILED'
-      details: PaymentDetails
+      details?: PaymentDetails
     }
 }
 export interface OrderDetailInterface {

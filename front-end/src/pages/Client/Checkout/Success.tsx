@@ -238,23 +238,36 @@ const Success = () => {
                   </Table>
                 </TableContainer>
               </div>
-              <div className='flex items-center justify-end gap-[10px]'>
-                <b className='text-[20px]'>Tổng đơn hàng: </b>
-                {totalBill && (
-                  <span className='font-[600] text-[25px] text-[#FFAB19]'>{Math.floor(totalBill).toLocaleString()}đ</span>
-                )}
-              </div>
-              <div className='flex items-center justify-end gap-[10px]'>
-                <b className='text-[20px]'>Trạng thái: </b>
-                {order.paymentInfo.status === 'PAID' ? (
-                  <span className='font-[600] text-[25px] text-[#18BA2A]'>
-                    Đã thanh toán
-                  </span>
-                ) : (
-                  <span className='font-[600] text-[25px] text-[#BC3433]'>
-                    Chưa thanh toán
-                  </span>
-                )}
+              <div className='flex items-center justify-end'>
+                <div className='flex flex-col gap-[10px]'>
+                  <div className='flex items-center gap-[5px]'>
+                    <b className='text-[20px]'>Tổng đơn hàng: </b>
+                    {totalBill && (
+                      <span className='font-[600] text-[25px] text-[#FFAB19]'>{Math.floor(totalBill).toLocaleString()}đ</span>
+                    )}
+                  </div>
+                  {order.paymentInfo.status === 'PAID' ? (
+                    <div className='flex flex-col gap-[10px]'>
+                      <div className='flex items-center gap-[5px]'>
+                        <b className='text-[20px]'>Trạng thái: </b>
+                        <span className='font-[600] text-[25px] text-[#18BA2A]'>
+                        Đã thanh toán
+                        </span>
+                      </div>
+                      <div className='flex items-center gap-[5px]'>
+                        <b className='text-[20px]'>Phương thức thanh toán: </b>
+                        <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <b className='text-[20px]'>Trạng thái: </b>
+                      <span className='font-[600] text-[25px] text-[#BC3433]'>
+                      Chưa thanh toán
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>

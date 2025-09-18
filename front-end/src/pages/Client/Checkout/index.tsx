@@ -12,12 +12,15 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
   const [products, setProducts] = useState<ProductInfoInterface[]>([])
   const [loading, setLoading] = useState(false)
   const { refreshCart } = useCart()
+  const [paymentMethod, setPaymentMethod] = useState('COD')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +58,8 @@ const Checkout = () => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const payload = {
-      totalBill: Number(totalBill),
+      note: String(formData.get('note') ?? ''),
+      paymentMethod: paymentMethod,
       fullName: String(formData.get('fullName') ?? ''),
       phone: String(formData.get('phone') ?? ''),
       address: String(formData.get('address') ?? '')
@@ -63,10 +67,15 @@ const Checkout = () => {
     const response = await fetchOrderAPI(payload)
     if (response.code === 201) {
       await refreshCart()
-      if (response.paymentUrl) {
-        window.location.href = response.paymentUrl
+      if (paymentMethod === 'COD') {
+        navigate(`/checkout/success/${response.order._id}`)
+      } else if (paymentMethod === 'VNPAY') {
+        if (response.paymentUrl) {
+          window.location.href = response.paymentUrl
+        }
       }
     }
+    setPaymentMethod('')
   }
   if (loading) {
     return (
@@ -267,6 +276,31 @@ const Checkout = () => {
                     id='address'
                     required
                   />
+                </div>
+                <div className='form-group'>
+                  <label htmlFor='note'><b>Lời nhắn: </b></label>
+                  <input
+                    type='text'
+                    name='note'
+                    id='note'
+                    placeholder='Lưu ý cho người nhắn...'
+                  />
+                </div>
+                <div className='flex items-center justify-end gap-[15px]'>
+                  <div className='font-[600] text-[18px]'>
+                    Phương thức thanh toán:
+                  </div>
+                  <select
+                    name="type"
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
+                  >
+                    <option value={'COD'}>Thanh toán trực tiếp</option>
+                    <option value={'VNPAY'}>Thanh toán qua ví VNPAY</option>
+                    <option value={'ZALOPAY'}>Thanh toán qua ví ZALOPAY</option>
+                    <option value={'MOMO'}>Thanh toán qua ví MOMO</option>
+                  </select>
                 </div>
                 <div className='flex items-center justify-end'>
                   <button
