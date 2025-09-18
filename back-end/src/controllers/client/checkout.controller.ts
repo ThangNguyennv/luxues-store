@@ -78,50 +78,70 @@ export const order = async (req: Request, res: Response) => {
       objectProduct['thumbnail'] = productInfo.thumbnail
       products.push(objectProduct)
     }
+    const totalBill = products.reduce((acc, product) => {
+      const priceNewForOneProduct = product.price * (100 - product.discountPercentage) / 100
+    return acc + priceNewForOneProduct * product.quantity
+  }, 0)
+
+    const paymentMethod = body.paymentMethod
     const orderInfo = {
       user_id: req["accountUser"].id,
       cart_id: cartId,
       userInfo: userInfo,
       products: products,
       userId: req['accountUser'].id,
-      amount: Math.floor(body.totalBill)
+      amount: Math.floor(totalBill),
+      note: body.note,
     }
     const order = new Order(orderInfo)
+    order.paymentInfo.method = paymentMethod
     await order.save()
+    if (paymentMethod === 'COD') {
+      res.json({
+        code: 201,
+        order: order,
+        message: 'Thành công!',
+      })
+    } else if (paymentMethod === 'VNPAY') {
+      const vnpay = new VNPay({
+        // ⚡ Cấu hình bắt buộc
+        tmnCode: process.env.VNP_TMN_CODE,
+        secureSecret: process.env.VNP_HASH_SECRET,
+        vnpayHost: 'https://sanbox.vnpayment.vn',
 
-    const vnpay = new VNPay({
-      // ⚡ Cấu hình bắt buộc
-      tmnCode: process.env.VNP_TMN_CODE,
-      secureSecret: process.env.VNP_HASH_SECRET,
-      vnpayHost: 'https://sanbox.vnpayment.vn',
+        // 🔧 Cấu hình tùy chọn
+        testMode: true, // Chế độ test
+        hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
+        loggerFn: ignoreLogger // Custom logger
+      })
 
-      // 🔧 Cấu hình tùy chọn
-      testMode: true, // Chế độ test
-      hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
-      loggerFn: ignoreLogger // Custom logger
-    })
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
 
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1)
-
-    const vnpayResponse = vnpay.buildPaymentUrl({
-      vnp_Amount: body.totalBill,
-      vnp_IpAddr: '127.0.0.0.1', // ip test local
-      vnp_TxnRef: order.id,
-      vnp_OrderInfo: `Thanh toan don hang ${order.id}`,
-      vnp_OrderType: ProductCode.Other,
-      vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
-      vnp_Locale: VnpLocale.VN,
-      vnp_CreateDate: dateFormat(new Date()),
-      vnp_ExpireDate: dateFormat(tomorrow)
-    })
-
+      const vnpayResponse = vnpay.buildPaymentUrl({
+        vnp_Amount: totalBill,
+        vnp_IpAddr: '127.0.0.0.1', // ip test local
+        vnp_TxnRef: order.id,
+        vnp_OrderInfo: `Thanh toan don hang ${order.id}`,
+        vnp_OrderType: ProductCode.Other,
+        vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
+        vnp_Locale: VnpLocale.VN,
+        vnp_CreateDate: dateFormat(new Date()),
+        vnp_ExpireDate: dateFormat(tomorrow)
+      })
+      res.json({
+        code: 201,
+        message: 'Thành công!',
+        paymentUrl: vnpayResponse
+      })
+    }
     for (const item of products) {
       await Product.updateOne(
         { _id: item.product_id },
         { $inc: { stock: -item.quantity } } // trừ số lượng
       )
     }
+
     await Cart.updateOne(
       {
         _id: cartId
@@ -130,11 +150,6 @@ export const order = async (req: Request, res: Response) => {
         products: []
       }
     )
-    res.json({
-      code: 201,
-      order: order,
-      paymentUrl: vnpayResponse
-    })
   } catch (error) {
     res.json({
       code: 400,
@@ -178,7 +193,6 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     } else {
       order.paymentInfo.status = 'FAILED'
     }
-    order.paymentInfo.method = 'VNPAY'
     // Lưu thông tin giao dịch
     order.paymentInfo.details = {
       vnp_TxnRef: req.query.vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).

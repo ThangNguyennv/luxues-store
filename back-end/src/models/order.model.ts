@@ -16,6 +16,7 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+    note: String,
     paymentInfo: {
       method: {
         type: String,
