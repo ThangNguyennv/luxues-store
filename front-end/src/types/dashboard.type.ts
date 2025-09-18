@@ -5,5 +5,7 @@ type StatisticKey = 'user' | 'product' | 'order' | 'revenue';
 type Statistic = Record<StatisticKey, StatisticGroup>;
 
 export interface DashboardInterface {
-  statistic: Statistic
+  statistic: Statistic,
+  labels: string[],
+  data: number[]
 }
