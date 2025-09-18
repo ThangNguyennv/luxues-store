@@ -178,7 +178,7 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     } else {
       order.paymentInfo.status = 'FAILED'
     }
-
+    order.paymentInfo.method = 'VNPAY'
     // Lưu thông tin giao dịch
     order.paymentInfo.details = {
       vnp_TxnRef: req.query.vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).

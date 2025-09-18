@@ -13,7 +13,7 @@ export const index = async (req: Request, res: Response) => {
   try {
     const find: any = { deleted: false }
 
-    if (req.query.status === 'canceled') {
+    if (req.query.status === 'CANCELED') {
       find.deleted = true
     } else {
       find.deleted = false
@@ -43,7 +43,7 @@ export const index = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 3
+        limitItems: 15
       },
       req.query,
       countOrders
@@ -120,7 +120,7 @@ export const index = async (req: Request, res: Response) => {
       keyword: objectSearch.keyword,
       pagination: objectPagination,
       accounts: accounts,
-      allOrders: allOrders
+      allOrders: allOrders,
     })
   } catch (error) {
     res.json({
@@ -174,7 +174,7 @@ export const changeMulti = async (req: Request, res: Response) => {
     enum Key {
       PENDING = 'PENDING',
       CONFIRMED = 'CONFIRMED',
-      DELETEALL = 'delete-all',
+      DELETEALL = 'DELETEALL',
     }
     switch (type) {
       case Key.PENDING:

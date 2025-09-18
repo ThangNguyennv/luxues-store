@@ -8,25 +8,30 @@ const filterOrderHelpers = (query: Record<string, unknown>): StatusItem[] => {
       class: ''
     },
     {
-      name: 'Chờ duyệt',
-      status: 'waiting',
+      name: 'Đang xử lý',
+      status: 'PENDING',
       class: ''
     },
     {
-      name: 'Đã xác nhận',
-      status: 'confirmed',
+      name: 'Đang giao hàng',
+      status: 'TRANSPORTING',
+      class: ''
+    },
+    {
+      name: 'Hoàn thành',
+      status: 'CONFIRMED',
       class: ''
     },
     {
       name: 'Đã hủy',
-      status: 'canceled',
+      status: 'CANCELED',
       class: ''
     }
   ]
   const target = query.status ?? ''
   const index = filterOrder.findIndex((item) => item.status === target)
   if (index >= 0) {
-    filterOrder[index].class = 'confirmed'
+    filterOrder[index].class = 'CONFIRMED'
   }
   return filterOrder
 }
