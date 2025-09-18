@@ -4,6 +4,7 @@ import { useAuth } from '~/contexts/admin/AuthContext'
 import type { UpdatedBy } from '~/types/helper.type'
 import { useState } from 'react'
 import { useOrderContext } from '~/contexts/admin/OrderContext'
+import type { OrderStatus } from '~/types/order.type'
 
 export interface Props {
   selectedIds: string[],
@@ -105,12 +106,12 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     }
   }
 
-  const handleToggleStatus = async (id: string, currentStatus: string): Promise<void> => {
+  const handleChangeStatus = async (id: string, newStatus: OrderStatus): Promise<void> => {
     const currentUser: UpdatedBy = {
       account_id: myAccount ? myAccount._id : '',
       updatedAt: new Date()
     }
-    const newStatus = currentStatus === 'confirmed' ? 'waiting' : 'confirmed'
+
     const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
       const updatedAllOrders = stateOrder.allOrders.map(order =>
@@ -162,7 +163,7 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
   return {
     orders,
     loading,
-    handleToggleStatus,
+    handleChangeStatus,
     open,
     openPermanentlyDelete,
     handleOpen,
@@ -175,6 +176,6 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
     accounts,
     handleDelete,
     handleRecover,
-    handlePermanentlyDelete,
+    handlePermanentlyDelete
   }
 }

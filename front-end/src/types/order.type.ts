@@ -12,6 +12,8 @@ interface PaymentDetails {
   vnp_ResponseCode?: string
 }
 
+export type OrderStatus = 'PENDING' | 'TRANSPORTING' | 'CONFIRMED' | 'CANCELED'
+
 export interface OrderInfoInterface {
     deleted?: boolean,
     _id: string,
@@ -28,7 +30,7 @@ export interface OrderInfoInterface {
       quantity: number,
       thumbnail: string
     }[]
-    status: 'PENDING' | 'CONFIRMED' | 'CANCELED',
+    status: OrderStatus,
     position: number,
     createdBy: {
       account_id: string,
@@ -53,7 +55,7 @@ export interface OrderAllResponseInterface extends CurrentParamsInterface {
     accounts: AccountInfoInterface[],
     pagination: PaginationInterface,
     filterOrder: FilterStatusInterface[],
-    allOrders: OrderInfoInterface[]
+    allOrders: OrderInfoInterface[],
 }
 
 export interface OrderStates extends ParamsInterface {
@@ -61,7 +63,7 @@ export interface OrderStates extends ParamsInterface {
   accounts: AccountInfoInterface[],
   filterOrder: FilterStatusInterface[],
   pagination: PaginationInterface,
-  allOrders: OrderInfoInterface[]
+  allOrders: OrderInfoInterface[],
 }
 
 export type OrderActions =

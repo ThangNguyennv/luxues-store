@@ -9,7 +9,6 @@ import { MdArticle } from 'react-icons/md'
 import { FaCriticalRole } from 'react-icons/fa'
 import { MdOutlineSupervisorAccount } from 'react-icons/md'
 import { IoIosSettings } from 'react-icons/io'
-import { FaTrash } from 'react-icons/fa'
 import { TbMenu4 } from 'react-icons/tb'
 import { IoMenu } from 'react-icons/io5'
 import { BsChatLeftText } from 'react-icons/bs'
@@ -287,7 +286,7 @@ const Sidebar = () => {
                     <Link to={'/admin/accounts'}>Tài khoản Admin</Link>
                   </li>
                   <li className="border-b border-[#9D9995] pb-[7px]">
-                    <Link to={'/admin/users'}>Tài khoản người dùng</Link>
+                    <Link to={'/admin/users'}>Tài khoản khách hàng</Link>
                   </li>
                 </ul>
               </div>
@@ -333,22 +332,11 @@ const Sidebar = () => {
           <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
             <BsChatLeftText className='text-[18px]'/>
             {isOpen && (
-              <span>Chat</span>
+              <span>Chat khách hàng</span>
             )}
             {/* <BsChatLeftText className='text-[18px]'/> */}
           </Link>
           {/* Hết chat */}
-
-          {/* Thùng rác */}
-          {role && role.permissions.includes('trashs_view') && (
-            <Link to={'/admin/trash'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
-              <FaTrash className='text-[17px]'/>
-              {isOpen && (
-                <span>Thùng rác</span>
-              )}
-            </Link>
-          )}
-          {/* Hết thùng rác */}
         </>
       ) : (
         <>
@@ -378,9 +366,6 @@ const Sidebar = () => {
                   <IoIosSettings />
                 )}
                 <BsChatLeftText />
-                {role.permissions.includes('trashs_view') && (
-                  <FaTrash />
-                )}
               </>
             )}
           </div>

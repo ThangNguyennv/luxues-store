@@ -18,13 +18,14 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { getTotalBill } from '~/helpers/TotalBill'
+import type { OrderStatus } from '~/types/order.type'
 
 const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const {
     orders,
     loading,
-    handleToggleStatus,
+    handleChangeStatus,
     open,
     openPermanentlyDelete,
     handleOpen,
@@ -78,7 +79,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <Skeleton variant="rectangular" width={20} height={20} sx={{ bgcolor: 'grey.400', padding: '0px 2px' }}/>
                 </TableCell>
                 <TableCell align='center'>
-                  <Skeleton variant="text" width={420} height={70} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="text" width={245} height={24} sx={{ bgcolor: 'grey.400' }}/>
                 </TableCell>
                 <TableCell align='center'>
                   <Skeleton variant="text" width={61} height={17} sx={{ bgcolor: 'grey.400' }}/>
@@ -134,7 +135,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                     sx={{ padding: 0 }}
                   />
                 </TableCell>
-                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Đơn hàng</TableCell>
+                <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Mã đơn</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Khách hàng</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Tổng tiền</TableCell>
                 <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái đơn</TableCell>
@@ -159,37 +160,8 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         value={order._id}
                       />
                     </TableCell>
-                    <TableCell sx={{ padding: '6px 0px' }}>
-                      <div className='flex flex-col gap-[7px]'>
-                        {order && (
-                          order.products.map((product, index) => (
-                            <div key={index} className='flex items-center gap-[10px]'>
-                              <div>
-                                <img src={product.thumbnail} className='w-[70px] h-[70px]'/>
-                              </div>
-                              <div className='flex flex-col justify-center'>
-                                <div className='text-[#00171F] font-[500] line-clamp-1'>
-                                  {product.title}
-                                </div>
-                                <div>
-                                  <b>Giá gốc: </b>
-                                  {product.price.toLocaleString()}đ
-                                </div>
-                                <div>
-                                  <b>Số lượng: </b>
-                                  {product.quantity}
-                                </div>
-                                {product.discountPercentage > 0 && (
-                                  <div>
-                                    <b>Mã giảm: </b>
-                                    {product.discountPercentage}%
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          ))
-                        )}
-                      </div>
+                    <TableCell sx={{ padding: '6px 0px', width: '250px' }}>
+                      <div className='flex items-center justify-center font-[600] text-[16px] hover:underline'>{order._id}</div>
                     </TableCell>
                     <TableCell align='center' className='font-[700]' sx={{ padding: '6px 0px' }}>
                       <span>{order.userInfo.fullName}</span>
@@ -198,16 +170,40 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                       {Math.floor(getTotalBill(order)).toLocaleString()}đ
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
-                      <button
-                        onClick={() => handleToggleStatus(order._id, order.status)}
-                        className={`border rounded-[5px] p-[5px] text-white
-                          ${order.status === 'confirmed' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
+                      <select
+                        name="status"
+                        value={order.status}
+                        onChange={(event) => handleChangeStatus(order._id, event.target.value as OrderStatus)}
+                        className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px] bg-amber-100 text-black'
                       >
-                        {order.status === 'confirmed' ? 'Đã xác nhận' : 'Chờ duyệt'}
-                      </button>
+                        <option disabled value={''}>-- Chọn hành động --</option>
+                        <option value="PENDING">Đang xử lý</option>
+                        <option value="TRANSPORTING">Đang giao hàng</option>
+                        <option value="CONFIRMED">Hoàn thành</option>
+                      </select>
                     </TableCell>
-                    <TableCell align='center' sx={{ padding: '6px 0px' }}>Đã thanh toán</TableCell>
-                    <TableCell align='center' sx={{ padding: '6px 0px' }}>VNPAY</TableCell>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
+                      {order.paymentInfo.status === 'PENDING' ? (
+                        <span>Chưa thanh toán</span>
+                      ) : (
+                        order.paymentInfo.status === 'PAID' ? (
+                          <span>Đã thanh toán</span>
+                        ) : (
+                          <span>Hủy</span>
+                        )
+                      )}
+                    </TableCell>
+                    <TableCell align='center' sx={{ padding: '6px 0px' }}>
+                      {order.paymentInfo.method === 'VNPAY' ? (
+                        <span className='uppercase font-[600] text-[16px]'>VNPAY</span>
+                      ) : (
+                        order.paymentInfo.method === 'ZALOPAY' ? (
+                          <span className='uppercase font-[600] text-[16px]'>ZALOPAY</span>
+                        ) : (
+                          <span className='uppercase font-[600] text-[16px]'>COD</span>
+                        )
+                      )}
+                    </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }} className='font-[700] '>
                       <FormatDateTime time={order.createdAt}/>
                     </TableCell>
@@ -245,7 +241,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                             onClick={() => handleRecover(order._id)}
                             className='nav-link border rounded-[5px] bg-[#525FE1] p-[5px] text-white'
                           >
-                            Mua lại
+                            Khôi phục
                           </button>
                           <button
                             onClick={() => handleOpenPermanentlyDelete(order._id)}

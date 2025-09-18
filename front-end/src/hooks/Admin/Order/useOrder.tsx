@@ -4,6 +4,7 @@ import { fetchChangeMultiAPI } from '~/apis/admin/order.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useOrderContext } from '~/contexts/admin/OrderContext'
 import { useAuth } from '~/contexts/admin/AuthContext'
+import type { OrderStatus } from '~/types/order.type'
 
 export const useOrder = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
@@ -141,7 +142,7 @@ export const useOrder = () => {
     setSearchParams(newParams)
   }
 
-  const handleFilterStatus = (status: string): void => {
+  const handleFilterStatus = (status: OrderStatus): void => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {
       newParams.set('status', status)

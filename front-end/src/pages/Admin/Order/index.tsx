@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import FilterStatusOrder from '~/components/admin/FilterStatus/FilterStatusOrder'
 import OrderTable from '~/components/admin/ItemTable/OrderTable'
+import type { OrderStatus } from '~/types/order.type'
 
 const OrderAdmin = () => {
   const {
@@ -46,7 +47,7 @@ const OrderAdmin = () => {
             <div className='flex items-center justify-between text-[15px]'>
               <FilterStatusOrder
                 filterOrder={filterOrder}
-                currentStatus={currentStatus}
+                currentStatus={currentStatus as OrderStatus}
                 handleFilterStatus={handleFilterStatus}
                 items={allOrders}
               />
@@ -66,9 +67,10 @@ const OrderAdmin = () => {
                 className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
               >
                 <option disabled value={''}>-- Chọn hành động --</option>
-                <option value="waiting">Chờ duyệt</option>
-                <option value="confirmed">Đã xác nhận</option>
-                <option value="delete-all">Hủy tất cả</option>
+                <option value="PENDING">Đang xử lý</option>
+                <option value="TRANSPORTING">Đang giao hàng</option>
+                <option value="CONFIRMED">Hoàn thành</option>
+                <option value="DELETEALL">Hủy tất cả</option>
               </select>
               <button
                 type="submit"

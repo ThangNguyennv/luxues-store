@@ -167,7 +167,7 @@ const User = () => {
     <>
       {role && role.permissions.includes('users_view') && (
         <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[15px] shadow-md mt-[15px]'>
-          <h1 className="text-[24px] font-[700] text-[#000000]">Danh sách người dùng</h1>
+          <h1 className="text-[24px] font-[700] text-[#000000]">Danh sách khách hàng</h1>
           <TableContainer sx={{ maxHeight: 600 }}>
             <Table stickyHeader sx={{
               borderCollapse: 'collapse',

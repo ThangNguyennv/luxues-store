@@ -13,29 +13,34 @@ const DetailOrder = () => {
         orderDetail ? (
           <div className='flex flex-col gap-[15px] bg-[#FFFFFF] p-[25px] shadow-md mt-[15px] text-[17px]'>
             <div className='text-[24px] font-[600] text-[#00171F]'>
-            Chi tiết đơn hàng
+              Chi tiết đơn hàng
             </div>
             <div className='flex gap-[20px]'>
               <div className='flex flex-col gap-[15px]'>
                 <div className='flex flex-col gap-[15px]'>
                   {orderDetail.products.length > 0 && (
                     orderDetail.products.map((product, index) => (
-                      <div className='flex flex-col gap-[10px] border rounded-[5px] p-[10px]' key={index}>
-                        <div>
-                          <b>Tên sản phẩm: </b>
-                          {product.title}
+                      <div className='flex items-center justify-between border rounded-[5px] p-[10px]' key={index}>
+                        <div className='flex flex-col gap-[10px]'>
+                          <div>
+                            <b>Tên sản phẩm: </b>
+                            {product.title}
+                          </div>
+                          <div>
+                            <b>Giá: </b>
+                            {product.price.toLocaleString('vi-VN')}đ
+                          </div>
+                          <div>
+                            <b>Giảm giá: </b>
+                            {product.discountPercentage}%
+                          </div>
+                          <div>
+                            <b>Còn lại: </b>
+                            {product.quantity}
+                          </div>
                         </div>
                         <div>
-                          <b>Giá: </b>
-                          {product.price.toLocaleString('vi-VN')}đ
-                        </div>
-                        <div>
-                          <b>Giảm giá: </b>
-                          {product.discountPercentage}%
-                        </div>
-                        <div>
-                          <b>Còn lại: </b>
-                          {product.quantity}
+                          <img src={product.thumbnail} className='w-[150px] h-[150px]'/>
                         </div>
                       </div>
                     ))
@@ -44,9 +49,13 @@ const DetailOrder = () => {
                 <div>
                   <b>Trạng thái: </b>
                   {
-                    orderDetail.status === 'confirmed' ?
-                      <span className="text-green-500 font-[600]">Đã xác nhận</span> :
-                      <span className="text-red-500 font-[600]">Chờ duyệt</span>
+                    orderDetail.status === 'PENDING' ?
+                      <span className="text-[#FFAB19] font-[600]">Đang xử lý</span> :
+                      orderDetail.status === 'TRANSPORTING' ?
+                        <span className="text-[#2F57EF] font-[600]">Đang vận chuyển</span> :
+                        orderDetail.status === 'CONFIRMED' ?
+                          <span className="text-green-500 font-[600]">Đã hoàn thành</span> :
+                          <span className="text-[#BC3433] font-[600]">Đã hủy</span>
                   }
                 </div>
               </div>
