@@ -84,7 +84,7 @@ export const order = async (req: Request, res: Response) => {
       userInfo: userInfo,
       products: products,
       userId: req['accountUser'].id,
-      amount: body.totalBill
+      amount: Math.floor(body.totalBill)
     }
     const order = new Order(orderInfo)
     await order.save()
@@ -190,8 +190,6 @@ export const vnpayReturn = async (req: Request, res: Response) => {
       vnp_ResponseCode: "00",                         // Trạng thái giao dịch ("00" = thành công).
     }
     await order.save()
-    res.status(200).json({ message: 'Đặt hàng thành công', order: order })
-    // // Redirect về frontend hiển thị kết quả
     res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
   } catch (err) {
     res.status(500).json({ message: "Lỗi xử lý callback VNPay", error: err });
