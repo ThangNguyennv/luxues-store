@@ -1,4 +1,8 @@
 import { useDashboard } from '~/hooks/admin/dashboard/useDashboard'
+import { FaProductHunt } from 'react-icons/fa'
+import { PiUserListBold } from 'react-icons/pi'
+import { RiBillLine } from 'react-icons/ri'
+import { MdCheckCircleOutline } from 'react-icons/md'
 
 const Dashboard = () => {
   const {
@@ -7,40 +11,36 @@ const Dashboard = () => {
 
   return (
     <>
-      <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Doanh thu</h1>
+      <h1 className="text-[30px] font-[700] text-[#BC3433] m-[20px]">Thống kê</h1>
 
-      <div className='grid grid-cols-2 gap-[10px] border rounded-[5px] p-[5px]'>
-        <div className='border p-[5px]'>
-          <div>
-            <b>Danh mục sản phẩm</b>
+      <div className='grid grid-cols-4 gap-[10px] p-[5px] text-amber-50'>
+        <div className='border rounded-[5px] p-[15px] gap-[25px] flex items-center justify-center bg-[#2F57EF]'>
+          <PiUserListBold className='text-[30px]'/>
+          <div className='flex flex-col gap-[5px]'>
+            <b>Lượng truy cập</b>
+            <b>{statistic.user.total}</b>
           </div>
-          <p>Số lượng: <b>{statistic.categoryProduct.total}</b></p>
-          <p>Hoạt động: <b>{statistic.categoryProduct.active}</b></p>
-          <p>Dừng hoạt động: <b>{statistic.categoryProduct.inactive}</b></p>
         </div>
-        <div className='border p-[5px]'>
-          <div>
-            <b>Danh sách sản phẩm</b>
+        <div className='border rounded-[5px] p-[15px] gap-[25px] flex items-center justify-center bg-[#525FE1]'>
+          <FaProductHunt className='text-[30px]'/>
+          <div className='flex flex-col gap-[5px]'>
+            <b>Sản phẩm</b>
+            <b>{statistic.product.total}</b>
           </div>
-          <p>Số lượng: <b>{statistic.product.total}</b></p>
-          <p>Hoạt động: <b>{statistic.product.active}</b></p>
-          <p>Dừng hoạt động: <b>{statistic.product.inactive}</b></p>
         </div>
-        <div className='border p-[5px]'>
-          <div>
-            <b>Tài khoản admin</b>
+        <div className='border rounded-[5px] p-[15px] gap-[25px] flex items-center justify-center bg-[#18BA2A]'>
+          <RiBillLine className='text-[30px]'/>
+          <div className='flex flex-col gap-[5px]'>
+            <b>Đơn hàng</b>
+            <b>{statistic.order.total}</b>
           </div>
-          <p>Số lượng: <b>{statistic.account.total}</b></p>
-          <p>Hoạt động: <b>{statistic.account.active}</b></p>
-          <p>Dừng hoạt động: <b>{statistic.account.inactive}</b></p>
         </div>
-        <div className='border p-[5px]'>
-          <div>
-            <b>Tài khoản User</b>
+        <div className='border rounded-[5px] p-[15px] gap-[25px] flex items-center justify-center bg-[#FFAB19]'>
+          <MdCheckCircleOutline className='text-[30px]'/>
+          <div className='flex flex-col gap-[5px]'>
+            <b>Doanh thu</b>
+            <b>{statistic.revenue.total.toLocaleString()}đ</b>
           </div>
-          <p>Số lượng: <b>{statistic.user.total}</b></p>
-          <p>Hoạt động: <b>{statistic.user.active}</b></p>
-          <p>Dừng hoạt động: <b>{statistic.user.inactive}</b></p>
         </div>
       </div>
     </>

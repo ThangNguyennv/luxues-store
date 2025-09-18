@@ -78,7 +78,7 @@ const Sidebar = () => {
             >
               <ul className="flex flex-col gap-2 items-center">
                 <li className="border-b border-[#9D9995] pb-[7px]">
-                  <Link to={'/admin/dashboard'}>Doanh thu</Link>
+                  <Link to={'/admin/dashboard'}>Thống kê</Link>
                 </li>
                 {role && role.permissions.includes('orders_view') && (
                   <li className="border-b border-[#9D9995] pb-[7px]">

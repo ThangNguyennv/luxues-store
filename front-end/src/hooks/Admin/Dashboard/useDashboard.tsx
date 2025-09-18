@@ -4,17 +4,17 @@ import type { DashboardInterface } from '~/types/dashboard.type'
 
 export const useDashboard = () => {
   const [statistic, setStatistic] = useState({
-    categoryProduct: {
-      total: 0, active: 0, inactive: 0
+    user: {
+      total: 0
     },
     product: {
-      total: 0, active: 0, inactive: 0
+      total: 0
     },
-    account: {
-      total: 0, active: 0, inactive: 0
+    order: {
+      total: 0
     },
-    user: {
-      total: 0, active: 0, inactive: 0
+    revenue: {
+      total: 0
     }
   })
 
