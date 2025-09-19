@@ -170,8 +170,18 @@ const Checkout = () => {
                   <Skeleton variant="text" width={55} height={20} sx={{ bgcolor: 'grey.400' }}/>
                   <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
                 </div>
+                <div className='form-group'>
+                  <Skeleton variant="text" width={55} height={20} sx={{ bgcolor: 'grey.400' }}/>
+                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
+                </div>
                 <div className='flex items-center justify-end'>
-                  <Skeleton variant="rectangular" width={122} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                  <div className='flex flex-col items-end gap-[15px]'>
+                    <div className='flex items-center justify-center gap-[15px]'>
+                      <Skeleton variant="text" width={204} height={25} sx={{ bgcolor: 'grey.400' }}/>
+                      <Skeleton variant="rectangular" width={234} height={33} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
+                    <Skeleton variant="rectangular" width={122} height={50} sx={{ bgcolor: 'grey.400' }}/>
+                  </div>
                 </div>
               </form>
             </div>
@@ -296,7 +306,7 @@ const Checkout = () => {
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
                   >
-                    <option value={'COD'}>Thanh toán trực tiếp</option>
+                    <option value={'COD'}>Thanh toán khi nhận hàng</option>
                     <option value={'VNPAY'}>Thanh toán qua ví VNPAY</option>
                     <option value={'ZALOPAY'}>Thanh toán qua ví ZALOPAY</option>
                     <option value={'MOMO'}>Thanh toán qua ví MOMO</option>
