@@ -7,6 +7,7 @@ import Account from '~/models/account.model'
 import Product from '~/models/product.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
+import mongoose from 'mongoose'
 
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
@@ -21,20 +22,11 @@ export const index = async (req: Request, res: Response) => {
         find.status = req.query.status.toString()
       }
     }
+
     // Search
-    let productIds: string[] = []
     const objectSearch = searchHelpers(req.query)
-    if (objectSearch.regex || objectSearch.slug) {
-      const matchedProducts = await Product.find({
-        $or: [
-          { title: objectSearch.regex },
-          { slug: objectSearch.slug }
-        ]
-      }).select('_id')
-      productIds = matchedProducts.map(p => p._id.toString())    
-      if (productIds.length > 0) {
-        find['products.product_id'] = { $in: productIds }
-      }
+    if (objectSearch.keyword) {
+      find._id = new mongoose.Types.ObjectId(objectSearch.keyword)
     }
     // End search
 
