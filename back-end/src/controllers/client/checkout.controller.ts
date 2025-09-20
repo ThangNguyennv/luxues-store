@@ -5,7 +5,8 @@ import Order from '~/models/order.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm, ReturnQueryFromVNPay } from 'vnpay'
-
+import moment from 'moment'
+import CryptoJS from 'crypto-js'
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
   try {
@@ -44,6 +45,13 @@ export const index = async (req: Request, res: Response) => {
     })
   }
 }
+
+const config = {
+  app_id: "553",
+  key1: "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
+  key2: "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3",
+  endpoint: "https://sandbox.zalopay.com.vn/v001/tpe/createorder"
+};
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
@@ -93,7 +101,7 @@ export const order = async (req: Request, res: Response) => {
       amount: Math.floor(totalBill),
       note: body.note,
     }
-    const order = new Order(orderInfo)
+    let order = new Order(orderInfo)
     order.paymentInfo.method = paymentMethod
     await order.save()
     if (paymentMethod === 'COD') {
@@ -134,7 +142,33 @@ export const order = async (req: Request, res: Response) => {
         message: 'Thành công!',
         paymentUrl: vnpayResponse
       })
+    } else if (paymentMethod === 'ZALOPAY') {
+        const embed_data = {
+          redirectURL: `http://localhost:5173/checkout/success/${order.id}`
+        }
+
+        const items = [{products}]
+        const transID = Math.floor(Math.random() * 1000000)
+        const orderTest = {
+          app_id: config.app_id, 
+          app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
+          app_user: "demo", 
+          app_time: Date.now(), // miliseconds
+          item: JSON.stringify(items), 
+          embed_data: JSON.stringify(embed_data), 
+          amount: totalBill, 
+          description: "ZaloPay Integration Demo",
+          bank_code: "", 
+        };
+
+        // appid|apptransid|appuser|amount|apptime|embeddata|item
+        const data = config.app_id + "|" + orderTest.app_trans_id + "|" + orderTest.app_user + "|" + orderTest.amount + "|" + orderTest.app_time + "|" + orderTest.embed_data + "|" + orderTest.item
+        orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
+
+    } else if (paymentMethod === 'MOMO') {
+
     }
+
     for (const item of products) {
       await Product.updateOne(
         { _id: item.product_id },
