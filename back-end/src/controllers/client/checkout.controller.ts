@@ -7,13 +7,12 @@ import { OneProduct } from '~/helpers/product'
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm, ReturnQueryFromVNPay } from 'vnpay'
 import moment from 'moment'
 import CryptoJS from 'crypto-js'
+
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
   try {
     const cartId = req["cartId"]
-    const cart = await Cart.findOne({
-      _id: cartId
-    })
+    const cart = await Cart.findOne({ _id: cartId })
     if (cart.products.length > 0) {
       for (const item of cart.products) {
         const productId = item.product_id
@@ -28,21 +27,10 @@ export const index = async (req: Request, res: Response) => {
         item['totalPrice'] = productInfo['priceNew'] * item.quantity
       }
     }
-    cart['totalsPrice'] = cart.products.reduce(
-      (sum, item) => sum + item['totalPrice'],
-      0
-    )
-    res.json({
-      code: 200,
-      message: 'Thành công!',
-      cartDetail: cart
-    })
+    cart['totalsPrice'] = cart.products.reduce((sum, item) => sum + item['totalPrice'], 0)
+    res.status(200).json({ message: 'Thành công!', cartDetail: cart })
   } catch (error) {
-    res.json({
-      code: 400,
-      message: 'Lỗi!',
-      error: error
-    })
+    res.status(400).json({ message: 'Lỗi!', error: error })
   }
 }
 
@@ -63,10 +51,7 @@ export const order = async (req: Request, res: Response) => {
       phone: body.phone, 
       address: body.address
     }
-    const cart = await Cart.findOne({
-      _id: cartId
-    })
-
+    const cart = await Cart.findOne({ _id: cartId })
     const products = []
     for (const product of cart.products) {
       const objectProduct = {
@@ -75,11 +60,9 @@ export const order = async (req: Request, res: Response) => {
         quantity: product.quantity,
         discountPercentage: 0
       }
-
       const productInfo = await Product
         .findOne({ _id: product.product_id })
         .select('price discountPercentage title thumbnail')
-
       objectProduct.price = productInfo.price
       objectProduct.discountPercentage = productInfo.discountPercentage
       objectProduct['title'] = productInfo.title
@@ -87,10 +70,9 @@ export const order = async (req: Request, res: Response) => {
       products.push(objectProduct)
     }
     const totalBill = products.reduce((acc, product) => {
-      const priceNewForOneProduct = product.price * (100 - product.discountPercentage) / 100
-    return acc + priceNewForOneProduct * product.quantity
-  }, 0)
-
+      const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
+      return acc + priceNewForOneProduct * product.quantity
+    }, 0)
     const paymentMethod = body.paymentMethod
     const orderInfo = {
       user_id: req["accountUser"].id,
@@ -99,17 +81,14 @@ export const order = async (req: Request, res: Response) => {
       products: products,
       userId: req['accountUser'].id,
       amount: Math.floor(totalBill),
-      note: body.note,
+      note: body.note
     }
-    let order = new Order(orderInfo)
+    const order = new Order(orderInfo)
     order.paymentInfo.method = paymentMethod
     await order.save()
+
     if (paymentMethod === 'COD') {
-      res.json({
-        code: 201,
-        order: order,
-        message: 'Thành công!',
-      })
+      res.status(201).json({ message: 'Thành công!', order: order })
     } else if (paymentMethod === 'VNPAY') {
       const vnpay = new VNPay({
         // ⚡ Cấu hình bắt buộc
@@ -137,33 +116,29 @@ export const order = async (req: Request, res: Response) => {
         vnp_CreateDate: dateFormat(new Date()),
         vnp_ExpireDate: dateFormat(tomorrow)
       })
-      res.json({
-        code: 201,
-        message: 'Thành công!',
-        paymentUrl: vnpayResponse
-      })
+      res.status(201).json({ message: 'Thành công!', paymentUrl: vnpayResponse })
     } else if (paymentMethod === 'ZALOPAY') {
-        const embed_data = {
-          redirectURL: `http://localhost:5173/checkout/success/${order.id}`
-        }
+        // const embed_data = {
+        //   redirectURL: `http://localhost:5173/checkout/success/${order.id}`
+        // }
 
-        const items = [{products}]
-        const transID = Math.floor(Math.random() * 1000000)
-        const orderTest = {
-          app_id: config.app_id, 
-          app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
-          app_user: "demo", 
-          app_time: Date.now(), // miliseconds
-          item: JSON.stringify(items), 
-          embed_data: JSON.stringify(embed_data), 
-          amount: totalBill, 
-          description: "ZaloPay Integration Demo",
-          bank_code: "", 
-        };
+        // const items = [{products}]
+        // const transID = Math.floor(Math.random() * 1000000)
+        // const orderTest = {
+        //   app_id: config.app_id, 
+        //   app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
+        //   app_user: "demo", 
+        //   app_time: Date.now(), // miliseconds
+        //   item: JSON.stringify(items), 
+        //   embed_data: JSON.stringify(embed_data), 
+        //   amount: totalBill, 
+        //   description: "ZaloPay Integration Demo",
+        //   bank_code: "", 
+        // };
 
-        // appid|apptransid|appuser|amount|apptime|embeddata|item
-        const data = config.app_id + "|" + orderTest.app_trans_id + "|" + orderTest.app_user + "|" + orderTest.amount + "|" + orderTest.app_time + "|" + orderTest.embed_data + "|" + orderTest.item
-        orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
+        // // appid|apptransid|appuser|amount|apptime|embeddata|item
+        // const data = config.app_id + "|" + orderTest.app_trans_id + "|" + orderTest.app_user + "|" + orderTest.amount + "|" + orderTest.app_time + "|" + orderTest.embed_data + "|" + orderTest.item
+        // orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
 
     } else if (paymentMethod === 'MOMO') {
 
@@ -177,19 +152,11 @@ export const order = async (req: Request, res: Response) => {
     }
 
     await Cart.updateOne(
-      {
-        _id: cartId
-      },
-      {
-        products: []
-      }
+      { _id: cartId },
+      { products: [] }
     )
   } catch (error) {
-    res.json({
-      code: 400,
-      message: 'Lỗi tạo đơn hàng!',
-      error: error
-    })
+    res.status(400).json({ message: 'Lỗi tạo đơn hàng!', error: error })
   }
 }
 
