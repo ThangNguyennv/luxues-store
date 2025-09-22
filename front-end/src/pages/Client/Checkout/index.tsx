@@ -65,6 +65,7 @@ const Checkout = () => {
       address: String(formData.get('address') ?? '')
     }
     const response = await fetchOrderAPI(payload)
+    console.log("🚀 ~ index.tsx ~ handleSubmit ~ response:", response);
     if (response.code === 201) {
       await refreshCart()
       if (paymentMethod === 'COD') {
@@ -72,6 +73,10 @@ const Checkout = () => {
       } else if (paymentMethod === 'VNPAY') {
         if (response.paymentUrl) {
           window.location.href = response.paymentUrl
+        }
+      } else if (paymentMethod === 'ZALOPAY') {
+        if (response.order_url) {
+          window.location.href = response.order_url
         }
       }
     }
