@@ -35,9 +35,9 @@ export const index = async (req: Request, res: Response) => {
 }
 
 const config = {
-  app_id: "553",
-  key1: "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
-  key2: "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3",
+  app_id: "554",
+  key1: "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn",
+  key2: "uUfsWgfLkRLzq6W2uNXTCxrfxs51auny",
   endpoint: "https://sandbox.zalopay.com.vn/v001/tpe/createorder"
 };
 
@@ -45,11 +45,11 @@ const config = {
 export const order = async (req: Request, res: Response) => {
   try {
     const cartId = req["cartId"]
-    const body = req.body
+    const { note, paymentMethod, fullName, phone, address, } = req.body
     const userInfo = {
-      fullName: body.fullName,
-      phone: body.phone, 
-      address: body.address
+      fullName: fullName,
+      phone: phone, 
+      address: address
     }
     const cart = await Cart.findOne({ _id: cartId })
     const products = []
@@ -73,7 +73,6 @@ export const order = async (req: Request, res: Response) => {
       const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
       return acc + priceNewForOneProduct * product.quantity
     }, 0)
-    const paymentMethod = body.paymentMethod
     const orderInfo = {
       user_id: req["accountUser"].id,
       cart_id: cartId,
@@ -81,7 +80,7 @@ export const order = async (req: Request, res: Response) => {
       products: products,
       userId: req['accountUser'].id,
       amount: Math.floor(totalBill),
-      note: body.note
+      note: note
     }
     const order = new Order(orderInfo)
     order.paymentInfo.method = paymentMethod
@@ -118,28 +117,31 @@ export const order = async (req: Request, res: Response) => {
       })
       res.status(201).json({ message: 'Thành công!', paymentUrl: vnpayResponse })
     } else if (paymentMethod === 'ZALOPAY') {
-        // const embed_data = {
-        //   redirectURL: `http://localhost:5173/checkout/success/${order.id}`
-        // }
+        const embed_data = {
+          redirectURL: `http://localhost:5173/checkout/success/${order.id}`
+        }
 
-        // const items = [{products}]
-        // const transID = Math.floor(Math.random() * 1000000)
-        // const orderTest = {
-        //   app_id: config.app_id, 
-        //   app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
-        //   app_user: "demo", 
-        //   app_time: Date.now(), // miliseconds
-        //   item: JSON.stringify(items), 
-        //   embed_data: JSON.stringify(embed_data), 
-        //   amount: totalBill, 
-        //   description: "ZaloPay Integration Demo",
-        //   bank_code: "", 
-        // };
+        const items = [{products}]
+        const transID = Math.floor(Math.random() * 1000000)
+        const orderTest = {
+          app_id: config.app_id, 
+          app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
+          app_user: "demo", 
+          app_time: Date.now(), // miliseconds
+          item: JSON.stringify(items), 
+          embed_data: JSON.stringify(embed_data), 
+          amount: totalBill, 
+          description: "ZaloPay Integration Demo",
+          bank_code: "", 
+          mac: ''
+        };
 
-        // // appid|apptransid|appuser|amount|apptime|embeddata|item
-        // const data = config.app_id + "|" + orderTest.app_trans_id + "|" + orderTest.app_user + "|" + orderTest.amount + "|" + orderTest.app_time + "|" + orderTest.embed_data + "|" + orderTest.item
-        // orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
-
+        const data = config.app_id + "|" + orderTest.app_trans_id + "|" + 
+                     orderTest.app_user + "|" + orderTest.amount + "|" + 
+                     orderTest.app_time + "|" + orderTest.embed_data + "|" + 
+                     orderTest.item
+        orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString()
+      res.status(201).json({ message: 'Thành công!', data: data })
     } else if (paymentMethod === 'MOMO') {
 
     }
@@ -207,9 +209,9 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     await order.save()
     res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
   } catch (err) {
-    res.status(500).json({ message: "Lỗi xử lý callback VNPay", error: err });
+    res.status(500).json({ message: "Lỗi xử lý callback VNPay", error: err })
   }
-};
+}
 
 // [GET] /checkout/success/:orderId
 export const success = async (req: Request, res: Response) => {
@@ -231,16 +233,8 @@ export const success = async (req: Request, res: Response) => {
       (sum, item) => sum + item['totalPrice'],
       0
     )
-    res.json({
-      code: 200,
-      message: 'Đặt hàng thành công',
-      order: order
-    })
+    res.status(200).json({ message: 'Đặt hàng thành công', order: order })
   } catch (error) {
-    res.json({
-      code: 400,
-      message: 'Lỗi!',
-      error: error
-    })
+    res.status(400).json({ message: 'Lỗi!', error: error })
   }
 }
