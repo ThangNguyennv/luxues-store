@@ -7,6 +7,8 @@ import { OneProduct } from '~/helpers/product'
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm, ReturnQueryFromVNPay } from 'vnpay'
 import moment from 'moment'
 import CryptoJS from 'crypto-js'
+import axios from 'axios'
+import { createHmac } from 'crypto';
 
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
@@ -28,21 +30,30 @@ export const index = async (req: Request, res: Response) => {
       }
     }
     cart['totalsPrice'] = cart.products.reduce((sum, item) => sum + item['totalPrice'], 0)
-    res.status(200).json({ message: 'Thành công!', cartDetail: cart })
+    res.json({ 
+      code: 200,  
+      message: 'Thành công!', 
+      cartDetail: cart 
+    })
   } catch (error) {
-    res.status(400).json({ message: 'Lỗi!', error: error })
+    res.json({ 
+      code: 400,  
+      message: 'Lỗi!', 
+      error: error
+    })
   }
 }
 
 const config = {
-  app_id: "554",
+  appid: "554",
   key1: "8NdU5pG5R2spGHGhyO99HN1OhD8IQJBn",
   key2: "uUfsWgfLkRLzq6W2uNXTCxrfxs51auny",
   endpoint: "https://sandbox.zalopay.com.vn/v001/tpe/createorder"
-};
+}
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
+  console.log(req.body)
   try {
     const cartId = req["cartId"]
     const { note, paymentMethod, fullName, phone, address, } = req.body
@@ -87,7 +98,11 @@ export const order = async (req: Request, res: Response) => {
     await order.save()
 
     if (paymentMethod === 'COD') {
-      res.status(201).json({ message: 'Thành công!', order: order })
+      res.json({ 
+        code: 201,  
+        message: 'Thành công!', 
+        order: order
+      })
     } else if (paymentMethod === 'VNPAY') {
       const vnpay = new VNPay({
         // ⚡ Cấu hình bắt buộc
@@ -115,33 +130,62 @@ export const order = async (req: Request, res: Response) => {
         vnp_CreateDate: dateFormat(new Date()),
         vnp_ExpireDate: dateFormat(tomorrow)
       })
-      res.status(201).json({ message: 'Thành công!', paymentUrl: vnpayResponse })
+      res.json({ 
+        code: 201,  
+        message: 'Thành công!', 
+        paymentUrl: vnpayResponse
+      })
     } else if (paymentMethod === 'ZALOPAY') {
-        const embed_data = {
+        const embeddata = {
           redirectURL: `http://localhost:5173/checkout/success/${order.id}`
         }
 
-        const items = [{products}]
+        const items = products.map(p => ({
+          itemid: p.product_id,
+          itemname: p.title,
+          itemprice: Math.floor(p.price * (100 - p.discountPercentage) / 100),
+          itemquantity: p.quantity
+        }))
+        console.log("🚀 ~ checkout.controller.ts ~ order ~ items:", items);
+        console.log("🚀 ~ checkout.controller.ts ~ order ~ totalBill:", totalBill);
+
         const transID = Math.floor(Math.random() * 1000000)
         const orderTest = {
-          app_id: config.app_id, 
-          app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
-          app_user: "demo", 
-          app_time: Date.now(), // miliseconds
+          appid: config.appid, 
+          apptransid: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
+          appuser: "demo", 
+          apptime: Date.now(), // miliseconds
           item: JSON.stringify(items), 
-          embed_data: JSON.stringify(embed_data), 
-          amount: totalBill, 
+          embeddata: JSON.stringify(embeddata), 
+          amount: Math.floor(totalBill), 
           description: "ZaloPay Integration Demo",
-          bank_code: "", 
+          bank_code: "zalopayapp", 
           mac: ''
-        };
+        }
 
-        const data = config.app_id + "|" + orderTest.app_trans_id + "|" + 
-                     orderTest.app_user + "|" + orderTest.amount + "|" + 
-                     orderTest.app_time + "|" + orderTest.embed_data + "|" + 
-                     orderTest.item
-        orderTest.mac = CryptoJS.HmacSHA256(data, config.key1).toString()
-      res.status(201).json({ message: 'Thành công!', data: data })
+        const data = [
+          orderTest.appid,
+          orderTest.apptransid,
+          orderTest.appuser,
+          orderTest.amount,
+          orderTest.apptime,
+          orderTest.embeddata,
+          orderTest.item
+        ].join('|');
+
+  // dùng Node crypto thay vì CryptoJS
+  orderTest.mac = createHmac('sha256', config.key1)
+    .update(data)
+    .digest('hex');
+
+        const zaloRes  = await axios.post(config.endpoint, null, { params: orderTest })
+        console.log("🚀 ~ checkout.controller.ts ~ order ~ zaloRes:", zaloRes.data);
+      res.json({ 
+        code: 201,  
+        message: 'Thành công!', 
+        order_url: zaloRes.data.orderurl, 
+        zalo_token: zaloRes.data.zptranstoken
+      })
     } else if (paymentMethod === 'MOMO') {
 
     }
@@ -158,7 +202,11 @@ export const order = async (req: Request, res: Response) => {
       { products: [] }
     )
   } catch (error) {
-    res.status(400).json({ message: 'Lỗi tạo đơn hàng!', error: error })
+    res.json({ 
+      code: 400,  
+      message: 'Lỗi!', 
+      error: error
+    })
   }
 }
 
@@ -180,14 +228,20 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     // Verify query từ VNPay
     const verified = vnpay.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
     if (!verified.isVerified) {
-      return res.status(400).json({ message: 'Sai chữ ký VNPay' })
+      res.json({ 
+        code: 400,  
+        message: 'Sai chữ ký VNPay'
+      })
     }
 
     const orderId = req.query["vnp_TxnRef"] as string
     const order = await Order.findById(orderId)
 
     if (!order) {
-      return res.status(404).json({ message: 'Không tìm thấy đơn hàng' })
+      res.json({ 
+        code: 404,  
+        message: 'Không tìm thấy đơn hàng'
+      })
     }
 
     // Nếu thanh toán thành công
@@ -209,7 +263,11 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     await order.save()
     res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
   } catch (err) {
-    res.status(500).json({ message: "Lỗi xử lý callback VNPay", error: err })
+    res.json({ 
+      code: 500,  
+      message: "Lỗi xử lý callback VNPay",
+      error: err
+    })
   }
 }
 
@@ -233,8 +291,16 @@ export const success = async (req: Request, res: Response) => {
       (sum, item) => sum + item['totalPrice'],
       0
     )
-    res.status(200).json({ message: 'Đặt hàng thành công', order: order })
+    res.json({ 
+      code: 200,  
+      message: 'Đặt hàng thành công',
+      order: order
+    })
   } catch (error) {
-    res.status(400).json({ message: 'Lỗi!', error: error })
+    res.json({ 
+      code: 400,  
+      message: 'Lỗi!',
+      error: error
+    })
   }
 }
