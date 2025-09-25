@@ -12,7 +12,7 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
@@ -21,7 +21,8 @@ const Checkout = () => {
   const { refreshCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()
-
+  const params = useParams()
+  const orderId = params.orderId as string
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,11 +54,11 @@ const Checkout = () => {
 
     return acc + priceNewForOneProduct * item.quantity
   }, 0)
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const payload = {
+      orderId: orderId,
       note: String(formData.get('note') ?? ''),
       paymentMethod: paymentMethod,
       fullName: String(formData.get('fullName') ?? ''),
@@ -65,7 +66,6 @@ const Checkout = () => {
       address: String(formData.get('address') ?? '')
     }
     const response = await fetchOrderAPI(payload)
-    console.log("🚀 ~ index.tsx ~ handleSubmit ~ response:", response);
     if (response.code === 201) {
       await refreshCart()
       if (paymentMethod === 'COD') {
@@ -313,8 +313,8 @@ const Checkout = () => {
                   >
                     <option value={'COD'}>Thanh toán khi nhận hàng</option>
                     <option value={'VNPAY'}>Thanh toán qua ví VNPAY</option>
-                    <option value={'ZALOPAY'}>Thanh toán qua ví ZALOPAY</option>
-                    <option value={'MOMO'}>Thanh toán qua ví MOMO</option>
+                    <option value={'ZALOPAY'}>Thanh toán qua ví Zalopay</option>
+                    <option value={'MOMO'}>Thanh toán qua ví MoMo</option>
                   </select>
                 </div>
                 <div className='flex items-center justify-end'>

@@ -112,7 +112,11 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
       </TableContainer>
     )
   }
-
+  if (!orders || orders.length === 0) {
+    return (
+      <div className='flex items-center justify-center'>Không tồn tại đơn hàng nào.</div>
+    )
+  }
   return (
     <>
       {orders && orders.length > 0 ? (
@@ -183,13 +187,13 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                       </select>
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
-                      {order.paymentInfo.status === 'PENDING' ? (
-                        <span>Chưa thanh toán</span>
+                      {order.paymentInfo.status === 'FAILED' ? (
+                        <span className='text-red-600 font-[600] text-[16px]'>Thanh toán thất bại</span>
                       ) : (
-                        order.paymentInfo.status === 'PAID' ? (
-                          <span>Đã thanh toán</span>
+                        order.paymentInfo.status === 'PENDING' ? (
+                          <span className='text-yellow-600 font-[600] text-[16px]'>Chờ thanh toán</span>
                         ) : (
-                          <span>Hủy</span>
+                          <span className='text-green-600 font-[600] text-[16px]'>Đã thanh toán</span>
                         )
                       )}
                     </TableCell>
