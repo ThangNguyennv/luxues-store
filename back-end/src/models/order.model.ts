@@ -28,7 +28,8 @@ const orderSchema = new mongoose.Schema(
         default: 'PENDING' 
       },
       details: { 
-        type: Object, default: {} 
+        type: mongoose.Schema.Types.Mixed, 
+        default: {} 
       }
     },
     products: [
@@ -44,7 +45,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ['PENDING', 'TRANSPORTING', 'CONFIRMED', 'CANCELED'],
-      default: 'PENDING',
+      default: 'PENDING'
     },
     deleted: {
       type: Boolean,

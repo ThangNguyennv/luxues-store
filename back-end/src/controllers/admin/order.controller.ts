@@ -12,10 +12,11 @@ import mongoose from 'mongoose'
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
   try {
-    const find: any = { deleted: false }
+    const find: any = { }
 
     if (req.query.status === 'CANCELED') {
       find.deleted = true
+      find.status = 'CANCELED'
     } else {
       find.deleted = false
       if (req.query.status) {
