@@ -16,7 +16,6 @@ export const index = async (req: Request, res: Response) => {
 
     if (req.query.status === 'CANCELED') {
       find.deleted = true
-      find.status = 'CANCELED'
     } else {
       find.deleted = false
       if (req.query.status) {

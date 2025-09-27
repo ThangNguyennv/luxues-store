@@ -4,11 +4,14 @@ import Product from '~/models/product.model'
 import Order from '~/models/order.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
-import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm, ReturnQueryFromVNPay } from 'vnpay'
-import moment from 'moment'
+import { ReturnQueryFromVNPay } from 'vnpay'
 import axios from 'axios'
-import { createHmac } from 'crypto';
 import crypto from 'crypto'
+import { vnpayMethod } from '~/helpers/vnpayPayment'
+import { zaloMethod } from '~/helpers/zalopayPayment'
+import { vnpayCreate } from '~/helpers/vnpayPayment'
+import "~/cron/order.cron" // ⚡ load cron khi server start
+import qs from "qs"
 
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
@@ -47,11 +50,9 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
-  console.log(req.body)
   try {
-    console.log(123)
     const cartId = req["cartId"]
-    const { orderId, note, paymentMethod, fullName, phone, address } = req.body
+    const { note, paymentMethod, fullName, phone, address } = req.body
     const userInfo = {
       fullName: fullName,
       phone: phone, 
@@ -59,109 +60,7 @@ export const order = async (req: Request, res: Response) => {
     }
     const cart = await Cart.findOne({ _id: cartId })
     if (cart) {
-      console.log("vào cart")
-      if (cart.products.length === 0) {
-        console.log("vào cart rỗng")
-        const orderUnPaid = await Order.findOne({
-          _id: orderId,
-          cart_id: cartId,
-          'paymentInfo.status': 'PENDING',
-          deleted: false
-        })
-        if (orderUnPaid) {
-          console.log("vào orderUnPaid")
-          const totalBill = orderUnPaid.products.reduce((acc, product) => {
-            const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
-            return acc + priceNewForOneProduct * product.quantity
-          }, 0)
-          orderUnPaid.paymentInfo.method = paymentMethod
-          await orderUnPaid.save()
-          if (paymentMethod === 'VNPAY') {
-            console.log("vào VNPAY")
-            const vnpay = new VNPay({
-            // ⚡ Cấu hình bắt buộc
-            tmnCode: process.env.VNP_TMN_CODE,
-            secureSecret: process.env.VNP_HASH_SECRET,
-            vnpayHost: 'https://sanbox.vnpayment.vn',
-
-            // 🔧 Cấu hình tùy chọn
-            testMode: true, // Chế độ test
-            hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
-            loggerFn: ignoreLogger // Custom logger
-          })
-
-            const tomorrow = new Date()
-            tomorrow.setDate(tomorrow.getDate() + 1)
-
-            const vnpayResponse = vnpay.buildPaymentUrl({
-              vnp_Amount: totalBill,
-              vnp_IpAddr: '127.0.0.0.1', // ip test local
-              vnp_TxnRef: orderUnPaid.id,
-              vnp_OrderInfo: `Thanh toan don hang ${orderUnPaid.id}`,
-              vnp_OrderType: ProductCode.Other,
-              vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
-              vnp_Locale: VnpLocale.VN,
-              vnp_CreateDate: dateFormat(new Date()),
-              vnp_ExpireDate: dateFormat(tomorrow)
-            })
-            res.json({ 
-              code: 201,  
-              message: 'Thành công!', 
-              paymentUrl: vnpayResponse
-            })
-          } else if (paymentMethod === 'ZALOPAY') {
-            const embed_data = {
-              redirecturl: `http://localhost:5173/checkout/success/${orderUnPaid.id}`
-            }
-            const items = orderUnPaid.products.map(p => ({
-              itemid: p.product_id,
-              itemname: p.title,
-              itemprice: Math.floor(p.price * (100 - p.discountPercentage) / 100),
-              itemquantity: p.quantity
-            }))
-            const transID = Math.floor(Math.random() * 1000000)
-            const orderInfo = {
-              app_id: process.env.ZALOPAY_APP_ID, // Định danh cho ứng dụng đã được cấp bởi ZaloPay.
-              app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
-              app_user: `${orderUnPaid.userInfo.phone}-${orderUnPaid.id}`, // Thông tin người dùng như: id/username/tên/số điện thoại/email của user.
-              app_time: Date.now(), // Thời gian tạo đơn hàng (unix timestamp in milisecond). Thời gian tính đến milisecond, lấy theo current time và không quá 15 phút so với thời điểm thanh toán
-              item: JSON.stringify(items), // 	Dữ liệu riêng của đơn hàng. Dữ liệu này sẽ được callback lại cho AppServer khi thanh toán thành công (Nếu không có thì để chuỗi rỗng). Dạng [{...}]
-              embed_data: JSON.stringify(embed_data), 
-              amount: Math.floor(totalBill), 
-              description: `Thanh toán đơn hàng ${transID}`,
-              bank_code: "", 
-              mac: '',
-              callback_url: 'https://164896da51bb.ngrok-free.app/checkout/callback'
-            }
-
-            const data = [
-              orderInfo.app_id,
-              orderInfo.app_trans_id,
-              orderInfo.app_user,
-              orderInfo.amount,
-              orderInfo.app_time,
-              orderInfo.embed_data,
-              orderInfo.item
-            ].join('|');
-
-            orderInfo.mac = crypto.createHmac('sha256', process.env.ZALOPAY_KEY1)
-              .update(data)
-              .digest('hex')
-            console.log("🚀 ~ checkout.controller.ts ~ order ~ orderInfo:", orderInfo);
-
-            const zaloRes  = await axios.post(process.env.ZALOPAY_ENDPOINT, null, { params: orderInfo })
-            console.log("🚀 ~ checkout.controller.ts ~ order ~ zaloRes:", zaloRes);
-            res.json({ 
-              code: 201,  
-              message: 'Thành công!', 
-              order_url: zaloRes.data.order_url, 
-              zalo_token: zaloRes.data.zp_trans_token
-            })
-          } else if (paymentMethod === 'MOMO') {
-            
-          }
-        }
-      } else {
+      if (cart.products.length > 0) {
         const products = []
         for (const product of cart.products) {
           const objectProduct = {
@@ -183,7 +82,6 @@ export const order = async (req: Request, res: Response) => {
           const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
           return acc + priceNewForOneProduct * product.quantity
         }, 0)
-        console.log("🚀 ~ checkout.controller.ts ~ order ~ totalBill:", totalBill);
         const orderInfo = {
           user_id: req["accountUser"].id,
           cart_id: cartId,
@@ -193,9 +91,7 @@ export const order = async (req: Request, res: Response) => {
           amount: Math.floor(totalBill),
           note: note
         }
-        console.log("🚀 ~ checkout.controller.ts ~ order ~ orderInfo:", orderInfo);
         const order = new Order(orderInfo)
-        console.log("🚀 ~ checkout.controller.ts ~ order ~ order:", order);
         order.paymentInfo.method = paymentMethod
         await order.save()
 
@@ -205,113 +101,25 @@ export const order = async (req: Request, res: Response) => {
             message: 'Thành công!', 
             order: order
           })
+          await Cart.updateOne(
+            { _id: cartId },
+            { products: [] }
+          )
           await order.save()
         } else if (paymentMethod === 'VNPAY') {
-          const vnpay = new VNPay({
-            // ⚡ Cấu hình bắt buộc
-            tmnCode: process.env.VNP_TMN_CODE,
-            secureSecret: process.env.VNP_HASH_SECRET,
-            vnpayHost: 'https://sanbox.vnpayment.vn',
-
-            // 🔧 Cấu hình tùy chọn
-            testMode: true, // Chế độ test
-            hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
-            loggerFn: ignoreLogger // Custom logger
-          })
-
-          const tomorrow = new Date()
-          tomorrow.setDate(tomorrow.getDate() + 1)
-
-          const vnpayResponse = vnpay.buildPaymentUrl({
-            vnp_Amount: totalBill,
-            vnp_IpAddr: '127.0.0.0.1', // ip test local
-            vnp_TxnRef: order.id,
-            vnp_OrderInfo: `Thanh toan don hang ${order.id}`,
-            vnp_OrderType: ProductCode.Other,
-            vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
-            vnp_Locale: VnpLocale.VN,
-            vnp_CreateDate: dateFormat(new Date()),
-            vnp_ExpireDate: dateFormat(tomorrow)
-          })
-          res.json({ 
-            code: 201,  
-            message: 'Thành công!', 
-            paymentUrl: vnpayResponse
-          })
+          vnpayMethod(totalBill, order.id, res)
         } else if (paymentMethod === 'ZALOPAY') {
-          const embed_data = {
-            redirecturl: `http://localhost:5173/checkout/success/${order.id}`
-          }
-          const items = products.map(p => ({
-            itemid: p.product_id,
-            itemname: p.title,
-            itemprice: Math.floor(p.price * (100 - p.discountPercentage) / 100),
-            itemquantity: p.quantity
-          }))
-          const transID = Math.floor(Math.random() * 1000000)
-          const orderInfo = {
-            app_id: process.env.ZALOPAY_APP_ID, // Định danh cho ứng dụng đã được cấp bởi ZaloPay.
-            app_trans_id: `${moment().format('YYMMDD')}_${transID}`, // mã giao dich có định dạng yyMMdd_xxxx
-            app_user: `${order.userInfo.phone}-${order.id}`, // Thông tin người dùng như: id/username/tên/số điện thoại/email của user.
-            app_time: Date.now(), // Thời gian tạo đơn hàng (unix timestamp in milisecond). Thời gian tính đến milisecond, lấy theo current time và không quá 15 phút so với thời điểm thanh toán
-            item: JSON.stringify(items), // 	Dữ liệu riêng của đơn hàng. Dữ liệu này sẽ được callback lại cho AppServer khi thanh toán thành công (Nếu không có thì để chuỗi rỗng). Dạng [{...}]
-            embed_data: JSON.stringify(embed_data), 
-            amount: Math.floor(totalBill), 
-            description: `Thanh toán đơn hàng ${transID}`,
-            bank_code: "", 
-            mac: '',
-            callback_url: 'https://164896da51bb.ngrok-free.app/checkout/callback'
-          }
-
-          const data = [
-            orderInfo.app_id,
-            orderInfo.app_trans_id,
-            orderInfo.app_user,
-            orderInfo.amount,
-            orderInfo.app_time,
-            orderInfo.embed_data,
-            orderInfo.item
-          ].join('|');
-
-          orderInfo.mac = crypto.createHmac('sha256', process.env.ZALOPAY_KEY1)
-            .update(data)
-            .digest('hex')
-          console.log("🚀 ~ checkout.controller.ts ~ order ~ orderInfo:", orderInfo);
-
-          const zaloRes  = await axios.post(process.env.ZALOPAY_ENDPOINT, null, { params: orderInfo })
-          console.log("🚀 ~ checkout.controller.ts ~ order ~ zaloRes:", zaloRes);
-          if (zaloRes.data.return_code === 1) {
-            // Thành công
-              res.json({ 
-              code: 201,  
-              message: 'Thành công!', 
-              order_url: zaloRes.data.order_url, 
-              zalo_token: zaloRes.data.zp_trans_token
-            })
-          } else if (zaloRes.data.return_code === 2) {
-            // Thất bại
-            res.json({ 
-              code: 400,  
-              message: 'Giao dịch thất bại, tài khoản chưa bị trừ tiền, vui lòng thực hiện lại.', 
-              error: zaloRes.data
-            })
-          }
+          zaloMethod(totalBill, products, order.userInfo.phone, order.id, res)
         } else if (paymentMethod === 'MOMO') {
 
         }
-
         for (const item of products) {
           await Product.updateOne(
             { _id: item.product_id },
             { $inc: { stock: -item.quantity } } // trừ số lượng
           )
         }
-
-        await Cart.updateOne(
-          { _id: cartId },
-          { products: [] }
-        )
-      }
+      } 
     } 
   } catch (error) {
     res.json({ 
@@ -334,7 +142,6 @@ export const callback = async (req: Request, res: Response) => {
       return res.json({ return_code: -1, return_message: "mac not match" }) // Báo lỗi, thường khi MAC không khớp (nghi ngờ giả mạo).
     }
     let dataJson = JSON.parse(data)
-    console.log("🚀 ~ checkout.controller.ts ~ callback ~ dataJson:", dataJson);
     const [phone, id] = dataJson.app_user.split("-");
     const order = await Order.findOne({
       _id: id,
@@ -344,20 +151,27 @@ export const callback = async (req: Request, res: Response) => {
     if (!order) {
       return res.json({ return_code: 0, return_message: 'order not found' })
     }
-    const result = await queryOrder(dataJson.app_trans_id)
+    const result = await queryOrder(req, dataJson.app_trans_id)
     console.log("🚀 ~ checkout.controller.ts ~ callback ~ result:", result);
     if (result.status === "PAID") {
+      console.log("Vào đây")
+      await Cart.updateOne(
+        { _id: order.cart_id },
+        { products: [] }
+      )
       order.paymentInfo.status = "PAID"
+      order.paymentInfo.details = {
+      app_trans_id: dataJson.app_trans_id,
+      app_time: dataJson.app_time,
+      amount: dataJson.amount,
+    }
     } else if (result.status === "PENDING") {
       order.paymentInfo.status = "PENDING"
     } else if (result.status === "FAILED") {
       order.paymentInfo.status = "FAILED"
-    }
-    order.paymentInfo.details = {
-      app_trans_id: dataJson.app_trans_id,
-      app_time: dataJson.app_time,
-      amount: dataJson.amount,
-      embed_data: dataJson.embed_data,
+      order.paymentInfo.details = {
+        embed_data: `http://localhost:5173/cart`,
+      }
     }
     await order.save()
     return res.json({ return_code: 1, return_message: "success" }) // Báo cho ZaloPay biết bạn đã nhận callback thành công.
@@ -367,52 +181,49 @@ export const callback = async (req: Request, res: Response) => {
 }
 
 // [POST] /checkout/order-status
-export const queryOrder  = async (app_trans_id: string) => {
-  const data = `${process.env.ZALOPAY_APP_ID}|${app_trans_id}|${process.env.ZALOPAY_KEY1}`
-  const mac = crypto.createHmac("sha256", process.env.ZALOPAY_KEY1 as string)
+export const queryOrder  = async (req: Request , app_trans_id: string) => {
+  const key1 = process.env.ZALOPAY_KEY1
+  const app_id = process.env.ZALOPAY_APP_ID
+  
+  const data = `${app_id}|${app_trans_id}|${key1}`
+  const mac = crypto.createHmac("sha256", key1)
     .update(data)
     .digest("hex")
-
-  const response = await axios.post(process.env.ZALOPAY_ENDPOINT_QUERY, {
-    app_id: process.env.ZALOPAY_APP_ID,
+  const payload = {
+    app_id,
     app_trans_id,
     mac
-  })
+  }
+  const response = await axios.post(
+    process.env.ZALOPAY_ENDPOINT_QUERY,
+    qs.stringify(payload), // convert sang form-urlencoded
+    { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+  )
   console.log("🚀 ~ checkout.controller.ts ~ queryOrder ~ response:", response);
-  console.log("app_id:", process.env.ZALOPAY_APP_ID);
-  console.log("app_trans_id:", app_trans_id);
-  console.log("key1:", process.env.ZALOPAY_KEY1);
-  console.log("data string:", data);
-  console.log("mac:", mac);
-
-  if (response.data.return_code === 1) {
-    return { status: "PAID", data: response.data }
-  } else if (response.data.return_code === 2) {
-    return { status: "FAILED", data: response.data }
-  } else if (response.data.return_code === 3) {
-    return { status: "PENDING", data: response.data }
+  if (response.data.return_code !== 1) {
+    // API gọi thất bại -> sai request
+    return { status: "ERROR", data: response };
+  }
+   // return_code = 1 => API query thành công, check sub_return_code
+  switch (response.data.sub_return_code) {
+    case 1:
+      return { status: "PAID", data: response }
+    case 2:
+      return { status: "FAILED", data: response }
+    default:
+      return { status: "PENDING", data: response }
   }
 }
 
 // [GET] /checkout/check-payment-vnpay
 export const vnpayReturn = async (req: Request, res: Response) => {
+  console.log("VNPay Return gọi về:", req.query)
   try {
-    const vnpay = new VNPay({
-      // ⚡ Cấu hình bắt buộc
-      tmnCode: process.env.VNP_TMN_CODE,
-      secureSecret: process.env.VNP_HASH_SECRET,
-      vnpayHost: 'https://sanbox.vnpayment.vn',
-
-      // 🔧 Cấu hình tùy chọn
-      testMode: true, // Chế độ test
-      hashAlgorithm: HashAlgorithm.SHA512, // Thuật toán mã hóa
-      loggerFn: ignoreLogger // Custom logger
-    })
-
+    const cartId = req["cartId"]
     // Verify query từ VNPay
-    const verified = vnpay.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
+    const verified = vnpayCreate.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
     if (!verified.isVerified) {
-      res.json({ 
+      return res.json({ 
         code: 400,  
         message: 'Sai chữ ký VNPay'
       })
@@ -422,39 +233,88 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     const order = await Order.findById(orderId)
 
     if (!order) {
-      res.json({ 
+      return res.json({ 
         code: 404,  
         message: 'Không tìm thấy đơn hàng'
       })
     }
+    const { vnp_TxnRef, vnp_TransactionNo, vnp_BankCode, vnp_BankTranNo, vnp_CardType, vnp_PayDate } = req.query
+    // Nếu thanh toán thành công
+    if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
+      order.paymentInfo.status = 'PAID'
+      // Lưu thông tin giao dịch
+      order.paymentInfo.details = {
+        vnp_TxnRef: vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
+        vnp_TransactionNo: vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
+        vnp_BankCode: vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
+        vnp_BankTranNo: vnp_BankTranNo,       // Mã giao dịch ngân hàng
+        vnp_CardType: vnp_CardType,
+        vnp_PayDate: vnp_PayDate,             // Thời gian thanh toán (quan trọng cho báo cáo & tracking).
+        vnp_ResponseCode: "00",               // Trạng thái giao dịch ("00" = thành công).
+      }
+      await Cart.updateOne(
+        { _id: cartId },
+        { products: [] }
+      )
+      res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
+    } else if (req.query["vnp_ResponseCode"] === "24" && req.query["vnp_TransactionStatus"] === "02") {
+      order.paymentInfo.status = 'FAILED'
+      res.redirect('http://localhost:5173/cart')
+    }
+    await order.save()
+  } catch (error) {
+    res.json({ 
+      code: 500,  
+      message: "Lỗi xử lý callback VNPay",
+      error: error
+    })
+  }
+}
 
+// [GET] /checkout/vnpay-ipn
+export const vnpayIpn = async (req: Request, res: Response) => {
+  try {
+    console.log("VNPay IPN gọi về:", req.query)
+    // Verify query từ VNPay
+    const verified = vnpayCreate.verifyIpnCall(req.query as unknown as ReturnQueryFromVNPay)
+    if (!verified.isVerified) {
+      return res.json({ 
+        RspCode: "97",  
+        Message: 'Sai chữ ký VNPay'
+      })
+    }
+
+    const orderId = req.query["vnp_TxnRef"] as string
+    const order = await Order.findById(orderId)
+
+    if (!order) {
+      return res.json({ 
+        RspCode: "01",  
+        Message: 'Không tìm thấy đơn hàng!'
+      })
+    }
+    const { vnp_TxnRef, vnp_TransactionNo, vnp_BankCode, vnp_BankTranNo, vnp_CardType, vnp_PayDate } = req.query
     // Nếu thanh toán thành công
     if (req.query["vnp_ResponseCode"] === "00") {
       order.paymentInfo.status = 'PAID'
       // Lưu thông tin giao dịch
       order.paymentInfo.details = {
-        vnp_TxnRef: req.query.vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
-        vnp_TransactionNo: req.query.vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
-        vnp_BankCode: req.query.vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
-        vnp_BankTranNo: req.query.vnp_BankTranNo,       // Mã giao dịch ngân hàng
-        vnp_CardType: req.query.vnp_CardType,
-        vnp_PayDate: req.query.vnp_PayDate,             // Thời gian thanh toán (quan trọng cho báo cáo & tracking).
-        vnp_ResponseCode: "00",                         // Trạng thái giao dịch ("00" = thành công).
+        vnp_TxnRef: vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
+        vnp_TransactionNo: vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
+        vnp_BankCode: vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
+        vnp_BankTranNo: vnp_BankTranNo,       // Mã giao dịch ngân hàng
+        vnp_CardType: vnp_CardType,
+        vnp_PayDate: vnp_PayDate,             // Thời gian thanh toán (quan trọng cho báo cáo & tracking).
+        vnp_ResponseCode: "00",               // Trạng thái giao dịch ("00" = thành công).
       }
-    } else {
-      order.paymentInfo.status = 'FAILED'
     }
-    
     await order.save()
-    res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
-  } catch (err) {
-    res.json({ 
-      code: 500,  
-      message: "Lỗi xử lý callback VNPay",
-      error: err
-    })
+    return res.json({ RspCode: "00", Message: "Thành công!" })
+  } catch (error) {
+    return res.json({ RspCode: "99", Message: "Lỗi không xác định!" })
   }
 }
+
 
 // [GET] /checkout/success/:orderId
 export const success = async (req: Request, res: Response) => {
