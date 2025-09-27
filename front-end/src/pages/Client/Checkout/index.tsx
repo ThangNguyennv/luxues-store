@@ -12,7 +12,11 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { MdOutlineLocalShipping } from 'react-icons/md'
+import vnpayLogo from '~/assets/images/Payment/vnpay-logo.png'
+import zalopayLogo from '~/assets/images/Payment/zalopay-logo.png'
+import momoLogo from '~/assets/images/Payment/momo-logo.png'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
@@ -21,8 +25,7 @@ const Checkout = () => {
   const { refreshCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()
-  const params = useParams()
-  const orderId = params.orderId as string
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +61,6 @@ const Checkout = () => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const payload = {
-      orderId: orderId,
       note: String(formData.get('note') ?? ''),
       paymentMethod: paymentMethod,
       fullName: String(formData.get('fullName') ?? ''),
@@ -259,71 +261,131 @@ const Checkout = () => {
                 <b>Tổng thanh toán: </b>
                 <span className='text-[#BC3433] font-[600] text-[20px]'>{Math.floor(totalBill ?? 0).toLocaleString()}đ</span>
               </div>
-              <div className='text-[30px] uppercase font-[600]'>
-                Địa chỉ nhận hàng
-              </div>
-              <form onSubmit={handleSubmit} className='flex flex-col gap-[15px]'>
+              <form onSubmit={handleSubmit} className='grid grid-cols-2 gap-[25px]'>
                 <input type="hidden" name="position" value={1} />
-                <div className='form-group'>
-                  <label htmlFor='fullName'><b>Họ và tên: </b></label>
-                  <input
-                    type='text'
-                    name='fullName'
-                    id='fullName'
-                    className=''
-                    required
-                  />
+                <div className='flex flex-col gap-[15px]'>
+                  <div className='text-[24px] uppercase font-[600]'>
+                    Thông tin người nhận hàng:
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='fullName'><b>Họ và tên: </b></label>
+                    <input
+                      type='text'
+                      name='fullName'
+                      id='fullName'
+                      className=''
+                      required
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='phone'><b>Số điện thoại: </b></label>
+                    <input
+                      type='tel'
+                      name='phone'
+                      id='phone'
+                      required
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='address'><b>Địa chỉ: </b></label>
+                    <input
+                      type='text'
+                      name='address'
+                      id='address'
+                      required
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <label htmlFor='note'><b>Lời nhắn: </b></label>
+                    <input
+                      type='text'
+                      name='note'
+                      id='note'
+                      placeholder='Lưu ý cho người nhắn...'
+                    />
+                  </div>
                 </div>
-                <div className='form-group'>
-                  <label htmlFor='phone'><b>Số điện thoại: </b></label>
-                  <input
-                    type='tel'
-                    name='phone'
-                    id='phone'
-                    required
-                  />
-                </div>
-                <div className='form-group'>
-                  <label htmlFor='address'><b>Địa chỉ: </b></label>
-                  <input
-                    type='text'
-                    name='address'
-                    id='address'
-                    required
-                  />
-                </div>
-                <div className='form-group'>
-                  <label htmlFor='note'><b>Lời nhắn: </b></label>
-                  <input
-                    type='text'
-                    name='note'
-                    id='note'
-                    placeholder='Lưu ý cho người nhắn...'
-                  />
-                </div>
-                <div className='flex items-center justify-end gap-[15px]'>
-                  <div className='font-[600] text-[18px]'>
+                <div className='flex flex-col gap-[43px]'>
+                  <div className='font-[600] text-[24px]'>
                     Phương thức thanh toán:
                   </div>
-                  <select
-                    name="type"
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                    className='cursor-pointer outline-none border rounded-[5px] border-[#9D9995] p-[5px]'
-                  >
-                    <option value={'COD'}>Thanh toán khi nhận hàng</option>
-                    <option value={'VNPAY'}>Thanh toán qua ví VNPAY</option>
-                    <option value={'ZALOPAY'}>Thanh toán qua ví Zalopay</option>
-                    <option value={'MOMO'}>Thanh toán qua ví MoMo</option>
-                  </select>
-                </div>
-                <div className='flex items-center justify-end'>
-                  <button
-                    type='submit'
-                    className='uppercase border rounded-[10px] text-center px-[20px] py-[12px] bg-[#BC3433] text-white'
-                  >
-                    Đặt hàng
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="COD"
+                        checked={paymentMethod === 'COD'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className='flex items-center gap-2 justify-center'>
+                        <MdOutlineLocalShipping className='text-[30px]'/>
+                        <div className='flex flex-col'>
+                          <span>COD</span>
+                          <span>Thanh toán khi nhận hàng</span>
+                        </div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="VNPAY"
+                        checked={paymentMethod === 'VNPAY'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className='flex items-center gap-2 justify-center'>
+                        <img src={vnpayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                        <div className='flex flex-col'>
+                          <span>VNPAY</span>
+                          <span>Thanh toán chuyển khoản VNPay</span>
+                        </div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="ZALOPAY"
+                        checked={paymentMethod === 'ZALOPAY'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className='flex items-center gap-2 justify-center'>
+                        <img src={zalopayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                        <div className='flex flex-col'>
+                          <span>ZALOPAY</span>
+                          <span>Thanh toán chuyển khoản ZaloPay</span>
+                        </div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="MOMO"
+                        checked={paymentMethod === 'MOMO'}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                      <div className='flex items-center gap-2 justify-center'>
+                        <img src={momoLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                        <div className='flex flex-col'>
+                          <span>MOMO</span>
+                          <span>Thanh toán chuyển khoản MoMo</span>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                  <div className='flex items-center justify-end'>
+                    <button
+                      type='submit'
+                      className='uppercase border rounded-[10px] text-center px-[20px] py-[12px] bg-[#BC3433] text-white'
+                    >
+                      Đặt hàng
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>

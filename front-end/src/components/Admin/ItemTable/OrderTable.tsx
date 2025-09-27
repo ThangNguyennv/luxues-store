@@ -188,7 +188,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       {order.paymentInfo.status === 'FAILED' ? (
-                        <span className='text-red-600 font-[600] text-[16px]'>Thanh toán thất bại</span>
+                        <span className='text-red-600 font-[600] text-[16px]'>Hủy yêu cầu</span>
                       ) : (
                         order.paymentInfo.status === 'PENDING' ? (
                           <span className='text-yellow-600 font-[600] text-[16px]'>Chờ thanh toán</span>
