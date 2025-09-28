@@ -17,7 +17,7 @@ export const vnpayCreate = new VNPay({
   loggerFn: ignoreLogger // Custom logger
 })
 
-export const vnpayBuildUrl = (totalBill: number, orderId: string,  res: Response) => {
+export const vnpayCreateOrder = (totalBill: number, orderId: string,  res: Response) => {
   const expire = new Date()
   expire.setMinutes(expire.getMinutes() + 15) 
 

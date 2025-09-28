@@ -7,7 +7,7 @@ import Cart from '~/models/cart.model'
 import Order from '~/models/order.model'
 import qs from "qs"
 
-export const zaloPayCreateOrder = async (
+export const zalopayCreateOrder = async (
   totalBill: number, 
   products: {product_id: string, title: string, price: number, discountPercentage: number, quantity: number}[], 
   phoneUser: string, 
@@ -36,7 +36,7 @@ export const zaloPayCreateOrder = async (
     description: `Thanh toán đơn hàng ${transID}`,
     bank_code: "", 
     mac: '',
-    callback_url: 'https://d5bb47ca8910.ngrok-free.app/checkout/callback'
+    callback_url: 'https://b5c346fddb47.ngrok-free.app/checkout/callback'
   }
 
   const data = [
@@ -53,27 +53,27 @@ export const zaloPayCreateOrder = async (
     .digest('hex')
 
   const zaloRes  = await axios.post(process.env.ZALOPAY_ENDPOINT_CREATE, null, { params: orderInfo })
-  console.log("🚀 ~ zalopayPayment.ts ~ zaloMethod ~ zaloRes:", zaloRes);
-  if (zaloRes.data.return_code === 1) {
-    // Thành công
-    res.json({ 
-      code: 201,  
-      message: 'Thành công!', 
-      order_url: zaloRes.data.order_url, 
-      zalo_token: zaloRes.data.zp_trans_token
-    })
-  } else if (zaloRes.data.return_code === 2) {
+  if (zaloRes.data.return_code !== 1) {
     // Thất bại
-    res.json({ 
+    return res.json({ 
       code: 400,  
       message: 'Giao dịch thất bại, tài khoản chưa bị trừ tiền, vui lòng thực hiện lại.', 
       error: zaloRes.data
     })
   }
+  if (zaloRes.data.return_code === 1 && zaloRes.data.sub_return_code === 1) {
+    // Thành công
+    return res.json({ 
+      code: 201,  
+      message: 'Thành công!', 
+      order_url: zaloRes.data.order_url, 
+      zalo_token: zaloRes.data.zp_trans_token
+    })
+  } 
 }
 
-// [POST] /checkout/callback
-export const zaloPayCallback = async (req: Request, res: Response) => {
+// [POST] /checkout/zalopay-callback
+export const zalopayCallback = async (req: Request, res: Response) => {
   try {
     let { data, mac } = req.body
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
@@ -93,8 +93,7 @@ export const zaloPayCallback = async (req: Request, res: Response) => {
     if (!order) {
       return res.json({ return_code: 0, return_message: 'order not found' })
     }
-    const result = await zaloPayQueryOrder(req, dataJson.app_trans_id)
-    console.log("🚀 ~ checkout.controller.ts ~ callback ~ result:", result);
+    const result = await zaloPayQueryOrder(dataJson.app_trans_id)
     if (result.status === "PAID") {
       console.log("Vào đây")
       await Cart.updateOne(
@@ -112,7 +111,7 @@ export const zaloPayCallback = async (req: Request, res: Response) => {
     } else if (result.status === "FAILED") {
       order.paymentInfo.status = "FAILED"
       order.paymentInfo.details = {
-        embed_data: `http://localhost:5173/cart`,
+        embed_data: `http://localhost:5173/cart`
       }
     }
     await order.save()
@@ -122,8 +121,7 @@ export const zaloPayCallback = async (req: Request, res: Response) => {
   }
 }
 
-// [POST] /checkout/order-status
-export const zaloPayQueryOrder  = async (req: Request , app_trans_id: string) => {
+export const zaloPayQueryOrder  = async (app_trans_id: string) => {
   const key1 = process.env.ZALOPAY_KEY1
   const app_id = process.env.ZALOPAY_APP_ID
   
@@ -141,12 +139,10 @@ export const zaloPayQueryOrder  = async (req: Request , app_trans_id: string) =>
     qs.stringify(payload), // convert sang form-urlencoded
     { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
   )
-  console.log("🚀 ~ checkout.controller.ts ~ queryOrder ~ response:", response);
   if (response.data.return_code !== 1) {
     // API gọi thất bại -> sai request
     return { status: "ERROR", data: response };
   }
-   // return_code = 1 => API query thành công, check sub_return_code
   switch (response.data.sub_return_code) {
     case 1:
       return { status: "PAID", data: response }

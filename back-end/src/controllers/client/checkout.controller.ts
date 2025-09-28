@@ -4,12 +4,10 @@ import Product from '~/models/product.model'
 import Order from '~/models/order.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
-import { vnpayBuildUrl } from '~/helpers/vnpayPayment'
-import { zaloPayCreateOrder } from '~/helpers/zalopayPayment'
+import { vnpayCreateOrder } from '~/helpers/vnpayPayment'
+import { zalopayCreateOrder } from '~/helpers/zalopayPayment'
+import { momoCreateOrder } from '~/helpers/momoPayment'
 import "~/cron/order.cron" // ⚡ load cron khi server start
-import { vnpayReturn } from '~/helpers/vnpayPayment'
-import { vnpayIpn } from '~/helpers/vnpayPayment'
-import { zaloPayCallback } from '~/helpers/zalopayPayment'
 
 // [GET] /checkout
 export const index = async (req: Request, res: Response) => {
@@ -47,6 +45,7 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
+  console.log("🚀 ~ checkout.controller.ts ~ order ~ req.body:", req.body);
   try {
     const cartId = req["cartId"]
     const { note, paymentMethod, fullName, phone, address } = req.body
@@ -103,12 +102,14 @@ export const order = async (req: Request, res: Response) => {
             order: order
           })
         } else if (paymentMethod === 'VNPAY') {
-          vnpayBuildUrl(totalBill, order.id, res)
+          vnpayCreateOrder(totalBill, order.id, res)
         } else if (paymentMethod === 'ZALOPAY') {
-          zaloPayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
+          zalopayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
         } else if (paymentMethod === 'MOMO') {
-
+          console.log("vao momo");
+          momoCreateOrder(order.id, totalBill, res)
         }
+
         for (const item of products) {
           await Product.updateOne(
             { _id: item.product_id },
@@ -125,6 +126,7 @@ export const order = async (req: Request, res: Response) => {
     })
   } 
 }
+
 
 // [GET] /checkout/success/:orderId
 export const success = async (req: Request, res: Response) => {
