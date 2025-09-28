@@ -204,7 +204,11 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         order.paymentInfo.method === 'ZALOPAY' ? (
                           <span className='uppercase font-[600] text-[16px]'>ZALOPAY</span>
                         ) : (
-                          <span className='uppercase font-[600] text-[16px]'>COD</span>
+                          order.paymentInfo.method === 'MOMO' ? (
+                            <span className='uppercase font-[600] text-[16px]'>MOMO</span>
+                          ) : (
+                            <span className='uppercase font-[600] text-[16px]'>COD</span>
+                          )
                         )
                       )}
                     </TableCell>

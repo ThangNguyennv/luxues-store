@@ -68,6 +68,7 @@ const Checkout = () => {
       address: String(formData.get('address') ?? '')
     }
     const response = await fetchOrderAPI(payload)
+    console.log("🚀 ~ index.tsx ~ handleSubmit ~ response:", response);
     if (response.code === 201) {
       await refreshCart()
       if (paymentMethod === 'COD') {
@@ -77,6 +78,9 @@ const Checkout = () => {
         return
       } else if (paymentMethod === 'ZALOPAY' && response.order_url) {
         window.location.href = response.order_url
+        return
+      } else if (paymentMethod === 'MOMO' && response.data.payUrl) {
+        window.location.href = response.data.payUrl
         return
       }
     }
