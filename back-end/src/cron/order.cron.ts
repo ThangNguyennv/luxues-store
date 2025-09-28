@@ -1,11 +1,11 @@
 import cron from "node-cron"
 import Order from "../models/order.model"
 
-// Hủy đơn hàng PENDING quá 5 phút 
-// 2p quét 1 lần
-cron.schedule("*/2 * * * *", async () => {
+// Hủy đơn hàng PENDING quá 15 phút 
+// 10p quét 1 lần
+cron.schedule("*/10 * * * *", async () => {
   try {
-    const timeoutMinutes = 5
+    const timeoutMinutes = 15
     const now = new Date()
     const expiredAt = new Date(now.getTime() - timeoutMinutes * 60000)
 

@@ -1,5 +1,9 @@
 import { Response } from 'express'
 import { VNPay, ignoreLogger, ProductCode, VnpLocale, dateFormat, HashAlgorithm } from 'vnpay'
+import { Request } from 'express'
+import Cart from '~/models/cart.model'
+import Order from '~/models/order.model'
+import { ReturnQueryFromVNPay } from 'vnpay'
 
 export const vnpayCreate = new VNPay({
   // ⚡ Cấu hình bắt buộc
@@ -13,7 +17,7 @@ export const vnpayCreate = new VNPay({
   loggerFn: ignoreLogger // Custom logger
 })
 
-export const vnpayMethod = (totalBill: number, orderId: string,  res: Response) => {
+export const vnpayBuildUrl = (totalBill: number, orderId: string,  res: Response) => {
   const expire = new Date()
   expire.setMinutes(expire.getMinutes() + 15) 
 
@@ -23,7 +27,7 @@ export const vnpayMethod = (totalBill: number, orderId: string,  res: Response) 
     vnp_TxnRef: orderId,
     vnp_OrderInfo: `Thanh toán đơn hàng: ${orderId}`,
     vnp_OrderType: ProductCode.Other,
-    vnp_ReturnUrl: 'http://localhost:3100/checkout/check-payment-vnpay',
+    vnp_ReturnUrl: 'http://localhost:3100/checkout/vnpay-return',
     vnp_Locale: VnpLocale.VN,
     vnp_CreateDate: dateFormat(new Date()),
     vnp_ExpireDate: dateFormat(expire),
@@ -33,4 +37,111 @@ export const vnpayMethod = (totalBill: number, orderId: string,  res: Response) 
     message: 'Tạo link thanh toán thành công!', 
     paymentUrl: vnpayResponse
   })
+}
+
+// [GET] /checkout/vnpay-return
+export const vnpayReturn = async (req: Request, res: Response) => {
+  try {
+    delete req.query['vnp_SecureHashType']  
+    delete req.query['vnp_SecureHash'] 
+
+    // Verify query từ VNPay
+    const verified = vnpayCreate.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
+    if (verified.isVerified) {
+      const orderId = req.query["vnp_TxnRef"] as string
+      const order = await Order.findById(orderId)
+      if (!order) {
+        return res.json({ 
+          code: 404,  
+          message: 'Không tìm thấy đơn hàng'
+        })
+      }
+      if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
+        return res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
+      } 
+      if (req.query["vnp_ResponseCode"] === "24" && req.query["vnp_TransactionStatus"] === "02") {
+        return res.redirect('http://localhost:5173/cart')
+      }
+      return res.json({ 
+        code: 400,  
+        message: 'Trạng thái thanh toán không hợp lệ!'
+      })
+    } else {
+      return res.json({ 
+        code: 200,  
+        RspCode: '97',
+        Message: 'Sai chữ ký VNPay'
+      })
+    }
+  } catch (error) {
+    return res.json({ 
+      code: 500,  
+      message: "Lỗi xử lý callback VNPay",
+      error: error
+    })
+  }
+}
+
+// [GET] /checkout/vnpay-ipn
+export const vnpayIpn = async (req: Request, res: Response) => {
+  try {
+    const cartId = req["cartId"]
+    delete req.query['vnp_SecureHashType']  
+    delete req.query['vnp_SecureHash'] 
+    const verified = vnpayCreate.verifyIpnCall(req.query as unknown as ReturnQueryFromVNPay)
+    if (verified.isVerified) {
+      const { vnp_TxnRef, vnp_TransactionNo, vnp_BankCode, vnp_BankTranNo, vnp_CardType, vnp_PayDate } = req.query
+      const rspCode  = req.query["vnp_ResponseCode"]
+      const orderId = req.query["vnp_TxnRef"] as string
+      const order = await Order.findById(orderId)
+
+      if (!order) {
+        return res.json({ 
+          code: 404,
+          RspCode: "01",  
+          Message: 'Không tìm thấy đơn hàng!'
+        })
+      }
+      // Nếu thanh toán thành công
+
+      if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
+        await Cart.updateOne(
+          { _id: cartId },
+          { products: [] }
+        )
+        order.paymentInfo.status = 'PAID'
+        // Lưu thông tin giao dịch
+        order.paymentInfo.details = {
+          vnp_TxnRef: vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
+          vnp_TransactionNo: vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
+          vnp_BankCode: vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
+          vnp_BankTranNo: vnp_BankTranNo,       // Mã giao dịch ngân hàng
+          vnp_CardType: vnp_CardType,
+          vnp_PayDate: vnp_PayDate,             // Thời gian thanh toán (quan trọng cho báo cáo & tracking).
+          vnp_ResponseCode: rspCode,               // Trạng thái giao dịch ("00" = thành công).
+        }
+      } 
+      if (req.query["vnp_ResponseCode"] === "24" && req.query["vnp_TransactionStatus"] === "02") {
+        order.paymentInfo.status = 'FAILED'
+      }
+      await order.save()
+      return res.json({ 
+        code: 200,
+        RspCode: rspCode,  
+        Message: 'Thanh toán thành công đơn hàng.'
+      })
+    } else {
+      return res.json({ 
+        code: 200,
+        RspCode: "97",  
+        Message: 'Sai chữ ký VNPay'
+      })
+    }
+  } catch (error) {
+    return res.json({ 
+      code: 500,  
+      message: "Lỗi xử lý ipn VNPay",
+      error: error
+    })
+  }
 }

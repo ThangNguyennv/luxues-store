@@ -2,8 +2,12 @@ import { Response } from 'express'
 import moment from 'moment'
 import axios from 'axios'
 import crypto from 'crypto'
+import { Request } from 'express'
+import Cart from '~/models/cart.model'
+import Order from '~/models/order.model'
+import qs from "qs"
 
-export const zaloMethod = async (
+export const zaloPayCreateOrder = async (
   totalBill: number, 
   products: {product_id: string, title: string, price: number, discountPercentage: number, quantity: number}[], 
   phoneUser: string, 
@@ -65,5 +69,90 @@ export const zaloMethod = async (
       message: 'Giao dịch thất bại, tài khoản chưa bị trừ tiền, vui lòng thực hiện lại.', 
       error: zaloRes.data
     })
+  }
+}
+
+// [POST] /checkout/callback
+export const zaloPayCallback = async (req: Request, res: Response) => {
+  try {
+    let { data, mac } = req.body
+    const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
+      .update(data)
+      .digest("hex")
+    
+    if (macVerify !== mac) {
+      return res.json({ return_code: -1, return_message: "mac not match" }) // Báo lỗi, thường khi MAC không khớp (nghi ngờ giả mạo).
+    }
+    let dataJson = JSON.parse(data)
+    const [phone, id] = dataJson.app_user.split("-");
+    const order = await Order.findOne({
+      _id: id,
+      'userInfo.phone': phone,
+      deleted: false,
+    })
+    if (!order) {
+      return res.json({ return_code: 0, return_message: 'order not found' })
+    }
+    const result = await zaloPayQueryOrder(req, dataJson.app_trans_id)
+    console.log("🚀 ~ checkout.controller.ts ~ callback ~ result:", result);
+    if (result.status === "PAID") {
+      console.log("Vào đây")
+      await Cart.updateOne(
+        { _id: order.cart_id },
+        { products: [] }
+      )
+      order.paymentInfo.status = "PAID"
+      order.paymentInfo.details = {
+      app_trans_id: dataJson.app_trans_id,
+      app_time: dataJson.app_time,
+      amount: dataJson.amount,
+    }
+    } else if (result.status === "PENDING") {
+      order.paymentInfo.status = "PENDING"
+    } else if (result.status === "FAILED") {
+      order.paymentInfo.status = "FAILED"
+      order.paymentInfo.details = {
+        embed_data: `http://localhost:5173/cart`,
+      }
+    }
+    await order.save()
+    return res.json({ return_code: 1, return_message: "success" }) // Báo cho ZaloPay biết bạn đã nhận callback thành công.
+  } catch (error) {
+    return res.json({ return_code: 0, return_message: 'retry', error }) // Báo cho ZaloPay retry lại callback (ví dụ server bạn đang lỗi DB).
+  }
+}
+
+// [POST] /checkout/order-status
+export const zaloPayQueryOrder  = async (req: Request , app_trans_id: string) => {
+  const key1 = process.env.ZALOPAY_KEY1
+  const app_id = process.env.ZALOPAY_APP_ID
+  
+  const data = `${app_id}|${app_trans_id}|${key1}`
+  const mac = crypto.createHmac("sha256", key1)
+    .update(data)
+    .digest("hex")
+  const payload = {
+    app_id,
+    app_trans_id,
+    mac
+  }
+  const response = await axios.post(
+    process.env.ZALOPAY_ENDPOINT_QUERY,
+    qs.stringify(payload), // convert sang form-urlencoded
+    { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+  )
+  console.log("🚀 ~ checkout.controller.ts ~ queryOrder ~ response:", response);
+  if (response.data.return_code !== 1) {
+    // API gọi thất bại -> sai request
+    return { status: "ERROR", data: response };
+  }
+   // return_code = 1 => API query thành công, check sub_return_code
+  switch (response.data.sub_return_code) {
+    case 1:
+      return { status: "PAID", data: response }
+    case 2:
+      return { status: "FAILED", data: response }
+    default:
+      return { status: "PENDING", data: response }
   }
 }
