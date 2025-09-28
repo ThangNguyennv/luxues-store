@@ -72,14 +72,12 @@ const Checkout = () => {
       await refreshCart()
       if (paymentMethod === 'COD') {
         navigate(`/checkout/success/${response.order._id}`)
-      } else if (paymentMethod === 'VNPAY') {
-        if (response.paymentUrl) {
-          window.location.href = response.paymentUrl
-        }
-      } else if (paymentMethod === 'ZALOPAY') {
-        if (response.order_url) {
-          window.location.href = response.order_url
-        }
+      } else if (paymentMethod === 'VNPAY' && response.paymentUrl) {
+        window.location.href = response.paymentUrl
+        return
+      } else if (paymentMethod === 'ZALOPAY' && response.order_url) {
+        window.location.href = response.order_url
+        return
       }
     }
     setPaymentMethod('')

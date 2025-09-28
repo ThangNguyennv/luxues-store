@@ -264,12 +264,12 @@ const Success = () => {
                       </div>
                     </div>
                   ) : (
-                    <>
+                    order.paymentInfo.status === 'PENDING' ? (
                       <div className='flex flex-col gap-[10px]'>
                         <div className='flex items-center gap-[5px]'>
                           <b className='text-[20px]'>Trạng thái: </b>
                           <span className='font-[600] text-[25px] text-[#BC3433]'>
-                            Chưa thanh toán
+                            Đang chờ xử lý
                           </span>
                         </div>
                         <div className='flex items-center gap-[5px]'>
@@ -277,7 +277,20 @@ const Success = () => {
                           <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
                         </div>
                       </div>
-                    </>
+                    ) : (
+                      <div className='flex flex-col gap-[10px]'>
+                        <div className='flex items-center gap-[5px]'>
+                          <b className='text-[20px]'>Trạng thái: </b>
+                          <span className='font-[600] text-[25px] text-[#BC3433]'>
+                            Giao dịch thất bại
+                          </span>
+                        </div>
+                        <div className='flex items-center gap-[5px]'>
+                          <b className='text-[20px]'>Phương thức thanh toán: </b>
+                          <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
+                        </div>
+                      </div>
+                    )
                   )}
                 </div>
               </div>
