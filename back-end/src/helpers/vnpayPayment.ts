@@ -5,7 +5,7 @@ import Cart from '~/models/cart.model'
 import Order from '~/models/order.model'
 import { ReturnQueryFromVNPay } from 'vnpay'
 
-export const vnpayCreate = new VNPay({
+export const vnpaybuildPaymentUrl = new VNPay({
   // ⚡ Cấu hình bắt buộc
   tmnCode: process.env.VNP_TMN_CODE,
   secureSecret: process.env.VNP_HASH_SECRET,
@@ -21,7 +21,7 @@ export const vnpayCreateOrder = (totalBill: number, orderId: string,  res: Respo
   const expire = new Date()
   expire.setMinutes(expire.getMinutes() + 15) 
 
-  const vnpayResponse = vnpayCreate.buildPaymentUrl({
+  const vnpayResponse = vnpaybuildPaymentUrl.buildPaymentUrl({
     vnp_Amount: totalBill,
     vnp_IpAddr: '127.0.0.0.1', // ip test local
     vnp_TxnRef: orderId,
@@ -46,7 +46,7 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     delete req.query['vnp_SecureHash'] 
 
     // Verify query từ VNPay
-    const verified = vnpayCreate.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
+    const verified = vnpaybuildPaymentUrl.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
     if (verified.isVerified) {
       const orderId = req.query["vnp_TxnRef"] as string
       const order = await Order.findById(orderId)
@@ -63,12 +63,13 @@ export const vnpayReturn = async (req: Request, res: Response) => {
         return res.redirect('http://localhost:5173/cart')
       }
       return res.json({ 
-        code: 400,  
-        message: 'Trạng thái thanh toán không hợp lệ!'
+        code: 200,  
+        RspCode: '00',  
+        Message: 'Thành công'
       })
     } else {
       return res.json({ 
-        code: 200,  
+        code: 400,  
         RspCode: '97',
         Message: 'Sai chữ ký VNPay'
       })
@@ -88,7 +89,7 @@ export const vnpayIpn = async (req: Request, res: Response) => {
     const cartId = req["cartId"]
     delete req.query['vnp_SecureHashType']  
     delete req.query['vnp_SecureHash'] 
-    const verified = vnpayCreate.verifyIpnCall(req.query as unknown as ReturnQueryFromVNPay)
+    const verified = vnpaybuildPaymentUrl.verifyIpnCall(req.query as unknown as ReturnQueryFromVNPay)
     if (verified.isVerified) {
       const { vnp_TxnRef, vnp_TransactionNo, vnp_BankCode, vnp_BankTranNo, vnp_CardType, vnp_PayDate } = req.query
       const rspCode  = req.query["vnp_ResponseCode"]
@@ -127,8 +128,8 @@ export const vnpayIpn = async (req: Request, res: Response) => {
       await order.save()
       return res.json({ 
         code: 200,
-        RspCode: rspCode,  
-        Message: 'Thanh toán thành công đơn hàng.'
+        RspCode: '00',  
+        Message: 'Thành công'
       })
     } else {
       return res.json({ 

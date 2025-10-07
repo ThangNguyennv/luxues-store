@@ -6,23 +6,23 @@ import Order from '~/models/order.model'
 import { Request } from 'express'
 
 export const momoCreateOrder = async (id: string, totalBill: number, res: Response) => {
-  var accessKey = 'F8BBA842ECF85'
-  var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz'
-  var orderInfoText = `Thanh toán đơn hàng ${id}`
-  var partnerCode = 'MOMO'
-  var redirectUrl = `http://localhost:5173/checkout/success/${id}`
-  var ipnUrl = 'https://1012464b3d33.ngrok-free.app/checkout/momo-callback'
-  var requestType = "payWithMethod"
-  var amount = Math.floor(totalBill)
-  var orderId = id
-  var requestId = orderId
-  var extraData =''
-  var orderGroupId =''
-  var autoCapture =true
-  var lang = 'vi'
+  const accessKey = 'F8BBA842ECF85'
+  const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz'
+  const orderInfoText = `Thanh toán đơn hàng ${id}`
+  const partnerCode = 'MOMO'
+  const redirectUrl = `http://localhost:5173/checkout/success/${id}`
+  const ipnUrl = 'https://1012464b3d33.ngrok-free.app/checkout/momo-callback'
+  const requestType = "payWithMethod"
+  const amount = Math.floor(totalBill)
+  const orderId = id
+  const requestId = orderId
+  const extraData =''
+  const orderGroupId =''
+  const autoCapture =true
+  const lang = 'vi'
 
-  var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfoText + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
-  var signature = crypto.createHmac('sha256', secretKey)
+  const rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfoText + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
+  const signature = crypto.createHmac('sha256', secretKey)
     .update(rawSignature)
     .digest('hex')
           
@@ -53,7 +53,7 @@ export const momoCreateOrder = async (id: string, totalBill: number, res: Respon
     },
     data: requestBody
   }
-  let result
+  let result: any
   try {
     result = await axios(options)
     return res.json({ code: 201, message: 'Thành công', data: result.data })
