@@ -45,4 +45,6 @@ router.patch(
   controller.changePasswordPatch
 )
 
+router.get('/my-orders', authMiddleware.requireAuth, controller.getOrders)
+
 export const userRoutes: Router = router
