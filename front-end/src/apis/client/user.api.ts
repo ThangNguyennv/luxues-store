@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { OrderInfoInterface } from '~/types/order.type'
 import type { UserDetailInterface } from '~/types/user.type'
 import { API_ROOT } from '~/utils/constants'
 
@@ -23,6 +24,14 @@ export const fetchChangePasswordInfoUserAPI = async (currentPassword: string, pa
   const response = await axios.patch(
     `${API_ROOT}/user/account/info/change-password`,
     { currentPassword, password, confirmPassword },
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchMyOrdersAPI = async (): Promise<OrderInfoInterface> => {
+  const response = await axios.get(
+    `${API_ROOT}/user/account/my-orders`,
     { withCredentials: true }
   )
   return response.data

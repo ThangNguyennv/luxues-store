@@ -1,0 +1,75 @@
+import axios from 'axios'
+import type { OrderAllResponseInterface, OrderDetailInterface } from '~/types/order.type'
+import { API_ROOT } from '~/utils/constants'
+
+export const fetchOrdersAPI = async (
+  status: string,
+  page: number,
+  currentKeyword: string,
+  currentSortKey: string,
+  currentSortValue: string
+): Promise<OrderAllResponseInterface> => {
+  const queryParams = new URLSearchParams()
+  if (status) queryParams.set('status', status)
+  if (page) queryParams.set('page', page.toString())
+  if (currentKeyword) queryParams.set('keyword', currentKeyword)
+  if (currentSortKey) queryParams.set('sortKey', currentSortKey)
+  if (currentSortValue) queryParams.set('sortValue', currentSortValue)
+
+  const response = await axios.get(
+    `${API_ROOT}/user/my-orders?${queryParams.toString()}`,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+// export const fetchChangeStatusAPI = async (status: string, id: string) => {
+//   const response = await axios.patch(
+//     `${API_ROOT}/admin/orders/change-status/${status}/${id}`,
+//     { status },
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+// export const fetchChangeMultiAPI = async (data: { ids: string[], type: string }) => {
+//   const response = await axios.patch(
+//     `${API_ROOT}/admin/orders/change-multi`,
+//     data,
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+// export const fetchDeleteOrderAPI = async (id: string) => {
+//   const response = await axios.delete(
+//     `${API_ROOT}/admin/orders/delete/${id}`,
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+// export const fetchPermanentlyDeleteOrderAPI = async (id: string) => {
+//   const response = await axios.delete(
+//     `${API_ROOT}/admin/orders/permanentlyDelete/${id}`,
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+// export const fetchDetailOrderAPI = async (id: string): Promise<OrderDetailInterface> => {
+//   const response = await axios.get(
+//     `${API_ROOT}/admin/orders/detail/${id}`,
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+// export const fetchRecoverOrderAPI = async (id: string) => {
+//   const response = await axios.patch(
+//     `${API_ROOT}/admin/orders/recover/${id}`,
+//     {},
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }

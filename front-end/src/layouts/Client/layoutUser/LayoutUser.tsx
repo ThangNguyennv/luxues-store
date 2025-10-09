@@ -12,9 +12,9 @@ const LayoutUser = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-[70px] p-[70px] mt-[40px] mb-[80px]">
-        <div className="container flex justify-around gap-[20px] p-[20px] shadow-lg">
-          <div className='flex flex-col gap-[5px] text-[17px] font-[500] p-[10px]'>
+      <div className="flex items-center justify-center gap-[70px] pb-[70px] mt-[40px] mb-[80px]">
+        <div className="container flex justify-between gap-[20px] p-[20px] shadow-lg">
+          <div className='flex flex-col gap-[5px] text-[17px] font-[500] p-[10px] w-[15%]'>
             <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[4px]'>
               <IoIosNotifications />
               <p>Thông Báo</p>
@@ -46,7 +46,7 @@ const LayoutUser = () => {
             </div>
             <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[5px]'>
               <LiaFileInvoiceSolid />
-              <span>Đơn Mua</span>
+              <Link to={'/user/my-orders'}>Đơn Mua</Link>
             </div>
             <div className='hover:underline hover:text-[#00A7E6] cursor-pointer flex items-center gap-[5px]'>
               <LuTicket />

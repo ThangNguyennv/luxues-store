@@ -43,7 +43,8 @@ export interface OrderInfoInterface {
       status: 'PENDING' | 'PAID' | 'FAILED'
       details?: PaymentDetails
     },
-    note?: string
+    note?: string,
+    amount: number
 }
 export interface OrderDetailInterface {
   order: OrderInfoInterface,
@@ -53,10 +54,10 @@ export interface OrderDetailInterface {
 
 export interface OrderAllResponseInterface extends CurrentParamsInterface {
     orders: OrderInfoInterface[],
-    accounts: AccountInfoInterface[],
+    accounts?: AccountInfoInterface[],
     pagination: PaginationInterface,
     filterOrder: FilterStatusInterface[],
-    allOrders: OrderInfoInterface[],
+    allOrders?: OrderInfoInterface[],
 }
 
 export interface OrderStates extends ParamsInterface {

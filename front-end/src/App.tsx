@@ -73,6 +73,7 @@ import ArticleCategory from './pages/client/Article/Category'
 import Search from './pages/client/Search/Search'
 import DetailProductClient from './pages/client/Product/Detail'
 import DetailArticleClient from './pages/client/Article/Detail'
+import MyOrders from './pages/client/MyAccount/MyOrders'
 
 function App() {
   useEffect(() => {
@@ -119,7 +120,7 @@ function App() {
                 <Route path='address'></Route>
                 <Route path='setting-privacy'></Route>
               </Route>
-              <Route path='purchase'></Route>
+              <Route path='my-orders' element={ <MyOrders />}/>
               <Route path='voucher-wallet'></Route>
               <Route path='coin'></Route>
             </Route>

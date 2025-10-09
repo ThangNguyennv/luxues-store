@@ -68,7 +68,6 @@ const Checkout = () => {
       address: String(formData.get('address') ?? '')
     }
     const response = await fetchOrderAPI(payload)
-    console.log("🚀 ~ index.tsx ~ handleSubmit ~ response:", response);
     if (response.code === 201) {
       await refreshCart()
       if (paymentMethod === 'COD') {

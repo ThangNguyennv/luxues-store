@@ -401,7 +401,7 @@ const Header = () => {
                     }}>
                       <Link to={''} className='flex items-center justify-start gap-[10px]'>
                         <RiBillLine />
-                        <span>Đơn mua</span>
+                        <Link to={'/user/my-orders'}>Đơn mua</Link>
                       </Link>
                     </MenuItem>
                     <MenuItem sx={{
