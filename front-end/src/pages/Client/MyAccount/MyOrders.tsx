@@ -72,54 +72,55 @@ const MyOrders = () => {
     <div className="flex flex-col gap-[15px] flex-1">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-[10px]">
-          <h2 className="text-[22px] font-[600]">Đơn Mua</h2>
+          <h2 className="text-[22px] font-[600]">Đơn hàng của tôi</h2>
           <span className="text-[14px] text-[#555]">Theo dõi và quản lý lịch sử đơn hàng của bạn</span>
         </div>
         <div className="flex items-center justify-center gap-[10px]">
-          <div className="">Trạng thái đơn hàng</div>
-          <div className="">Mốc thời gian</div>
+          <div className="border rounded-[5px]">Trạng thái đơn hàng</div>
+          <div className="border rounded-[5px]">Mốc thời gian</div>
         </div>
       </div>
-      {orders && (
+      {orders && orders.length > 0 ? (
         orders.map((order, index) => (
-          <div className="flex flex-col gap-[10px] border rounded-[5px] p-[15px]" key={index}>
+          <div className="flex flex-col gap-[10px] border rounded-[5px] border-blue-100 shadow-xl p-[15px]" key={index}>
             <div className="flex items-center justify-between">
               <div className='flex items-center justify-center gap-[10px]'>
                 <div className='flex flex-col gap-[5px]'>
-                  <span>Mã đơn: {order._id}</span>
-                  <span>Đặt hàng vào:
+                  <span className='font-[700] text-[17px]'>Mã đơn: {order._id}</span>
+                  <div className='flex items-center gap-[5px]'>
+                    <span>Đặt hàng vào:</span>
                     <FormatDateTime time={order.createdAt}/>
-                  </span>
+                  </div>
                 </div>
                 {
                   order.status == 'PENDING' ?
-                    <div className="text-[#FFAB19] font-[600] border rounded-[5px] bg-amber-200 p-[4px] flex items-center justify-center gap-[4px]">
+                    <div className="text-[#FFAB19] font-[600] border rounded-[10px] bg-amber-200 p-[4px] flex items-center justify-center gap-[4px] text-[14px]">
                       <BsClockFill />
                       <span>Đang xử lý</span>
                     </div> :
                     order.status == 'TRANSPORTING' ?
-                      <div className="text-[#2F57EF] font-[600] border rounded-[5px] bg-blue-200 p-[4px] flex items-center justify-center gap-[4px]">
+                      <div className="text-[#2F57EF] font-[600] border rounded-[10px] bg-blue-200 p-[4px] flex items-center justify-center gap-[4px] text-[14px]">
                         <MdLocalShipping />
                         <span>Đang vận chuyển</span>
                       </div> :
                       order.status == 'CONFIRMED' ?
-                        <div className="text-green-500 font-[600] border rounded-[5px] bg-emerald-200 p-[4px] flex items-center justify-center gap-[4px]">
+                        <div className="text-green-500 font-[600] border rounded-[10px] bg-emerald-200 p-[4px] flex items-center justify-center gap-[4px] text-[14px]">
                           <FaCircleCheck />
                           <span>Đã hoàn thành</span>
                         </div> :
-                        <div className="text-[#BC3433] font-[600] border rounded-[5px] bg-red-200 p-[4px] flex items-center justify-center gap-[4px]">
+                        <div className="text-[#BC3433] font-[600] border rounded-[10px] bg-red-200 p-[4px] flex items-center justify-center gap-[4px] text-[14px]">
                           <MdOutlineCancel />
                           <span>Đã hủy</span>
                         </div>
                 }
               </div>
               <div className='flex items-center justify-center gap-[10px]'>
-                <div className='flex flex-col gap-[10px]'>
+                <div className='flex flex-col items-center gap-[10px]'>
                   <span>Tổng số tiền:</span>
-                  <span>{order.amount.toLocaleString()}đ</span>
+                  <span className='font-[600]'>{order.amount.toLocaleString()}đ</span>
                 </div>
                 <Link
-                  to={''}
+                  to={`/checkout/success/${order._id}`}
                   className='text-blue-600 hover:underline'
                 >
                   Xem chi tiết
@@ -129,38 +130,79 @@ const MyOrders = () => {
             <div className='grid grid-cols-2 gap-[10px]'>
               {order.products && order.products.length > 0 && (
                 order.products.map((product, idx) => (
-                  <div className='flex items-center justify-center gap-[5px]' key={idx}>
-                    <img src={product.thumbnail} className='w-[150px] h-[150px] object-contain'/>
+                  <div className='flex items-center gap-[5px]' key={idx}>
+                    <img src={product.thumbnail} className='w-[100px] h-[100px] object-contain'/>
                     <div className='flex flex-col gap-[5px]'>
-                      <span>{product.title}</span>
+                      <span className='line-clamp-1 font-[600]'>{product.title}</span>
                       <span>x{product.quantity}</span>
-                      <span className='line-through'>{product.price.toLocaleString()}đ</span>
-                      <span>
-                        {Math.floor((product.price * (100 - product.discountPercentage) / 100)).toLocaleString()}đ
-                      </span>
+                      <div className='flex items-center gap-[5px]'>
+                        {product.discountPercentage > 0 && (
+                          <span className='line-through'>{product.price.toLocaleString()}đ</span>
+                        )}
+                        <span>
+                          {Math.floor((product.price * (100 - product.discountPercentage) / 100)).toLocaleString()}đ
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )))}
             </div>
             <div className='flex flex-col gap-[10px]'>
               <div>
-                {/* Hiển thị các mốc thời gian dựa trên trạng thái đơn hàng */}
+                {order.status == 'TRANSPORTING' && (
+                  <div className='flex items-center gap-[5px]'>
+                    <span>Ngày giao hàng dự kiến:</span>
+                    <span className='font-[600]'>01/01/2025</span>
+                  </div>
+                )}
+                {order.status == 'CONFIRMED' && (
+                  <div className='flex items-center gap-[5px]'>
+                    <span>Đã nhận hàng:</span>
+                    <span className='font-[600]'>03/01/2025</span>
+                  </div>
+                )}
               </div>
               <div>
                 {
-                  order.status != 'CANCELED' && <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
+                  order.status != 'CANCELED' && order.status != 'CONFIRMED' && (
+                    <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
+                  )
+                }
+                {
+                  order.status == 'CONFIRMED' && (
+                    <>
+                      <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
+                      <div className='flex items-center justify-end gap-[5px]'>
+                        <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'>Đánh giá</button>
+                        <button className='text-black font-[600] border rounded-[5px]  p-[5px] text-[14px]'>Yêu cầu trả hàng/hoàn tiền</button>
+                        <select className='outline-none border rounded-[5px] p-[5px] text-[14px] font-[600]'>
+                          <option disabled>Thêm</option>
+                          <option>Liên hệ shop</option>
+                          <option>Mua lại</option>
+                        </select>
+                      </div>
+                    </>
+                  )
                 }
               </div>
             </div>
             <div className='flex items-center justify-end'>
               <div>
                 {order.status == 'PENDING' && (
-                  <span className='text-red-500 font-[600]'>Hủy đơn hàng</span>
+                  <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'>Hủy đơn hàng</button>
+                )}
+                {order.status == 'CANCELED' && (
+                  <div className='flex items-center justify-center gap-[5px]'>
+                    <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[16px]'>Mua lại</button>
+                    <button className='text-black font-[600] border rounded-[5px] p-[5px] text-[16px]'>Liên hệ shop</button>
+                  </div>
                 )}
               </div>
             </div>
           </div>
         ))
+      ) : (
+        <div className='text-red'>Không tồn tại đơn hàng nào!</div>
       )}
     </div>
   )

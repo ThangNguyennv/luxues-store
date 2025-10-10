@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { fetchSuccessAPI } from '~/apis/client/checkout.api'
 import type { OrderDetailInterface, OrderInfoInterface } from '~/types/order.type'
 import Table from '@mui/material/Table'
@@ -165,11 +165,6 @@ const Success = () => {
         <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
           <div className='container flex flex-col gap-[20px]'>
             <div className='text-[30px] uppercase font-[600]'>Đơn hàng</div>
-            <div className='text-[24px] uppercase font-[500] text-[#168B35]'>
-              <span className='text-[#168B35]'>
-                Cảm ơn bạn đã đặt hàng bên LUXUES STORE, chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất. Xin cảm ơn!
-              </span>
-            </div>
             <div className="flex flex-col gap-[15px]">
               <div className='text-[24px] font-[500]'>Thông tin người đặt: </div>
               <div className='flex flex-col gap-[10px]'>
@@ -250,48 +245,46 @@ const Success = () => {
                       <span className='font-[600] text-[25px] text-[#FFAB19]'>{Math.floor(totalBill).toLocaleString()}đ</span>
                     )}
                   </div>
-                  {order.paymentInfo.status === 'PAID' ? (
-                    <div className='flex flex-col gap-[10px]'>
+                  <div className='flex flex-col gap-[10px]'>
+                    {order.paymentInfo.status === 'PAID' ? (
                       <div className='flex items-center gap-[5px]'>
                         <b className='text-[20px]'>Trạng thái: </b>
                         <span className='font-[600] text-[25px] text-[#18BA2A]'>
                           Đã thanh toán
                         </span>
                       </div>
-                      <div className='flex items-center gap-[5px]'>
-                        <b className='text-[20px]'>Phương thức thanh toán: </b>
-                        <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    order.paymentInfo.status === 'PENDING' ? (
-                      <div className='flex flex-col gap-[10px]'>
+                    ) : (
+                      order.paymentInfo.status === 'PENDING' ? (
                         <div className='flex items-center gap-[5px]'>
                           <b className='text-[20px]'>Trạng thái: </b>
                           <span className='font-[600] text-[25px] text-[#BC3433]'>
-                            Đang chờ xử lý
+                            Chưa thanh toán
                           </span>
                         </div>
-                        <div className='flex items-center gap-[5px]'>
-                          <b className='text-[20px]'>Phương thức thanh toán: </b>
-                          <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className='flex flex-col gap-[10px]'>
+                      ) : (
                         <div className='flex items-center gap-[5px]'>
                           <b className='text-[20px]'>Trạng thái: </b>
                           <span className='font-[600] text-[25px] text-[#BC3433]'>
                             Giao dịch thất bại
                           </span>
                         </div>
-                        <div className='flex items-center gap-[5px]'>
-                          <b className='text-[20px]'>Phương thức thanh toán: </b>
-                          <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
-                        </div>
+                      )
+                    )}
+                    <div className='flex items-center gap-[5px]'>
+                      <b className='text-[20px]'>Phương thức thanh toán: </b>
+                      <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
+                    </div>
+                    {order.paymentInfo.status === 'FAILED' && (
+                      <div>
+                        <Link
+                          to={'/checkout'}
+                          className='border rounded-[5px] bg-emerald-600 p-[4px] text-amber-50 font-[500]'
+                        >
+                        Thanh toán lại
+                        </Link>
                       </div>
-                    )
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

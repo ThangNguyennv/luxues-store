@@ -42,6 +42,10 @@ const DetailUser = () => {
                 {user.phone}
               </div>
               <div>
+                <b>Địa chỉ: </b>
+                {user.address}
+              </div>
+              <div>
                 <b>Trạng thái: </b>
                 {
                   user.status === 'active' ?

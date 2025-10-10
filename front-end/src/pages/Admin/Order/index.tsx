@@ -11,6 +11,7 @@ import Button from '@mui/material/Button'
 import FilterStatusOrder from '~/components/admin/FilterStatus/FilterStatusOrder'
 import OrderTable from '~/components/admin/ItemTable/OrderTable'
 import type { OrderStatus } from '~/types/order.type'
+import { FaTrashAlt } from 'react-icons/fa'
 
 const OrderAdmin = () => {
   const {
@@ -45,12 +46,18 @@ const OrderAdmin = () => {
           <h1 className='text-[24px] font-[700] text-[#000000]'>Danh sách đơn hàng</h1>
           <div className='text-[20px] font-[500] text-[#000000] pb-[15px] px-[15px] shadow-md flex flex-col gap-[10px]'>
             <div className='flex items-center justify-between text-[15px]'>
-              <FilterStatusOrder
-                filterOrder={filterOrder}
-                currentStatus={currentStatus as OrderStatus}
-                handleFilterStatus={handleFilterStatus}
-                items={allOrders}
-              />
+              <div className='flex items-center justify-center gap-[15px]'>
+                <FilterStatusOrder
+                  filterOrder={filterOrder}
+                  currentStatus={currentStatus as OrderStatus}
+                  handleFilterStatus={handleFilterStatus}
+                  items={allOrders}
+                />
+                <button className='p-[5px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] flex items-center justify-center gap-[5px]'>
+                  <FaTrashAlt />
+                  <span>Thùng rác</span>
+                </button>
+              </div>
               <Search
                 keyword={keyword}
                 handleChangeKeyword={(value) => dispatchOrder({ type: 'SET_DATA', payload: { keyword: value } })}
@@ -70,7 +77,8 @@ const OrderAdmin = () => {
                 <option value="PENDING">Đang xử lý</option>
                 <option value="TRANSPORTING">Đang giao hàng</option>
                 <option value="CONFIRMED">Hoàn thành</option>
-                <option value="DELETEALL">Hủy tất cả</option>
+                <option value="CANCELED">Hủy tất cả</option>
+                <option value="DELETEALL">Xóa tất cả</option>
               </select>
               <button
                 type="submit"

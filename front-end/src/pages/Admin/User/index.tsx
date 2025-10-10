@@ -112,6 +112,7 @@ const User = () => {
                 <TableCell align='center'>Họ và tên</TableCell>
                 <TableCell align='center'>Email</TableCell>
                 <TableCell align='center'>Số điện thoại</TableCell>
+                <TableCell align='center'>Địa chỉ</TableCell>
                 <TableCell align='center'>Trạng thái</TableCell>
                 <TableCell align='center'>Hành động</TableCell>
               </TableRow>
@@ -127,6 +128,11 @@ const User = () => {
                   <TableCell align='center'>
                     <div className='flex items-center justify-center'>
                       <Skeleton variant="circular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
+                    </div>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <div className='flex items-center justify-center'>
+                      <Skeleton variant="text" width={150} height={32} sx={{ bgcolor: 'grey.400' }}/>
                     </div>
                   </TableCell>
                   <TableCell align='center'>
@@ -190,6 +196,7 @@ const User = () => {
                   <TableCell align='center'>Họ và tên</TableCell>
                   <TableCell align='center'>Email</TableCell>
                   <TableCell align='center'>Số điện thoại</TableCell>
+                  <TableCell align='center'>Địa chỉ</TableCell>
                   <TableCell align='center'>Trạng thái</TableCell>
                   <TableCell align='center'>Hành động</TableCell>
                 </TableRow>
@@ -211,6 +218,7 @@ const User = () => {
                       <TableCell align='center'>{user.fullName}</TableCell>
                       <TableCell align='center'>{user.email}</TableCell>
                       <TableCell align='center'>{user.phone}</TableCell>
+                      <TableCell align='center'>{user.address}</TableCell>
                       <TableCell align='center'>
                         <button
                           onClick={() => handleToggleStatus(user._id, user.status)}

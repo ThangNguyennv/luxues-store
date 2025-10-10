@@ -2,6 +2,7 @@ export interface UserInfoInterface {
   _id: string,
   fullName: string,
   email: string,
+  address: string,
   password: string,
   tokenUser: string,
   status: string,

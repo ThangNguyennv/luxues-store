@@ -25,6 +25,10 @@ const MyAccountClient = () => {
                 <b>Số điện thoại: </b>
                 {accountUser.phone}
               </div>
+              <div>
+                <b>Địa chỉ: </b>
+                {accountUser.address}
+              </div>
               <Link
                 to={'/user/account/info/edit'}
                 className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[20%] text-[14px]'

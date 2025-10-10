@@ -61,7 +61,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                   sx={{ padding: 0 }}
                 />
               </TableCell>
-              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Đơn hàng</TableCell>
+              <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '0px' }}>Mã đơn</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Khách hàng</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Tổng tiền</TableCell>
               <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white', padding: '6px 0px' }}>Trạng thái đơn</TableCell>
@@ -165,7 +165,9 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                       />
                     </TableCell>
                     <TableCell sx={{ padding: '6px 0px', width: '250px' }}>
-                      <div className='flex items-center justify-center font-[600] text-[16px] hover:underline'>{order._id}</div>
+                      <div className='flex items-center justify-center font-[600] text-[16px] hover:underline'>
+                        {order._id}
+                      </div>
                     </TableCell>
                     <TableCell align='center' className='font-[700]' sx={{ padding: '6px 0px' }}>
                       <span>{order.userInfo.fullName}</span>
@@ -184,14 +186,15 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                         <option value="PENDING">Đang xử lý</option>
                         <option value="TRANSPORTING">Đang giao hàng</option>
                         <option value="CONFIRMED">Hoàn thành</option>
+                        <option value="CANCELED">Hủy</option>
                       </select>
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       {order.paymentInfo.status === 'FAILED' ? (
-                        <span className='text-red-600 font-[600] text-[16px]'>Hủy yêu cầu</span>
+                        <span className='text-red-600 font-[600] text-[16px]'>Thất bại</span>
                       ) : (
                         order.paymentInfo.status === 'PENDING' ? (
-                          <span className='text-yellow-600 font-[600] text-[16px]'>Chờ thanh toán</span>
+                          <span className='text-yellow-600 font-[600] text-[16px]'>Chưa thanh toán</span>
                         ) : (
                           <span className='text-green-600 font-[600] text-[16px]'>Đã thanh toán</span>
                         )
@@ -270,7 +273,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                             onClick={() => handleOpen(order._id)}
                             className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
                           >
-                            Hủy
+                            Xóa
                           </button>
                         </>
                       )}

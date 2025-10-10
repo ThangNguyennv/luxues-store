@@ -37,6 +37,7 @@ const EditUser = () => {
     formData.set('fullName', userInfo.fullName)
     formData.set('email', userInfo.email)
     formData.set('phone', userInfo.phone)
+    formData.set('address', userInfo.address)
     formData.set('password', userInfo.password)
 
     const response = await fetchEditUserAPI(id, formData)
@@ -123,6 +124,18 @@ const EditUser = () => {
                 name="phone"
                 className='py-[3px] text-[16px]'
                 value={userInfo.phone}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="address">Địa chỉ</label>
+              <input
+                onChange={(event) => setUserInfo({ ...userInfo, address: event.target.value })}
+                type="text"
+                id="address"
+                name="address"
+                className='py-[3px] text-[16px]'
+                value={userInfo.address}
               />
             </div>
 

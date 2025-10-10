@@ -24,6 +24,7 @@ const EditMyAccountClient = () => {
     formData.set('fullName', accountUser.fullName)
     formData.set('email', accountUser.email)
     formData.set('phone', accountUser.phone)
+    formData.set('address', accountUser.address)
 
     const response = await fetchEditInfoUserAPI(formData)
     if (response.code === 200) {
@@ -83,7 +84,7 @@ const EditMyAccountClient = () => {
                 />
               </div>
               <div className='form-group'>
-                <label htmlFor='phone'> Số điện thoại:</label>
+                <label htmlFor='phone'>Số điện thoại:</label>
                 <input
                   onChange={(event) => setAccountUser({ ...accountUser, phone: event.target.value })}
                   type='tel'
@@ -94,11 +95,23 @@ const EditMyAccountClient = () => {
                   required
                 />
               </div>
+              <div className='form-group'>
+                <label htmlFor='address'>Địa chỉ:</label>
+                <input
+                  onChange={(event) => setAccountUser({ ...accountUser, address: event.target.value })}
+                  type='text'
+                  id='address'
+                  name='address'
+                  value={accountUser.address}
+                  className='py-[3px]'
+                  required
+                />
+              </div>
               <button
                 type='submit'
                 className='border rounded-[5px] p-[7px] bg-[#525FE1] text-white text-center w-[20%] text-[14px]'
               >
-                  Cập nhật
+                Cập nhật
               </button>
             </div>
           </div>
