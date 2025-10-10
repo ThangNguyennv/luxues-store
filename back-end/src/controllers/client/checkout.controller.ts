@@ -58,63 +58,112 @@ export const order = async (req: Request, res: Response) => {
     if (cart) {
       if (cart.products.length > 0) {
         const products = []
-        for (const product of cart.products) {
-          const objectProduct = {
-            product_id: product.product_id,
-            price: 0,
-            quantity: product.quantity,
-            discountPercentage: 0
+        const cartProductIds = cart.products.map(p => p.product_id)
+        const failedOrder = await Order.findOne({ 
+          deleted: false, 
+          "products.product_id": { $all: cartProductIds } 
+        })
+        if (failedOrder) {
+          failedOrder.paymentInfo.method = paymentMethod
+          failedOrder.paymentInfo.status = 'PENDING'
+          await failedOrder.save()
+
+          if (paymentMethod === 'COD') {
+            await Cart.updateOne(
+              { _id: cartId },
+              { products: [] }
+            )
+            return res.json({ 
+              code: 201,  
+              message: 'Thành công!', 
+              order: order
+            })
+          } else if (paymentMethod === 'VNPAY') {
+            vnpayCreateOrder(failedOrder.amount, failedOrder.id, res)
+          } else if (paymentMethod === 'ZALOPAY') {
+            zalopayCreateOrder(
+              failedOrder.amount,
+              failedOrder.products.map((p) => ({
+                product_id: p.product_id as string,
+                title: p.title as string,
+                price: p.price as number,
+                discountPercentage: p.discountPercentage as number,
+                quantity: p.quantity as number
+              })),
+              failedOrder.userInfo.phone,
+              failedOrder.id,
+              res
+            )
+          } else if (paymentMethod === 'MOMO') {
+            console.log("vao momo");
+            momoCreateOrder(failedOrder.id, failedOrder.amount, res)
           }
-          const productInfo = await Product
-            .findOne({ _id: product.product_id })
-            .select('price discountPercentage title thumbnail')
-          objectProduct.price = productInfo.price
-          objectProduct.discountPercentage = productInfo.discountPercentage
-          objectProduct['title'] = productInfo.title
-          objectProduct['thumbnail'] = productInfo.thumbnail
-          products.push(objectProduct)
-        }
-        const totalBill = products.reduce((acc, product) => {
-          const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
-          return acc + priceNewForOneProduct * product.quantity
-        }, 0)
-        const orderInfo = {
-          user_id: req["accountUser"].id,
-          cart_id: cartId,
-          userInfo: userInfo,
-          products: products,
-          userId: req['accountUser'].id,
-          amount: Math.floor(totalBill),
-          note: note
-        }
-        const order = new Order(orderInfo)
-        order.paymentInfo.method = paymentMethod
-        await order.save()
 
-        if (paymentMethod === 'COD') {
-          await Cart.updateOne(
-            { _id: cartId },
-            { products: [] }
-          )
-          return res.json({ 
-            code: 201,  
-            message: 'Thành công!', 
-            order: order
-          })
-        } else if (paymentMethod === 'VNPAY') {
-          vnpayCreateOrder(totalBill, order.id, res)
-        } else if (paymentMethod === 'ZALOPAY') {
-          zalopayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
-        } else if (paymentMethod === 'MOMO') {
-          console.log("vao momo");
-          momoCreateOrder(order.id, totalBill, res)
-        }
+          for (const item of failedOrder.products) {
+            await Product.updateOne(
+              { _id: item.product_id },
+              { $inc: { stock: -item.quantity } } // trừ số lượng
+            )
+          }
+        } else {
+          for (const product of cart.products) {
+            const objectProduct = {
+              product_id: product.product_id,
+              price: 0,
+              quantity: product.quantity,
+              discountPercentage: 0
+            }
+            const productInfo = await Product
+              .findOne({ _id: product.product_id })
+              .select('price discountPercentage title thumbnail')
+            objectProduct.price = productInfo.price
+            objectProduct.discountPercentage = productInfo.discountPercentage
+            objectProduct['title'] = productInfo.title
+            objectProduct['thumbnail'] = productInfo.thumbnail
+            products.push(objectProduct)
+          }
+          const totalBill = products.reduce((acc, product) => {
+            const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
+            return acc + priceNewForOneProduct * product.quantity
+          }, 0)
+          const orderInfo = {
+            user_id: req["accountUser"].id,
+            cart_id: cartId,
+            userInfo: userInfo,
+            products: products,
+            userId: req['accountUser'].id,
+            amount: Math.floor(totalBill),
+            note: note
+          }
+          const order = new Order(orderInfo)
+          order.paymentInfo.method = paymentMethod
+          await order.save()
 
-        for (const item of products) {
-          await Product.updateOne(
-            { _id: item.product_id },
-            { $inc: { stock: -item.quantity } } // trừ số lượng
-          )
+          if (paymentMethod === 'COD') {
+            await Cart.updateOne(
+              { _id: cartId },
+              { products: [] }
+            )
+            return res.json({ 
+              code: 201,  
+              message: 'Thành công!', 
+              order: order
+            })
+          } else if (paymentMethod === 'VNPAY') {
+            vnpayCreateOrder(totalBill, order.id, res)
+          } else if (paymentMethod === 'ZALOPAY') {
+            zalopayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
+          } else if (paymentMethod === 'MOMO') {
+            console.log("vao momo");
+            momoCreateOrder(order.id, totalBill, res)
+          }
+
+          for (const item of products) {
+            await Product.updateOne(
+              { _id: item.product_id },
+              { $inc: { stock: -item.quantity } } // trừ số lượng
+            )
+          }
         }
       } 
     } 

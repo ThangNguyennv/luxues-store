@@ -340,15 +340,18 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     const find: any = { }
 
-    if (req.query.status === 'CANCELED') {
-      find.deleted = true
-    } else {
-      find.deleted = false
-      if (req.query.status) {
-        find.status = req.query.status.toString()
-      }
+    // if (req.query.status === 'CANCELED') {
+    //   find.deleted = true
+    // } else {
+    //   find.deleted = false
+    //   if (req.query.status) {
+    //     find.status = req.query.status.toString()
+    //   }
+    // }
+    find.deleted = false
+    if (req.query.status) {
+      find.status = req.query.status.toString()
     }
-
     // Search
     const objectSearch = searchHelpers(req.query)
     if (objectSearch.keyword) {

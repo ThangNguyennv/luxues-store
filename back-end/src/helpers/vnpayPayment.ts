@@ -20,12 +20,13 @@ export const vnpaybuildPaymentUrl = new VNPay({
 export const vnpayCreateOrder = (totalBill: number, orderId: string,  res: Response) => {
   const expire = new Date()
   expire.setMinutes(expire.getMinutes() + 15) 
-
+    // ✅ Sinh mã giao dịch mới mỗi lần thanh toán
+  const txnRef = `${orderId}-${Date.now()}`
   const vnpayResponse = vnpaybuildPaymentUrl.buildPaymentUrl({
     vnp_Amount: totalBill,
     vnp_IpAddr: '127.0.0.0.1', // ip test local
-    vnp_TxnRef: orderId,
-    vnp_OrderInfo: `Thanh toán đơn hàng: ${orderId}`,
+    vnp_TxnRef: txnRef,
+    vnp_OrderInfo: `Thanh toán đơn hàng: ${txnRef}`,
     vnp_OrderType: ProductCode.Other,
     vnp_ReturnUrl: 'http://localhost:3100/checkout/vnpay-return',
     vnp_Locale: VnpLocale.VN,
@@ -48,7 +49,12 @@ export const vnpayReturn = async (req: Request, res: Response) => {
     // Verify query từ VNPay
     const verified = vnpaybuildPaymentUrl.verifyReturnUrl(req.query as unknown as ReturnQueryFromVNPay)
     if (verified.isVerified) {
-      const orderId = req.query["vnp_TxnRef"] as string
+      // Lấy TxnRef (có dạng: orderId-timestamp)
+      const txnRef = req.query["vnp_TxnRef"] as string
+
+      // Tách phần orderId gốc trước dấu '-'
+      const orderId = txnRef.split('-')[0]
+      
       const order = await Order.findById(orderId)
       if (!order) {
         return res.json({ 
@@ -86,14 +92,17 @@ export const vnpayReturn = async (req: Request, res: Response) => {
 // [GET] /checkout/vnpay-ipn
 export const vnpayIpn = async (req: Request, res: Response) => {
   try {
-    const cartId = req["cartId"]
     delete req.query['vnp_SecureHashType']  
     delete req.query['vnp_SecureHash'] 
     const verified = vnpaybuildPaymentUrl.verifyIpnCall(req.query as unknown as ReturnQueryFromVNPay)
     if (verified.isVerified) {
       const { vnp_TxnRef, vnp_TransactionNo, vnp_BankCode, vnp_BankTranNo, vnp_CardType, vnp_PayDate } = req.query
       const rspCode  = req.query["vnp_ResponseCode"]
-      const orderId = req.query["vnp_TxnRef"] as string
+      // Lấy TxnRef (có dạng: orderId-timestamp)
+      const txnRef = vnp_TxnRef as string
+
+      // Tách phần orderId gốc trước dấu '-'
+      const orderId = txnRef.split('-')[0]
       const order = await Order.findById(orderId)
 
       if (!order) {
@@ -106,14 +115,15 @@ export const vnpayIpn = async (req: Request, res: Response) => {
       // Nếu thanh toán thành công
 
       if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
+        console.log("Đi vào ipn")
         await Cart.updateOne(
-          { _id: cartId },
+          { _id: order.cart_id },
           { products: [] }
         )
         order.paymentInfo.status = 'PAID'
         // Lưu thông tin giao dịch
         order.paymentInfo.details = {
-          vnp_TxnRef: vnp_TxnRef,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
+          vnp_TxnRef: orderId,               // Mã đơn hàng của bạn (key liên kết để biết đơn nào đã thanh toán).
           vnp_TransactionNo: vnp_TransactionNo, // Mã giao dịch của VNPay (dùng để tra cứu với VNPay khi cần).
           vnp_BankCode: vnp_BankCode,           // Biết khách hàng dùng ngân hàng nào (tiện thống kê, hỗ trợ).
           vnp_BankTranNo: vnp_BankTranNo,       // Mã giao dịch ngân hàng

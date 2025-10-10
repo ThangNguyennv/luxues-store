@@ -172,6 +172,8 @@ export const changeMulti = async (req: Request, res: Response) => {
     enum Key {
       PENDING = 'PENDING',
       CONFIRMED = 'CONFIRMED',
+      TRANSPORTING = 'TRANSPORTING',
+      CANCELED = 'CANCELED',
       DELETEALL = 'DELETEALL',
     }
     switch (type) {
@@ -185,10 +187,30 @@ export const changeMulti = async (req: Request, res: Response) => {
           message: `Cập nhật trạng thái thành công ${ids.length} đơn hàng!`
         })
         break
+      case Key.TRANSPORTING:
+        await Order.updateMany(
+          { _id: { $in: ids } },
+          { status: Key.TRANSPORTING, $push: { updatedBy: updatedBy } }
+        )
+        res.json({
+          code: 200,
+          message: `Cập nhật trạng thái thành công ${ids.length} đơn hàng!`
+        })
+        break
       case Key.CONFIRMED:
         await Order.updateMany(
           { _id: { $in: ids } },
           { status: Key.CONFIRMED, $push: { updatedBy: updatedBy } }
+        )
+        res.json({
+          code: 200,
+          message: `Cập nhật trạng thái thành công ${ids.length} đơn hàng!`
+        })
+        break
+      case Key.CANCELED:
+        await Order.updateMany(
+          { _id: { $in: ids } },
+          { status: Key.CANCELED, $push: { updatedBy: updatedBy } }
         )
         res.json({
           code: 200,

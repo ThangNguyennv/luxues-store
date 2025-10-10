@@ -86,15 +86,15 @@ export const zalopayCallback = async (req: Request, res: Response) => {
     }
     let dataJson = JSON.parse(data)
     console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ dataJson:", dataJson);
-    // const [phone, id] = dataJson.app_user.split("-");
-    // const order = await Order.findOne({
-    //   _id: id,
-    //   'userInfo.phone': phone,
-    //   deleted: false,
-    // })
-    // if (!order) {
-    //   return res.json({ return_code: 0, return_message: 'order not found' })
-    // }
+    const [phone, id] = dataJson.app_user.split("-");
+    const order = await Order.findOne({
+      _id: id,
+      'userInfo.phone': phone,
+      deleted: false,
+    })
+    if (!order) {
+      return res.json({ return_code: 0, return_message: 'order not found' })
+    }
     // const result = await zaloPayQueryOrder(dataJson.app_trans_id)
     // if (result.status === "PAID") {
     //   console.log("Vào đây")
@@ -116,7 +116,18 @@ export const zalopayCallback = async (req: Request, res: Response) => {
     //     embed_data: `http://localhost:5173/cart`
     //   }
     // }
-    // await order.save()
+      await Cart.updateOne(
+        { _id: order.cart_id },
+        { products: [] }
+      )
+      order.paymentInfo.status = "PAID"
+      order.paymentInfo.details = {
+      app_trans_id: dataJson.app_trans_id,
+      app_time: dataJson.app_time,
+      amount: dataJson.amount
+    }
+
+    await order.save()
     return res.json({ return_code: 1, return_message: "success" }) // Báo cho ZaloPay biết bạn đã nhận callback thành công.
   } catch (error) {
     return res.json({ return_code: 0, return_message: 'retry', error }) // Báo cho ZaloPay retry lại callback (ví dụ server bạn đang lỗi DB).
