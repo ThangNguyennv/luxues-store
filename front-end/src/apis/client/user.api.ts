@@ -36,3 +36,12 @@ export const fetchMyOrdersAPI = async (): Promise<OrderInfoInterface> => {
   )
   return response.data
 }
+
+export const fetchCancelOrder = async (id: string) => {
+  const response = await axios.patch(
+    `${API_ROOT}/user/my-orders/cancel-order/${id}`,
+    {},
+    { withCredentials: true }
+  )
+  return response.data
+}

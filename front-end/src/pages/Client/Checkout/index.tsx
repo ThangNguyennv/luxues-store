@@ -12,7 +12,7 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { MdOutlineLocalShipping } from 'react-icons/md'
 import vnpayLogo from '~/assets/images/Payment/vnpay-logo.png'
 import zalopayLogo from '~/assets/images/Payment/zalopay-logo.png'
@@ -27,7 +27,6 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()
   const { accountUser } = useAuth()
-  console.log("🚀 ~ index.tsx ~ Checkout ~ accountUser:", accountUser);
   const [fullName, setFullName] = useState(accountUser?.fullName)
   const [phone, setPhone] = useState(accountUser?.phone)
   const [address, setAddress] = useState(accountUser?.address)

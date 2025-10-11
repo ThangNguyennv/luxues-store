@@ -8,14 +8,22 @@ import { MdLocalShipping } from 'react-icons/md'
 import { MdOutlineCancel } from 'react-icons/md'
 import FormatDateTime from '~/components/admin/Moment/FormatDateTime'
 import OrderProgress from '~/helpers/OrderStatusProps'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
+import { fetchCancelOrder } from '~/apis/client/user.api'
+import type { OrderStatus } from '~/types/order.type'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
   console.log('🚀 ~ MyOrders.tsx ~ MyOrders ~ stateOrder:', stateOrder)
-  const { orders, pagination, filterOrder, keyword, allOrders } = stateOrder
+  const { orders, pagination, filterOrder, keyword } = stateOrder
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   const [actionType, setActionType] = useState('')
   const [open, setOpen] = useState(false)
   const [pendingAction, setPendingAction] = useState<string | null>(null)
@@ -61,6 +69,44 @@ const MyOrders = () => {
       sortValue: currentSortValue
     })
   }
+
+  const handleOpen = (id: string) => {
+    setSelectedId(id)
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setSelectedId(null)
+    setOpen(false)
+  }
+
+  const handleCancel = async () => {
+    if (!selectedId) return
+
+    const response = await fetchCancelOrder(selectedId)
+    if (response.code === 200) {
+      const updatedOrders = orders.map(order =>
+        order._id === selectedId
+          ? { ...order, status: 'CANCELED' as OrderStatus }
+          : order
+      )
+      dispatchOrder({
+        type: 'SET_DATA',
+        payload: {
+          orders: updatedOrders
+        }
+      })
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: response.message, severity: 'success' }
+      })
+      setOpen(false)
+    } else if (response.code === 400) {
+      alert('error: ' + response.error)
+      return
+    }
+  }
+
   const statusToStep = {
     PENDING: 0,
     TRANSPORTING: 1,
@@ -189,7 +235,12 @@ const MyOrders = () => {
             <div className='flex items-center justify-end'>
               <div>
                 {order.status == 'PENDING' && (
-                  <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'>Hủy đơn hàng</button>
+                  <button
+                    onClick={() => handleOpen(order._id)}
+                    className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'
+                  >
+                    Hủy đơn hàng
+                  </button>
                 )}
                 {order.status == 'CANCELED' && (
                   <div className='flex items-center justify-center gap-[5px]'>
@@ -204,6 +255,28 @@ const MyOrders = () => {
       ) : (
         <div className='text-red'>Không tồn tại đơn hàng nào!</div>
       )}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="delete-dialog-title"
+      >
+        <DialogTitle id="delete-dialog-title">Xác nhận hủy</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+                      Bạn có chắc chắn muốn hủy đơn hàng này không?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button
+            onClick={handleCancel}
+            color="error"
+            variant="contained"
+          >
+                      Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }
