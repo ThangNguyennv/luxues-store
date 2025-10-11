@@ -106,8 +106,8 @@ function App() {
               <Route path='articlesFeatured' element={<ArticlesFeatured />}/>
             </Route>
             <Route path='cart' element={<Cart />}/>
-            <Route path='checkout' element={<Checkout />}/>
-            <Route path='checkout/success/:orderId' element={<Success />}/>
+            <Route path='checkout' element={<PrivateRouteClient><Checkout /></PrivateRouteClient>}/>
+            <Route path='checkout/success/:orderId' element={<PrivateRouteClient><Success /></PrivateRouteClient>}/>
             <Route path='user' element={<PrivateRouteClient><LayoutUser /></PrivateRouteClient>}>
               <Route path='notification'></Route>
               <Route path='account'>

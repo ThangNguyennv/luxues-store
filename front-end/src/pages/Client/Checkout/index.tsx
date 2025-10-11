@@ -12,11 +12,12 @@ import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
 import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { MdOutlineLocalShipping } from 'react-icons/md'
 import vnpayLogo from '~/assets/images/Payment/vnpay-logo.png'
 import zalopayLogo from '~/assets/images/Payment/zalopay-logo.png'
 import momoLogo from '~/assets/images/Payment/momo-logo.png'
+import { useAuth } from '~/contexts/client/AuthContext'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
@@ -25,6 +26,11 @@ const Checkout = () => {
   const { refreshCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()
+  const { accountUser } = useAuth()
+  console.log("🚀 ~ index.tsx ~ Checkout ~ accountUser:", accountUser);
+  const [fullName, setFullName] = useState(accountUser?.fullName)
+  const [phone, setPhone] = useState(accountUser?.phone)
+  const [address, setAddress] = useState(accountUser?.address)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -226,33 +232,31 @@ const Checkout = () => {
                     {cartDetail.products.map((cart, index) => {
                       const item = products.find((product) => product._id.toString() === cart.product_id.toString())
                       return (
-                        <>
-                          {item && (
-                            <TableRow key={index}>
-                              <TableCell align="center">
-                                {index + 1}
-                              </TableCell>
-                              <TableCell align="center">
-                                <div className='flex items-center justify-center'>
-                                  <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
-                                </div>
-                              </TableCell>
-                              <TableCell align="center">
-                                <span>
-                                  {item.title}
-                                </span>
-                              </TableCell>
-                              <TableCell align="center">
-                                <span>
-                                  {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
-                                </span>
-                              </TableCell>
-                              <TableCell align="center">
-                                {cart.quantity}
-                              </TableCell>
-                            </TableRow>
-                          )}
-                        </>
+                        item && (
+                          <TableRow key={index}>
+                            <TableCell align="center">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell align="center">
+                              <div className='flex items-center justify-center'>
+                                <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                              </div>
+                            </TableCell>
+                            <TableCell align="center">
+                              <span>
+                                {item.title}
+                              </span>
+                            </TableCell>
+                            <TableCell align="center">
+                              <span>
+                                {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
+                              </span>
+                            </TableCell>
+                            <TableCell align="center">
+                              {cart.quantity}
+                            </TableCell>
+                          </TableRow>
+                        )
                       )
                     })}
                   </TableBody>
@@ -264,53 +268,60 @@ const Checkout = () => {
               </div>
               <form onSubmit={handleSubmit} className='grid grid-cols-2 gap-[25px]'>
                 <input type="hidden" name="position" value={1} />
-                <div className='flex flex-col gap-[15px]'>
+                <div className='flex flex-col gap-[18px]'>
                   <div className='text-[24px] uppercase font-[600]'>
                     Thông tin người nhận hàng:
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor='fullName'><b>Họ và tên: </b></label>
-                    <input
-                      type='text'
-                      name='fullName'
-                      id='fullName'
-                      className=''
-                      required
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='phone'><b>Số điện thoại: </b></label>
-                    <input
-                      type='tel'
-                      name='phone'
-                      id='phone'
-                      required
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='address'><b>Địa chỉ: </b></label>
-                    <input
-                      type='text'
-                      name='address'
-                      id='address'
-                      required
-                    />
-                  </div>
-                  <div className='form-group'>
-                    <label htmlFor='note'><b>Lời nhắn: </b></label>
-                    <input
-                      type='text'
-                      name='note'
-                      id='note'
-                      placeholder='Lưu ý cho người nhắn...'
-                    />
+                  <div className='flex flex-col gap-2'>
+                    <div className='form-group'>
+                      <label htmlFor='fullName'><b>Họ và tên: </b></label>
+                      <input
+                        onChange={(event) => setFullName(event.target.value)}
+                        type='text'
+                        name='fullName'
+                        id='fullName'
+                        value={fullName}
+                        required
+                      />
+                    </div>
+                    <div className='form-group'>
+                      <label htmlFor='phone'><b>Số điện thoại: </b></label>
+                      <input
+                        onChange={(event) => setPhone(event.target.value)}
+                        type='tel'
+                        name='phone'
+                        id='phone'
+                        value={phone}
+                        required
+                      />
+                    </div>
+                    <div className='form-group'>
+                      <label htmlFor='address'><b>Địa chỉ: </b></label>
+                      <input
+                        onChange={(event) => setAddress(event.target.value)}
+                        type='text'
+                        name='address'
+                        id='address'
+                        value={address}
+                        required
+                      />
+                    </div>
+                    <div className='form-group'>
+                      <label htmlFor='note'><b>Lời nhắn: </b></label>
+                      <input
+                        type='text'
+                        name='note'
+                        id='note'
+                        placeholder='Lưu ý cho người bán...'
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className='flex flex-col gap-[43px]'>
+                <div className='flex flex-col justify-between gap-[30px]'>
                   <div className='font-[600] text-[24px]'>
                     Phương thức thanh toán:
                   </div>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-[10px]">
                     <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
                       <input
                         type="radio"
@@ -382,7 +393,7 @@ const Checkout = () => {
                   <div className='flex items-center justify-end'>
                     <button
                       type='submit'
-                      className='uppercase border rounded-[10px] text-center px-[20px] py-[12px] bg-[#BC3433] text-white'
+                      className='uppercase border rounded-[10px] text-center bg-[#BC3433] text-white p-[10px]'
                     >
                       Đặt hàng
                     </button>

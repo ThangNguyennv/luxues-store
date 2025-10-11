@@ -366,68 +366,66 @@ const Cart = () => {
                       {cartDetail.products.map((cart, index) => {
                         const item = products.find((product) => product._id.toString() === cart.product_id.toString())
                         return (
-                          <>
-                            {item && (
-                              <TableRow key={index}>
-                                <TableCell align='center'>
-                                  <Checkbox
-                                    checked={selectedIds.includes(item._id)}
-                                    onChange={(event) => handleCheckbox(item._id, event.target.checked)}
-                                    {...label}
-                                    size="small"
-                                    sx={{ padding: 0 }}
-                                    value={item._id}
-                                  />
-                                </TableCell>
-                                <TableCell align="center">
-                                  {index + 1}
-                                </TableCell>
-                                <TableCell align="center">
-                                  <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
-                                </TableCell>
-                                <TableCell align="left">
+                          item && (
+                            <TableRow key={index}>
+                              <TableCell align='center'>
+                                <Checkbox
+                                  checked={selectedIds.includes(item._id)}
+                                  onChange={(event) => handleCheckbox(item._id, event.target.checked)}
+                                  {...label}
+                                  size="small"
+                                  sx={{ padding: 0 }}
+                                  value={item._id}
+                                />
+                              </TableCell>
+                              <TableCell align="center">
+                                {index + 1}
+                              </TableCell>
+                              <TableCell align="center">
+                                <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
+                              </TableCell>
+                              <TableCell align="left">
+                                <span>
+                                  {item.title}
+                                </span>
+                              </TableCell>
+                              <TableCell align="left">
+                                <div className='flex items-center justify-between gap-[5px]'>
                                   <span>
-                                    {item.title}
+                                    {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
                                   </span>
-                                </TableCell>
-                                <TableCell align="left">
-                                  <div className='flex items-center justify-between gap-[5px]'>
-                                    <span>
-                                      {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
-                                    </span>
-                                    <span className='line-through text-gray-400'>
-                                      {item.price.toLocaleString()}đ
-                                    </span>
-                                  </div>
-                                </TableCell>
-                                <TableCell align="center">
-                                  <input
-                                    onChange={(event) => {
-                                      const newQuantity = parseInt(event.target.value, 10)
-                                      const updatedProducts = cartDetail.products.map((product) =>
-                                        product.product_id === cart.product_id ? { ...product, quantity: newQuantity } : product
-                                      )
-                                      setCartDetail({ ...cartDetail, products: updatedProducts })
-                                    }}
-                                    className='border rounded-[5px] text-center'
-                                    type='number'
-                                    name='quantity'
-                                    value={cart.quantity}
-                                    data-id={cart.product_id}
-                                    min={1}
-                                    max={item.stock}
-                                  />
-                                </TableCell>
-                                <TableCell align="center">
-                                  <button
-                                    onClick={() => handleOpen(item._id)}
-                                    className='text-red-500'>
-                                    <RiDeleteBin5Line className='text-[17px] flex items-center justify-center'/>
-                                  </button>
-                                </TableCell>
-                              </TableRow>
-                            )}
-                          </>
+                                  <span className='line-through text-gray-400'>
+                                    {item.price.toLocaleString()}đ
+                                  </span>
+                                </div>
+                              </TableCell>
+                              <TableCell align="center">
+                                <input
+                                  onChange={(event) => {
+                                    const newQuantity = parseInt(event.target.value, 10)
+                                    const updatedProducts = cartDetail.products.map((product) =>
+                                      product.product_id === cart.product_id ? { ...product, quantity: newQuantity } : product
+                                    )
+                                    setCartDetail({ ...cartDetail, products: updatedProducts })
+                                  }}
+                                  className='border rounded-[5px] text-center'
+                                  type='number'
+                                  name='quantity'
+                                  value={cart.quantity}
+                                  data-id={cart.product_id}
+                                  min={1}
+                                  max={item.stock}
+                                />
+                              </TableCell>
+                              <TableCell align="center">
+                                <button
+                                  onClick={() => handleOpen(item._id)}
+                                  className='text-red-500'>
+                                  <RiDeleteBin5Line className='text-[17px] flex items-center justify-center'/>
+                                </button>
+                              </TableCell>
+                            </TableRow>
+                          )
                         )
                       })}
                       <Dialog
