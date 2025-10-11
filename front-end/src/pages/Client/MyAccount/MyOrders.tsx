@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useOrderContext } from '~/contexts/client/OrderContext'
@@ -34,7 +34,7 @@ const MyOrders = () => {
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
   const { addToCart } = useCart()
-  
+
   useEffect(() => {
     fetchOrder({
       status: currentStatus,
@@ -124,6 +124,21 @@ const MyOrders = () => {
       })
     }
   }
+
+  const handleLinkToContactShop = () => {
+
+  }
+
+  const handleBuyBackAfterConfirming = (e: ChangeEvent<HTMLSelectElement>, productId: string, quantity: number) => {
+    const value = e.target.value
+    setActionType(value)
+    if (value === 'contact-shop') {
+      handleLinkToContactShop()
+    } else if (value === 'buy-back') {
+      handleBuyBack(productId, quantity)
+    }
+  }
+
   const statusToStep = {
     PENDING: 0,
     TRANSPORTING: 1,
@@ -238,10 +253,22 @@ const MyOrders = () => {
                       <div className='flex items-center justify-end gap-[5px]'>
                         <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'>Đánh giá</button>
                         <button className='text-black font-[600] border rounded-[5px]  p-[5px] text-[14px]'>Yêu cầu trả hàng/hoàn tiền</button>
-                        <select className='outline-none border rounded-[5px] p-[5px] text-[14px] font-[600]'>
-                          <option disabled>Thêm</option>
-                          <option>Liên hệ shop</option>
-                          <option>Mua lại</option>
+                        <select
+                          value={actionType}
+                          onChange={(e) => {
+                            {order.products.forEach((product) => {
+                              handleBuyBackAfterConfirming(e, product.product_id, product.quantity)
+                            })}
+                          }}
+                          className='outline-none border rounded-[5px] p-[5px] text-[14px] font-[600]'
+                        >
+                          <option disabled value={''}>-- Thêm --</option>
+                          <option value={'contact-shop'}>
+                            Liên hệ shop
+                          </option>
+                          <option value={'buy-back'}>
+                            Mua lại
+                          </option>
                         </select>
                       </div>
                     </>
