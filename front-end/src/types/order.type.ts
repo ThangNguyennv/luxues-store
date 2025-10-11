@@ -24,6 +24,7 @@ export interface OrderInfoInterface {
       address: string
     },
     products: {
+      product_id: string,
       title: string,
       price: number,
       discountPercentage: number,

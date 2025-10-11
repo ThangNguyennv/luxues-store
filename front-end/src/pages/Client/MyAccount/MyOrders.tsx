@@ -16,6 +16,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { fetchCancelOrder } from '~/apis/client/user.api'
 import type { OrderStatus } from '~/types/order.type'
+import { useCart } from '~/contexts/client/CartContext'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
@@ -32,7 +33,8 @@ const MyOrders = () => {
   const currentKeyword = searchParams.get('keyword') || ''
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
-
+  const { addToCart } = useCart()
+  
   useEffect(() => {
     fetchOrder({
       status: currentStatus,
@@ -107,6 +109,21 @@ const MyOrders = () => {
     }
   }
 
+  const handleBuyBack = async (productId: string, quantity: number) => {
+    try {
+      await addToCart(productId, quantity)
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Mua lại đơn hàng thành công!', severity: 'success' }
+      })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    } catch (error) {
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: { message: 'Lỗi khi mua lại', severity: 'error' }
+      })
+    }
+  }
   const statusToStep = {
     PENDING: 0,
     TRANSPORTING: 1,
@@ -244,7 +261,16 @@ const MyOrders = () => {
                 )}
                 {order.status == 'CANCELED' && (
                   <div className='flex items-center justify-center gap-[5px]'>
-                    <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[16px]'>Mua lại</button>
+                    <button
+                      onClick={() => {
+                        order.products.forEach((product) => {
+                          handleBuyBack(product.product_id, product.quantity)
+                        })
+                      }}
+                      className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[16px]'
+                    >
+                      Mua lại
+                    </button>
                     <button className='text-black font-[600] border rounded-[5px] p-[5px] text-[16px]'>Liên hệ shop</button>
                   </div>
                 )}
@@ -263,7 +289,7 @@ const MyOrders = () => {
         <DialogTitle id="delete-dialog-title">Xác nhận hủy</DialogTitle>
         <DialogContent>
           <DialogContentText>
-                      Bạn có chắc chắn muốn hủy đơn hàng này không?
+            Bạn có chắc chắn muốn hủy đơn hàng này không?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
