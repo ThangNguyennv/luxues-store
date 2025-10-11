@@ -46,5 +46,5 @@ router.patch(
 )
 
 router.get('/my-orders', authMiddleware.requireAuth, controller.getOrders)
-
+router.patch('/my-orders/cancel-order/:id', authMiddleware.requireAuth, controller.cancelOrder)
 export const userRoutes: Router = router

@@ -442,3 +442,24 @@ export const getOrders = async (req: Request, res: Response) => {
     })
   }
 }
+
+// [PATCH] /user/my-orders/cancel-order/:id
+export const cancelOrder = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.id
+    await Order.updateOne(
+      { _id: orderId },
+      { status: 'CANCELED' }
+    )
+    res.json({
+      code: 200,
+      message: 'Hủy thành công đơn hàng!'
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
