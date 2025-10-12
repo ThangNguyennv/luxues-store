@@ -280,7 +280,7 @@ const Success = () => {
                           to={'/checkout'}
                           className='border rounded-[5px] bg-emerald-600 p-[4px] text-amber-50 font-[500]'
                         >
-                        Thanh toán lại
+                          Thanh toán lại
                         </Link>
                       </div>
                     )}
