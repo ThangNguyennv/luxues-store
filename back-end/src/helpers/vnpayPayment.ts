@@ -115,7 +115,6 @@ export const vnpayIpn = async (req: Request, res: Response) => {
       // Nếu thanh toán thành công
 
       if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
-        console.log("Đi vào ipn")
         await Cart.updateOne(
           { _id: order.cart_id },
           { products: [] }

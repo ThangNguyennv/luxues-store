@@ -65,7 +65,6 @@ export const momoCreateOrder = async (id: string, totalBill: number, res: Respon
 
 // [POST] /checkout/momo-callback
 export const momoCallback = async (req: Request, res: Response) => {
-  console.log("Vào callback momo")
   const data = req.body
   let dataJson = typeof data === 'string' ? JSON.parse(data) : data
   const { signature } = dataJson

@@ -36,7 +36,7 @@ export const zalopayCreateOrder = async (
     description: `Thanh toán đơn hàng ${transID}`,
     bank_code: "", 
     mac: '',
-    callback_url: 'https://f58cd96af333.ngrok-free.app/checkout/callback'
+    callback_url: 'https://295b96ab6e0d.ngrok-free.app/checkout/zalopay-callback'
   }
 
   const data = [
@@ -76,7 +76,6 @@ export const zalopayCreateOrder = async (
 export const zalopayCallback = async (req: Request, res: Response) => {
   try {
     let { data, mac } = req.body
-    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ req.body:", req.body);
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
       .update(data)
       .digest("hex")
@@ -85,7 +84,6 @@ export const zalopayCallback = async (req: Request, res: Response) => {
       return res.json({ return_code: -1, return_message: "mac not match" }) // Báo lỗi, thường khi MAC không khớp (nghi ngờ giả mạo).
     }
     let dataJson = JSON.parse(data)
-    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ dataJson:", dataJson);
     const [phone, id] = dataJson.app_user.split("-");
     const order = await Order.findOne({
       _id: id,
@@ -95,27 +93,6 @@ export const zalopayCallback = async (req: Request, res: Response) => {
     if (!order) {
       return res.json({ return_code: 0, return_message: 'order not found' })
     }
-    // const result = await zaloPayQueryOrder(dataJson.app_trans_id)
-    // if (result.status === "PAID") {
-    //   console.log("Vào đây")
-    //   await Cart.updateOne(
-    //     { _id: order.cart_id },
-    //     { products: [] }
-    //   )
-    //   order.paymentInfo.status = "PAID"
-    //   order.paymentInfo.details = {
-    //   app_trans_id: dataJson.app_trans_id,
-    //   app_time: dataJson.app_time,
-    //   amount: dataJson.amount,
-    // }
-    // } else if (result.status === "PENDING") {
-    //   order.paymentInfo.status = "PENDING"
-    // } else if (result.status === "FAILED") {
-    //   order.paymentInfo.status = "FAILED"
-    //   order.paymentInfo.details = {
-    //     embed_data: `http://localhost:5173/cart`
-    //   }
-    // }
       await Cart.updateOne(
         { _id: order.cart_id },
         { products: [] }
@@ -154,7 +131,7 @@ export const zaloPayQueryOrder  = async (app_trans_id: string) => {
   )
   if (response.data.return_code !== 1) {
     // API gọi thất bại -> sai request
-    return { status: "ERROR", data: response };
+    return { status: "ERROR", data: response }
   }
   switch (response.data.sub_return_code) {
     case 1:

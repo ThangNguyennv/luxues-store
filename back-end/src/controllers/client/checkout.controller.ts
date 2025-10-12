@@ -45,7 +45,6 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
-  console.log("🚀 ~ checkout.controller.ts ~ order ~ req.body:", req.body);
   try {
     const cartId = req["cartId"]
     const { note, paymentMethod, fullName, phone, address } = req.body
@@ -95,7 +94,6 @@ export const order = async (req: Request, res: Response) => {
               res
             )
           } else if (paymentMethod === 'MOMO') {
-            console.log("vao momo");
             momoCreateOrder(failedOrder.id, failedOrder.amount, res)
           }
 
@@ -154,7 +152,6 @@ export const order = async (req: Request, res: Response) => {
           } else if (paymentMethod === 'ZALOPAY') {
             zalopayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
           } else if (paymentMethod === 'MOMO') {
-            console.log("vao momo");
             momoCreateOrder(order.id, totalBill, res)
           }
 
