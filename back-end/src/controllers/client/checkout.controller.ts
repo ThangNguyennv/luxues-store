@@ -95,6 +95,8 @@ export const order = async (req: Request, res: Response) => {
             )
           } else if (paymentMethod === 'MOMO') {
             momoCreateOrder(failedOrder.id, failedOrder.amount, res)
+          } else if (paymentMethod === 'ZALOPAY') {
+            zalopayCreateOrder(failedOrder.amount, products, failedOrder.userInfo.phone, failedOrder.id, res)
           }
 
           for (const item of failedOrder.products) {

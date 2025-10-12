@@ -75,6 +75,7 @@ export const zalopayCreateOrder = async (
 // [POST] /checkout/zalopay-callback
 export const zalopayCallback = async (req: Request, res: Response) => {
   try {
+    console.log("Vao callback zalopay")
     let { data, mac } = req.body
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
       .update(data)
@@ -93,15 +94,22 @@ export const zalopayCallback = async (req: Request, res: Response) => {
     if (!order) {
       return res.json({ return_code: 0, return_message: 'order not found' })
     }
-      await Cart.updateOne(
-        { _id: order.cart_id },
-        { products: [] }
-      )
-      order.paymentInfo.status = "PAID"
+    // ✅ Gọi API kiểm tra trạng thái thật từ ZaloPay
+    const result = await zaloPayQueryOrder(dataJson.app_trans_id);
+    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ result:", result);
+    if (result.status === "PAID") {
+      await Cart.updateOne({ _id: order.cart_id }, { products: [] })
+      order.paymentInfo.status = "PAID";
       order.paymentInfo.details = {
-      app_trans_id: dataJson.app_trans_id,
-      app_time: dataJson.app_time,
-      amount: dataJson.amount
+        app_trans_id: dataJson.app_trans_id,
+        app_time: dataJson.app_time,
+        amount: dataJson.amount,
+      }
+    } else if (result.status === "PENDING") {
+      order.paymentInfo.status = "PENDING";
+    } else if (result.status === "FAILED") {
+      order.paymentInfo.status = "FAILED";
+      order.paymentInfo.details = { reason: "User cancelled or failed payment" }
     }
 
     await order.save()
@@ -112,6 +120,7 @@ export const zalopayCallback = async (req: Request, res: Response) => {
 }
 
 export const zaloPayQueryOrder  = async (app_trans_id: string) => {
+  console.log("vao query order zalopay")
   const key1 = process.env.ZALOPAY_KEY1
   const app_id = process.env.ZALOPAY_APP_ID
   
@@ -129,6 +138,7 @@ export const zaloPayQueryOrder  = async (app_trans_id: string) => {
     qs.stringify(payload), // convert sang form-urlencoded
     { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
   )
+  console.log("🚀 ~ zalopayPayment.ts ~ zaloPayQueryOrder ~ response:", response);
   if (response.data.return_code !== 1) {
     // API gọi thất bại -> sai request
     return { status: "ERROR", data: response }
