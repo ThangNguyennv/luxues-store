@@ -17,7 +17,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
-import { getTotalBill } from '~/helpers/TotalBill'
+import { getTotalBill } from '~/helpers/totalBill'
 import type { OrderStatus } from '~/types/order.type'
 
 const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {

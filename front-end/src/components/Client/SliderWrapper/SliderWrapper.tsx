@@ -21,7 +21,7 @@ interface SliderWrapperProps {
   autoplayDelay?: number
 }
 
-export default function SliderWrapper({
+export default function SliderWrapper ({
   items,
   slidesPerView = 4,
   autoplayDelay = 3000

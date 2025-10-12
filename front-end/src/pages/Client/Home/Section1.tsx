@@ -3,7 +3,6 @@ import backgroundHome from '~/assets/images/Home/background-home.png'
 import star from '~/assets/images/Home/star.svg'
 import CountUp from 'react-countup'
 import { Link } from 'react-scroll'
-import Section3 from './Section3'
 
 const Section1 = () => {
   const { ref, inView } = useInView({ triggerOnce: true }) // chỉ chạy 1 lần khi vào view
