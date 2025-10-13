@@ -17,6 +17,8 @@ const orderSchema = new mongoose.Schema(
       required: true
     },
     note: String,
+    estimatedDeliveryDay: String,
+    estimatedConfirmedDay: String, 
     paymentInfo: {
       method: {
         type: String,

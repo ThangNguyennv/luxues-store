@@ -347,3 +347,55 @@ export const recoverPatch = async (req: Request, res: Response) => {
     })
   }
 }
+
+// [PATCH] /admin/orders/edit-estimatedDeliveryDay
+export const estimatedDeliveryDay = async (req: Request, res: Response) => {
+  try {
+    const estimatedDeliveryDay = req.body.estimatedDeliveryDay
+    const orderId = req.body.id
+    const updatedBy = {
+      account_id: req['accountAdmin'].id,
+      updatedAt: new Date()
+    }
+    await Order.updateOne(
+      { _id: orderId },
+      { estimatedDeliveryDay: estimatedDeliveryDay, $push: { updatedBy: updatedBy }}
+    )
+    res.json({
+      code: 200,
+      message: `Cập nhật thành công thời gian giao hàng!`
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
+
+// [PATCH] /admin/orders/edit-estimatedConfirmedDay
+export const estimatedConfirmedDay = async (req: Request, res: Response) => {
+  try {
+    const estimatedConfirmedDay = req.body.estimatedConfirmedDay
+    const orderId = req.body.id
+    const updatedBy = {
+      account_id: req['accountAdmin'].id,
+      updatedAt: new Date()
+    }
+    await Order.updateOne(
+      { _id: orderId },
+      { estimatedConfirmedDay: estimatedConfirmedDay, $push: { updatedBy: updatedBy }}
+    )
+    res.json({
+      code: 200,
+      message: `Cập nhật thành công thời gian nhận hàng!`
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}
