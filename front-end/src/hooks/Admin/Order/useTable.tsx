@@ -114,12 +114,12 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
 
     const response = await fetchChangeStatusAPI(newStatus, id)
     if (response.code === 200) {
-      const updatedAllOrders = stateOrder.allOrders.map(order =>
+      const updatedAllOrders = (stateOrder.allOrders ?? []).map(order =>
         order._id === id
           ? { ...order, status: newStatus, updatedBy: [...(order.updatedBy || []), currentUser] }
           : order
       )
-      const updatedOrders = stateOrder.orders.map(order =>
+      const updatedOrders = (stateOrder.allOrders ?? []).map(order =>
         order._id === id
           ? { ...order, status: newStatus, updatedBy: [...(order.updatedBy || []), currentUser] }
           : order

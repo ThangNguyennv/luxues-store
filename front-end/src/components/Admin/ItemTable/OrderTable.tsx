@@ -229,7 +229,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                           )
                         }
                         if (Array.isArray(order.updatedBy) && order.updatedBy.length > 0) {
-                          const updater = accounts.find((account) => account._id === updatedBy.account_id)
+                          const updater = (accounts ?? []).find((account) => account._id === updatedBy.account_id)
                           return updater ? (
                             <>
                               <span className="text-sm font-medium text-gray-800">
@@ -239,7 +239,7 @@ const OrderTable = ({ selectedIds, setSelectedIds }: Props) => {
                             </>
                           ) : (
                             <span className="text-sm italic text-gray-400">
-                              Không xác định
+                            Không xác định
                             </span>
                           )
                         }

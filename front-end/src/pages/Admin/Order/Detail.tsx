@@ -1,10 +1,13 @@
 import Skeleton from '@mui/material/Skeleton'
 import { useDetail } from '~/hooks/admin/Order/useDetail'
+import { formatDateForInput } from '~/helpers/formatDateForInput'
 
 const DetailOrder = () => {
   const {
     orderDetail,
-    role
+    role,
+    handleSubmitConfirmedDay,
+    handleSubmitDeliveryDay
   } = useDetail()
 
   return (
@@ -35,7 +38,7 @@ const DetailOrder = () => {
                             {product.discountPercentage}%
                           </div>
                           <div>
-                            <b>Còn lại: </b>
+                            <b>Số lượng: </b>
                             {product.quantity}
                           </div>
                           {orderDetail.note && (
@@ -63,6 +66,40 @@ const DetailOrder = () => {
                           <span className="text-green-500 font-[600]">Đã hoàn thành</span> :
                           <span className="text-[#BC3433] font-[600]">Đã hủy</span>
                   }
+                </div>
+                <div>
+                  {orderDetail.status == 'TRANSPORTING' && (
+                    <form onSubmit={(e) => handleSubmitDeliveryDay(e)} className='flex flex-col gap-[10px]'>
+                      <div className='flex items-center gap-[5px]'>
+                        <b>Thời gian giao hàng: </b>
+                        <input
+                          type='date'
+                          name='estimatedDeliveryDay'
+                          className='border rounded-[5px] p-[2px]'
+                          defaultValue={formatDateForInput(orderDetail.estimatedDeliveryDay)}
+                        />
+                      </div>
+                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[10%] text-[16px]'>
+                        Cập nhật
+                      </button>
+                    </form>
+                  )}
+                  {orderDetail.status == 'CONFIRMED' && (
+                    <form onSubmit={(e) => handleSubmitConfirmedDay(e)} className='flex flex-col gap-[10px]'>
+                      <div className='flex items-center gap-[5px]'>
+                        <b>Thời gian nhận hàng: </b>
+                        <input
+                          type='date'
+                          name='estimatedConfirmedDay'
+                          className='border rounded-[5px] p-[2px]'
+                          defaultValue={formatDateForInput(orderDetail.estimatedConfirmedDay)}
+                        />
+                      </div>
+                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[10%] text-[16px]'>
+                        Cập nhật
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
               <div className='flex flex-col gap-[15px]'>

@@ -51,7 +51,7 @@ const OrderAdmin = () => {
                   filterOrder={filterOrder}
                   currentStatus={currentStatus as OrderStatus}
                   handleFilterStatus={handleFilterStatus}
-                  items={allOrders}
+                  items={allOrders ?? []}
                 />
                 <button className='p-[5px] border rounded-[5px] border-[#525FE1] hover:bg-[#525FE1] flex items-center justify-center gap-[5px]'>
                   <FaTrashAlt />

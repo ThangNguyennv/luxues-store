@@ -45,7 +45,9 @@ export interface OrderInfoInterface {
       details?: PaymentDetails
     },
     note?: string,
-    amount: number
+    amount: number,
+    estimatedDeliveryDay: string,
+    estimatedConfirmedDay: string
 }
 export interface OrderDetailInterface {
   order: OrderInfoInterface,

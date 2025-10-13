@@ -18,10 +18,12 @@ import { fetchCancelOrder } from '~/apis/client/user.api'
 import type { OrderStatus } from '~/types/order.type'
 import { useCart } from '~/contexts/client/CartContext'
 import Pagination from '~/components/admin/Pagination/Pagination'
+import { FaFilter } from 'react-icons/fa'
+import { FaCalendarDays } from 'react-icons/fa6'
+import { formatDateIntl } from '~/helpers/formatDateIntl'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
-  console.log('🚀 ~ MyOrders.tsx ~ MyOrders ~ stateOrder:', stateOrder)
   const { orders, pagination, filterOrder, keyword } = stateOrder
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -155,8 +157,19 @@ const MyOrders = () => {
           <span className="text-[14px] text-[#555]">Theo dõi và quản lý lịch sử đơn hàng của bạn</span>
         </div>
         <div className="flex items-center justify-center gap-[10px]">
-          <div className="border rounded-[5px]">Trạng thái đơn hàng</div>
-          <div className="border rounded-[5px]">Mốc thời gian</div>
+          <div className="flex items-center justify-center gap-[5px] border rounded-[5px] p-[5px]">
+            <FaFilter />
+            <select className='outline-none'>
+              <option disabled value={''}>Trạng thái đơn</option>
+              <option value={'PENDING'}>Đang xử lý</option>
+              <option value={'TRANSPORTING'}>Đang vận chuyển</option>
+              <option value={'CONFIRMED'}>Đã hoàn thành</option>
+            </select>
+          </div>
+          <div className="flex items-center justify-center gap-[5px] border rounded-[5px] p-[5px]">
+            <FaCalendarDays />
+            <span>Mốc thời gian</span>
+          </div>
         </div>
       </div>
       {orders && orders.length > 0 ? (
@@ -231,13 +244,17 @@ const MyOrders = () => {
                 {order.status == 'TRANSPORTING' && (
                   <div className='flex items-center gap-[5px]'>
                     <span>Ngày giao hàng dự kiến:</span>
-                    <span className='font-[600]'>01/01/2025</span>
+                    <span className='font-[600]'>
+                      {formatDateIntl(order.estimatedDeliveryDay)}
+                    </span>
                   </div>
                 )}
                 {order.status == 'CONFIRMED' && (
                   <div className='flex items-center gap-[5px]'>
-                    <span>Đã nhận hàng:</span>
-                    <span className='font-[600]'>03/01/2025</span>
+                    <span>Ngày nhận hàng:</span>
+                    <span className='font-[600]'>
+                      {formatDateIntl(order.estimatedConfirmedDay)}
+                    </span>
                   </div>
                 )}
               </div>

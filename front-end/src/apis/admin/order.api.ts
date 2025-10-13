@@ -73,3 +73,21 @@ export const fetchRecoverOrderAPI = async (id: string) => {
   )
   return response.data
 }
+
+export const fetchEditEstimatedDeliveryDay = async ( data: { estimatedDeliveryDay: string, id: string }) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/orders/edit-estimatedDeliveryDay`,
+    data,
+    { withCredentials: true }
+  )
+  return response.data
+}
+
+export const fetchEditEstimatedConfirmedDay = async (data: { estimatedConfirmedDay: string, id: string }) => {
+  const response = await axios.patch(
+    `${API_ROOT}/admin/orders/edit-estimatedConfirmedDay`,
+    data,
+    { withCredentials: true }
+  )
+  return response.data
+}
