@@ -13,9 +13,7 @@ export const initialState: OrderStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  orders: [],
-  accounts: [],
-  allOrders: []
+  orders: []
 }
 
 export function orderReducer(

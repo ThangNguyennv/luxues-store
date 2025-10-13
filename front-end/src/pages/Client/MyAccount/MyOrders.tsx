@@ -17,6 +17,7 @@ import Button from '@mui/material/Button'
 import { fetchCancelOrder } from '~/apis/client/user.api'
 import type { OrderStatus } from '~/types/order.type'
 import { useCart } from '~/contexts/client/CartContext'
+import Pagination from '~/components/admin/Pagination/Pagination'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
@@ -308,6 +309,13 @@ const MyOrders = () => {
       ) : (
         <div className='text-red'>Không tồn tại đơn hàng nào!</div>
       )}
+      <Pagination
+        pagination={pagination}
+        handlePagination={(page) => updateSearchParams('page', (page).toString())}
+        handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
+        handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+        items={orders}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
@@ -326,7 +334,7 @@ const MyOrders = () => {
             color="error"
             variant="contained"
           >
-                      Xác nhận
+            Xác nhận
           </Button>
         </DialogActions>
       </Dialog>

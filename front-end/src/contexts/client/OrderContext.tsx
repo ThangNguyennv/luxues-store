@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback } from 'react'
-import { fetchOrdersAPI } from '~/apis/admin/order.api'
+import { fetchOrdersAPI } from '~/apis/client/order.api'
 import { initialState, orderReducer } from '~/reducers/client/orderReducer'
 import type { OrderActions, OrderAllResponseInterface, OrderStates } from '~/types/order.type'
 

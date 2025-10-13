@@ -63,10 +63,10 @@ export interface OrderAllResponseInterface extends CurrentParamsInterface {
 
 export interface OrderStates extends ParamsInterface {
   orders: OrderInfoInterface[],
-  accounts: AccountInfoInterface[],
+  accounts?: AccountInfoInterface[],
   filterOrder: FilterStatusInterface[],
   pagination: PaginationInterface,
-  allOrders: OrderInfoInterface[],
+  allOrders?: OrderInfoInterface[],
 }
 
 export type OrderActions =

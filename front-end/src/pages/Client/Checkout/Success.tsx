@@ -274,7 +274,7 @@ const Success = () => {
                       <b className='text-[20px]'>Phương thức thanh toán: </b>
                       <span className='font-[600] text-[25px] text-[#0542AB]'>{order.paymentInfo.method}</span>
                     </div>
-                    {order.paymentInfo.status === 'FAILED' && (
+                    {(order.paymentInfo.status === 'FAILED' || order.paymentInfo.status === 'PENDING') && (
                       <div>
                         <Link
                           to={'/checkout'}
