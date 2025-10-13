@@ -364,7 +364,7 @@ export const getOrders = async (req: Request, res: Response) => {
     const objectPagination = paginationHelpers(
       {
         currentPage: 1,
-        limitItems: 15
+        limitItems: 5
       },
       req.query,
       countOrders

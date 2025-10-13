@@ -76,6 +76,7 @@ export const zalopayCreateOrder = async (
 export const zalopayCallback = async (req: Request, res: Response) => {
   try {
     let { data, mac } = req.body
+    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ req.body:", req.body);
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
       .update(data)
       .digest("hex")
@@ -84,6 +85,7 @@ export const zalopayCallback = async (req: Request, res: Response) => {
       return res.json({ return_code: -1, return_message: "mac not match" }) // Báo lỗi, thường khi MAC không khớp (nghi ngờ giả mạo).
     }
     let dataJson = JSON.parse(data)
+    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ dataJson:", dataJson);
     const [phone, id] = dataJson.app_user.split("-");
     const order = await Order.findOne({
       _id: id,
