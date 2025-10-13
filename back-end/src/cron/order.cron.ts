@@ -2,8 +2,8 @@ import cron from "node-cron"
 import Order from "../models/order.model"
 
 // Hủy đơn hàng PENDING quá 15 phút 
-// 10p quét 1 lần
-cron.schedule("*/10 * * * *", async () => {
+// 5p quét 1 lần
+cron.schedule("*/5 * * * *", async () => {
   try {
     const timeoutMinutes = 15
     const now = new Date()

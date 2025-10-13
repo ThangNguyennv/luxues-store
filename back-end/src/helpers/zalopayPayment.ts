@@ -36,7 +36,7 @@ export const zalopayCreateOrder = async (
     description: `Thanh toán đơn hàng ${transID}`,
     bank_code: "", 
     mac: '',
-    callback_url: 'https://295b96ab6e0d.ngrok-free.app/checkout/zalopay-callback'
+    callback_url: 'https://ecbde85a8603.ngrok-free.app/checkout/zalopay-callback'
   }
 
   const data = [
@@ -75,7 +75,6 @@ export const zalopayCreateOrder = async (
 // [POST] /checkout/zalopay-callback
 export const zalopayCallback = async (req: Request, res: Response) => {
   try {
-    console.log("Vao callback zalopay")
     let { data, mac } = req.body
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
       .update(data)
@@ -94,24 +93,14 @@ export const zalopayCallback = async (req: Request, res: Response) => {
     if (!order) {
       return res.json({ return_code: 0, return_message: 'order not found' })
     }
-    // ✅ Gọi API kiểm tra trạng thái thật từ ZaloPay
-    const result = await zaloPayQueryOrder(dataJson.app_trans_id);
-    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ result:", result);
-    if (result.status === "PAID") {
-      await Cart.updateOne({ _id: order.cart_id }, { products: [] })
-      order.paymentInfo.status = "PAID";
-      order.paymentInfo.details = {
-        app_trans_id: dataJson.app_trans_id,
-        app_time: dataJson.app_time,
-        amount: dataJson.amount,
-      }
-    } else if (result.status === "PENDING") {
-      order.paymentInfo.status = "PENDING";
-    } else if (result.status === "FAILED") {
-      order.paymentInfo.status = "FAILED";
-      order.paymentInfo.details = { reason: "User cancelled or failed payment" }
+    // Thanh toán thành công
+    await Cart.updateOne({ _id: order.cart_id }, { products: [] })
+    order.paymentInfo.status = "PAID"
+    order.paymentInfo.details = {
+      app_trans_id: dataJson.app_trans_id,
+      app_time: dataJson.app_time,
+      amount: dataJson.amount,
     }
-
     await order.save()
     return res.json({ return_code: 1, return_message: "success" }) // Báo cho ZaloPay biết bạn đã nhận callback thành công.
   } catch (error) {
@@ -119,36 +108,36 @@ export const zalopayCallback = async (req: Request, res: Response) => {
   }
 }
 
-export const zaloPayQueryOrder  = async (app_trans_id: string) => {
-  console.log("vao query order zalopay")
-  const key1 = process.env.ZALOPAY_KEY1
-  const app_id = process.env.ZALOPAY_APP_ID
+// export const zaloPayQueryOrder  = async (app_trans_id: string) => {
+//   console.log("vao query order zalopay")
+//   const key1 = process.env.ZALOPAY_KEY1
+//   const app_id = process.env.ZALOPAY_APP_ID
   
-  const data = `${app_id}|${app_trans_id}|${key1}`
-  const mac = crypto.createHmac("sha256", key1)
-    .update(data)
-    .digest("hex")
-  const payload = {
-    app_id,
-    app_trans_id,
-    mac
-  }
-  const response = await axios.post(
-    process.env.ZALOPAY_ENDPOINT_QUERY,
-    qs.stringify(payload), // convert sang form-urlencoded
-    { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-  )
-  console.log("🚀 ~ zalopayPayment.ts ~ zaloPayQueryOrder ~ response:", response);
-  if (response.data.return_code !== 1) {
-    // API gọi thất bại -> sai request
-    return { status: "ERROR", data: response }
-  }
-  switch (response.data.sub_return_code) {
-    case 1:
-      return { status: "PAID", data: response }
-    case 2:
-      return { status: "FAILED", data: response }
-    default:
-      return { status: "PENDING", data: response }
-  }
-}
+//   const data = `${app_id}|${app_trans_id}|${key1}`
+//   const mac = crypto.createHmac("sha256", key1)
+//     .update(data)
+//     .digest("hex")
+//   const payload = {
+//     app_id,
+//     app_trans_id,
+//     mac
+//   }
+//   const response = await axios.post(
+//     process.env.ZALOPAY_ENDPOINT_QUERY,
+//     qs.stringify(payload), // convert sang form-urlencoded
+//     { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+//   )
+//   console.log("🚀 ~ zalopayPayment.ts ~ zaloPayQueryOrder ~ response:", response);
+//   if (response.data.return_code !== 1) {
+//     // API gọi thất bại -> sai request
+//     return { status: "ERROR", data: response }
+//   }
+//   switch (response.data.sub_return_code) {
+//     case 1:
+//       return { status: "PAID", data: response }
+//     case 2:
+//       return { status: "FAILED", data: response }
+//     default:
+//       return { status: "PENDING", data: response }
+//   }
+// }
