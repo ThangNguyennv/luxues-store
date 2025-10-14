@@ -102,7 +102,18 @@ export const order = async (req: Request, res: Response) => {
           for (const item of failedOrder.products) {
             await Product.updateOne(
               { _id: item.product_id },
-              { $inc: { stock: -item.quantity } } // trừ số lượng
+              [ // <-- Dùng một mảng [] để báo hiệu đây là một pipeline
+                {
+                  $set: {
+                    stock: {
+                      $max: [ // $max sẽ lấy giá trị lớn nhất trong mảng
+                        0,   // Giá trị tối thiểu là 0
+                        { $subtract: ["$stock", item.quantity] } // (stock hiện tại - số lượng)
+                      ]
+                    }
+                  }
+                }
+              ]
             )
           }
         } else {
@@ -160,7 +171,18 @@ export const order = async (req: Request, res: Response) => {
           for (const item of products) {
             await Product.updateOne(
               { _id: item.product_id },
-              { $inc: { stock: -item.quantity } } // trừ số lượng
+              [
+                {
+                  $set: {
+                    stock: {
+                      $max: [
+                        0,
+                        { $subtract: ["$stock", item.quantity] }
+                      ]
+                    }
+                  }
+                }
+              ]
             )
           }
         }

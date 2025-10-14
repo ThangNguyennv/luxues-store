@@ -26,6 +26,35 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    colors: [
+      {
+        name: { type: String, required: true }, // Ví dụ: "Xanh Navy"
+        code: { type: String, required: true }  // Ví dụ: "#000080"
+      }
+    ],
+    sizes: [String], // Ví dụ: ["S", "M", "L", "XL"]
+    stars: {
+      average: { type: Number, default: 0 }, // Điểm trung bình, ví dụ: 4.5
+      count: { type: Number, default: 0 }     // Tổng số lượt đánh giá, ví dụ: 150
+    },
+    comments: [
+      {
+        user_id: { 
+          type: mongoose.Schema.Types.ObjectId, 
+          ref: 'User' // Giả sử bạn có model 'User'
+        },
+        rating: { type: Number, required: true, min: 1, max: 5 },
+        content: { type: String, required: true },
+        status: { 
+          type: String, 
+          enum: ['pending', 'approved', 'rejected'], 
+          default: 'pending' 
+        }
+      },
+      {
+        timestamps: true // Tự động thêm createdAt, updatedAt cho mỗi bình luận
+      }
+    ],
     thumbnail: String,
     status: {
       type: String,
