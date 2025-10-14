@@ -145,3 +145,42 @@ export const detail = async (req: Request, res: Response) => {
     })
   }
 }
+
+// [GET] /products/suggestions
+export const getSearchSuggestions = async (req: Request, res: Response) => {
+  try {
+    const keyword = req.query.keyword as string
+    const find: any = { deleted: false, status: 'active' }
+    if (!keyword || !keyword.trim()) {
+      return res.json({ code: 200, products: [] })
+    }
+    const objectSearch = searchHelpers(req.query)
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
+    }
+    const products = await Product
+      .find(find)
+      .select('title thumbnail price discountPercentage slug')
+      .limit(20)
+
+    const newProducts = productsHelper.priceNewProducts(
+      products as OneProduct[]
+    )
+
+    res.json({
+      code: 200,
+      message: 'Thành công!',
+      products: newProducts
+    })
+
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error
+    })
+  }
+}

@@ -8,9 +8,7 @@ import * as controller from '~/controllers/admin/product.controller'
 import * as validate from '~/validates/admin/product.validate'
 
 router.get('/', controller.index)
-router.patch('/change-status/:status/:id', controller.changeStatus)
 router.patch('/change-multi', controller.changeMulti)
-router.delete('/delete/:id', controller.deleteItem)
 router.post(
   '/create',
   multer().single('thumbnail'),
@@ -18,6 +16,8 @@ router.post(
   validate.createPost, // middleware
   controller.createPost
 )
+router.patch('/change-status/:status/:id', controller.changeStatus)
+router.delete('/delete/:id', controller.deleteItem)
 router.patch(
   '/edit/:id',
   multer().single('thumbnail'),
