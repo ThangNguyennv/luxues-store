@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { OrderAllResponseInterface, OrderDetailInterface } from '~/types/order.type'
+import type { OrderAllResponseInterface } from '~/types/order.type'
 import { API_ROOT } from '~/utils/constants'
 
 export const fetchOrdersAPI = async (
@@ -7,7 +7,8 @@ export const fetchOrdersAPI = async (
   page: number,
   currentKeyword: string,
   currentSortKey: string,
-  currentSortValue: string
+  currentSortValue: string,
+  currentDate: string
 ): Promise<OrderAllResponseInterface> => {
   const queryParams = new URLSearchParams()
   if (status) queryParams.set('status', status)
@@ -15,7 +16,7 @@ export const fetchOrdersAPI = async (
   if (currentKeyword) queryParams.set('keyword', currentKeyword)
   if (currentSortKey) queryParams.set('sortKey', currentSortKey)
   if (currentSortValue) queryParams.set('sortValue', currentSortValue)
-
+  if (currentDate) queryParams.set('date', currentDate)
   const response = await axios.get(
     `${API_ROOT}/user/my-orders?${queryParams.toString()}`,
     { withCredentials: true }

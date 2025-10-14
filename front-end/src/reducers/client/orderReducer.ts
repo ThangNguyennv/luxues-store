@@ -13,7 +13,8 @@ export const initialState: OrderStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  orders: []
+  orders: [],
+  date: ''
 }
 
 export function orderReducer(

@@ -11,7 +11,8 @@ interface OrderContextType {
     page?: number
     keyword?: string
     sortKey?: string
-    sortValue?: string
+    sortValue?: string,
+    date?: string,
   }) => Promise<void>
   dispatchOrder: React.Dispatch<OrderActions>
 }
@@ -27,7 +28,8 @@ export const OrderClientProvider = ({ children }: { children: React.ReactNode })
       page = 1,
       keyword = '',
       sortKey = '',
-      sortValue = ''
+      sortValue = '',
+      date = ''
     } = {}) => {
       dispatchOrder({ type: 'SET_LOADING', payload: true })
       try {
@@ -36,17 +38,18 @@ export const OrderClientProvider = ({ children }: { children: React.ReactNode })
           page,
           keyword,
           sortKey,
-          sortValue
+          sortValue,
+          date
         )
         dispatchOrder({
           type: 'SET_DATA',
           payload: {
             orders: res.orders,
             pagination: res.pagination,
-            filterOrder: res.filterOrder,
             keyword: res.keyword,
             sortKey,
-            sortValue
+            sortValue,
+            date
           }
         })
       } finally {

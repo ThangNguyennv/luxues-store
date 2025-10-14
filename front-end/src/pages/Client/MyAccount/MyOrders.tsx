@@ -19,23 +19,23 @@ import type { OrderStatus } from '~/types/order.type'
 import { useCart } from '~/contexts/client/CartContext'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import { FaFilter } from 'react-icons/fa'
-import { FaCalendarDays } from 'react-icons/fa6'
 import { formatDateIntl } from '~/helpers/formatDateIntl'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
-  const { orders, pagination, filterOrder, keyword } = stateOrder
+  const { orders, pagination } = stateOrder
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [actionType, setActionType] = useState('')
   const [open, setOpen] = useState(false)
-  const [pendingAction, setPendingAction] = useState<string | null>(null)
   const currentStatus = searchParams.get('status') || ''
+  const currentDate = searchParams.get('date') || ''
   const currentPage = parseInt(searchParams.get('page') || '1', 10)
   const currentKeyword = searchParams.get('keyword') || ''
   const currentSortKey = searchParams.get('sortKey') || ''
   const currentSortValue = searchParams.get('sortValue') || ''
+  const [typeStatusOrder, setTypeStatusOrder] = useState(currentStatus || '')
   const { addToCart } = useCart()
 
   useEffect(() => {
@@ -44,9 +44,10 @@ const MyOrders = () => {
       page: currentPage,
       keyword: currentKeyword,
       sortKey: currentSortKey,
-      sortValue: currentSortValue
+      sortValue: currentSortValue,
+      date: currentDate
     })
-  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, fetchOrder])
+  }, [currentStatus, currentPage, currentKeyword, currentSortKey, currentSortValue, currentDate, fetchOrder])
 
   const updateSearchParams = (key: string, value: string): void => {
     const newParams = new URLSearchParams(searchParams)
@@ -65,15 +66,15 @@ const MyOrders = () => {
     setSearchParams(newParams)
   }
 
-  const reloadData = (): void => {
-    fetchOrder({
-      status: currentStatus,
-      page: currentPage,
-      keyword: currentKeyword,
-      sortKey: currentSortKey,
-      sortValue: currentSortValue
-    })
-  }
+  // const reloadData = (): void => {
+  //   fetchOrder({
+  //     status: currentStatus,
+  //     page: currentPage,
+  //     keyword: currentKeyword,
+  //     sortKey: currentSortKey,
+  //     sortValue: currentSortValue
+  //   })
+  // }
 
   const handleOpen = (id: string) => {
     setSelectedId(id)
@@ -142,6 +143,27 @@ const MyOrders = () => {
     }
   }
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    const selectedDate = event.currentTarget.selectedDate.value
+
+    const newParams = new URLSearchParams(searchParams)
+
+    const setParam = (key: string, value: string) => {
+      if (value) {
+        newParams.set(key, value)
+      } else {
+        newParams.delete(key)
+      }
+    }
+
+    setParam('status', typeStatusOrder)
+    setParam('date', selectedDate)
+    newParams.set('page', '1') // Luôn quay về trang 1 khi lọc
+    setSearchParams(newParams)
+  }
+
+
   const statusToStep = {
     PENDING: 0,
     TRANSPORTING: 1,
@@ -156,21 +178,35 @@ const MyOrders = () => {
           <h2 className="text-[22px] font-[600]">Đơn hàng của tôi</h2>
           <span className="text-[14px] text-[#555]">Theo dõi và quản lý lịch sử đơn hàng của bạn</span>
         </div>
-        <div className="flex items-center justify-center gap-[10px]">
+        <form
+          onSubmit={(event) => handleSubmit(event)}
+          className="flex items-center justify-center gap-[10px]"
+        >
           <div className="flex items-center justify-center gap-[5px] border rounded-[5px] p-[5px]">
             <FaFilter />
-            <select className='outline-none'>
-              <option disabled value={''}>Trạng thái đơn</option>
+            <select
+              name='type'
+              defaultValue={typeStatusOrder}
+              onChange={(e) => setTypeStatusOrder(e.target.value)}
+              className='outline-none'
+            >
+              <option disabled>Trạng thái đơn</option>
+              <option value={''}>Tất cả</option>
               <option value={'PENDING'}>Đang xử lý</option>
               <option value={'TRANSPORTING'}>Đang vận chuyển</option>
               <option value={'CONFIRMED'}>Đã hoàn thành</option>
+              <option value={'CANCELED'}>Đã hủy</option>
             </select>
           </div>
-          <div className="flex items-center justify-center gap-[5px] border rounded-[5px] p-[5px]">
-            <FaCalendarDays />
-            <span>Mốc thời gian</span>
+          <div className="flex items-center justify-center gap-[5px] border rounded-[5px] p-[4px]">
+            <input
+              type='date'
+              name='selectedDate'
+              defaultValue={currentDate}
+            />
           </div>
-        </div>
+          <button type='submit' className='border rounded-[5px] p-[4px] bg-blue-500 text-amber-100'>Áp dụng</button>
+        </form>
       </div>
       {orders && orders.length > 0 ? (
         orders.map((order, index) => (
@@ -181,7 +217,7 @@ const MyOrders = () => {
                   <span className='font-[700] text-[17px]'>Mã đơn: {order._id}</span>
                   <div className='flex items-center gap-[5px]'>
                     <span>Đặt hàng vào:</span>
-                    <FormatDateTime time={order.createdAt}/>
+                    <b><FormatDateTime time={order.createdAt}/></b>
                   </div>
                 </div>
                 {

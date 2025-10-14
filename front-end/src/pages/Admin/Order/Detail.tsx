@@ -79,7 +79,7 @@ const DetailOrder = () => {
                           defaultValue={formatDateForInput(orderDetail.estimatedDeliveryDay)}
                         />
                       </div>
-                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[10%] text-[16px]'>
+                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[12%] text-[16px]'>
                         Cập nhật
                       </button>
                     </form>
@@ -95,7 +95,7 @@ const DetailOrder = () => {
                           defaultValue={formatDateForInput(orderDetail.estimatedConfirmedDay)}
                         />
                       </div>
-                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[10%] text-[16px]'>
+                      <button type='submit' className='border rounded-[5px] p-[4px] bg-amber-500 text-amber-50 w-[12%] text-[16px]'>
                         Cập nhật
                       </button>
                     </form>

@@ -26,12 +26,14 @@ export interface HelperInterface {
 
 export interface CurrentParamsInterface {
   keyword: string,
+  currentDate: string,
   currentSortKey: string,
   currentSortValue: string
 }
 
 export interface ParamsInterface {
   keyword: string,
+  date: string,
   sortKey: string,
   sortValue: string
   loading: boolean
