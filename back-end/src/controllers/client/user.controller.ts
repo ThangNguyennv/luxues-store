@@ -339,19 +339,27 @@ export const changePasswordPatch = async (req: Request, res: Response) => {
 export const getOrders = async (req: Request, res: Response) => {
   try {
     const find: any = { }
+    const { status, date } = req.query
 
-    // if (req.query.status === 'CANCELED') {
-    //   find.deleted = true
-    // } else {
-    //   find.deleted = false
-    //   if (req.query.status) {
-    //     find.status = req.query.status.toString()
-    //   }
-    // }
+    // Filter
     find.deleted = false
-    if (req.query.status) {
-      find.status = req.query.status.toString()
+    if (status) {
+      find.status = status
     }
+    if (date) {
+      const startDate = new Date(date.toString()) // Bắt đầu từ 00:00:00 của ngày được chọn
+      startDate.setHours(0, 0, 0, 0)
+      const endDate = new Date(date.toString()) // Kết thúc vào 23:59:59 của ngày được chọn
+      endDate.setHours(23, 59, 59, 999)
+
+      // Tìm các đơn hàng có `createdAt` nằm trong khoảng thời gian của ngày đó
+      find.createdAt = {
+        $gte: startDate, // Lớn hơn hoặc bằng thời điểm bắt đầu ngày
+        $lte: endDate    // Nhỏ hơn hoặc bằng thời điểm kết thúc ngày
+      }
+    }
+    // End filter
+
     // Search
     const objectSearch = searchHelpers(req.query)
     if (objectSearch.keyword) {
@@ -376,9 +384,7 @@ export const getOrders = async (req: Request, res: Response) => {
     if (req.query.sortKey && req.query.sortValue) {
       const sortKey = req.query.sortKey.toLocaleString()
       sort[sortKey] = req.query.sortValue
-    } else {
-      sort['position'] = 'desc'
-    }
+    } 
     // End Sort
 
     const orders = await Order
@@ -387,39 +393,6 @@ export const getOrders = async (req: Request, res: Response) => {
       .limit(objectPagination.limitItems)
       .skip(objectPagination.skip)
 
-    for (const order of orders) {
-      // Lấy ra thông tin người tạo
-      const user = await Account.findOne({
-        _id: order.createdBy.account_id
-      })
-      if (user) {
-        order['accountFullName'] = user.fullName
-      }
-      // Lấy ra thông tin người cập nhật gần nhất
-      const updatedBy = order.updatedBy[order.updatedBy.length - 1]
-      if (updatedBy) {
-        const userUpdated = await Account.findOne({
-          _id: updatedBy.account_id
-        })
-        updatedBy['accountFullName'] = userUpdated.fullName
-      }
-      if (order.products.length > 0) {
-        for (const item of order.products) {
-          const productId = item.product_id
-          const productInfo: OneProduct = await Product.findOne({
-            _id: productId
-          }).select('price discountPercentage')
-          productInfo.priceNew = productsHelper.priceNewProduct(productInfo)
-          item['productInfo'] = productInfo
-          item['totalPrice'] = productInfo.priceNew * item.quantity
-        }
-      }
-      order['totalsPrice'] = order.products.reduce(
-        (sum, item) => sum + item['totalPrice'],
-        0
-      )
-      order['price'] = order['totalsPrice']
-    }
     // Sort chay do không sài hàm sort() kia cho các thuộc tính không có trong db.
     if (req.query.sortKey === 'price' && req.query.sortValue) {
       const dir = req.query.sortValue === 'desc' ? -1 : 1
@@ -430,7 +403,6 @@ export const getOrders = async (req: Request, res: Response) => {
       code: 200,
       message: 'Thành công!',
       orders: orders,
-      filterOrder: filterOrderHelpers(req.query),
       keyword: objectSearch.keyword,
       pagination: objectPagination,
     })
