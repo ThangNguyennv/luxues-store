@@ -4,9 +4,9 @@ import { IoMdCart } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { FaBars } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
 import type { UserInfoInterface } from '~/types/user.type'
@@ -25,24 +25,28 @@ import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
 import { useCart } from '~/contexts/client/CartContext'
 import { RiBillLine } from 'react-icons/ri'
+import type { ProductInfoInterface } from '~/types/product.type'
+import { fetchSearchSuggestionsAPI } from '~/apis/client/product.api'
+import SearchInput from './SearchInput'
 
 const Header = () => {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
   const [loading, setLoading] = useState(false)
-  const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [suggestions, setSuggestions] = useState<ProductInfoInterface[]>([])
+  const [isSuggestLoading, setIsSuggestLoading] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(4) // Số lượng gợi ý hiển thị ban đầu
+  const scrollContainerRef = useRef<HTMLDivElement>(null) // Tạo một ref để gắn vào div cuộn
+
+  const { dispatchAlert } = useAlertContext()
   const { dataHome, setDataHome } = useHome()
   const { settingGeneral, setSettingGeneral } = useSettingGeneral()
-  const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const initialKeyword = searchParams.get('keyword') || ''
-
-  // 1. DÙNG STATE CỤC BỘ cho ô input
-  const [inputValue, setInputValue] = useState(initialKeyword)
-
   const { cartDetail } = useCart()
+
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
@@ -69,12 +73,43 @@ const Header = () => {
       }
     }
     fetchData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // ĐỒNG BỘ state cục bộ với URL khi URL thay đổi (VD: người dùng bấm nút back/forward)
+
+  // === THÊM useEffect ĐỂ XỬ LÝ DEBOUNCE VÀ GỌI API GỢI Ý ===
   useEffect(() => {
-    setInputValue(searchParams.get('keyword') || '')
-  }, [searchParams])
+    // Nếu không có từ khóa, xóa gợi ý và dừng lại
+    if (!searchTerm.trim()) {
+      setSuggestions([])
+      return
+    }
+
+    // Đặt một timer. Nếu người dùng tiếp tục gõ, timer cũ sẽ bị xóa.
+    const delayDebounceFn = setTimeout(async () => {
+      setIsSuggestLoading(true)
+      try {
+        const response = await fetchSearchSuggestionsAPI(searchTerm)
+        if (response.code === 200) {
+          setSuggestions(response.products)
+          setVisibleCount(4) // Reset lại số lượng hiển thị mỗi khi có kết quả mới
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Lỗi khi fetch gợi ý:', error)
+        setSuggestions([])
+      } finally {
+        setIsSuggestLoading(false)
+      }
+    }, 300) // Chờ 300ms sau khi người dùng ngừng gõ
+
+    // Cleanup function: Xóa timer cũ mỗi khi inputValue thay đổi
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchTerm])
+
+  const handleSearchTermChange = (newTerm: string) => {
+    setSearchTerm(newTerm)
+  }
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -106,33 +141,22 @@ const Header = () => {
     sessionStorage.setItem('closeTopHeader', 'true')
   }
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    // Tạo một bản sao của các tham số hiện tại
-    const newParams = new URLSearchParams(searchParams)
-
-    // Cập nhật hoặc xóa keyword
-    if (inputValue) {
-      newParams.set('keyword', inputValue)
-    } else {
-      newParams.delete('keyword')
-    }
-
-    // Khi tìm kiếm, luôn đưa người dùng về trang 1
-    newParams.set('page', '1')
-
-    // Nếu đang không ở trang tìm kiếm hoặc sản phẩm, chuyển hướng đến đó
-    // Nếu đã ở đó rồi, chỉ cập nhật tham số
-    if (!window.location.pathname.startsWith('/search')) {
-      navigate(`/search?${newParams.toString()}`)
-    } else {
-      setSearchParams(newParams)
-    }
+  const handleSearchSubmit = () => {
+    setSuggestions([])
   }
-  // chỉ cập nhật state cục bộ
-  const handleChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value)
+
+  // Hàm để xử lý khi click vào "Xem thêm"
+  const handleShowMore = () => {
+    setVisibleCount(prevCount => prevCount + 4)
   }
+
+  // Dùng useEffect để xử lý việc cuộn sau khi state đã được cập nhật và component đã render lại
+  useEffect(() => {
+    // Cuộn xuống dưới cùng của div mỗi khi danh sách được mở rộng
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
+    }
+  }, [visibleCount]) // Chạy lại mỗi khi visibleCount thay đổi
 
   return (
     <>
@@ -190,7 +214,7 @@ const Header = () => {
       {/* Header */}
       <header className="sm:py-[24px] py-[19px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-999">
         <div className="container mx-auto px-[16px]">
-          <div className="flex items-center md:gap-x-[40px] gap-x-[16px]">
+          <div className="flex items-center md:gap-x-[35px] gap-x-[16px]">
             <button className=" text-[20px] md:hidden inline">
               <FaBars />
             </button>
@@ -221,7 +245,7 @@ const Header = () => {
               )}
             </Link>
             <nav className="md:block hidden">
-              <ul className="menu flex gap-x-[24px] font-[400] text-[16px] text-black">
+              <ul className="menu flex gap-x-[17px] font-[400] text-[16px] text-black">
                 <li>
                   <Link to="/">
                     Trang chủ
@@ -331,27 +355,61 @@ const Header = () => {
                 </li>
               </ul>
             </nav>
-            <form
-              onSubmit={handleSubmit}
-              className="
-                flex-1 lg:flex hidden
-                items-center gap-x-[12px]
-                px-[16px] py-[10px] bg-[#F0F0F0]
-                rounded-[62px] text-[16px]"
-            >
-              <button type='submit' className="text-[#00000066]">
-                <IoSearch />
-              </button>
-              <input
-                onChange={handleChangeKeyword}
-                className="bg-transparent flex-1"
-                type="text"
-                name='keyword'
-                value={inputValue}
-                placeholder="Tìm kiếm sản phẩm..."
+            <div className="relative flex-1 lg:flex hidden">
+              <SearchInput
+                onSearchSubmit={handleSearchSubmit}
+                onTermChange={handleSearchTermChange}
               />
-            </form>
-            <div className="flex items-center gap-x-[27px] text-[26px]">
+
+              {/* === PHẦN HIỂN THỊ GỢI Ý === */}
+              {suggestions.length > 0 && (
+                <div
+                  ref={scrollContainerRef}
+                  className="absolute top-full mt-2 w-full bg-white border rounded-lg shadow-lg z-1000 p-4 max-h-[400px] overflow-y-auto"
+                >
+                  <div className="flex flex-col gap-4">
+                    {/* Hiển thị sản phẩm theo visibleCount */}
+                    {suggestions.slice(0, visibleCount).map(product => (
+                      <Link
+                        to={`/products/detail/${product.slug}`}
+                        key={product._id}
+                        className="flex items-center gap-4 hover:bg-gray-100 p-2 rounded-md"
+                        onClick={() => setSuggestions([])} // Ẩn gợi ý khi click
+                      >
+                        <img src={product.thumbnail} alt={product.title} className="w-16 h-16 object-contain border rounded" />
+                        <div className="flex-1">
+                          <p className="font-semibold line-clamp-2">{product.title}</p>
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-red-600 font-bold">
+                              {Math.floor((product.price * (100 - product.discountPercentage)) / 100).toLocaleString('vi-VN')}đ
+                            </span>
+                            <span className="line-through text-gray-500">
+                              {product.price.toLocaleString('vi-VN')}đ
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+
+                  {isSuggestLoading && <p className="text-center p-2">Đang tải...</p>}
+
+                  {/* Nút "Xem thêm" */}
+                  {visibleCount < suggestions.length && (
+                    <div className="text-center mt-4">
+                      <button
+                        type='button'
+                        onClick={handleShowMore}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Xem thêm {Math.min(4, suggestions.length - visibleCount)} sản phẩm
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-x-[20px] text-[26px]">
               <a className="lg:hidden inline" href="#">
                 <IoSearch />
               </a>

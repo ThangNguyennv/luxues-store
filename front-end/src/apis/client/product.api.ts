@@ -42,3 +42,10 @@ export const fetchDetailProductCategoryAPI = async (slugCategory: string): Promi
   )
   return response.data
 }
+
+export const fetchSearchSuggestionsAPI = async (keyword: string) => {
+  const response = await axios.get(
+    `${API_ROOT}/products/suggestions?keyword=${keyword}`
+  )
+  return response.data
+}
