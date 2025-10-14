@@ -218,6 +218,14 @@ export const deleteItem = async (req: Request, res: Response) => {
 // [POST] /admin/products/create
 export const createPost = async (req: Request, res: Response) => {
   try {
+    if (req.body.colors) {
+      // Chuyển chuỗi "[{...}]" thành mảng object thật
+      req.body.colors = JSON.parse(req.body.colors)
+    }
+    if (req.body.sizes) {
+      // Chuyển chuỗi '["S", "M"]' thành mảng string thật
+      req.body.sizes = JSON.parse(req.body.sizes)
+    }
     req.body.price = parseInt(req.body.price)
     req.body.discountPercentage = parseInt(req.body.discountPercentage)
     req.body.stock = parseInt(req.body.stock)
@@ -252,6 +260,13 @@ export const createPost = async (req: Request, res: Response) => {
 // [PATCH] /admin/products/edit/:id
 export const editPatch = async (req: Request, res: Response) => {
   try {
+    // === PARSE DỮ LIỆU MẢNG TỪ CHUỖI JSON ===
+    if (req.body.colors) {
+      req.body.colors = JSON.parse(req.body.colors);
+    }
+    if (req.body.sizes) {
+      req.body.sizes = JSON.parse(req.body.sizes);
+    }
     req.body.position = parseInt(req.body.position)
     req.body.price = parseInt(req.body.price)
     req.body.discountPercentage = parseInt(req.body.discountPercentage)
