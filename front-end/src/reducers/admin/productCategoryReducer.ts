@@ -16,7 +16,8 @@ export const initialState: ProductCategoryStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  allProductCategories: []
+  allProductCategories: [],
+  date: ''
 }
 
 export function productCategoryReducer(

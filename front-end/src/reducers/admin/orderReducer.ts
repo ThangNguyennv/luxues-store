@@ -15,7 +15,8 @@ export const initialState: OrderStates = {
   loading: false,
   orders: [],
   accounts: [],
-  allOrders: []
+  allOrders: [],
+  date: ''
 }
 
 export function orderReducer(

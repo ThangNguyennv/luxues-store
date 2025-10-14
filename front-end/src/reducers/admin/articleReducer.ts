@@ -15,7 +15,8 @@ export const initialState: ArticleStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  allArticles: []
+  allArticles: [],
+  date: ''
 }
 
 export function articleReducer(

@@ -36,19 +36,15 @@ export const ProductClientProvider = ({ children }: { children: React.ReactNode 
           sortKey,
           sortValue
         )
+        // Chỉ cần một lần dispatch SET_DATA là đủ
         dispatchProduct({
           type: 'SET_DATA',
           payload: {
             products: res.products,
             pagination: res.pagination,
+            keyword: keyword, // Lấy keyword từ tham số truyền vào
             sortKey,
             sortValue
-          }
-        })
-        dispatchProduct({
-          type: 'SET_KEYWORD',
-          payload: {
-            keyword: res.keyword
           }
         })
       } finally {

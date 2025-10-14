@@ -23,7 +23,6 @@ import SubMenu from '../SubMenu/SubMenu'
 import { motion } from 'framer-motion'
 import { useHome } from '~/contexts/client/HomeContext'
 import { IoChevronDown } from 'react-icons/io5'
-import { useProductContext } from '~/contexts/client/ProductContext'
 import { useCart } from '~/contexts/client/CartContext'
 import { RiBillLine } from 'react-icons/ri'
 
@@ -34,12 +33,15 @@ const Header = () => {
   const { dispatchAlert } = useAlertContext()
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
-  const { stateProduct, dispatchProduct } = useProductContext()
-  const { keyword } = stateProduct
   const { dataHome, setDataHome } = useHome()
   const { settingGeneral, setSettingGeneral } = useSettingGeneral()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
+  const initialKeyword = searchParams.get('keyword') || ''
+
+  // 1. DÙNG STATE CỤC BỘ cho ô input
+  const [inputValue, setInputValue] = useState(initialKeyword)
+
   const { cartDetail } = useCart()
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
     // lấy từ sessionStorage khi khởi tạo
@@ -69,28 +71,10 @@ const Header = () => {
     fetchData()
   }, [])
 
+  // ĐỒNG BỘ state cục bộ với URL khi URL thay đổi (VD: người dùng bấm nút back/forward)
   useEffect(() => {
-    const kw = searchParams.get('keyword') || ''
-    if (kw !== keyword) {
-      dispatchProduct({ type: 'SET_DATA', payload: { keyword: kw } })
-    }
+    setInputValue(searchParams.get('keyword') || '')
   }, [searchParams])
-
-  const updateSearchParams = (key: string, value: string): void => {
-    const newParams = new URLSearchParams(searchParams)
-    if (value) {
-      newParams.set(key, value)
-    } else {
-      newParams.delete(key)
-    }
-
-    // Nếu xóa sortKey hoặc sortValue → xóa cả 2
-    if ((key === 'sortKey' || key === 'sortValue') && !value) {
-      newParams.delete('sortKey')
-      newParams.delete('sortValue')
-    }
-    setSearchParams(newParams)
-  }
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -124,11 +108,30 @@ const Header = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    updateSearchParams('keyword', keyword)
-    navigate(`/search?keyword=${keyword}`)
+    // Tạo một bản sao của các tham số hiện tại
+    const newParams = new URLSearchParams(searchParams)
+
+    // Cập nhật hoặc xóa keyword
+    if (inputValue) {
+      newParams.set('keyword', inputValue)
+    } else {
+      newParams.delete('keyword')
+    }
+
+    // Khi tìm kiếm, luôn đưa người dùng về trang 1
+    newParams.set('page', '1')
+
+    // Nếu đang không ở trang tìm kiếm hoặc sản phẩm, chuyển hướng đến đó
+    // Nếu đã ở đó rồi, chỉ cập nhật tham số
+    if (!window.location.pathname.startsWith('/search')) {
+      navigate(`/search?${newParams.toString()}`)
+    } else {
+      setSearchParams(newParams)
+    }
   }
-  const handleChangeKeyword = (value: string) => {
-    dispatchProduct({ type: 'SET_KEYWORD', payload: { keyword: value } })
+  // chỉ cập nhật state cục bộ
+  const handleChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value)
   }
 
   return (
@@ -340,11 +343,11 @@ const Header = () => {
                 <IoSearch />
               </button>
               <input
-                onChange={(event) => handleChangeKeyword(event.target.value)}
+                onChange={handleChangeKeyword}
                 className="bg-transparent flex-1"
                 type="text"
                 name='keyword'
-                value={keyword}
+                value={inputValue}
                 placeholder="Tìm kiếm sản phẩm..."
               />
             </form>

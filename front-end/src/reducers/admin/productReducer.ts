@@ -15,7 +15,8 @@ export const initialState: ProductStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  allProducts: []
+  allProducts: [],
+  date: ''
 }
 
 export function productReducer(

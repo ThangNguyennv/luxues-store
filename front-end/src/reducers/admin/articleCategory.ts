@@ -16,7 +16,8 @@ export const initialState: ArticleCategoryStates = {
   sortKey: '',
   sortValue: '',
   loading: false,
-  allArticleCategories: []
+  allArticleCategories: [],
+  date: ''
 }
 
 export function articleCategoryReducer(
