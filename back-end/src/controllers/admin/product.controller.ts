@@ -45,6 +45,7 @@ export const index = async (req: Request, res: Response) => {
       countProducts
     )
     // End Pagination
+    
     const products = await Product
       .find(find)
       .sort(sort)

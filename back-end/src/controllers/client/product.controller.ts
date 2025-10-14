@@ -4,26 +4,32 @@ import ProductCategory from '~/models/product-category.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
 import paginationHelpers from '~/helpers/pagination'
+import searchHelpers from '~/helpers/search'
 
 // [GET] /products
 export const index = async (req: Request, res: Response) => {
   try {
-    interface Find {
-      deleted: boolean;
-      status?: string;
-      title?: RegExp;
-    }
-    const find: Find = { deleted: false }
+    const find: any = { deleted: false }
 
+    // Search
+    const objectSearch = searchHelpers(req.query)
+    if (objectSearch.regex || objectSearch.slug) {
+      find.$or = [
+        { title: objectSearch.regex },
+        { slug: objectSearch.slug }
+      ]
+    }
+    // End search
+    
     // Pagination
     const countProducts = await Product.countDocuments(find)
     const objectPagination = paginationHelpers(
-      { currentPage: 1, limitItems: 20 },
+      { currentPage: 1, limitItems: 16 },
       req.query,
       countProducts
     )
     // End Pagination
-    
+
     const allProducts = await Product
       .find(find)
       .sort({ position: 'desc' })
@@ -42,7 +48,8 @@ export const index = async (req: Request, res: Response) => {
       message: 'Thành công!',
       products: newProducts,
       pagination: objectPagination,
-      allProducts: allProducts
+      allProducts: allProducts,
+      keyword: objectSearch.keyword,
     })
   } catch (error) {
     res.json({
