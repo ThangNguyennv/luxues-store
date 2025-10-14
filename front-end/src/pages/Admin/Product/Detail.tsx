@@ -29,11 +29,11 @@ const DetailProduct = () => {
                 </div>
                 <div>
                   <b>Giảm giá: </b>
-                  {productDetail.discountPercentage}
+                  {productDetail.discountPercentage}%
                 </div>
                 <div>
                   <b>Còn lại: </b>
-                  {productDetail.stock}
+                  {productDetail.stock} sản phẩm
                 </div>
                 <div>
                   <b>Trạng thái: </b>
@@ -50,6 +50,22 @@ const DetailProduct = () => {
                 <div>
                   <b>Mô tả: </b>
                   <div dangerouslySetInnerHTML={{ __html: productDetail.description }} />
+                </div>
+                <div>
+                  <b>Danh sách màu: </b>
+
+                </div>
+                <div>
+                  <b>Danh sách kích cỡ: </b>
+
+                </div>
+                <div>
+                  <b>Số lượng sao: </b>
+
+                </div>
+                <div>
+                  <b>Số lượng người bình luận: </b>
+
                 </div>
                 <Link
                   to={`/admin/products/edit/${id}`}

@@ -8,6 +8,11 @@ export interface ProductInfoInterface extends GeneralInfoInterface {
   featured: string,
   product_category_id: string,
   description: string,
+  colors: {
+    name: string
+    code: string
+  }[]
+  sizes: string[]
 }
 
 export interface ProductAllResponseInterface extends HelperInterface, CurrentParamsInterface {

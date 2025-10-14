@@ -14,7 +14,15 @@ const EditProduct = () => {
     handleSubmit,
     handleClick,
     uploadImagePreviewRef,
-    role
+    role,
+    currentColor,
+    setCurrentColor,
+    currentSize,
+    setCurrentSize,
+    handleAddColor,
+    handleRemoveColor,
+    handleAddSize,
+    handleRemoveSize
   } = useEdit()
 
   return (
@@ -141,6 +149,67 @@ const EditProduct = () => {
                 min={0}/>
             </div>
 
+            {/* === UI CHO DANH SÁCH MÀU SẮC === */}
+            <div className="form-group">
+              <label>Danh sách các màu</label>
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  placeholder="Tên màu (VD: Xanh rêu)"
+                  value={currentColor.name}
+                  onChange={(e) => setCurrentColor({ ...currentColor, name: e.target.value })}
+                  className="flex-1 text-[16px] py-[3px] border rounded px-2"
+                />
+                <input
+                  type="color"
+                  value={currentColor.code}
+                  onChange={(e) => setCurrentColor({ ...currentColor, code: e.target.value })}
+                  className="h-[35px]"
+                />
+                <button type="button" onClick={handleAddColor} className="bg-blue-500 text-white px-3 py-1 rounded">
+                  Thêm
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {productInfo.colors.map((color, index) => (
+                  <div key={index} className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1 text-sm">
+                    <span style={{ backgroundColor: color.code }} className="w-4 h-4 rounded-full border"></span>
+                    <span>{color.name}</span>
+                    <button type="button" onClick={() => handleRemoveColor(index)} className="font-bold text-red-500">
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* === UI CHO DANH SÁCH KÍCH CỠ === */}
+            <div className="form-group">
+              <label>Danh sách kích cỡ</label>
+              <div className="flex items-center gap-2 mb-2">
+                <input
+                  type="text"
+                  placeholder="Nhập size (VD: M)"
+                  value={currentSize}
+                  onChange={(e) => setCurrentSize(e.target.value)}
+                  className="flex-1 text-[16px] py-[3px] border rounded px-2"
+                />
+                <button type="button" onClick={handleAddSize} className="bg-blue-500 text-white px-3 py-1 rounded">
+                  Thêm
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {productInfo.sizes.map((size, index) => (
+                  <div key={index} className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1 text-sm">
+                    <span>{size}</span>
+                    <button type="button" onClick={() => handleRemoveSize(index)} className="font-bold text-red-500">
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="flex flex-col gap-[10px]">
               <label htmlFor="thumbnail">Ảnh</label>
               <input
@@ -156,7 +225,7 @@ const EditProduct = () => {
                 onClick={event => handleClick(event)}
                 className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
               >
-              Chọn ảnh
+                Chọn ảnh
               </button>
               <img
                 ref={uploadImagePreviewRef}
@@ -176,7 +245,7 @@ const EditProduct = () => {
                 placeholder="Tự động tăng"
                 min={1}
                 className='text-[16px] py-[3px]'
-                value={productInfo ? productInfo.position : ''}
+                value={productInfo?.position ?? ''}
               />
             </div>
 
