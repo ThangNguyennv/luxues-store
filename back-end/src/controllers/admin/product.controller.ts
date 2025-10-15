@@ -217,31 +217,49 @@ export const deleteItem = async (req: Request, res: Response) => {
 
 // [POST] /admin/products/create
 export const createPost = async (req: Request, res: Response) => {
+  console.log(req.body)
   try {
-    if (req.body.colors) {
-      // Chuyển chuỗi "[{...}]" thành mảng object thật
-      req.body.colors = JSON.parse(req.body.colors)
+    // 1. Parse dữ liệu sản phẩm từ chuỗi JSON
+    const productData = req.body
+
+    // 2. Lấy mảng URL đã được upload từ middleware
+    const uploadedUrls = req['fileUrls'] || []
+    let urlIndex = 0
+
+    // 3. Xử lý ảnh đại diện (thumbnail)
+    if (productData.thumbnail === '__THUMBNAIL_PLACEHOLDER__') {
+      productData.thumbnail = uploadedUrls[urlIndex]
+      urlIndex++
     }
-    if (req.body.sizes) {
-      // Chuyển chuỗi '["S", "M"]' thành mảng string thật
-      req.body.sizes = JSON.parse(req.body.sizes)
+    
+    // 4. Lắp ráp URL vào đúng vị trí trong mảng colors
+    for (const color of productData.colors) {
+      const imageCount = color.images.length // Số lượng ảnh cần cho màu này
+      if (imageCount > 0) {
+        // Lấy đúng số lượng URL từ mảng đã upload
+        const colorImages = uploadedUrls.slice(urlIndex, urlIndex + imageCount)
+        color.images = colorImages
+        urlIndex += imageCount
+      }
     }
-    req.body.price = parseInt(req.body.price)
-    req.body.discountPercentage = parseInt(req.body.discountPercentage)
-    req.body.stock = parseInt(req.body.stock)
+
+    productData.price = parseInt(productData.price) || 0
+    productData.discountPercentage = parseInt(productData.discountPercentage) || 0
+    productData.stock = parseInt(productData.stock) || 0
+    
     let position: number
-    if (req.body.position === '' || req.body.position === null) {
+    if (!productData.position) {
       const count = await Product.countDocuments({ deleted: false })
       position = count + 1
     } else {
-      position = parseInt(req.body.position)
+      position = parseInt(productData.position)
     }
-    req.body.position = position
-    req.body.createdBy = {
+    productData.position = position
+    productData.createdBy = {
       account_id: req['accountAdmin'].id
     }
 
-    const records = new Product(req.body)
+    const records = new Product(productData)
     await records.save()
     res.json({
       code: 201,
@@ -249,6 +267,8 @@ export const createPost = async (req: Request, res: Response) => {
       data: records,
     })
   } catch (error) {
+    // THÊM LOG: Ghi lại lỗi chi tiết ra console của server để gỡ lỗi
+    console.error("LỖI KHI TẠO SẢN PHẨM:", error); 
     res.json({
       code: 400,
       message: 'Lỗi!',
@@ -262,10 +282,10 @@ export const editPatch = async (req: Request, res: Response) => {
   try {
     // === PARSE DỮ LIỆU MẢNG TỪ CHUỖI JSON ===
     if (req.body.colors) {
-      req.body.colors = JSON.parse(req.body.colors);
+      req.body.colors = JSON.parse(req.body.colors)
     }
     if (req.body.sizes) {
-      req.body.sizes = JSON.parse(req.body.sizes);
+      req.body.sizes = JSON.parse(req.body.sizes)
     }
     req.body.position = parseInt(req.body.position)
     req.body.price = parseInt(req.body.price)

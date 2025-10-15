@@ -29,7 +29,8 @@ const productSchema = new mongoose.Schema(
     colors: [
       {
         name: { type: String, required: true }, // Ví dụ: "Xanh Navy"
-        code: { type: String, required: true }  // Ví dụ: "#000080"
+        code: { type: String, required: true },  // Ví dụ: "#000080"
+        images: [String] 
       }
     ],
     sizes: [String], // Ví dụ: ["S", "M", "L", "XL"]

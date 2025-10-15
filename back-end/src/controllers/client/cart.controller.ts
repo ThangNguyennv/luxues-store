@@ -24,6 +24,9 @@ export const index = async (req: Request, res: Response) => {
         )
         item['productInfo'] = productInfo
         item['totalPrice'] = productInfo['priceNew'] * item.quantity
+        // Thêm color và size vào item để frontend dễ dàng truy cập
+        // item['color'] = item.color
+        // item['size'] = item.size
       }
     }
     cart['totalsPrice'] = cart.products.reduce(
@@ -46,45 +49,41 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /cart/add/:productId
 export const addPost = async (req: Request, res: Response) => {
+  console.log(req.body)
   try {
     const productId = req.params.productId
-    const quantity = parseInt(req.body.quantity)
+    const { quantity, color, size } = req.body 
     const cartId = req["cartId"]
-    const objectCart = {
-      product_id: productId,
-      quantity: quantity
-    }
-    const cart = await Cart.findOne({
-      _id: cartId
-    })
-    // find() trong js (Khác find trong mongoose là tìm nhiều) -> Tìm 1 bản ghi
-    const isExistProductInCart = cart.products.find(
-      (item) => item.product_id === productId
+    // Thử cập nhật số lượng của sản phẩm nếu nó đã tồn tại với ĐÚNG color và size
+    const result = await Cart.updateOne(
+      {
+        _id: cartId,
+        'products.product_id': productId,
+        'products.color': color, // Phải khớp cả color
+        'products.size': size    // và cả size
+      },
+      {
+        // Dùng $inc để tăng số lượng một cách an toàn
+        $inc: { 'products.$.quantity': quantity } 
+      }
     )
-
-    // Thêm sản phẩm để không bị tạo object mới
-    if (isExistProductInCart) {
-      const quantityNew = quantity + isExistProductInCart.quantity
-      await Cart.updateOne(
-        {
-          _id: cartId,
-          'products.product_id': productId
-        },
-        {
-          $set: {
-            'products.$.quantity': quantityNew
-          }
-        }
-      )
-    } else {
-      // $push: Thêm phần tử vào mảng
+    // Nếu không có dòng nào được cập nhật (modifiedCount = 0), có nghĩa là đây là một biến thể mới
+    console.log("🚀 ~ cart.controller.ts ~ addPost ~ result.modifiedCount:", result.modifiedCount);
+    if (result.modifiedCount === 0) {
+      const productInfo = {
+        product_id: productId,
+        quantity: quantity,
+        color: color,
+        size: size
+      }
+      
+      // Thêm sản phẩm mới vào giỏ hàng
       await Cart.updateOne(
         { _id: cartId },
-        {
-          $push: { products: objectCart }
-        }
+        { $push: { products: productInfo } }
       )
     }
+
     res.json({
       code: 201,
       message: 'Thêm thành công sản phẩm vào giỏ hàng!'
