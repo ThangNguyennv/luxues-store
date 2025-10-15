@@ -280,28 +280,50 @@ export const createPost = async (req: Request, res: Response) => {
 // [PATCH] /admin/products/edit/:id
 export const editPatch = async (req: Request, res: Response) => {
   try {
-    // === PARSE DỮ LIỆU MẢNG TỪ CHUỖI JSON ===
-    if (req.body.colors) {
-      req.body.colors = JSON.parse(req.body.colors)
+    // 1. Parse dữ liệu sản phẩm từ chuỗi JSON
+    const productData = req.body
+
+    // 2. Lấy mảng URL của các ảnh MỚI đã được upload
+    const uploadedUrls = req['fileUrls'] || []
+    let urlIndex = 0
+
+    // 3. Xử lý ảnh đại diện (thumbnail)
+    if (productData.thumbnail === '__THUMBNAIL_PLACEHOLDER__') {
+      productData.thumbnail = uploadedUrls[urlIndex]
+      urlIndex++
     }
-    if (req.body.sizes) {
-      req.body.sizes = JSON.parse(req.body.sizes)
+ 
+    // 4. Lắp ráp lại mảng ảnh cho từng màu
+    for (const color of productData.colors) {
+      // Thay thế các placeholder bằng URL mới
+      color.images = color.images.map((image: string) => {
+        if (image === '__IMAGE_PLACEHOLDER__') {
+          const newUrl = uploadedUrls[urlIndex]
+          urlIndex++
+          return newUrl
+        }
+        // Giữ nguyên các URL ảnh cũ
+        return image
+      })
     }
-    req.body.position = parseInt(req.body.position)
-    req.body.price = parseInt(req.body.price)
-    req.body.discountPercentage = parseInt(req.body.discountPercentage)
-    req.body.stock = parseInt(req.body.stock)
+
+    // Logic parseInt không đổi
+    productData.price = parseInt(productData.price) || 0
+    productData.discountPercentage = parseInt(productData.discountPercentage) || 0
+    productData.stock = parseInt(productData.stock) || 0
+    productData.position = parseInt(productData.position) || 0
+
     const updatedBy = {
       account_id: req['accountAdmin'].id,
       updatedAt: new Date()
     }
+    delete productData.updatedBy
+
     await Product.updateOne(
       { _id: req.params.id },
       {
-        ...req.body,
-        $push: {
-          updatedBy: updatedBy
-        }
+        ...productData, // Dùng productData đã được lắp ráp hoàn chỉnh
+        $push: { updatedBy: updatedBy }
       }
     )
     res.json({
@@ -309,11 +331,8 @@ export const editPatch = async (req: Request, res: Response) => {
       message: 'Cập nhật thành công sản phẩm!'
     })
   } catch (error) {
-    res.json({
-      code: 400,
-      message: 'Lỗi!',
-      error: error
-    })
+    console.error("LỖI KHI CẬP NHẬT SẢN PHẨM:", error);
+    res.json({ code: 400, message: 'Lỗi!', error: error })
   }
 }
 

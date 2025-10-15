@@ -24,6 +24,7 @@ router.patch(
   '/edit/:id',
   multer().array('files', 15), // Nhận tối đa 15 files với tên trường là 'files'
   uploadCloud,
+  parseProductData,
   validate.createPost, // middleware
   controller.editPatch
 )
