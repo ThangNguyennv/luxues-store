@@ -6,5 +6,6 @@ router.get('/', controller.index)
 router.get('/suggestions', controller.getSearchSuggestions)
 router.get('/:slugCategory', controller.category)
 router.get('/detail/:slugProduct', controller.detail)
+router.get('/related/:productId', controller.getRelatedProducts); // <-- THÊM DÒNG NÀY
 
 export const productRoutes: Router = router

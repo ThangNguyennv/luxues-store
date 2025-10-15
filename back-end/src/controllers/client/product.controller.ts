@@ -184,3 +184,37 @@ export const getSearchSuggestions = async (req: Request, res: Response) => {
     })
   }
 }
+
+// [GET] /products/related/:productId
+export const getRelatedProducts = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId
+
+    // 1. Tìm sản phẩm hiện tại để lấy category_id
+    const currentProduct = await Product.findById(productId)
+
+      // Nếu không tìm thấy sản phẩm hoặc sản phẩm không có danh mục, trả về mảng rỗng
+    if (!currentProduct || !currentProduct.product_category_id) {
+      return res.json({ code: 200, products: [] })
+    }
+
+    // 2. Tìm các sản phẩm khác có cùng category_id
+    const relatedProducts = await Product.find({
+      product_category_id: currentProduct.product_category_id,
+      _id: { $ne: productId } // $ne: loại trừ chính sản phẩm đang xem
+    }).limit(8) // Giới hạn 8 sản phẩm liên quan
+
+    // 3. Tính toán lại giá mới cho các sản phẩm
+    const newProducts = productsHelper.priceNewProducts(
+      relatedProducts as OneProduct[]
+    )
+
+    res.json({
+      code: 200,
+      message: 'Thành công!',
+      products: newProducts
+    })
+  } catch (error) {
+    res.json({ code: 400, message: 'Lỗi!', error: error })
+  }
+}
