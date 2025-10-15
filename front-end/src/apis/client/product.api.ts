@@ -49,3 +49,8 @@ export const fetchSearchSuggestionsAPI = async (keyword: string) => {
   )
   return response.data
 }
+
+export const fetchRelatedProductsAPI = async (productId: string) => {
+  const response = await axios.get(`${API_ROOT}/products/related/${productId}`)
+  return response.data
+}
