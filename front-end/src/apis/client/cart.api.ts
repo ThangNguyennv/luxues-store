@@ -10,10 +10,19 @@ export const fetchCartAPI = async (): Promise<CartDetailInterface> => {
   return response.data
 }
 
-export const fetchAddProductToCartAPI = async (productId: string, quantity: number) => {
+export const fetchAddProductToCartAPI = async (
+  productId: string,
+  quantity: number,
+  color?: string | null,
+  size?: string | null
+) => {
   const response = await axios.post(
     `${API_ROOT}/cart/add/${productId}`,
-    { quantity },
+    {
+      quantity, // Gửi quantity trong body
+      color, // Gửi color trong body
+      size // Gửi size trong body
+    },
     { withCredentials: true }
   )
   return response.data

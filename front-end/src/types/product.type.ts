@@ -10,9 +10,14 @@ export interface ProductInfoInterface extends GeneralInfoInterface {
   description: string,
   colors: {
     name: string
-    code: string
+    code: string,
+    images: (File | string)[]
   }[]
-  sizes: string[]
+  sizes: string[],
+  stars: {
+    average: number,
+    count: number
+  }
 }
 
 export interface ProductAllResponseInterface extends HelperInterface, CurrentParamsInterface {

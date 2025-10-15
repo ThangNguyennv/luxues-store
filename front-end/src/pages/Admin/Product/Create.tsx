@@ -9,10 +9,7 @@ const CreateProduct = () => {
     productInfo,
     setProductInfo,
     uploadImageInputRef,
-    handleChange,
     handleSubmit,
-    preview,
-    handleClick,
     role,
     currentColor,
     setCurrentColor,
@@ -21,7 +18,13 @@ const CreateProduct = () => {
     handleAddColor,
     handleRemoveColor,
     handleAddSize,
-    handleRemoveSize
+    handleRemoveSize,
+    thumbnailPreview,
+    handleThumbnailChange,
+    handleAddImagesToColor,
+    handleRemoveImageFromColor,
+    colorFileInputRefs,
+    handleClick
   } = useCreate()
 
   return (
@@ -147,9 +150,29 @@ const CreateProduct = () => {
                 min={0}/>
             </div>
 
-            {/* === UI CHO DANH SÁCH MÀU SẮC === */}
+            {/* PHẦN ẢNH ĐẠI DIỆN */}
+            <div className="flex flex-col gap-[5px]">
+              <label htmlFor="thumbnail">Ảnh đại diện</label>
+              <input
+                onChange={handleThumbnailChange}
+                ref={uploadImageInputRef}
+                type="file" name="thumbnail" className='hidden' accept="image/*"
+              />
+              <button
+                onClick={(event) => handleClick(event, uploadImageInputRef)}
+                className="bg-gray-400 font-semibold border rounded-md w-fit px-3 py-1 text-sm text-white"
+              >
+                Chọn ảnh
+              </button>
+              {thumbnailPreview && (
+                <img src={thumbnailPreview} alt="Thumbnail preview" className="border rounded-md w-[150px] h-[150px] object-cover" />
+              )}
+            </div>
+
+            {/* Phần quản lý màu sắc */}
             <div className="form-group">
               <label>Danh sách các màu</label>
+              {/* Input thêm màu mới */}
               <div className="flex items-center gap-2 mb-2">
                 <input
                   type="text"
@@ -168,14 +191,51 @@ const CreateProduct = () => {
                   Thêm
                 </button>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {productInfo.colors.map((color, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1 text-sm">
-                    <span style={{ backgroundColor: color.code }} className="w-4 h-4 rounded-full border"></span>
-                    <span>{color.name}</span>
-                    <button type="button" onClick={() => handleRemoveColor(index)} className="font-bold text-red-500">
-                      &times;
-                    </button>
+              {/* Danh sách các màu đã thêm */}
+              <div className="flex flex-col gap-4 mt-2">
+                {productInfo.colors.map((color, colorIndex) => (
+                  <div key={colorIndex} className="border p-4 rounded-md">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span style={{ backgroundColor: color.code }} className="w-6 h-6 rounded-full border"></span>
+                        <span className='font-semibold'>{color.name}</span>
+                      </div>
+                      <button type="button" onClick={() => handleRemoveColor(colorIndex)} className="font-bold text-red-500">&times;</button>
+                    </div>
+                    <div className="mt-2">
+                      <input
+                        type="file"
+                        multiple accept="image/*"
+                        className="hidden"
+                        ref={el => { colorFileInputRefs.current[colorIndex] = el }}
+                        onChange={(e) => handleAddImagesToColor(colorIndex, e)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => colorFileInputRefs.current[colorIndex]?.click()}
+                        className="bg-gray-200 px-3 py-1 text-sm rounded"
+                      >
+                        + Thêm ảnh
+                      </button>
+                    </div>
+                    {/* Preview ảnh */}
+                    <div className="grid grid-cols-5 gap-2 mt-2">
+                      {color.images && color.images.map((image, imgIndex) => (
+                        <div key={imgIndex} className="relative group">
+                          <img
+                            src={image instanceof File ? URL.createObjectURL(image) : image}
+                            className="w-full h-24 object-cover rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImageFromColor(colorIndex, imgIndex)}
+                            className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100"
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -206,32 +266,6 @@ const CreateProduct = () => {
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="flex flex-col gap-[5px]">
-              <label htmlFor="thumbnail">Ảnh</label>
-              <input
-                onChange={(event) => handleChange(event)}
-                ref={uploadImageInputRef}
-                type="file"
-                id="thumbnail"
-                name="thumbnail"
-                className='hidden'
-                accept="image/*"
-              />
-              <button
-                onClick={event => handleClick(event)}
-                className="bg-[#9D9995] font-[500] border rounded-[5px] w-[5%] py-[4px] text-[14px]"
-              >
-              Chọn ảnh
-              </button>
-              {preview && (
-                <img
-                  src={preview}
-                  alt="Thumbnail preview"
-                  className="border rounded-[5px] w-[150px] h-[150px]"
-                />
-              )}
             </div>
 
             <div className="form-group">

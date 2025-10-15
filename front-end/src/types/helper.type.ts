@@ -40,7 +40,7 @@ export interface ParamsInterface {
 }
 
 export interface GeneralInfoInterface {
-  _id: string,
+  _id?: string,
   createdBy: {
     account_id: string,
   },
