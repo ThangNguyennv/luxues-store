@@ -27,14 +27,8 @@ const ReviewCard = ({ comment, userName, userAvatar }: ReviewCardProps) => {
           ))}
         </div>
         <p className="text-sm text-gray-500">
-          {new Date(comment.createdAt!).toLocaleDateString('vi-VN')}
+          {new Date(comment.createdAt!).toLocaleDateString('vi-VN')} | Phân loại hàng: {comment.color}{comment.color && comment.size ? ', ' : ''}{comment.size}
         </p>
-        {/* --- THÊM PHẦN HIỂN THỊ PHÂN LOẠI HÀNG --- 🏷️ */}
-        {(comment.color || comment.size) && (
-          <p className="text-sm text-gray-500 mt-2">
-            Phân loại hàng: {comment.color}{comment.color && comment.size ? ', ' : ''}{comment.size}
-          </p>
-        )}
         <p className="mt-3 text-gray-700">{comment.content}</p>
 
         {/* Hiển thị ảnh/video đính kèm */}

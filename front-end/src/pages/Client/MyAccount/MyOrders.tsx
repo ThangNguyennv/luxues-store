@@ -336,7 +336,8 @@ const MyOrders = () => {
                     <img src={product.thumbnail} className='w-[100px] h-[100px] object-contain'/>
                     <div className='flex flex-col gap-[5px]'>
                       <span className='line-clamp-1 font-[600]'>{product.title}</span>
-                      <span>x{product.quantity}</span>
+                      <span>{product.color}, {product.size}</span>
+                      <span>Số lượng: {product.quantity}</span>
                       <div className='flex items-center gap-[5px]'>
                         {product.discountPercentage > 0 && (
                           <span className='line-through'>{product.price.toLocaleString()}đ</span>
@@ -483,7 +484,10 @@ const MyOrders = () => {
               {/* Card thông tin sản phẩm */}
               <div className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
                 <img src={productToReview.thumbnail} className="w-16 h-16 object-cover rounded"/>
-                <span className="font-semibold">{productToReview.title}</span>
+                <div className='flex flex-col gap-[4px]'>
+                  <span className="font-semibold">{productToReview.title}</span>
+                  <span>{productToReview.color}, {productToReview.size}</span>
+                </div>
               </div>
 
               {/* Chọn số sao */}
