@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchDetailProductAPI, fetchRelatedProductsAPI  } from '~/apis/client/product.api'
+import { fetchDetailProductAPI, fetchRelatedProductsAPI } from '~/apis/client/product.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useCart } from '~/contexts/client/CartContext'
 import type { ProductDetailInterface, ProductInfoInterface } from '~/types/product.type'
@@ -9,6 +9,8 @@ import { FaStar, FaRegStar } from 'react-icons/fa6' // Import thêm icon
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, FreeMode, Thumbs } from 'swiper/modules'
 import ProductCard from '~/components/client/ProductCard/ProductCard'
+import { useMemo } from 'react' // Import useMemo để tối ưu
+import ReviewCard from '~/components/client/ReviewCard/ReviewCard'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -19,6 +21,9 @@ const DetailProductClient = () => {
   const [productDetail, setProductDetail] = useState<ProductInfoInterface | null>(null)
   const [quantity, setQuantity] = useState<number>(1)
   const [loading, setLoading] = useState(true)
+
+  // === THÊM STATE ĐỂ QUẢN LÝ BỘ LỌC ĐÁNH GIÁ ===
+  const [reviewFilter, setReviewFilter] = useState<'all' | 'media' | number>('all')
 
   // === CẬP NHẬT STATE CHO MÀU SẮC VÀ ẢNH HIỂN THỊ ===
   const [selectedColor, setSelectedColor] = useState<ProductInfoInterface['colors'][0] | null>(null)
@@ -112,6 +117,37 @@ const DetailProductClient = () => {
       dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Lỗi khi thêm vào giỏ', severity: 'error' } })
     }
   }
+
+  // === XỬ LÝ DỮ LIỆU ĐÁNH GIÁ BẰNG useMemo ĐỂ TỐI ƯU HIỆU NĂNG ===
+  const ratingCounts = useMemo(() => {
+    if (!productDetail?.comments) return { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, media: 0 }
+    interface RatingCounts {
+      [key: number]: number // Cho phép truy cập bằng bất kỳ key nào là number
+      media: number
+    }
+    const counts: RatingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, media: 0 }
+    productDetail.comments.forEach(comment => {
+      if (comment.rating >= 1 && comment.rating <= 5) {
+        counts[comment.rating]++
+      }
+      if (comment.images && comment.images.length > 0) {
+        counts.media++
+      }
+    })
+    return counts
+  }, [productDetail?.comments])
+
+  const filteredComments = useMemo(() => {
+    if (!productDetail?.comments) return []
+
+    if (reviewFilter === 'all') {
+      return productDetail.comments
+    }
+    if (reviewFilter === 'media') {
+      return productDetail.comments.filter(c => c.images && c.images.length > 0)
+    }
+    return productDetail.comments.filter(c => c.rating === reviewFilter)
+  }, [productDetail?.comments, reviewFilter])
 
   // Giao diện khi đang tải dữ liệu
   if (loading) {
@@ -256,6 +292,9 @@ const DetailProductClient = () => {
               {productDetail.stock > 0 ? 'Thêm vào giỏ hàng' : 'Hết hàng'}
             </button>
           </form>
+          <div className='border rounded-[5px] p-[4px] text-center w-[30%]'>
+            {productDetail.stock} sản phẩm có sẵn
+          </div>
 
         </div>
       </div>
@@ -266,10 +305,98 @@ const DetailProductClient = () => {
         <div className='prose max-w-none' dangerouslySetInnerHTML={{ __html: productDetail.description }} />
       </div>
 
-      {/* Phần đánh giá sản phẩm */}
-      <div className='mt-20 pt-8 border-t'>
-        <h2 className='text-2xl font-bold mb-4'>Đánh giá sản phẩm</h2>
-      </div>
+      {/* === PHẦN ĐÁNH GIÁ SẢN PHẨM === */}
+      {productDetail.comments && productDetail.comments.length > 0 && (
+        <div className='mt-20 pt-8 border-t'>
+          <h2 className='text-2xl font-bold mb-4'>Đánh giá sản phẩm</h2>
+
+          {/* Box tổng quan */}
+          <div className="flex items-center gap-8 bg-rose-50 p-6 rounded-lg border border-rose-100">
+            <div className="text-center">
+              <p className="text-4xl font-bold text-red-600">
+                {productDetail.stars.average.toFixed(1)} <span className="text-2xl">trên 5</span>
+              </p>
+              <div className="flex justify-center text-xl text-yellow-500 mt-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  i < Math.round(productDetail.stars.average) ? <FaStar key={i}/> : <FaRegStar key={i}/>
+                ))}
+              </div>
+            </div>
+
+            {/* Bộ lọc */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setReviewFilter('all')}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 'all' ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                Tất cả ({productDetail.comments.length})
+              </button>
+              <button
+                onClick={() => setReviewFilter(5)}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 5 ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                5 Sao ({ratingCounts[5]})
+              </button>
+              <button
+                onClick={() => setReviewFilter(4)}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 4 ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                4 Sao ({ratingCounts[4]})
+              </button>
+              <button
+                onClick={() => setReviewFilter(3)}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 3 ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                3 Sao ({ratingCounts[3]})
+              </button>
+              <button
+                onClick={() => setReviewFilter(2)}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 2 ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                2 Sao ({ratingCounts[2]})
+              </button>
+              <button
+                onClick={() => setReviewFilter(1)}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 1 ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                1 Sao ({ratingCounts[1]})
+              </button>
+              <button
+                onClick={() => setReviewFilter('media')}
+                className={`px-4 py-2 rounded-md border transition-colors 
+                  ${reviewFilter === 'media' ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-gray-50'}`
+                }
+              >
+                Có Hình Ảnh / Video ({ratingCounts.media})
+              </button>
+            </div>
+          </div>
+
+          {/* Danh sách bình luận */}
+          <div className="mt-6">
+            {filteredComments.map((comment, index) => (
+              <ReviewCard
+                key={index}
+                comment={comment}
+                userName={comment.user_id.fullName}
+                userAvatar={comment.user_id.avatar}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* === PHẦN SẢN PHẨM CÙNG LOẠI === */}
       {relatedProducts.length > 0 && (
@@ -284,7 +411,7 @@ const DetailProductClient = () => {
               // Responsive: 1 slide trên mobile, 2 trên tablet, 4 trên desktop
               320: { slidesPerView: 1, spaceBetween: 10 },
               640: { slidesPerView: 2, spaceBetween: 20 },
-              1024: { slidesPerView: 4, spaceBetween: 30 }
+              1024: { slidesPerView: 5, spaceBetween: 30 }
             }}
             className="related-products-swiper"
           >

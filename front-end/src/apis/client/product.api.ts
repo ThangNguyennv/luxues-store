@@ -54,3 +54,18 @@ export const fetchRelatedProductsAPI = async (productId: string) => {
   const response = await axios.get(`${API_ROOT}/products/related/${productId}`)
   return response.data
 }
+
+export const submitReviewAPI = async (productId: string, formData: FormData) => {
+  const response = await axios.post(
+    `${API_ROOT}/products/${productId}/reviews`,
+    formData,
+    {
+      headers: {
+        // Rất quan trọng khi gửi FormData chứa file
+        'Content-Type': 'multipart/form-data'
+      },
+      withCredentials: true // Để gửi cookie xác thực người dùng
+    }
+  )
+  return response.data
+}

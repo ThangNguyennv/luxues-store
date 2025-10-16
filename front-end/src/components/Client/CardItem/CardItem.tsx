@@ -41,7 +41,7 @@ const CardItem = ({
             <div className="flex items-center gap-2">
               {discountPercentage && discountPercentage > 0 ? (
                 <>
-                  <div className="font-medium">
+                  <div className="font-[600] text-[#BC3433]">
                     {Math.floor(((price * (100 - discountPercentage)) / 100)).toLocaleString()}đ
                   </div>
                   <div className="line-through text-gray-400">

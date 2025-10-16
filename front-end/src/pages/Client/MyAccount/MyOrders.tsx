@@ -2,7 +2,7 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { useOrderContext } from '~/contexts/client/OrderContext'
-import { FaCircleCheck } from 'react-icons/fa6'
+import { FaCircleCheck, FaRegStar, FaStar } from 'react-icons/fa6'
 import { BsClockFill } from 'react-icons/bs'
 import { MdLocalShipping } from 'react-icons/md'
 import { MdOutlineCancel } from 'react-icons/md'
@@ -20,6 +20,7 @@ import { useCart } from '~/contexts/client/CartContext'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import { FaFilter } from 'react-icons/fa'
 import { formatDateIntl } from '~/helpers/formatDateIntl'
+import { submitReviewAPI } from '~/apis/client/product.api'
 
 const MyOrders = () => {
   const { stateOrder, fetchOrder, dispatchOrder } = useOrderContext()
@@ -37,6 +38,15 @@ const MyOrders = () => {
   const currentSortValue = searchParams.get('sortValue') || ''
   const [typeStatusOrder, setTypeStatusOrder] = useState(currentStatus || '')
   const { addToCart } = useCart()
+
+  // === THÊM STATE CHO POPUP ĐÁNH GIÁ ===
+  const [openReview, setOpenReview] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [productToReview, setProductToReview] = useState<any | null>(null)
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewContent, setReviewContent] = useState('')
+  const [reviewImages, setReviewImages] = useState<File[]>([])
+  const [reviewPreviews, setReviewPreviews] = useState<string[]>([])
 
   useEffect(() => {
     fetchOrder({
@@ -169,6 +179,70 @@ const MyOrders = () => {
     TRANSPORTING: 1,
     CONFIRMED: 2,
     CANCELED: 3
+  }
+
+  // === CÁC HÀM XỬ LÝ CHO POPUP ===
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleOpenReview = (product: any, orderId: string) => {
+    setProductToReview({ ...product, orderId }) // Lưu cả orderId nếu cần
+    setOpenReview(true)
+  }
+
+  const handleCloseReview = () => {
+    setOpenReview(false)
+    // Reset state để lần sau mở lại không bị dính dữ liệu cũ
+    setProductToReview(null)
+    setReviewRating(5)
+    setReviewContent('')
+    setReviewImages([])
+    setReviewPreviews([])
+  }
+
+  const handleReviewImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files) {
+      const newFiles = Array.from(files)
+      const newPreviews = newFiles.map(file => URL.createObjectURL(file))
+      setReviewImages(prev => [...prev, ...newFiles])
+      setReviewPreviews(prev => [...prev, ...newPreviews])
+    }
+  }
+
+  const handleRemoveReviewImage = (index: number) => {
+    URL.revokeObjectURL(reviewPreviews[index])
+    setReviewImages(prev => prev.filter((_, i) => i !== index))
+    setReviewPreviews(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleReviewSubmit = async () => {
+    if (!productToReview || reviewRating === 0) {
+      dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Vui lòng chọn số sao!', severity: 'error' } })
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('rating', String(reviewRating))
+    formData.append('content', reviewContent)
+    reviewImages.forEach(file => {
+      formData.append('images', file)
+    })
+    if (productToReview.color) {
+      formData.append('color', productToReview.color)
+    }
+    if (productToReview.size) {
+      formData.append('size', productToReview.size)
+    }
+    try {
+      const response = await submitReviewAPI(productToReview.product_id, formData)
+      if (response.code === 201) {
+        dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Đánh giá đã được gửi!', severity: 'success' } })
+        handleCloseReview()
+        // Cập nhật lại trạng thái đơn hàng (ví dụ: đã đánh giá) nếu cần
+      }
+    } catch (error) {
+      dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Có lỗi xảy ra', severity: 'error' } })
+    }
   }
 
   return (
@@ -305,7 +379,16 @@ const MyOrders = () => {
                     <>
                       <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
                       <div className='flex items-center justify-end gap-[5px]'>
-                        <button className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'>Đánh giá</button>
+                        {/* Đánh giá từng sản phẩm */}
+                        {order.products.map(product => (
+                          <button
+                            key={product.product_id}
+                            onClick={() => handleOpenReview(product, order._id)}
+                            className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'
+                          >
+                            Đánh giá
+                          </button>
+                        ))}
                         <button className='text-black font-[600] border rounded-[5px]  p-[5px] text-[14px]'>Yêu cầu trả hàng/hoàn tiền</button>
                         <select
                           value={actionType}
@@ -389,6 +472,69 @@ const MyOrders = () => {
           >
             Xác nhận
           </Button>
+        </DialogActions>
+      </Dialog>
+      {/* === THÊM POPUP ĐÁNH GIÁ VÀO CUỐI COMPONENT === */}
+      <Dialog open={openReview} onClose={handleCloseReview} fullWidth maxWidth="sm">
+        <DialogTitle>Đánh giá sản phẩm</DialogTitle>
+        <DialogContent>
+          {productToReview && (
+            <div className="flex flex-col gap-4 py-4">
+              {/* Card thông tin sản phẩm */}
+              <div className="flex items-center gap-4 p-2 bg-gray-50 rounded-lg">
+                <img src={productToReview.thumbnail} className="w-16 h-16 object-cover rounded"/>
+                <span className="font-semibold">{productToReview.title}</span>
+              </div>
+
+              {/* Chọn số sao */}
+              <div className="flex items-center justify-center gap-2 text-3xl text-yellow-400">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <span key={index} onClick={() => setReviewRating(index + 1)} className="cursor-pointer">
+                    {index < reviewRating ? <FaStar /> : <FaRegStar />}
+                  </span>
+                ))}
+              </div>
+
+              {/* Mô tả */}
+              <textarea
+                value={reviewContent}
+                onChange={(e) => setReviewContent(e.target.value)}
+                rows={4}
+                placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm này nhé!"
+                className="w-full p-2 border rounded-md"
+              ></textarea>
+
+              {/* Upload ảnh */}
+              <div>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  id="review-images-upload"
+                  className="hidden"
+                  onChange={handleReviewImageChange}
+                />
+                <label htmlFor="review-images-upload" className="cursor-pointer bg-blue-100 text-blue-600 px-4 py-2 rounded-md">
+                  + Thêm hình ảnh
+                </label>
+                <div className="grid grid-cols-5 gap-2 mt-2">
+                  {reviewPreviews.map((src, index) => (
+                    <div key={index} className="relative group">
+                      <img src={src} className="w-full h-20 object-cover rounded"/>
+                      <button onClick={() => handleRemoveReviewImage(index)} className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100">
+                        &times;
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseReview}>Hủy</Button>
+          <Button onClick={handleReviewSubmit} variant="contained">Gửi đánh giá</Button>
         </DialogActions>
       </Dialog>
     </div>

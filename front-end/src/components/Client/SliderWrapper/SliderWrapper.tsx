@@ -23,7 +23,7 @@ interface SliderWrapperProps {
 
 export default function SliderWrapper ({
   items,
-  slidesPerView = 4,
+  slidesPerView = 5,
   autoplayDelay = 3000
 }: SliderWrapperProps) {
   return (

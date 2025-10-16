@@ -1,3 +1,4 @@
+import type { AccountInfoInterface } from './account.type'
 import type { CurrentParamsInterface, GeneralInfoInterface, HelperInterface, ParamsInterface } from './helper.type'
 
 export interface ProductInfoInterface extends GeneralInfoInterface {
@@ -8,6 +9,7 @@ export interface ProductInfoInterface extends GeneralInfoInterface {
   featured: string,
   product_category_id: string,
   description: string,
+  priceNew?: number
   colors: {
     name: string
     code: string,
@@ -17,7 +19,18 @@ export interface ProductInfoInterface extends GeneralInfoInterface {
   stars: {
     average: number,
     count: number
-  }
+  },
+  comments: {
+    user_id: AccountInfoInterface,
+    rating: number,
+    content: string,
+    status: string,
+    images: string[],
+    createdAt: Date | null
+    updatedAt: Date | null
+    color: string,
+    size: string
+  }[]
 }
 
 export interface ProductAllResponseInterface extends HelperInterface, CurrentParamsInterface {

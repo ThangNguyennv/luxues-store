@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import type { ProductInfoInterface } from '~/types/product.type'
 
 interface ProductCardProps {
-  product: ProductInfoInterface;
+  product: ProductInfoInterface
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
@@ -14,7 +14,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <img
           src={product.thumbnail}
           alt={product.title}
-          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
+          className="w-full h-[300px] object-contain group-hover:scale-110 transition-transform duration-300"
         />
       </div>
       <div className="mt-4">

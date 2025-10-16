@@ -28,13 +28,13 @@ export const fetchAddProductToCartAPI = async (
   return response.data
 }
 
-export const fetchDeleteProductInCartAPI = async (productId: string) => {
-  const response = await axios.delete(
-    `${API_ROOT}/cart/delete/${productId}`,
-    { withCredentials: true }
-  )
-  return response.data
-}
+// export const fetchDeleteProductInCartAPI = async (productId: string) => {
+//   const response = await axios.delete(
+//     `${API_ROOT}/cart/delete/${productId}`,
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
 
 export const fetchChangeMultiAPI = async (data: { ids: string[], type: string }) => {
   const response = await axios.patch(
@@ -42,5 +42,41 @@ export const fetchChangeMultiAPI = async (data: { ids: string[], type: string })
     data,
     { withCredentials: true }
   )
+  return response.data
+}
+
+// Sửa lại hàm xóa
+export const fetchDeleteProductInCartAPI = async (item: { productId: string; color: string; size: string }) => {
+  const response = await axios.delete(`${API_ROOT}/cart/delete-item`, {
+    data: item,
+    withCredentials: true
+  })
+  return response.data
+}
+
+// Hàm mới để cập nhật số lượng
+export const fetchUpdateQuantityAPI = async (data: {
+  productId: string;
+  color: string;
+  size: string;
+  quantity: number;
+}) => {
+  const response = await axios.patch(`${API_ROOT}/cart/update-quantity`, data, {
+    withCredentials: true
+  })
+  return response.data
+}
+
+// Hàm mới để cập nhật color/size của một sản phẩm trong giỏ hàng
+export const fetchUpdateVariantAPI = async (data: {
+  productId: string;
+  oldColor: string;
+  oldSize: string;
+  newColor: string;
+  newSize: string;
+}) => {
+  const response = await axios.patch(`${API_ROOT}/cart/update-variant`, data, {
+    withCredentials: true
+  })
   return response.data
 }
