@@ -3,6 +3,28 @@ import slug from 'mongoose-slug-updater'
 
 mongoose.plugin(slug)
 
+// --- TẠO SCHEMA RIÊNG CHO COMMENT ---
+const commentSchema = new mongoose.Schema({
+  user_id: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  content: { type: String, required: true },
+  status: { 
+    type: String, 
+    enum: ['pending', 'approved', 'rejected'], 
+    default: 'pending' 
+  },
+  images: [String],
+  color: { type: String }, // Tên màu, ví dụ: "Xanh Navy"
+  size: { type: String }   // Kích cỡ, ví dụ: "XL"
+  }, 
+  {
+    timestamps: true // Đặt timestamps option ở đây
+  }
+)
+
 const productSchema = new mongoose.Schema(
   {
     title: {
@@ -26,6 +48,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
+    selled: Number, // Số lượng sản phẩm đã bán được
     colors: [
       {
         name: { type: String, required: true }, // Ví dụ: "Xanh Navy"
@@ -38,24 +61,7 @@ const productSchema = new mongoose.Schema(
       average: { type: Number, default: 0 }, // Điểm trung bình, ví dụ: 4.5
       count: { type: Number, default: 0 }     // Tổng số lượt đánh giá, ví dụ: 150
     },
-    comments: [
-      {
-        user_id: { 
-          type: mongoose.Schema.Types.ObjectId, 
-          ref: 'User'
-        },
-        rating: { type: Number, required: true, min: 1, max: 5 },
-        content: { type: String, required: true },
-        status: { 
-          type: String, 
-          enum: ['pending', 'approved', 'rejected'], 
-          default: 'pending' 
-        }
-      },
-      {
-        timestamps: true // Tự động thêm createdAt, updatedAt cho mỗi bình luận
-      }
-    ],
+    comments: [commentSchema],
     thumbnail: String,
     status: {
       type: String,

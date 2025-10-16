@@ -122,7 +122,9 @@ export const detail = async (req: Request, res: Response) => {
       slug: req.params.slugProduct,
       status: 'active'
     }
-    const product = await Product.findOne(find)
+    const product = await Product
+      .findOne(find)
+      .populate('comments.user_id')
     if (product.product_category_id) {
       const category = await ProductCategory.findOne({
         _id: product.product_category_id,
@@ -216,5 +218,52 @@ export const getRelatedProducts = async (req: Request, res: Response) => {
     })
   } catch (error) {
     res.json({ code: 400, message: 'Lỗi!', error: error })
+  }
+}
+
+// [POST] /products/:productId/reviews
+export const createReview = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId
+    const userId = req["accountUser"].id // Lấy từ middleware xác thực
+    const { rating, content, color, size } = req.body
+    const images = req['fileUrls'] || [] // Lấy URL ảnh từ middleware uploadCloud
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.json({ code: 404, message: 'Không tìm thấy sản phẩm.' })
+    }
+
+    const newReview = {
+      user_id: userId,
+      rating: Number(rating),
+      content: content,
+      images: images,
+      color: color,
+      size: size,
+      status: 'approved' // Hoặc 'pending' nếu bạn muốn duyệt
+    }
+
+    // Thêm đánh giá mới vào sản phẩm
+    product.comments.push(newReview)
+
+    // Tính toán lại điểm sao trung bình
+    let totalRating = 0
+    const approvedComments = product.comments.filter(c => c.status === 'approved')
+    
+    approvedComments.forEach(comment => {
+      totalRating += comment.rating
+    })
+
+    product.stars.count = approvedComments.length
+    product.stars.average = approvedComments.length > 0 ? totalRating / approvedComments.length : 0
+
+    await product.save()
+
+    res.json({ code: 201, message: 'Gửi đánh giá thành công!' })
+
+  } catch (error) {
+    console.error("LỖI KHI TẠO REVIEW:", error)
+    res.json({ code: 400, message: 'Lỗi!', error })
   }
 }

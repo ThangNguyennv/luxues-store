@@ -45,8 +45,10 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
+  console.log("vao order")
   try {
     const cartId = req["cartId"]
+    const userId = req["accountUser"].id
     const { note, paymentMethod, fullName, phone, address } = req.body
     const userInfo = {
       fullName: fullName,
@@ -55,14 +57,18 @@ export const order = async (req: Request, res: Response) => {
     }
     const cart = await Cart.findOne({ _id: cartId })
     if (cart) {
+      console.log("vao cart")
       if (cart.products.length > 0) {
+        console.log("product-cart")
         const products = []
         const cartProductIds = cart.products.map(p => p.product_id)
         const failedOrder = await Order.findOne({ 
-          deleted: false, 
+          deleted: false,
+          user_id: userId, 
           "products.product_id": { $all: cartProductIds } 
         })
         if (failedOrder) {
+          console.log("vao failedorder")
           failedOrder.paymentInfo.method = paymentMethod
           failedOrder.paymentInfo.status = 'PENDING'
           await failedOrder.save()
@@ -117,15 +123,18 @@ export const order = async (req: Request, res: Response) => {
             )
           }
         } else {
-          for (const product of cart.products) {
+          console.log("vao not failed order")
+          for (const productInCart of cart.products) {
             const objectProduct = {
-              product_id: product.product_id,
+              product_id: productInCart.product_id,
               price: 0,
-              quantity: product.quantity,
-              discountPercentage: 0
+              quantity: productInCart.quantity,
+              discountPercentage: 0,
+              color: productInCart.color, 
+              size: productInCart.size
             }
             const productInfo = await Product
-              .findOne({ _id: product.product_id })
+              .findOne({ _id: productInCart.product_id })
               .select('price discountPercentage title thumbnail')
             objectProduct.price = productInfo.price
             objectProduct.discountPercentage = productInfo.discountPercentage
@@ -138,11 +147,10 @@ export const order = async (req: Request, res: Response) => {
             return acc + priceNewForOneProduct * product.quantity
           }, 0)
           const orderInfo = {
-            user_id: req["accountUser"].id,
+            user_id: userId,
             cart_id: cartId,
             userInfo: userInfo,
             products: products,
-            userId: req['accountUser'].id,
             amount: Math.floor(totalBill),
             note: note
           }
@@ -151,6 +159,7 @@ export const order = async (req: Request, res: Response) => {
           await order.save()
 
           if (paymentMethod === 'COD') {
+            console.log("vao cod")
             await Cart.updateOne(
               { _id: cartId },
               { products: [] }

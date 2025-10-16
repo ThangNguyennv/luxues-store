@@ -340,8 +340,9 @@ export const getOrders = async (req: Request, res: Response) => {
   try {
     const find: any = { }
     const { status, date } = req.query
-
+    const useId = req["accountUser"].id
     // Filter
+    find.user_id = useId
     find.deleted = false
     if (status) {
       find.status = status

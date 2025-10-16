@@ -2,7 +2,7 @@ import { Router } from 'express'
 const router: Router = Router()
 // Upload ảnh
 import multer from 'multer'
-import uploadCloud from '~/middlewares/client/uploadCloud.middleware'
+import { uploadWithOneImageToCloud } from '~/middlewares/client/uploadCloud.middleware'
 // Hết Upload ảnh
 import * as controller from '~/controllers/client/user.controller'
 import * as validate from '~/validates/client/user.validate'
@@ -34,7 +34,7 @@ router.patch(
   '/account/info/edit',
   authMiddleware.requireAuth,
   multer().single('avatar'),
-  uploadCloud,
+  uploadWithOneImageToCloud,
   validate.editPatch,
   controller.editPatch
 )

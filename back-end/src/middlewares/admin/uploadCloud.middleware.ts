@@ -42,5 +42,4 @@ export const uploadCloud = async (req: Request, res: Response, next: NextFunctio
     next(error)
   }
 }
-
 export default uploadCloud

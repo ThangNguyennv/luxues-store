@@ -5,10 +5,13 @@ const cartSchema = new mongoose.Schema(
     user_id: String,
     products: [
       {
-        product_id: String,
-        quantity: Number,
-        color: { type: String, required: true }, // Ví dụ: "Xanh Navy"
-        size: { type: String, required: true }, // Ví dụ: ["S", "M", "L", "XL"]
+        product_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product' // Tham chiếu đến model 'Product'
+        },
+        quantity: { type: Number, min: 1, default: 1 },
+        color: { type: String, default: null },
+        size: { type: String, default: null },
       }
     ]
   },

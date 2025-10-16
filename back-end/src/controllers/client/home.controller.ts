@@ -12,7 +12,7 @@ export const index = async (req: Request, res: Response) => {
       featured: '1',
       deleted: false,
       status: 'active'
-    }).limit(5)
+    }).limit(6)
     const newProductsFeatured = productsHelper.priceNewProducts(
       productsFeatured as OneProduct[]
     )
@@ -23,7 +23,7 @@ export const index = async (req: Request, res: Response) => {
       status: 'active'
     })
       .sort({ position: 'desc' })
-      .limit(5)
+      .limit(6)
 
     const newProductsNew = productsHelper.priceNewProducts(
       productsNew as OneProduct[]

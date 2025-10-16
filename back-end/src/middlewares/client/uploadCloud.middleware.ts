@@ -10,7 +10,7 @@ cloudinary.config({
 })
 // End cloudinary
 
-export const uploadCloud = (
+export const uploadWithOneImageToCloud = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -40,4 +40,38 @@ export const uploadCloud = (
   }
 }
 
-export default uploadCloud
+
+// Helper function để upload một file buffer, có thể tái sử dụng
+const streamUpload = (fileBuffer: Buffer): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream((error, result) => {
+      if (result) {
+        resolve(result)
+      } else {
+        reject(error)
+      }
+    })
+    streamifier.createReadStream(fileBuffer).pipe(stream)
+  })
+}
+
+// Middleware đã được nâng cấp để xử lý nhiều ảnh
+export const uploadCloud = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    // Kiểm tra xem `req.files` có phải là một mảng và có chứa file không
+    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+      const files = req.files as Express.Multer.File[]
+
+      // Dùng Promise.all để upload song song, tăng tốc độ
+      const uploadPromises = files.map(file => streamUpload(file.buffer))
+      const results = await Promise.all(uploadPromises)
+      
+      // Gán mảng các URL vào một thuộc tính tạm trên `req`
+      req['fileUrls'] = results.map(result => result.secure_url)
+    }
+    next() // Chuyển tiếp sang controller
+  } catch (error) {
+    console.error("Lỗi khi upload lên Cloudinary:", error)
+    next(error) // Chuyển lỗi cho Express error handler
+  }
+}
