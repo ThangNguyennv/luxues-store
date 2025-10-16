@@ -29,7 +29,9 @@ export interface OrderInfoInterface {
       price: number,
       discountPercentage: number,
       quantity: number,
-      thumbnail: string
+      thumbnail: string,
+      color: string,
+      size: string
     }[]
     status: OrderStatus,
     position: number,

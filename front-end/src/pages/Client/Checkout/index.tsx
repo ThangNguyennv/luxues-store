@@ -1,16 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { fetchCartAPI } from '~/apis/client/cart.api'
 import type { CartInfoInterface } from '~/types/cart.type'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableRow from '@mui/material/TableRow'
-import TableContainer from '@mui/material/TableContainer'
-import type { ProductInfoInterface } from '~/types/product.type'
-import { fetchProductsAPI } from '~/apis/client/product.api'
 import { fetchOrderAPI } from '~/apis/client/checkout.api'
-import Skeleton from '@mui/material/Skeleton'
 import { useCart } from '~/contexts/client/CartContext'
 import { useNavigate } from 'react-router-dom'
 import { MdOutlineLocalShipping } from 'react-icons/md'
@@ -21,388 +12,183 @@ import { useAuth } from '~/contexts/client/AuthContext'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
-  const [products, setProducts] = useState<ProductInfoInterface[]>([])
   const [loading, setLoading] = useState(false)
   const { refreshCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()
   const { accountUser } = useAuth()
-  const [fullName, setFullName] = useState(accountUser?.fullName)
-  const [phone, setPhone] = useState(accountUser?.phone)
-  const [address, setAddress] = useState(accountUser?.address)
 
+  // Dùng state riêng cho form để dễ quản lý
+  const [formValues, setFormValues] = useState({
+    fullName: '',
+    phone: '',
+    address: '',
+    note: ''
+  })
   useEffect(() => {
+    // Tự động điền thông tin người dùng khi có
+    if (accountUser) {
+      setFormValues(prev => ({
+        ...prev,
+        fullName: accountUser.fullName || '',
+        phone: accountUser.phone || '',
+        address: accountUser.address || ''
+      }))
+    }
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [cartRes, productRes] = await Promise.all([
-          fetchCartAPI(),
-          fetchProductsAPI()
-        ])
-
+        const cartRes = await fetchCartAPI()
         setCartDetail(cartRes.cartDetail)
-        setProducts(productRes.allProducts)
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Lỗi khi fetch dữ liệu:', error)
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
-  }, [])
+  }, [accountUser])
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormValues(prev => ({ ...prev, [name]: value }))
+  }
+  const totalBill = useMemo(() => {
+    if (!cartDetail?.products) return 0
+    return cartDetail?.products.reduce((acc, item) => {
+      const priceNewForOneProduct =
+      item.product_id.price * (100 - item.product_id.discountPercentage) / 100
 
-  const totalBill = cartDetail?.products.reduce((acc, item) => {
-    const product = products.find(p => p._id === item.product_id)
-    if (!product) return acc
-
-    const priceNewForOneProduct =
-    product.price * (100 - product.discountPercentage) / 100
-
-    return acc + priceNewForOneProduct * item.quantity
-  }, 0)
+      return acc + priceNewForOneProduct * item.quantity
+    }, 0)
+  }, [cartDetail])
+  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+  //   const formData = new FormData(event.currentTarget)
+  //   const payload = {
+  //     note: String(formData.get('note') ?? ''),
+  //     paymentMethod: paymentMethod,
+  //     fullName: String(formData.get('fullName') ?? ''),
+  //     phone: String(formData.get('phone') ?? ''),
+  //     address: String(formData.get('address') ?? '')
+  //   }
+  //   const response = await fetchOrderAPI(payload)
+  //   if (response.code === 201) {
+  //     await refreshCart()
+  //     if (paymentMethod === 'COD') {
+  //       navigate(`/checkout/success/${response.order._id}`)
+  //     } else if (paymentMethod === 'VNPAY' && response.paymentUrl) {
+  //       window.location.href = response.paymentUrl
+  //       return
+  //     } else if (paymentMethod === 'ZALOPAY' && response.order_url) {
+  //       window.location.href = response.order_url
+  //       return
+  //     } else if (paymentMethod === 'MOMO' && response.data.payUrl) {
+  //       window.location.href = response.data.payUrl
+  //       return
+  //     }
+  //   }
+  //   setPaymentMethod('')
+  // }
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const payload = {
-      note: String(formData.get('note') ?? ''),
-      paymentMethod: paymentMethod,
-      fullName: String(formData.get('fullName') ?? ''),
-      phone: String(formData.get('phone') ?? ''),
-      address: String(formData.get('address') ?? '')
-    }
-    const response = await fetchOrderAPI(payload)
-    if (response.code === 201) {
-      await refreshCart()
-      if (paymentMethod === 'COD') {
-        navigate(`/checkout/success/${response.order._id}`)
-      } else if (paymentMethod === 'VNPAY' && response.paymentUrl) {
-        window.location.href = response.paymentUrl
-        return
-      } else if (paymentMethod === 'ZALOPAY' && response.order_url) {
-        window.location.href = response.order_url
-        return
-      } else if (paymentMethod === 'MOMO' && response.data.payUrl) {
-        window.location.href = response.data.payUrl
-        return
+    const payload = { ...formValues, paymentMethod }
+    try {
+      const response = await fetchOrderAPI(payload)
+      if (response.code === 201) {
+        await refreshCart()
+        if (paymentMethod === 'COD') {
+          navigate(`/checkout/success/${response.order._id}`)
+        } else if (paymentMethod === 'VNPAY' && response.paymentUrl) {
+          window.location.href = response.paymentUrl
+        } else if (paymentMethod === 'ZALOPAY' && response.order_url) {
+          window.location.href = response.order_url
+        } else if (paymentMethod === 'MOMO' && response.data?.payUrl) {
+          window.location.href = response.data.payUrl
+        }
+        setPaymentMethod('')
+      } else {
+        // Xử lý lỗi từ server (ví dụ: giỏ hàng trống)
+        alert(response.message || 'Có lỗi xảy ra, vui lòng thử lại.')
       }
+    } catch (error) {
+      alert('Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.')
     }
-    setPaymentMethod('')
   }
-  if (loading) {
-    return (
-      <>
-        <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
-          <div className='container flex flex-col gap-[15px]'>
-            <Skeleton variant="text" width={200} height={45} sx={{ bgcolor: 'grey.400' }}/>
-            <div className='flex flex-col gap-[20px]'>
-              <TableContainer sx={{ maxHeight: 600 }}>
-                <Table stickyHeader sx={{
-                  borderCollapse: 'collapse',
-                  '& th, & td': {
-                    border: '1px solid #757575' // đường kẻ
-                  }
-                }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={70} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={50} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center">
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="rectangular" width={100} height={100} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={412} height={17} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={60} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                      <TableCell align="center">
-                        <div className='flex items-center justify-center'>
-                          <Skeleton variant="text" width={20} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <div className='flex items-center justify-end gap-[5px]'>
-                <Skeleton variant="text" width={125} height={24} sx={{ bgcolor: 'grey.400' }}/>
-                <Skeleton variant="text" width={89} height={30} sx={{ bgcolor: 'grey.400' }}/>
-              </div>
-              <Skeleton variant="text" width={300} height={45} sx={{ bgcolor: 'grey.400' }}/>
-              <form onSubmit={handleSubmit} className='flex flex-col gap-[15px]'>
-                <input type="hidden" name="position" value={1} />
-                <div className='form-group'>
-                  <Skeleton variant="text" width={74} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
-                </div>
-                <div className='form-group'>
-                  <Skeleton variant="text" width={101} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
-                </div>
-                <div className='form-group'>
-                  <Skeleton variant="text" width={55} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
-                </div>
-                <div className='form-group'>
-                  <Skeleton variant="text" width={55} height={20} sx={{ bgcolor: 'grey.400' }}/>
-                  <Skeleton variant="rectangular" width={1536} height={36} sx={{ bgcolor: 'grey.400' }}/>
-                </div>
-                <div className='flex items-center justify-end'>
-                  <div className='flex flex-col items-end gap-[15px]'>
-                    <div className='flex items-center justify-center gap-[15px]'>
-                      <Skeleton variant="text" width={204} height={25} sx={{ bgcolor: 'grey.400' }}/>
-                      <Skeleton variant="rectangular" width={234} height={33} sx={{ bgcolor: 'grey.400' }}/>
-                    </div>
-                    <Skeleton variant="rectangular" width={122} height={50} sx={{ bgcolor: 'grey.400' }}/>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </>
-    )
-  }
-
   return (
     <>
-      {cartDetail && (
-        <div className='flex items-center justify-center p-[30px] mb-[100px] bg-[#FFFFFF] shadow-md'>
-          <div className='container flex flex-col gap-[15px]'>
-            <div className='text-[30px] uppercase font-[600]'>Đặt hàng</div>
-            <div className='flex flex-col gap-[20px]'>
-              <TableContainer sx={{ maxHeight: 600 }}>
-                <Table stickyHeader sx={{
-                  borderCollapse: 'collapse',
-                  '& th, & td': {
-                    border: '1px solid #757575' // đường kẻ
-                  }
-                }}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>STT</TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Hình ảnh</TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Tên sản phẩm</TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Đơn giá</TableCell>
-                      <TableCell align='center' sx={{ backgroundColor: '#003459', color: 'white' }}>Số lượng</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {cartDetail.products.map((cart, index) => {
-                      const item = products.find((product) => product._id.toString() === cart.product_id.toString())
-                      return (
-                        item && (
-                          <TableRow key={index}>
-                            <TableCell align="center">
-                              {index + 1}
-                            </TableCell>
-                            <TableCell align="center">
-                              <div className='flex items-center justify-center'>
-                                <img src={item.thumbnail} className='w-[100px] h-[100px] object-cover'/>
-                              </div>
-                            </TableCell>
-                            <TableCell align="center">
-                              <span>
-                                {item.title}
-                              </span>
-                            </TableCell>
-                            <TableCell align="center">
-                              <span>
-                                {Math.floor((item.price * (100 - item.discountPercentage) / 100)).toLocaleString()}đ
-                              </span>
-                            </TableCell>
-                            <TableCell align="center">
-                              {cart.quantity}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <div className='flex items-center justify-end gap-[5px]'>
-                <b>Tổng thanh toán: </b>
-                <span className='text-[#BC3433] font-[600] text-[20px]'>{Math.floor(totalBill ?? 0).toLocaleString()}đ</span>
+      <div className='bg-gray-50 py-12 mb-[100px]'>
+        <div className='container mx-auto px-4'>
+          <h1 className='text-3xl font-bold mb-8'>Thanh toán</h1>
+          <form onSubmit={handleSubmit} className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+
+            {/* CỘT TRÁI: THÔNG TIN GIAO HÀNG VÀ THANH TOÁN */}
+            <div className='lg:col-span-2 bg-white p-6 rounded-lg shadow-md flex flex-col gap-6'>
+              <div>
+                <h2 className='text-xl font-semibold mb-4'>Thông tin giao hàng</h2>
+                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                  <div className='form-group'><label>Họ và tên</label><input type="text" name="fullName" value={formValues.fullName} onChange={handleInputChange} required /></div>
+                  <div className='form-group'><label>Số điện thoại</label><input type="tel" name="phone" value={formValues.phone} onChange={handleInputChange} required /></div>
+                  <div className='form-group sm:col-span-2'><label>Địa chỉ</label><input type="text" name="address" value={formValues.address} onChange={handleInputChange} required /></div>
+                  <div className='form-group sm:col-span-2'><label>Ghi chú (tùy chọn)</label><textarea name="note" value={formValues.note} onChange={handleInputChange} rows={3}></textarea></div>
+                </div>
               </div>
-              <form onSubmit={handleSubmit} className='grid grid-cols-2 gap-[25px]'>
-                <input type="hidden" name="position" value={1} />
-                <div className='flex flex-col gap-[18px]'>
-                  <div className='text-[24px] uppercase font-[600]'>
-                    Thông tin người nhận hàng:
-                  </div>
-                  <div className='flex flex-col gap-2'>
-                    <div className='form-group'>
-                      <label htmlFor='fullName'><b>Họ và tên: </b></label>
-                      <input
-                        onChange={(event) => setFullName(event.target.value)}
-                        type='text'
-                        name='fullName'
-                        id='fullName'
-                        value={fullName}
-                        required
-                      />
-                    </div>
-                    <div className='form-group'>
-                      <label htmlFor='phone'><b>Số điện thoại: </b></label>
-                      <input
-                        onChange={(event) => setPhone(event.target.value)}
-                        type='tel'
-                        name='phone'
-                        id='phone'
-                        value={phone}
-                        required
-                      />
-                    </div>
-                    <div className='form-group'>
-                      <label htmlFor='address'><b>Địa chỉ: </b></label>
-                      <input
-                        onChange={(event) => setAddress(event.target.value)}
-                        type='text'
-                        name='address'
-                        id='address'
-                        value={address}
-                        required
-                      />
-                    </div>
-                    <div className='form-group'>
-                      <label htmlFor='note'><b>Lời nhắn: </b></label>
-                      <input
-                        type='text'
-                        name='note'
-                        id='note'
-                        placeholder='Lưu ý cho người bán...'
-                      />
-                    </div>
-                  </div>
+
+              <div>
+                <h2 className='text-xl font-semibold mb-4'>Phương thức thanh toán</h2>
+                <div className="flex flex-col gap-3">
+                  {/* Lựa chọn COD */}
+                  <label className={`flex items-center gap-4 cursor-pointer border p-4 rounded-lg transition-all ${paymentMethod === 'COD' ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
+                    <input type="radio" name="paymentMethod" value="COD" checked={paymentMethod === 'COD'} onChange={(e) => setPaymentMethod(e.target.value)} />
+                    <MdOutlineLocalShipping size={28} />
+                    <span>Thanh toán khi nhận hàng (COD)</span>
+                  </label>
+                  <label className={`flex items-center gap-4 cursor-pointer border p-4 rounded-lg transition-all ${paymentMethod === 'VNPAY' ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
+                    <input type="radio" name="paymentMethod" value="VNPAY" checked={paymentMethod === 'VNPAY'} onChange={(e) => setPaymentMethod(e.target.value)} />
+                    <img src={vnpayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                    <span>Thanh toán chuyển khoản VNPay</span>
+                  </label>
+                  <label className={`flex items-center gap-4 cursor-pointer border p-4 rounded-lg transition-all ${paymentMethod === 'ZALOPAY' ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
+                    <input type="radio" name="paymentMethod" value="ZALOPAY" checked={paymentMethod === 'ZALOPAY'} onChange={(e) => setPaymentMethod(e.target.value)} />
+                    <img src={zalopayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                    <span>Thanh toán chuyển khoản ZaloPay</span>
+                  </label>
+                  <label className={`flex items-center gap-4 cursor-pointer border p-4 rounded-lg transition-all ${paymentMethod === 'MOMO' ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400'}`}>
+                    <input type="radio" name="paymentMethod" value="MOMO" checked={paymentMethod === 'MOMO'} onChange={(e) => setPaymentMethod(e.target.value)} />
+                    <img src={momoLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
+                    <span>Thanh toán chuyển khoản MoMo</span>
+                  </label>
                 </div>
-                <div className='flex flex-col justify-between gap-[30px]'>
-                  <div className='font-[600] text-[24px]'>
-                    Phương thức thanh toán:
-                  </div>
-                  <div className="flex flex-col gap-[10px]">
-                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="COD"
-                        checked={paymentMethod === 'COD'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                      />
-                      <div className='flex items-center gap-2 justify-center'>
-                        <MdOutlineLocalShipping className='text-[30px]'/>
-                        <div className='flex flex-col'>
-                          <span>COD</span>
-                          <span>Thanh toán khi nhận hàng</span>
-                        </div>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="VNPAY"
-                        checked={paymentMethod === 'VNPAY'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                      />
-                      <div className='flex items-center gap-2 justify-center'>
-                        <img src={vnpayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
-                        <div className='flex flex-col'>
-                          <span>VNPAY</span>
-                          <span>Thanh toán chuyển khoản VNPay</span>
-                        </div>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="ZALOPAY"
-                        checked={paymentMethod === 'ZALOPAY'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                      />
-                      <div className='flex items-center gap-2 justify-center'>
-                        <img src={zalopayLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
-                        <div className='flex flex-col'>
-                          <span>ZALOPAY</span>
-                          <span>Thanh toán chuyển khoản ZaloPay</span>
-                        </div>
-                      </div>
-                    </label>
-
-                    <label className="flex items-center gap-2 cursor-pointer border p-[6px] rounded-[7px]">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="MOMO"
-                        checked={paymentMethod === 'MOMO'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                      />
-                      <div className='flex items-center gap-2 justify-center'>
-                        <img src={momoLogo} alt="vnpay-logo" className='h-[30px] object-contain'/>
-                        <div className='flex flex-col'>
-                          <span>MOMO</span>
-                          <span>Thanh toán chuyển khoản MoMo</span>
-                        </div>
-                      </div>
-                    </label>
-                  </div>
-                  <div className='flex items-center justify-end'>
-                    <button
-                      type='submit'
-                      className='uppercase border rounded-[10px] text-center bg-[#BC3433] text-white p-[10px]'
-                    >
-                      Đặt hàng
-                    </button>
-                  </div>
-                </div>
-              </form>
+              </div>
             </div>
-          </div>
+
+            {/* CỘT PHẢI: TÓM TẮT ĐƠN HÀNG */}
+            <div className='lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit flex flex-col gap-4'>
+              <h2 className='text-xl font-semibold border-b pb-3'>Đơn hàng của bạn</h2>
+              {cartDetail?.products.map((item) => (
+                <div key={`${item.product_id}-${item.color}-${item.size}`} className="flex items-center gap-4">
+                  <div className="relative">
+                    <img src={item.product_id?.thumbnail} className="w-16 h-16 object-cover rounded"/>
+                    <span className="absolute -top-2 -right-2 bg-gray-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{item.quantity}</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm">{item.product_id?.title}</p>
+                    <p className="text-xs text-gray-500">{item.color}, {item.size}</p>
+                  </div>
+                  <span className="font-semibold text-sm">{item.totalPrice?.toLocaleString('vi-VN')}đ</span>
+                </div>
+              ))}
+              <div className="border-t pt-4 flex flex-col gap-2">
+                <div className="flex justify-between text-gray-600"><span>Tạm tính:</span><span>{totalBill.toLocaleString('vi-VN')}đ</span></div>
+                <div className="flex justify-between text-gray-600"><span>Phí vận chuyển:</span><span>Miễn phí</span></div>
+                <div className="flex justify-between font-bold text-lg mt-2"><span>Tổng cộng:</span><span className="text-red-600">{totalBill.toLocaleString('vi-VN')}đ</span></div>
+              </div>
+              <button type='submit' className='w-full bg-red-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-red-700 transition-colors mt-4'>
+              Đặt hàng
+              </button>
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </>
   )
 }
