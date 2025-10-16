@@ -17,8 +17,8 @@ const commentSchema = new mongoose.Schema({
     default: 'pending' 
   },
   images: [String],
-  color: { type: String }, // Tên màu, ví dụ: "Xanh Navy"
-  size: { type: String }   // Kích cỡ, ví dụ: "XL"
+  color:  String , // Tên màu, ví dụ: "Xanh Navy"
+  size:  String   // Kích cỡ, ví dụ: "XL"
   }, 
   {
     timestamps: true // Đặt timestamps option ở đây
