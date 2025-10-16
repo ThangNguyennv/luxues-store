@@ -13,31 +13,43 @@ import "~/cron/order.cron" // ⚡ load cron khi server start
 export const index = async (req: Request, res: Response) => {
   try {
     const cartId = req["cartId"]
-    const cart = await Cart.findOne({ _id: cartId })
+    const cart = await Cart
+      .findOne({ _id: cartId })
+      .populate({
+        path: 'products.product_id', // Đường dẫn đến trường cần làm đầy
+        model: 'Product', // Tên model tham chiếu
+        select: 'title thumbnail slug price discountPercentage colors sizes stock' // Chỉ lấy các trường cần thiết
+      })
+    
+    // Nếu không có giỏ hàng, trả về an toàn
+    if (!cart) {
+      return res.json({ code: 200, message: 'Giỏ hàng trống!', cartDetail: null })
+    }
+    // Tính toán tổng tiền sau khi đã có đầy đủ thông tin
+    let totalsPrice = 0
     if (cart.products.length > 0) {
       for (const item of cart.products) {
-        const productId = item.product_id
-        const productInfo = await Product
-          .findOne({ _id: productId })
-          .select('title thumbnail slug price discountPercentage')
-
-        productInfo['priceNew'] = productsHelper.priceNewProduct(
-          productInfo as OneProduct
-        )
-        item['productInfo'] = productInfo
-        item['totalPrice'] = productInfo['priceNew'] * item.quantity
+        // Sau khi populate, item.product_id sẽ là một object chứa thông tin sản phẩm
+        const productInfo = item.product_id as any
+        if (productInfo) {
+          const priceNew = productsHelper.priceNewProduct(productInfo as OneProduct)
+          item['productInfo'] = productInfo // Gán productInfo vào một trường ảo
+          item['totalPrice'] = priceNew * item.quantity
+          totalsPrice += item['totalPrice']
+        }
       }
     }
-    cart['totalsPrice'] = cart.products.reduce((sum, item) => sum + item['totalPrice'], 0)
-    res.json({ 
-      code: 200,  
-      message: 'Thành công!', 
-      cartDetail: cart 
+    cart['totalsPrice'] = totalsPrice
+
+    res.json({
+      code: 200,
+      message: 'Trả checkout thành công!',
+      cartDetail: cart
     })
   } catch (error) {
-    res.json({ 
-      code: 400,  
-      message: 'Lỗi!', 
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
       error: error
     })
   }
@@ -45,7 +57,6 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /checkout/order
 export const order = async (req: Request, res: Response) => {
-  console.log("vao order")
   try {
     const cartId = req["cartId"]
     const userId = req["accountUser"].id
@@ -55,148 +66,76 @@ export const order = async (req: Request, res: Response) => {
       phone: phone, 
       address: address
     }
-    const cart = await Cart.findOne({ _id: cartId })
-    if (cart) {
-      console.log("vao cart")
-      if (cart.products.length > 0) {
-        console.log("product-cart")
-        const products = []
-        const cartProductIds = cart.products.map(p => p.product_id)
-        const failedOrder = await Order.findOne({ 
-          deleted: false,
-          user_id: userId, 
-          "products.product_id": { $all: cartProductIds } 
-        })
-        if (failedOrder) {
-          console.log("vao failedorder")
-          failedOrder.paymentInfo.method = paymentMethod
-          failedOrder.paymentInfo.status = 'PENDING'
-          await failedOrder.save()
+    const cart = await Cart.findById(cartId).populate({
+      path: 'products.product_id',
+      model: 'Product'
+    })
+    console.log("🚀 ~ checkout.controller.ts ~ order ~ cart:", cart);
+    if (!cart || cart.products.length === 0) {
+      return res.json({ code: 400, message: 'Giỏ hàng trống!' });
+    }
+    const products = cart.products.map(item => {
+      const productInfo = item.product_id as any // Sau khi populate, đây là object
+      return {
+        product_id: productInfo._id,
+        title: productInfo.title,
+        thumbnail: productInfo.thumbnail,
+        price: productInfo.price,
+        discountPercentage: productInfo.discountPercentage,
+        quantity: item.quantity,
+        color: item.color,
+        size: item.size
+      }
+    })
+    console.log("🚀 ~ checkout.controller.ts ~ order ~ products:", products);
 
-          if (paymentMethod === 'COD') {
-            await Cart.updateOne(
-              { _id: cartId },
-              { products: [] }
-            )
-            return res.json({ 
-              code: 201,  
-              message: 'Thành công!', 
-              order: order
-            })
-          } else if (paymentMethod === 'VNPAY') {
-            vnpayCreateOrder(failedOrder.amount, failedOrder.id, res)
-          } else if (paymentMethod === 'ZALOPAY') {
-            zalopayCreateOrder(
-              failedOrder.amount,
-              failedOrder.products.map((p) => ({
-                product_id: p.product_id as string,
-                title: p.title as string,
-                price: p.price as number,
-                discountPercentage: p.discountPercentage as number,
-                quantity: p.quantity as number
-              })),
-              failedOrder.userInfo.phone,
-              failedOrder.id,
-              res
-            )
-          } else if (paymentMethod === 'MOMO') {
-            momoCreateOrder(failedOrder.id, failedOrder.amount, res)
-          } else if (paymentMethod === 'ZALOPAY') {
-            zalopayCreateOrder(failedOrder.amount, products, failedOrder.userInfo.phone, failedOrder.id, res)
-          }
+    const totalBill = products.reduce((acc, product) => {
+      const priceNew = (product.price * (100 - product.discountPercentage)) / 100
+      return acc + priceNew * product.quantity
+    }, 0)
 
-          for (const item of failedOrder.products) {
-            await Product.updateOne(
-              { _id: item.product_id },
-              [ // <-- Dùng một mảng [] để báo hiệu đây là một pipeline
-                {
-                  $set: {
-                    stock: {
-                      $max: [ // $max sẽ lấy giá trị lớn nhất trong mảng
-                        0,   // Giá trị tối thiểu là 0
-                        { $subtract: ["$stock", item.quantity] } // (stock hiện tại - số lượng)
-                      ]
-                    }
-                  }
-                }
-              ]
-            )
-          }
-        } else {
-          console.log("vao not failed order")
-          for (const productInCart of cart.products) {
-            const objectProduct = {
-              product_id: productInCart.product_id,
-              price: 0,
-              quantity: productInCart.quantity,
-              discountPercentage: 0,
-              color: productInCart.color, 
-              size: productInCart.size
-            }
-            const productInfo = await Product
-              .findOne({ _id: productInCart.product_id })
-              .select('price discountPercentage title thumbnail')
-            objectProduct.price = productInfo.price
-            objectProduct.discountPercentage = productInfo.discountPercentage
-            objectProduct['title'] = productInfo.title
-            objectProduct['thumbnail'] = productInfo.thumbnail
-            products.push(objectProduct)
-          }
-          const totalBill = products.reduce((acc, product) => {
-            const priceNewForOneProduct = (product.price * (100 - product.discountPercentage)) / 100
-            return acc + priceNewForOneProduct * product.quantity
-          }, 0)
-          const orderInfo = {
-            user_id: userId,
-            cart_id: cartId,
-            userInfo: userInfo,
-            products: products,
-            amount: Math.floor(totalBill),
-            note: note
-          }
-          const order = new Order(orderInfo)
-          order.paymentInfo.method = paymentMethod
-          await order.save()
-
-          if (paymentMethod === 'COD') {
-            console.log("vao cod")
-            await Cart.updateOne(
-              { _id: cartId },
-              { products: [] }
-            )
-            return res.json({ 
-              code: 201,  
-              message: 'Thành công!', 
-              order: order
-            })
-          } else if (paymentMethod === 'VNPAY') {
-            vnpayCreateOrder(totalBill, order.id, res)
-          } else if (paymentMethod === 'ZALOPAY') {
-            zalopayCreateOrder(totalBill, products, order.userInfo.phone, order.id, res)
-          } else if (paymentMethod === 'MOMO') {
-            momoCreateOrder(order.id, totalBill, res)
-          }
-
-          for (const item of products) {
-            await Product.updateOne(
-              { _id: item.product_id },
-              [
-                {
-                  $set: {
-                    stock: {
-                      $max: [
-                        0,
-                        { $subtract: ["$stock", item.quantity] }
-                      ]
-                    }
-                  }
-                }
-              ]
-            )
-          }
-        }
-      } 
-    } 
+    const orderInfo = {
+      user_id: userId,
+      cart_id: cartId,
+      userInfo,
+      products,
+      amount: Math.floor(totalBill),
+      note,
+      paymentInfo: { method: paymentMethod, status: 'PENDING' }
+    }
+  
+    const newOrder = new Order(orderInfo)
+    await newOrder.save()
+    if (paymentMethod === 'COD') {
+      await Cart.updateOne({ _id: cartId }, { products: [] })
+      return res.json({ 
+        code: 201,  
+        message: 'Thành công!', 
+        order: newOrder
+      })
+    } else if (paymentMethod === 'VNPAY') {
+      vnpayCreateOrder(newOrder.amount, newOrder.id, res)
+    } else if (paymentMethod === 'ZALOPAY') {
+      const zaloProducts = newOrder.products.map(p => ({
+        product_id: p.product_id.toString(),
+        title: p.title,
+        price: p.price,
+        discountPercentage: p.discountPercentage,
+        quantity: p.quantity
+      }))
+      zalopayCreateOrder(newOrder.amount, zaloProducts, newOrder.userInfo.phone, newOrder.id, res)
+    } else if (paymentMethod === 'MOMO') {
+      momoCreateOrder(newOrder.id, newOrder.amount, res)
+    }
+    // Trừ kho hàng
+    for (const item of newOrder.products) {
+      await Product.updateOne(
+        { _id: item.product_id },
+        [
+          { $set: { stock: { $max: [0, { $subtract: ["$stock", item.quantity] }] } } }
+        ]
+      )
+    }
   } catch (error) {
     return res.json({ 
       code: 400,  

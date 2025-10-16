@@ -42,8 +42,8 @@ const orderSchema = new mongoose.Schema(
         quantity: Number,
         discountPercentage: Number,
         thumbnail: String,
-        colors: String,
-        sizes: String,
+        color: String,
+        size: String,
       }
     ],
     status: {

@@ -10,8 +10,8 @@ const cartSchema = new mongoose.Schema(
           ref: 'Product' // Tham chiếu đến model 'Product'
         },
         quantity: { type: Number, min: 1, default: 1 },
-        color: { type: String, default: null },
-        size: { type: String, default: null },
+        color: String,
+        size: String,
       }
     ]
   },

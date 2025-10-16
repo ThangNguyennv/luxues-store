@@ -40,7 +40,7 @@ export const index = async (req: Request, res: Response) => {
 
     res.json({
       code: 200,
-      message: 'Thành công!',
+      message: 'Trả cart thành công!',
       cartDetail: cart
     })
   } catch (error) {
