@@ -54,7 +54,6 @@ export const index = async (req: Request, res: Response) => {
 
 // [POST] /cart/add/:productId
 export const addPost = async (req: Request, res: Response) => {
-  console.log(req.body)
   try {
     const productId = req.params.productId
     const { quantity, color, size } = req.body 
@@ -72,8 +71,7 @@ export const addPost = async (req: Request, res: Response) => {
         $inc: { 'products.$.quantity': quantity } 
       }
     )
-    // Nếu không có dòng nào được cập nhật (modifiedCount = 0), có nghĩa là đây là một biến thể mới
-    console.log("🚀 ~ cart.controller.ts ~ addPost ~ result.modifiedCount:", result.modifiedCount);
+
     if (result.modifiedCount === 0) {
       const productInfo = {
         product_id: productId,
