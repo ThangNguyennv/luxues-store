@@ -1,60 +1,46 @@
-import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { fetchResetPasswordOTPAPI } from '~/apis/client/auth.api'
-import { useAlertContext } from '~/contexts/alert/AlertContext'
+
 import { IoEye, IoEyeOff } from 'react-icons/io5'
+import useReset from '~/hooks/client/auth/password/useReset'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const Reset = () => {
-  const navigate = useNavigate()
-  const { dispatchAlert } = useAlertContext()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const {
+    handleSubmit,
+    showPassword,
+    setShowPassword,
+    showConfirmPassword,
+    setShowConfirmPassword,
+    isLoading
+  } = useReset()
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault()
-    const form = event.currentTarget
-    const password = form.password.value
-    const confirmPassword = form.confirmPassword.value
-    const response = await fetchResetPasswordOTPAPI(password, confirmPassword)
-    if (response.code === 200) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'success' }
-      })
-      setTimeout(() => {
-        navigate('/user/login')
-      }, 1500)
-    } else if (response.code === 401) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
-    } else if (response.code === 400) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
-    }
-  }
   return (
     <>
-      <div className="flex items-center justify-center gap-[70px] p-[70px] mt-[40px] mb-[80px] bg-[#96D5FE]">
-        <div className='flex flex-col gap-[10px] text-center text-[20px]'>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-[70px] p-8 md:p-[70px] mt-[40px] mb-[80px] bg-[#96D5FE]">
+
+        <div className='flex flex-col gap-[10px] text-center text-[20px] mb-8 md:mb-0'>
           <div className='font-[600]'>LUXUES STORE</div>
           <div>Shop thời trang được yêu thích nhất tại Việt Nam</div>
         </div>
-        <div className="w-[30%]">
+        <div className="w-full max-w-md md:w-[40%] lg:w-[30%]">
           <form
             onSubmit={(event) => handleSubmit(event)}
             className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50"
           >
             <div className='text-[20px] font-[500]'>Đổi mật khẩu</div>
-            {/* Ô nhập mật khẩu có icon con mắt */}
+
+            {/* Ô nhập mật khẩu */}
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 name="password"
-                placeholder="Mật khẩu"
+                placeholder="Mật khẩu mới"
                 className="border rounded-[5px] p-[10px] w-full pr-10 focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
               />
               <button
@@ -65,7 +51,8 @@ const Reset = () => {
                 {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
               </button>
             </div>
-            {/* Ô nhập mật khẩu có icon con mắt */}
+
+            {/* Ô nhập xác nhận mật khẩu */}
             <div className="relative">
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -81,11 +68,13 @@ const Reset = () => {
                 {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
               </button>
             </div>
+
             <button
               type='submit'
-              className='bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer'
+              className='w-full bg-[#192335] border rouned-[5px] p-[10px] text-white cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed'
+              disabled={isLoading}
             >
-              Đổi mật khẩu
+              {isLoading ? 'Đang đổi mật khẩu...' : 'Đổi mật khẩu'}
             </button>
           </form>
         </div>
