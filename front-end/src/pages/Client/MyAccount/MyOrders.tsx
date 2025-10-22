@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
@@ -28,7 +30,6 @@ const MyOrders = () => {
   const { dispatchAlert } = useAlertContext()
   const [searchParams, setSearchParams] = useSearchParams()
   const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [actionType, setActionType] = useState('')
   const [open, setOpen] = useState(false)
   const currentStatus = searchParams.get('status') || ''
   const currentDate = searchParams.get('date') || ''
@@ -75,16 +76,6 @@ const MyOrders = () => {
 
     setSearchParams(newParams)
   }
-
-  // const reloadData = (): void => {
-  //   fetchOrder({
-  //     status: currentStatus,
-  //     page: currentPage,
-  //     keyword: currentKeyword,
-  //     sortKey: currentSortKey,
-  //     sortValue: currentSortValue
-  //   })
-  // }
 
   const handleOpen = (id: string) => {
     setSelectedId(id)
@@ -134,7 +125,6 @@ const MyOrders = () => {
           severity: 'success'
         }
       })
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       dispatchAlert({
         type: 'SHOW_ALERT',
@@ -174,7 +164,6 @@ const MyOrders = () => {
     CANCELED: 3
   }
 
-  // === CÁC HÀM XỬ LÝ CHO POPUP ===
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleOpenReview = (product: any, orderId: string) => {

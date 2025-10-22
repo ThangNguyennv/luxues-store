@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback } from 'react'
 import { fetchAllArticlesAPI } from '~/apis/client/article.api'
-import { articleReducer } from '~/reducers/admin/articleReducer'
-import { initialState } from '~/reducers/admin/articleReducer'
+import { articleReducer } from '~/reducers/client/articleReducer'
+import { initialState } from '~/reducers/client/articleReducer'
 import type { ArticleActions, ArticleAllResponseInterface, ArticleStates } from '~/types/article.type'
 
 interface ArticleContextType {

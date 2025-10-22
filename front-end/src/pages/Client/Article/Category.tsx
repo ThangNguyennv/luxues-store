@@ -1,22 +1,13 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { fetchDetailArticleCategoryAPI } from '~/apis/client/article.api'
+import { Link } from 'react-router-dom'
 import BoxHead from '~/components/client/BoxHead/BoxHead'
 import CardItem from '~/components/client/CardItem/CardItem'
-import type { ArticleInfoInterface, ArticlesWithCategoryDetailInterface } from '~/types/article.type'
+import useCategory from '~/hooks/client/article/useCategory'
 
 const ArticleCategory = () => {
-  const [articleCategory, setArticleCategory] = useState<ArticleInfoInterface[]>([])
-  const [pageTitle, setPageTitle] = useState('')
-  const params = useParams()
-  const slugCategory = params.slugCategory as string
-
-  useEffect(() => {
-    fetchDetailArticleCategoryAPI(slugCategory). then((res: ArticlesWithCategoryDetailInterface) => {
-      setArticleCategory(res.articles)
-      setPageTitle(res.pageTitle)
-    })
-  }, [slugCategory])
+  const {
+    pageTitle,
+    articleCategory
+  } = useCategory()
 
   return (
     <>

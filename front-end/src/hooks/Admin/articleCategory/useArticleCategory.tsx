@@ -88,7 +88,7 @@ export const useArticleCategory = () => {
     await executeAction(typeChange)
   }
   const executeAction = async (typeChange: string) => {
-    const selectedArticlesCategory = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id))
+    const selectedArticlesCategory = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id as string))
     let result: string[] = []
 
     result = selectedArticlesCategory.map(articleCategory => articleCategory._id)

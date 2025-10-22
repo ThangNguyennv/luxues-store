@@ -92,7 +92,7 @@ export const useArticle = () => {
 
   const executeAction = async (typeChange: string) => {
     const selectedArticles = articles.filter(article =>
-      selectedIds.includes(article._id)
+      selectedIds.includes(article._id as string)
     )
 
     let result: string[] = []
@@ -119,6 +119,7 @@ export const useArticle = () => {
     // Refetch
     reloadData()
   }
+
   const handleConfirmDeleteAll = async () => {
     if (pendingAction === 'delete-all') {
       await executeAction('delete-all')
@@ -135,12 +136,14 @@ export const useArticle = () => {
       setSearchParams(newParams)
     }
   }
+
   const clearSortParams = (): void => {
     const newParams = new URLSearchParams(searchParams)
     newParams.delete('sortKey')
     newParams.delete('sortValue')
     setSearchParams(newParams)
   }
+
   const handleFilterStatus = (status: string): void => {
     const newParams = new URLSearchParams(searchParams)
     if (status) {

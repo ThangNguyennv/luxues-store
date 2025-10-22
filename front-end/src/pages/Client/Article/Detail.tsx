@@ -1,20 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { fetchDetailArticleAPI } from '~/apis/client/article.api'
-import type { ArticleDetailInterface, ArticleInfoInterface } from '~/types/article.type'
+import useDetail from '~/hooks/client/article/useDetail'
 
 const DetailArticleClient = () => {
-  const [articleDetail, setArticleDetail] = useState<ArticleInfoInterface | null>(null)
-  const params = useParams()
-  const slugArticle = params.slugArticle as string
-
-  useEffect(() => {
-    if (!slugArticle) return
-    fetchDetailArticleAPI(slugArticle)
-      .then((response: ArticleDetailInterface) => {
-        setArticleDetail(response.article)
-      })
-  }, [slugArticle])
+  const {
+    articleDetail
+  } = useDetail()
 
   return (
     <>
