@@ -123,33 +123,26 @@ const MyOrders = () => {
     }
   }
 
-  const handleBuyBack = async (productId: string, quantity: number) => {
+  // Xử lý cho từng sản phẩm
+  const handleBuyBack = async (product_id: string, quantity: number, color: string, size: string) => {
     try {
-      await addToCart(productId, quantity)
+      await addToCart(product_id, quantity, color, size)
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Mua lại đơn hàng thành công!', severity: 'success' }
+        payload: {
+          message: 'Đã thêm vào giỏ hàng!',
+          severity: 'success'
+        }
       })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     } catch (error) {
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: 'Lỗi khi mua lại', severity: 'error' }
+        payload: {
+          message: 'Lỗi khi mua lại',
+          severity: 'error'
+        }
       })
-    }
-  }
-
-  const handleLinkToContactShop = () => {
-
-  }
-
-  const handleBuyBackAfterConfirming = (e: ChangeEvent<HTMLSelectElement>, productId: string, quantity: number) => {
-    const value = e.target.value
-    setActionType(value)
-    if (value === 'contact-shop') {
-      handleLinkToContactShop()
-    } else if (value === 'buy-back') {
-      handleBuyBack(productId, quantity)
     }
   }
 
@@ -284,7 +277,10 @@ const MyOrders = () => {
       </div>
       {orders && orders.length > 0 ? (
         orders.map((order, index) => (
-          <div className="flex flex-col gap-[10px] border rounded-[5px] border-blue-100 shadow-xl p-[15px]" key={index}>
+          <div
+            className="flex flex-col gap-[10px] border rounded-[5px] border-blue-100 shadow-xl p-[15px]"
+            key={index}
+          >
             <div className="flex items-center justify-between">
               <div className='flex items-center justify-center gap-[10px]'>
                 <div className='flex flex-col gap-[5px]'>
@@ -316,35 +312,53 @@ const MyOrders = () => {
                         </div>
                 }
               </div>
-              <div className='flex items-center justify-center gap-[10px]'>
-                <div className='flex flex-col items-center gap-[10px]'>
-                  <span>Tổng số tiền:</span>
-                  <span className='font-[600]'>{order.amount.toLocaleString()}đ</span>
-                </div>
-                <Link
-                  to={`/checkout/success/${order._id}`}
-                  className='text-blue-600 hover:underline'
-                >
-                  Xem chi tiết
-                </Link>
-              </div>
+              <Link
+                to={`/checkout/success/${order._id}`}
+                className='text-blue-600 hover:underline'
+              >
+                Xem chi tiết
+              </Link>
             </div>
-            <div className='grid grid-cols-2 gap-[10px]'>
+            <div className='flex flex-col gap-4 mt-4'>
               {order.products && order.products.length > 0 && (
                 order.products.map((product, idx) => (
-                  <div className='flex items-center gap-[5px]' key={idx}>
-                    <img src={product.thumbnail} className='w-[100px] h-[100px] object-contain'/>
-                    <div className='flex flex-col gap-[5px]'>
-                      <span className='line-clamp-1 font-[600]'>{product.title}</span>
-                      <span>{product.color}, {product.size}</span>
-                      <span>Số lượng: {product.quantity}</span>
-                      <div className='flex items-center gap-[5px]'>
-                        {product.discountPercentage > 0 && (
-                          <span className='line-through'>{product.price.toLocaleString()}đ</span>
-                        )}
-                        <span>
-                          {Math.floor((product.price * (100 - product.discountPercentage) / 100)).toLocaleString()}đ
+                  <div className='flex items-center justify-between gap-4 border-b pb-4' key={idx}>
+                    <div className='flex items-center gap-3'>
+                      <img src={product.thumbnail} className='w-20 h-20 object-contain rounded-md'/>
+                      <div className='flex flex-col gap-1'>
+                        <span className='font-semibold'>{product.title}</span>
+                        <span className="text-sm text-gray-500">
+                          Phân loại: {product.color}{product.size ? `, ${product.size}` : ''}
                         </span>
+                        <span className="text-sm">
+                          Số lượng: {product.quantity}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className='flex items-center justify-between gap-[30px]'>
+                      <div className="text-right">
+                        <span className="font-semibold">
+                          {Math.floor((product.price * (100 - product.discountPercentage)) / 100).toLocaleString()}đ
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-2 items-end">
+                        {order.status === 'CONFIRMED' && (
+                          <button
+                            onClick={() => handleOpenReview(product, order._id)}
+                            className='text-white font-semibold border rounded-md bg-blue-500 px-3 py-1 text-sm'
+                          >
+                            Đánh giá
+                          </button>
+                        )}
+                        {(order.status === 'CONFIRMED' || order.status === 'CANCELED') && (
+                          <button
+                            onClick={() => handleBuyBack(product.product_id, product.quantity, product.color, product.size)}
+                            className='text-black font-semibold border rounded-md bg-gray-200 px-3 py-1 text-sm'
+                          >
+                            Mua lại
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -370,76 +384,29 @@ const MyOrders = () => {
                 )}
               </div>
               <div>
-                {
-                  order.status != 'CANCELED' && order.status != 'CONFIRMED' && (
-                    <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
-                  )
-                }
-                {
-                  order.status == 'CONFIRMED' && (
-                    <>
-                      <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
-                      <div className='flex items-center justify-end gap-[5px]'>
-                        {/* Đánh giá từng sản phẩm */}
-                        {order.products.map(product => (
-                          <button
-                            key={product.product_id}
-                            onClick={() => handleOpenReview(product, order._id)}
-                            className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'
-                          >
-                            Đánh giá
-                          </button>
-                        ))}
-                        <button className='text-black font-[600] border rounded-[5px]  p-[5px] text-[14px]'>Yêu cầu trả hàng/hoàn tiền</button>
-                        <select
-                          value={actionType}
-                          onChange={(e) => {
-                            {order.products.forEach((product) => {
-                              handleBuyBackAfterConfirming(e, product.product_id, product.quantity)
-                            })}
-                          }}
-                          className='outline-none border rounded-[5px] p-[5px] text-[14px] font-[600]'
-                        >
-                          <option disabled value={''}>-- Thêm --</option>
-                          <option value={'contact-shop'}>
-                            Liên hệ shop
-                          </option>
-                          <option value={'buy-back'}>
-                            Mua lại
-                          </option>
-                        </select>
-                      </div>
-                    </>
-                  )
-                }
+                {order.status !== 'CANCELED' && (
+                  <OrderProgress currentStep={statusToStep[order.status] ?? 0} />
+                )}
               </div>
             </div>
-            <div className='flex items-center justify-end'>
-              <div>
-                {order.status == 'PENDING' && (
-                  <button
-                    onClick={() => handleOpen(order._id)}
-                    className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[14px]'
-                  >
-                    Hủy đơn hàng
-                  </button>
-                )}
-                {order.status == 'CANCELED' && (
-                  <div className='flex items-center justify-center gap-[5px]'>
-                    <button
-                      onClick={() => {
-                        order.products.forEach((product) => {
-                          handleBuyBack(product.product_id, product.quantity)
-                        })
-                      }}
-                      className='text-white font-[600] border rounded-[5px] bg-red-500 p-[5px] text-[16px]'
-                    >
-                      Mua lại
-                    </button>
-                    <button className='text-black font-[600] border rounded-[5px] p-[5px] text-[16px]'>Liên hệ shop</button>
-                  </div>
-                )}
+            <div className='flex items-center justify-end gap-3 mt-4'>
+              <div className='font-semibold text-lg'>
+                <span>Tổng tiền: </span>
+                <span className='text-red-600'>{order.amount.toLocaleString()}đ</span>
               </div>
+              {order.status == 'PENDING' && (
+                <button
+                  onClick={() => handleOpen(order._id)}
+                  className='text-white font-semibold border rounded-md bg-red-500 px-4 py-2'
+                >
+                  Hủy đơn hàng
+                </button>
+              )}
+              {order.status == 'CONFIRMED' && (
+                <button className='text-black font-semibold border rounded-md bg-gray-200 px-4 py-2'>
+                  Yêu cầu trả hàng
+                </button>
+              )}
             </div>
           </div>
         ))

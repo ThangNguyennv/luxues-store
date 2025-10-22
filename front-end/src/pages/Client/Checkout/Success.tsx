@@ -396,7 +396,7 @@ const Success = () => {
             <h2 className="text-lg font-semibold mb-2">Sản phẩm đã đặt</h2>
             <div className="border rounded-lg overflow-hidden">
               {order.products.map((product) => (
-                <div key={product.product_id} className="flex items-center gap-4 p-4 border-b last:border-b-0">
+                <Link to={`/products/detail/${''}`} key={product.product_id} className="flex items-center gap-4 p-4 border-b last:border-b-0">
                   <img src={product.thumbnail} className="w-20 h-20 object-cover rounded"/>
                   <div className="flex-1">
                     <p className="font-semibold">{product.title}</p>
@@ -408,7 +408,7 @@ const Success = () => {
                       {Math.floor((product.price * (100 - product.discountPercentage) / 100) * product.quantity).toLocaleString('vi-VN')}đ
                     </p>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

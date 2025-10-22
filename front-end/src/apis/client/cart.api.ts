@@ -69,11 +69,11 @@ export const fetchUpdateQuantityAPI = async (data: {
 
 // Hàm mới để cập nhật color/size của một sản phẩm trong giỏ hàng
 export const fetchUpdateVariantAPI = async (data: {
-  productId: string;
-  oldColor: string;
-  oldSize: string;
-  newColor: string;
-  newSize: string;
+  productId: string
+  oldColor: string
+  oldSize: string
+  newColor: string
+  newSize: string
 }) => {
   const response = await axios.patch(`${API_ROOT}/cart/update-variant`, data, {
     withCredentials: true

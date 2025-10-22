@@ -228,11 +228,11 @@ const Cart = () => {
                 <h2 className='text-2xl font-bold'>Tóm tắt đơn hàng</h2>
                 <div className='flex items-center justify-between'>
                   <span className="text-gray-600">Tổng tạm tính:</span>
-                  <span className='font-semibold'>{totalBill.toLocaleString()}đ</span>
+                  <span className='font-semibold'>{Math.floor(totalBill).toLocaleString()}đ</span>
                 </div>
                 <div className='border-t pt-4 flex items-center justify-between'>
                   <span className="text-xl font-bold">Tổng tiền:</span>
-                  <span className='font-bold text-2xl text-red-600'>{totalBill.toLocaleString()}đ</span>
+                  <span className='font-bold text-2xl text-red-600'>{Math.floor(totalBill).toLocaleString()}đ</span>
                 </div>
                 <Link to={'/checkout'} className='w-full bg-black text-white font-bold py-3 px-6 rounded-lg text-center hover:bg-gray-800 transition-colors'>
                   Tiến hành thanh toán
