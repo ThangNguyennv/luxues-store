@@ -22,8 +22,12 @@ const useHeader = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [suggestions, setSuggestions] = useState<ProductInfoInterface[]>([])
   const [isSuggestLoading, setIsSuggestLoading] = useState(false)
-  const [visibleCount, setVisibleCount] = useState(4) // Số lượng gợi ý hiển thị ban đầu
-  const scrollContainerRef = useRef<HTMLDivElement>(null) // Tạo một ref để gắn vào div cuộn
+  const [visibleCount, setVisibleCount] = useState(4)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // === THÊM STATE CHO RESPONSIVE ===
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
   const { dispatchAlert } = useAlertContext()
   const { dataHome, setDataHome } = useHome()
@@ -31,7 +35,6 @@ const useHeader = () => {
   const { cartDetail } = useCart()
 
   const [closeTopHeader, setCloseTopHeader] = useState<boolean>(() => {
-    // lấy từ sessionStorage khi khởi tạo
     const saved = sessionStorage.getItem('closeTopHeader')
     return saved === 'true'
   })
@@ -49,45 +52,51 @@ const useHeader = () => {
         setAccountUser(userRes.accountUser)
         setDataHome(homeRes)
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.log('error' + error)
       } finally {
         setLoading(false)
       }
     }
     fetchData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // === THÊM useEffect ĐỂ XỬ LÝ DEBOUNCE VÀ GỌI API GỢI Ý ===
+  // useEffect cho debounce
   useEffect(() => {
-    // Nếu không có từ khóa, xóa gợi ý và dừng lại
     if (!searchTerm.trim()) {
       setSuggestions([])
       return
     }
-
-    // Đặt một timer. Nếu người dùng tiếp tục gõ, timer cũ sẽ bị xóa.
     const delayDebounceFn = setTimeout(async () => {
       setIsSuggestLoading(true)
       try {
         const response = await fetchSearchSuggestionsAPI(searchTerm)
         if (response.code === 200) {
           setSuggestions(response.products)
-          setVisibleCount(4) // Reset lại số lượng hiển thị mỗi khi có kết quả mới
+          setVisibleCount(4)
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Lỗi khi fetch gợi ý:', error)
         setSuggestions([])
       } finally {
         setIsSuggestLoading(false)
       }
-    }, 300) // Chờ 300ms sau khi người dùng ngừng gõ
-
-    // Cleanup function: Xóa timer cũ mỗi khi inputValue thay đổi
+    }, 300)
     return () => clearTimeout(delayDebounceFn)
   }, [searchTerm])
+
+  // Khóa cuộn trang khi menu/search mobile mở
+  useEffect(() => {
+    if (isMobileMenuOpen || isMobileSearchOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+    // Cleanup khi component unmount
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isMobileMenuOpen, isMobileSearchOpen])
 
   const handleSearchTermChange = (newTerm: string) => {
     setSearchTerm(newTerm)
@@ -114,7 +123,6 @@ const useHeader = () => {
       })
     } else if (response.code === 400) {
       alert('error: ' + response.error)
-      return
     }
   }
 
@@ -125,20 +133,29 @@ const useHeader = () => {
 
   const handleSearchSubmit = () => {
     setSuggestions([])
+    setIsMobileSearchOpen(false) // Đóng search overlay khi submit
   }
 
-  // Hàm để xử lý khi click vào "Xem thêm"
   const handleShowMore = () => {
     setVisibleCount(prevCount => prevCount + 4)
   }
 
-  // Dùng useEffect để xử lý việc cuộn sau khi state đã được cập nhật và component đã render lại
   useEffect(() => {
-    // Cuộn xuống dưới cùng của div mỗi khi danh sách được mở rộng
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight
     }
-  }, [visibleCount]) // Chạy lại mỗi khi visibleCount thay đổi
+  }, [visibleCount])
+
+  // === HÀM MỞ/ĐÓNG MENU/SEARCH MOBILE ===
+  const toggleMobileMenu = () => {
+    setIsMobileSearchOpen(false) // Đóng search nếu mở nav
+    setIsMobileMenuOpen(prev => !prev)
+  }
+
+  const toggleMobileSearch = () => {
+    setIsMobileMenuOpen(false) // Đóng nav nếu mở search
+    setIsMobileSearchOpen(prev => !prev)
+  }
 
   return {
     loading,
@@ -164,8 +181,13 @@ const useHeader = () => {
     handleClose,
     anchorEl,
     setAnchorEl,
-    handleLogout
+    handleLogout,
+    isMobileMenuOpen,
+    isMobileSearchOpen,
+    toggleMobileMenu,
+    toggleMobileSearch
   }
 }
 
 export default useHeader
+
