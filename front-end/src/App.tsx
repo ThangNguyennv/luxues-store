@@ -74,6 +74,7 @@ import Search from './components/client/Search/Search'
 import DetailProductClient from './pages/client/Product/Detail'
 import DetailArticleClient from './pages/client/Article/Detail'
 import MyOrders from './pages/client/MyAccount/MyOrders'
+import HelpCenter from './pages/Client/HelpCenter/HelpCenter'
 
 function App() {
   useEffect(() => {
@@ -91,6 +92,7 @@ function App() {
           <Route path='/' element={<LayoutDefault />}>
             <Route index element={<Home />}/>
             <Route path='search' element={<Search />}/>
+            <Route path='help' element={<HelpCenter />} />
             <Route path='products'>
               <Route index element={<ProductClient />}/>
               <Route path=':slugCategory' element={<ProductCategory />}/>
