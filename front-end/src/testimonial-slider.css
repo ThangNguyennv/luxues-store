@@ -1,0 +1,28 @@
+/* Ẩn các mũi tên điều hướng mặc định của Swiper */
+.testimonial-swiper .swiper-button-next,
+.testimonial-swiper .swiper-button-prev {
+    display: none;
+}
+
+/* Tùy chỉnh các chấm phân trang (pagination dots) */
+.testimonial-swiper .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: #d1d5db;
+    /* Màu xám (gray-300) */
+    opacity: 1;
+    transition: all 0.3s;
+}
+
+.testimonial-swiper .swiper-pagination-bullet-active {
+    width: 24px;
+    border-radius: 5px;
+    background-color: #00171F;
+    /* Màu primary của bạn */
+}
+
+/* Đảm bảo các slide có cùng chiều cao */
+.testimonial-swiper .swiper-slide {
+    height: auto;
+    display: flex;
+}

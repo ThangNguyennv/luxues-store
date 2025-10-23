@@ -69,3 +69,8 @@ export const submitReviewAPI = async (productId: string, formData: FormData) => 
   )
   return response.data
 }
+
+export const fetchTopRatedReviewsAPI = async () => {
+  const response = await axios.get(`${API_ROOT}/products/reviews/top-rated`)
+  return response.data // Trả về { code, message, reviews }
+}
