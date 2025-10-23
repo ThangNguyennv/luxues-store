@@ -267,3 +267,63 @@ export const createReview = async (req: Request, res: Response) => {
     res.json({ code: 400, message: 'Lỗi!', error })
   }
 }
+
+// [GET] /products/reviews/top-rated
+export const getTopRatedReviews = async (req: Request, res: Response) => {
+  try {
+    const topReviews = await Product.aggregate([
+    // 1. Chỉ lấy sản phẩm có bình luận
+    { $match: { 'comments.0': { $exists: true } } },
+    // 2. Tách mảng comments thành các document riêng lẻ
+    { $unwind: '$comments' },
+    // 3. Lọc lấy comment 5 sao và đã được duyệt
+    {
+    $match: {
+    'comments.rating': 5,
+    'comments.status': 'approved'
+    }
+    },
+    // 4. Sắp xếp (ví dụ: mới nhất)
+    { $sort: { 'comments.createdAt': -1 } },
+    // 5. Giới hạn số lượng
+    { $limit: 10 },
+    // 6. Thay thế "root" (sản phẩm) bằng (comment)
+    { $replaceRoot: { newRoot: '$comments' } },
+    // 7. Lấy thông tin người dùng (tên)
+    {
+    $lookup: {
+    from: 'users', // Tên collection của User model
+    localField: 'user_id',
+    foreignField: '_id',
+    as: 'commentUser'
+    }
+    },
+    // 8. Định dạng lại output
+    {
+    $project: {
+      _id: 0,
+      // Giả sử model User có 'fullName'. Nếu không, hãy đổi thành 'username' v.v.
+      name: { $arrayElemAt: ['$commentUser.fullName', 0] },
+      quote: '$content',
+      rating: '$rating',
+      verified: { $literal: true } // Mặc định là đã xác minh (vì đã mua)
+      }
+    }
+   ])
+
+   // Xử lý trường hợp không tìm thấy tên
+   const formattedReviews = topReviews.map((review) => ({
+    ...review,
+    name: review.name || 'Người dùng ẩn danh'
+   }))
+
+   res.json({
+    code: 200,
+    message: 'Lấy đánh giá thành công!',
+    reviews: formattedReviews
+    })
+   } catch (error) {
+    console.error('LỖI KHI LẤY TOP REVIEWS:', error)
+   res.json({ code: 400, message: 'Lỗi!', error })
+  }
+}

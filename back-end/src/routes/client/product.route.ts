@@ -16,4 +16,5 @@ router.post(
   uploadCloud,
   controller.createReview // Một controller mới
 )
+router.get('/reviews/top-rated', controller.getTopRatedReviews)
 export const productRoutes: Router = router
