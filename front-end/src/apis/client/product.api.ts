@@ -2,17 +2,31 @@ import axios from 'axios'
 import type { ProductAllResponseInterface, ProductDetailInterface, ProductsWithCategoryDetailInterface } from '~/types/product.type'
 import { API_ROOT } from '~/utils/constants'
 
+export interface FetchProductParams {
+  page?: number
+  keyword?: string
+  sortKey?: string
+  sortValue?: string
+  category?: string
+  maxPrice?: string
+  color?: string
+  size?: string
+}
+
 export const fetchAllProductsAPI = async (
-  page: number,
-  currentKeyword: string,
-  currentSortKey: string,
-  currentSortValue: string
+  params: FetchProductParams = {}
 ): Promise<ProductAllResponseInterface> => {
   const queryParams = new URLSearchParams()
-  if (page) queryParams.set('page', page.toString())
-  if (currentKeyword) queryParams.set('keyword', currentKeyword)
-  if (currentSortKey) queryParams.set('sortKey', currentSortKey)
-  if (currentSortValue) queryParams.set('sortValue', currentSortValue)
+
+  // Tự động thêm các tham số vào URL nếu chúng tồn tại
+  if (params.page) queryParams.set('page', params.page.toString())
+  if (params.keyword) queryParams.set('keyword', params.keyword)
+  if (params.sortKey) queryParams.set('sortKey', params.sortKey)
+  if (params.sortValue) queryParams.set('sortValue', params.sortValue)
+  if (params.category) queryParams.set('category', params.category)
+  if (params.maxPrice) queryParams.set('maxPrice', params.maxPrice)
+  if (params.color) queryParams.set('color', params.color)
+  if (params.size) queryParams.set('size', params.size)
 
   const response = await axios.get(
     `${API_ROOT}/products?${queryParams.toString()}`
@@ -61,10 +75,9 @@ export const submitReviewAPI = async (productId: string, formData: FormData) => 
     formData,
     {
       headers: {
-        // Rất quan trọng khi gửi FormData chứa file
         'Content-Type': 'multipart/form-data'
       },
-      withCredentials: true // Để gửi cookie xác thực người dùng
+      withCredentials: true
     }
   )
   return response.data
@@ -72,5 +85,14 @@ export const submitReviewAPI = async (productId: string, formData: FormData) => 
 
 export const fetchTopRatedReviewsAPI = async () => {
   const response = await axios.get(`${API_ROOT}/products/reviews/top-rated`)
-  return response.data // Trả về { code, message, reviews }
+  return response.data
 }
+
+export const fetchFilterDataAPI = async () => {
+  const response = await axios.get(
+    `${API_ROOT}/products/filters`,
+    { withCredentials: true }
+  )
+  return response.data // Sẽ trả về { filters: { categories, colors, sizes, maxPrice } }
+}
+
