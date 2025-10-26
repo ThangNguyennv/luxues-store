@@ -55,15 +55,15 @@ const permissionSections = [
       { key: 'articles_delete', label: 'Xóa' }
     ]
   },
-  {
-    title: 'Danh mục thương hiệu',
-    permissions: [
-      { key: 'brands-category_view', label: 'Xem' },
-      { key: 'brands-category_create', label: 'Thêm mới' },
-      { key: 'brands-category_edit', label: 'Chỉnh sửa' },
-      { key: 'brands-category_delete', label: 'Xóa' }
-    ]
-  },
+  // {
+  //   title: 'Danh mục thương hiệu',
+  //   permissions: [
+  //     { key: 'brands-category_view', label: 'Xem' },
+  //     { key: 'brands-category_create', label: 'Thêm mới' },
+  //     { key: 'brands-category_edit', label: 'Chỉnh sửa' },
+  //     { key: 'brands-category_delete', label: 'Xóa' }
+  //   ]
+  // },
   {
     title: 'Danh sách thương hiệu',
     permissions: [

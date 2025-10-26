@@ -144,9 +144,9 @@ const Sidebar = () => {
                 `}
               >
                 <ul className="flex flex-col gap-2 items-center">
-                  <li className="border-b border-[#9D9995] pb-[7px]">
+                  {/* <li className="border-b border-[#9D9995] pb-[7px]">
                     <Link to={'/admin/brands-category'}>Danh mục thương hiệu</Link>
-                  </li>
+                  </li> */}
                   <li className="border-b border-[#9D9995] pb-[7px]">
                     <Link to={'/admin/brands'}>Danh sách thương hiệu</Link>
                   </li>
