@@ -37,7 +37,6 @@ export default function SliderWrapper ({
   loading = false // Mặc định không loading
 }: SliderWrapperProps) {
 
-  // Component Skeleton Card
   const CardItemSkeleton = () => (
     <div className="flex flex-col items-center gap-[15px] rounded-[5px] border border-gray-200 bg-white p-[10px] text-center h-full">
       <Skeleton variant="rectangular" width="100%" height={250} />

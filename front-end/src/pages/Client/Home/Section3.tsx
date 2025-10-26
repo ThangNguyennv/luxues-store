@@ -12,8 +12,8 @@ const Section3 = () => {
       {/* Section 3 */}
       <div className="sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
-          <BoxHead title={'Thời trang mới'}/>
-          <SliderWrapper items={dataHome?.productsNew || []} loading={isLoading} />
+          <BoxHead title={'Sản phẩm mới'}/>
+          <SliderWrapper items={dataHome.productsNew || []} loading={isLoading} />
           <div className="text-center sm:mt-[40px] mt-[30px]">
             <Link
               className="
