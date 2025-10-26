@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { MdDashboard } from 'react-icons/md'
-import { MdCategory } from 'react-icons/md'
 import { FaProductHunt } from 'react-icons/fa'
 import { FaCodeBranch } from 'react-icons/fa'
 import { MdArticle } from 'react-icons/md'
@@ -18,7 +17,6 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isOpenAccount, setIsOpenAccount] = useState(false)
   const [isOpenSetting, setIsOpenSetting] = useState(false)
-  const [isOpenCategory, setIsOpenCategory] = useState(false)
   const [isOpenProduct, setIsOpenProduct] = useState(false)
   const [isOpenBranch, setIsOpenBranch] = useState(false)
   const [isOpenArticle, setIsOpenArticle] = useState(false)
@@ -90,40 +88,6 @@ const Sidebar = () => {
           </div>
           {/* Hết tổng quan */}
 
-          {/* Danh mục */}
-          {role && role.permissions.includes('products-category_view') && role.permissions.includes('accessories-category_view') && (
-            <div
-              className='hover-sidebar flex flex-col text-white cursor-pointer'
-              onClick={() => setIsOpenCategory(!isOpenCategory)}
-            >
-              <div className='title-sidebar flex justify-between items-center p-[5px]'>
-                <div className='flex items-center justify-start gap-[15px]'>
-                  <MdCategory className='text-[18px]'/>
-                  <p>Danh mục</p>
-                </div>
-                {isOpen && (
-                  <span>{isOpenCategory ? <FaChevronUp /> : <FaChevronDown />}</span>
-                )}
-              </div>
-              <div
-                className={`
-                  overflow-hidden transition-all duration-700 ease-in-out
-                  ${isOpenCategory ? 'max-h-40 mt-2' : 'max-h-0'}
-                `}
-              >
-                <ul className="flex flex-col gap-2 items-center">
-                  <li className="border-b border-[#9D9995] pb-[7px]">
-                    <Link to={'/admin/products-category'}>Danh mục sản phẩm</Link>
-                  </li>
-                  <li className="border-b border-[#9D9995] pb-[7px]">
-                    <Link to={'/admin/accessories-category'}>Danh mục phụ kiện</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          )}
-          {/* Hết danh mục */}
-
           {/* Sản phẩm */}
           {role && role.permissions.includes('products_view') && role.permissions.includes('accessories_view') && (
             <div
@@ -147,10 +111,10 @@ const Sidebar = () => {
               >
                 <ul className="flex flex-col gap-2 items-center">
                   <li className="border-b border-[#9D9995] pb-[7px]">
-                    <Link to={'/admin/products'}>Danh sách sản phẩm</Link>
+                    <Link to={'/admin/products-category'}>Danh mục sản phẩm</Link>
                   </li>
                   <li className="border-b border-[#9D9995] pb-[7px]">
-                    <Link to={'/admin/accessories'}>Danh sách phụ kiện</Link>
+                    <Link to={'/admin/products'}>Danh sách sản phẩm</Link>
                   </li>
                 </ul>
               </div>
@@ -344,10 +308,7 @@ const Sidebar = () => {
             <MdDashboard />
             {role && (
               <>
-                {role.permissions.includes('products-category_view') && role.permissions.includes('accessories-category_view') && (
-                  <MdCategory />
-                )}
-                {role.permissions.includes('products_view') && role.permissions.includes('accessories_view') && (
+                {role.permissions.includes('products-category_view') && role.permissions.includes('products_view') && (
                   <FaProductHunt />
                 )}
                 {role.permissions.includes('brands-category_view') && role.permissions.includes('brands_view') && (

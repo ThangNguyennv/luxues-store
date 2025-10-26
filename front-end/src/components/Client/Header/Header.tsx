@@ -150,7 +150,7 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="lg:block hidden">
-              <ul className="menu flex xl:gap-x-[17px] gap-x-[10px] font-[400] xl:text-[16px] lg:text-[14px] text-[13px] text-black">
+              <ul className="menu flex xl:gap-x-[17px] gap-x-[10px] font-[400] lg:text-[16px] text-[13px] text-black">
                 <li>
                   <Link to="/">Trang chủ</Link>
                 </li>
@@ -206,14 +206,14 @@ const Header = () => {
                     </motion.div>
                   )}
                 </li>
-                <li>
+                {/* <li>
                   <Link to={''} className='flex items-center gap-[5px]'>
                     <span>Phụ kiện</span>
                     <IoChevronDown />
                   </Link>
-                </li>
+                </li> */}
                 <li>
-                  <Link to={''} className='flex items-center gap-[5px]'>
+                  <Link to={'/brands'} className='flex items-center gap-[5px]'>
                     <span>Thương hiệu</span>
                     <IoChevronDown />
                   </Link>
@@ -541,7 +541,7 @@ const Header = () => {
 
                   <li>
                     <Link
-                      to={''}
+                      to={'/brands'}
                       onClick={toggleMobileMenu}
                       className="block py-3 px-4 hover:bg-[#E0F2FE] rounded-lg"
                     >

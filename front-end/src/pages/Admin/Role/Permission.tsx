@@ -73,24 +73,24 @@ const permissionSections = [
       { key: 'brands_delete', label: 'Xóa' }
     ]
   },
-  {
-    title: 'Danh mục phụ kiện',
-    permissions: [
-      { key: 'accessories-category_view', label: 'Xem' },
-      { key: 'accessories-category_create', label: 'Thêm mới' },
-      { key: 'accessories-category_edit', label: 'Chỉnh sửa' },
-      { key: 'accessories-category_delete', label: 'Xóa' }
-    ]
-  },
-  {
-    title: 'Danh sách phụ kiện',
-    permissions: [
-      { key: 'accessories_view', label: 'Xem' },
-      { key: 'accessories_create', label: 'Thêm mới' },
-      { key: 'accessories_edit', label: 'Chỉnh sửa' },
-      { key: 'accessories_delete', label: 'Xóa' }
-    ]
-  },
+  // {
+  //   title: 'Danh mục phụ kiện',
+  //   permissions: [
+  //     { key: 'accessories-category_view', label: 'Xem' },
+  //     { key: 'accessories-category_create', label: 'Thêm mới' },
+  //     { key: 'accessories-category_edit', label: 'Chỉnh sửa' },
+  //     { key: 'accessories-category_delete', label: 'Xóa' }
+  //   ]
+  // },
+  // {
+  //   title: 'Danh sách phụ kiện',
+  //   permissions: [
+  //     { key: 'accessories_view', label: 'Xem' },
+  //     { key: 'accessories_create', label: 'Thêm mới' },
+  //     { key: 'accessories_edit', label: 'Chỉnh sửa' },
+  //     { key: 'accessories_delete', label: 'Xóa' }
+  //   ]
+  // },
   {
     title: 'Nhóm quyền',
     permissions: [

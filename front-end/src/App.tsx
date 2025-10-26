@@ -60,8 +60,6 @@ import Checkout from './pages/client/Checkout'
 import Success from './pages/client/Checkout/Success'
 import OrderAdmin from './pages/admin/Order'
 import DetailOrder from './pages/admin/Order/Detail'
-import Brand from './pages/admin/Brand'
-import BrandCategory from './pages/admin/BrandCategory'
 import Notification from './pages/admin/Notification'
 import ProductCategory from './pages/client/Product/Category'
 import ProductsNew from './pages/client/Product/ProductsNew'
@@ -76,6 +74,13 @@ import DetailArticleClient from './pages/client/Article/Detail'
 import MyOrders from './pages/client/MyAccount/MyOrders'
 import HelpCenter from './pages/client/HelpCenter/HelpCenter'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+import BrandAdmin from './pages/admin/Brand/BrandAdmin'
+import BrandCategoryAdmin from './pages/admin/BrandCategory/BrandCategoryAdmin'
+import CreateBrandCategory from './pages/admin/BrandCategory/CreateBrandCategory'
+import EditBrandCategory from './pages/admin/BrandCategory/EditBrandCategory'
+import CreateBrand from './pages/admin/Brand/CreateBrand'
+import EditBrand from './pages/admin/Brand/EditBrand'
+import BrandPage from './pages/client/Brand/Brand'
 
 function App() {
   useEffect(() => {
@@ -95,6 +100,7 @@ function App() {
             <Route index element={<Home />}/>
             <Route path='search' element={<Search />}/>
             <Route path='help' element={<HelpCenter />} />
+            <Route path='brands' element={<BrandPage />}/>
             <Route path='products'>
               <Route index element={<ProductClient />}/>
               <Route path=':slugCategory' element={<ProductCategory />}/>
@@ -147,10 +153,16 @@ function App() {
             </Route>
             <Route path='notification' element={<Notification />}/>
             <Route path='brands'>
-              <Route index element={<Brand />}/>
+              <Route index element={<BrandAdmin />}/>
+              <Route path='create' element={ <CreateBrand />}/>
+              <Route path='edit/:id' element={ <EditBrand />}/>
+              {/* <Route path='detail/:id' element={ <DetailBrand />}/> */}
             </Route>
             <Route path='brands-category'>
-              <Route index element={<BrandCategory />}/>
+              <Route index element={<BrandCategoryAdmin />}/>
+              <Route path='create' element={<CreateBrandCategory />}/>
+              <Route path='edit/:id' element={<EditBrandCategory />}/>
+              {/* <Route path='detail/:id' element={<DetailBrandCategory />}/> */}
             </Route>
             <Route path='products'>
               <Route index element={ <ProductAdmin />}/>
