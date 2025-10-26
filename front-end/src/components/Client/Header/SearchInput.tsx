@@ -1,21 +1,18 @@
-import { memo } from 'react'
+import { memo, type FormEvent } from 'react'
 import { IoSearch } from 'react-icons/io5'
 import type { SearchInputProps } from '~/hooks/client/components/searchInput/useSearchInput'
-import useSearchInput from '~/hooks/client/components/searchInput/useSearchInput'
 import clsx from 'clsx'
 
-interface SearchInputComponentProps extends SearchInputProps {
-  isMobile?: boolean
-}
 
-const SearchInput = ({ onSearchSubmit, onTermChange, isMobile = false }: SearchInputComponentProps) => {
-  const {
-    handleSubmit,
-    handleChangeKeyword,
-    inputValue
-  } = useSearchInput({ onSearchSubmit, onTermChange })
-
-  // 3. Tạo class động
+const SearchInput = ({ onSearchSubmit, onTermChange, inputValue, isMobile = false }: SearchInputProps) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    onSearchSubmit()
+  }
+  const handleChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onTermChange(event.target.value)
+  }
+  // Tạo class động
   const formClassName = clsx(
     'flex items-center gap-x-[12px] px-[16px] py-[10px] bg-[#F0F0F0] rounded-[62px] text-[16px]',
     isMobile

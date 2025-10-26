@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import { fetchLogoutAPI } from '~/apis/client/auth.api'
 import type { UserInfoInterface } from '~/types/user.type'
@@ -14,12 +14,13 @@ import { fetchSearchSuggestionsAPI } from '~/apis/client/product.api'
 
 const useHeader = () => {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [accountUser, setAccountUser] = useState<UserInfoInterface | null>(null)
   const [loading, setLoading] = useState(false)
   const [openProduct, setOpenProduct] = useState(false)
   const [openArticle, setOpenArticle] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('keyword') || '')
   const [suggestions, setSuggestions] = useState<ProductInfoInterface[]>([])
   const [isSuggestLoading, setIsSuggestLoading] = useState(false)
   const [visibleCount, setVisibleCount] = useState(4)
@@ -98,6 +99,11 @@ const useHeader = () => {
     }
   }, [isMobileMenuOpen, isMobileSearchOpen])
 
+  // Đồng bộ state với URL (nếu người dùng bấm back/forward)
+  useEffect(() => {
+    setSearchTerm(searchParams.get('keyword') || '')
+  }, [searchParams])
+
   const handleSearchTermChange = (newTerm: string) => {
     setSearchTerm(newTerm)
   }
@@ -134,6 +140,22 @@ const useHeader = () => {
   const handleSearchSubmit = () => {
     setSuggestions([])
     setIsMobileSearchOpen(false) // Đóng search overlay khi submit
+
+    // Thêm logic điều hướng
+    const newParams = new URLSearchParams(searchParams)
+    if (searchTerm) {
+      newParams.set('keyword', searchTerm)
+    } else {
+      newParams.delete('keyword')
+    }
+    newParams.set('page', '1')
+
+    // Nếu đang ở trang khác, chuyển về /search. Nếu đã ở /search, chỉ cập nhật URL
+    if (!window.location.pathname.startsWith('/search')) {
+      navigate(`/search?${newParams.toString()}`)
+    } else {
+      setSearchParams(newParams)
+    }
   }
 
   const handleShowMore = () => {
@@ -185,7 +207,8 @@ const useHeader = () => {
     isMobileMenuOpen,
     isMobileSearchOpen,
     toggleMobileMenu,
-    toggleMobileSearch
+    toggleMobileSearch,
+    searchTerm
   }
 }
 

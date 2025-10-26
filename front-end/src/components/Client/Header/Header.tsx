@@ -47,7 +47,8 @@ const Header = () => {
     isMobileMenuOpen,
     isMobileSearchOpen,
     toggleMobileMenu,
-    toggleMobileSearch
+    toggleMobileSearch,
+    searchTerm
   } = useHeader()
 
   return (
@@ -269,6 +270,7 @@ const Header = () => {
               <SearchInput
                 onSearchSubmit={handleSearchSubmit}
                 onTermChange={handleSearchTermChange}
+                inputValue={searchTerm}
               />
 
               {suggestions.length > 0 && (
@@ -667,6 +669,7 @@ const Header = () => {
                 <SearchInput
                   onSearchSubmit={handleSearchSubmit}
                   onTermChange={handleSearchTermChange}
+                  inputValue={searchTerm}
                   isMobile={true}
                 />
               </div>
