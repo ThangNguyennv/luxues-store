@@ -1,0 +1,56 @@
+import mongoose from 'mongoose'
+import slug from 'mongoose-slug-updater'
+
+mongoose.plugin(slug)
+
+const brandSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    brand_category_id: {
+      type: String,
+      default: ''
+      // Tùy chọn: bạn có thể dùng 'ref' nếu muốn populate
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: 'BrandCategory'
+    },
+    description: String,
+    thumbnail: String, // Dùng để lưu logo
+    status: {
+      type: String,
+      enum: ['active', 'inactive'],
+      default: 'active'
+    },
+    slug: {
+      type: String,
+      slug: 'title', 
+      unique: true 
+    },
+    deleted: {
+      type: Boolean,
+      default: false
+    },
+    createdBy: {
+      account_id: String,
+    },
+    deletedBy: {
+      account_id: String,
+      deletedAt: Date
+    },
+    updatedBy: [
+      {
+        account_id: String,
+        updatedAt: Date
+      }
+    ]
+  },
+  {
+    timestamps: true
+  }
+)
+
+const Brand = mongoose.model('Brand', brandSchema, 'brands')
+
+export default Brand

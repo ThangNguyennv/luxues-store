@@ -13,6 +13,7 @@ import { cartRoutes } from './cart.route'
 import { checkoutRoutes } from './checkout.route'
 import { userRoutes } from './user.route'
 import { settingRoutes } from './setting.route'
+import { brandClientRoutes } from './brand.route'
 // import chatRoutes from "./chat.route";
 
 const routeClient = (app: Express): void => {
@@ -25,6 +26,7 @@ const routeClient = (app: Express): void => {
   app.use('/', homeRoutes)
   app.use('/products', productRoutes)
   app.use('/articles', articleRoutes)
+  app.use('/brands', brandClientRoutes)
   app.use('/search', searchRoutes)
   app.use('/cart', cartMiddleware.cartId, cartRoutes)
   app.use('/checkout', cartMiddleware.cartId, checkoutRoutes)
