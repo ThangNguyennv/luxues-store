@@ -7,6 +7,7 @@ import { uploadCloud } from '~/middlewares/admin/uploadCloud.middleware'
 // Upload ảnh
 router.get('/', controller.index)
 router.get('/suggestions', controller.getSearchSuggestions)
+router.get('/filters', controller.getFilters)
 router.get('/:slugCategory', controller.category)
 router.get('/detail/:slugProduct', controller.detail)
 router.get('/related/:productId', controller.getRelatedProducts); // <-- THÊM DÒNG NÀY

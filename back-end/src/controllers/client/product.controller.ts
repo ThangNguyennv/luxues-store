@@ -6,6 +6,21 @@ import { OneProduct } from '~/helpers/product'
 import paginationHelpers from '~/helpers/pagination'
 import searchHelpers from '~/helpers/search'
 
+const getSubCategory = async (parentId: string) => {
+  const subs = await ProductCategory.find({
+    deleted: false,
+    status: 'active',
+    parent_id: parentId
+  })
+  let allSub = [...subs]
+
+  for (const sub of subs) {
+    const childs = await getSubCategory(sub.id)
+    allSub = allSub.concat(childs)
+  }
+  return allSub
+}
+
 // [GET] /products
 export const index = async (req: Request, res: Response) => {
   try {
@@ -21,23 +36,94 @@ export const index = async (req: Request, res: Response) => {
     }
     // End search
     
-    // Pagination
-    const countProducts = await Product.countDocuments(find)
+    if (req.query.category) {
+      const categorySlug = req.query.category.toString()
+      const category = await ProductCategory.findOne({
+        slug: categorySlug,
+        status: 'active',
+        deleted: false
+      })
+
+      if (category) {
+      // SỬ DỤNG HÀM ĐỆ QUY `getSubCategory`
+      // Lấy tất cả ID của danh mục con (Cấp 2, 3, 4...)
+      const listSubCategory = await getSubCategory(category.id)
+      const listSubCategoryId = listSubCategory.map((item) => item.id)
+        // Tìm sản phẩm có ID nằm trong danh mục cha (Cấp 1) HOẶC bất kỳ danh mục con nào
+        find.product_category_id = { $in: [category.id, ...listSubCategoryId] }
+      } else {
+        return res.json({ code: 200, message: 'Danh mục không tồn tại.', products: [], pagination: {} })
+      }
+    }
+
+    if (req.query.maxPrice) {
+      find.price = { $lte: parseInt(req.query.maxPrice.toString()) }
+    }
+
+    if (req.query.color) {
+      find['colors.name'] = req.query.color.toString()
+    }
+
+    if (req.query.size) {
+      find.sizes = req.query.size.toString()
+    }
+
+    const currentPage = parseInt(req.query.page as string) || 1
+    const limitItems = 16 // Số sản phẩm mỗi trang
+    const skip = (currentPage - 1) * limitItems
+    const sort = {}
+    const sortKey = req.query.sortKey as string || 'position' // Mặc định sort theo 'position'
+    const sortValue = req.query.sortValue === 'asc' ? 1 : -1 // Chuyển 'asc'/'desc' thành 1/-1
+
+    sort[sortKey] = sortValue
+
+    // XÂY DỰNG AGGREGATION PIPELINE
+    const pipeline: any[] = [
+      // Lọc sản phẩm
+      { $match: find },
+      // Tạo trường 'discountedPrice' (giá khuyến mãi)
+      {
+        $addFields: {
+          discountedPrice: {
+            $floor: { // Giống Math.floor
+              $multiply: [
+                '$price',
+                { $divide: [{ $subtract: [100, '$discountPercentage'] }, 100] }
+              ]
+            }
+          }
+        }
+      }
+    ]
+
+    // CHẠY PIPELINE ĐỂ LẤY DỮ LIỆU VÀ TỔNG SỐ LƯỢNG
+    // Dùng $facet để chạy 2 truy vấn con song song: 1. đếm, 2. lấy dữ liệu đã phân trang
+    const aggregationResult = await Product.aggregate([
+      ...pipeline,
+      {
+        $facet: {
+          // Pipeline con 1: Lấy tổng số sản phẩm (sau khi lọc)
+          count: [
+            { $count: 'total' }
+          ],
+          // Pipeline con 2: Sắp xếp, bỏ qua và giới hạn để lấy đúng trang
+          data: [
+            { $sort: sort },
+            { $skip: skip },
+            { $limit: limitItems }
+          ]
+        }
+      }
+    ])
+
+    const products = aggregationResult[0].data
+    const countProducts = aggregationResult[0].count[0]?.total || 0
+
     const objectPagination = paginationHelpers(
-      { currentPage: 1, limitItems: 16 },
+      { currentPage, limitItems },
       req.query,
       countProducts
     )
-    // End Pagination
-
-    const allProducts = await Product
-      .find(find)
-      .sort({ position: 'desc' })
-    const products = await Product
-      .find(find)
-      .sort({ position: 'desc' })
-      .limit(objectPagination.limitItems)
-      .skip(objectPagination.skip)
 
     const newProducts = productsHelper.priceNewProducts(
       products as OneProduct[]
@@ -48,7 +134,7 @@ export const index = async (req: Request, res: Response) => {
       message: 'Thành công!',
       products: newProducts,
       pagination: objectPagination,
-      allProducts: allProducts,
+      allProducts: [],
       keyword: objectSearch.keyword,
     })
   } catch (error) {
@@ -60,6 +146,85 @@ export const index = async (req: Request, res: Response) => {
   }
 }
 
+// [GET] /products/filters
+export const getFilters = async (req: Request, res: Response) => {
+  try {
+    // Chạy 2 tác vụ lấy dữ liệu song song, thay vì nối tiếp
+    const [categories, productAggregations] = await Promise.all([
+      // Tác vụ 1: Lấy danh mục Cấp 1
+      ProductCategory
+        .find({
+          deleted: false, status: 'active',
+          $or: [{ parent_id: null }, { parent_id: '' }] // Chỉ lấy danh mục gốc
+        })
+        .select('title slug _id')
+        .sort({ position: 1, title: 1 })
+        .lean(),
+
+      // Tác vụ 2: Chạy aggregation trên sản phẩm
+      Product.aggregate([
+        { $match: { deleted: false, status: 'active' } },
+        // Dùng $facet để chạy 3 pipeline con song song mà không làm bùng nổ dữ liệu
+        {
+          $facet: {
+            // Pipeline con 1: Lấy tất cả màu sắc
+            'allColors': [
+              { $unwind: '$colors' },
+              // Nhóm theo mã màu để đảm bảo tính duy nhất
+              { $group: { _id: '$colors.code', name: { $first: '$colors.name' } } },
+              { $project: { _id: 0, name: '$name', code: '$_id' } },
+              { $sort: { name: 1 } } // Sắp xếp theo tên
+            ],
+            // Pipeline con 2: Lấy tất cả kích cỡ
+            'allSizes': [
+              { $unwind: '$sizes' },
+              { $match: { sizes: { $nin: ['', null] } } }, 
+              { $group: { _id: '$sizes' } },
+              { $sort: { _id: 1 } }, // Sắp xếp A-Z
+              { $project: { _id: 0, name: '$_id' } }
+            ],
+            // Pipeline con 3: Lấy giá cao nhất
+            'maxPrice': [
+              { $group: { _id: null, max: { $max: '$price' } } }
+            ]
+          }
+        }
+      ])
+    ])
+    // 4. XỬ LÝ KẾT QUẢ TỪ $facet
+    const filterData = productAggregations[0]
+    if (!filterData) {
+      // Trả về dữ liệu rỗng nếu không có sản phẩm nào trong DB
+      return res.json({
+        code: 200,
+        message: 'Lấy dữ liệu filter thành công!',
+        filters: {
+          categories: categories || [],
+          colors: [],
+          sizes: [],
+          maxPrice: 5000000 
+        }
+      });
+    }
+    const colors = filterData.allColors
+    const sizes = filterData.allSizes.map(s => s.name) // Lấy tên từ object
+    const maxPrice = filterData.maxPrice[0]?.max || 5000000 // Lấy giá trị, hoặc 5 triệu nếu không có sản phẩm nào
+
+    res.json({
+      code: 200,
+      message: 'Lấy dữ liệu filter thành công!',
+      filters: {
+        categories: categories || [],
+        colors: colors || [],
+        sizes: sizes || [],
+        maxPrice: maxPrice
+      }
+    })
+ } catch (error) {
+    res.json({ code: 400, message: 'Lỗi!', error: error })
+ }
+}
+
 // [GET] /products/:slugCategory
 export const category = async (req: Request, res: Response) => {
   try {
@@ -68,21 +233,6 @@ export const category = async (req: Request, res: Response) => {
       status: 'active',
       deleted: false
     })
-
-    const getSubCategory = async (parentId) => {
-      const subs = await ProductCategory.find({
-        deleted: false,
-        status: 'active',
-        parent_id: parentId
-      })
-      let allSub = [...subs] // Cú pháp trải ra (spread syntax)
-
-      for (const sub of subs) {
-        const childs = await getSubCategory(sub.id) // Gọi đệ quy để lấy tất cả các danh mục con
-        allSub = allSub.concat(childs) // Nối mảng con vào mảng cha
-      }
-      return allSub
-    }
 
     const listSubCategory = await getSubCategory(category.id)
 
@@ -125,6 +275,7 @@ export const detail = async (req: Request, res: Response) => {
     const product = await Product
       .findOne(find)
       .populate('comments.user_id')
+
     if (product.product_category_id) {
       const category = await ProductCategory.findOne({
         _id: product.product_category_id,
@@ -166,7 +317,7 @@ export const getSearchSuggestions = async (req: Request, res: Response) => {
     const products = await Product
       .find(find)
       .select('title thumbnail price discountPercentage slug')
-      .limit(20)
+      .limit(10)
 
     const newProducts = productsHelper.priceNewProducts(
       products as OneProduct[]
@@ -278,10 +429,10 @@ export const getTopRatedReviews = async (req: Request, res: Response) => {
     { $unwind: '$comments' },
     // 3. Lọc lấy comment 5 sao và đã được duyệt
     {
-    $match: {
-    'comments.rating': 5,
-    'comments.status': 'approved'
-    }
+      $match: {
+      'comments.rating': 5,
+      'comments.status': 'approved'
+      }
     },
     // 4. Sắp xếp (ví dụ: mới nhất)
     { $sort: { 'comments.createdAt': -1 } },
@@ -291,12 +442,12 @@ export const getTopRatedReviews = async (req: Request, res: Response) => {
     { $replaceRoot: { newRoot: '$comments' } },
     // 7. Lấy thông tin người dùng (tên)
     {
-    $lookup: {
-    from: 'users', // Tên collection của User model
-    localField: 'user_id',
-    foreignField: '_id',
-    as: 'commentUser'
-    }
+      $lookup: {
+      from: 'users', // Tên collection của User model
+      localField: 'user_id',
+      foreignField: '_id',
+      as: 'commentUser'
+      }
     },
     // 8. Định dạng lại output
     {
