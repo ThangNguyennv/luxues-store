@@ -5,16 +5,16 @@ import { useHome } from '~/contexts/client/HomeContext'
 
 const Section4 = () => {
   const { dataHome } = useHome()
+  const isLoading = !dataHome || !dataHome.productsFeatured
+
   return (
     <>
       {/* Section 4 */}
       <div className="border-t border-[#0000001A] sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
           <BoxHead title={'Sản phẩm nổi bật'}/>
-          {dataHome?.productsFeatured && (
-            <SliderWrapper items={dataHome.productsFeatured} />
-          )}
-          <div className="text-center sm:bt-[40px] mt-[30px]">
+          <SliderWrapper items={dataHome.productsFeatured || []} loading={isLoading} />
+          <div className="text-center sm:mt-[40px] mt-[30px]">
             <Link
               className="
                 nav-link border border-[#0000001A]

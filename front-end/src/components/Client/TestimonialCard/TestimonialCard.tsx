@@ -33,7 +33,7 @@ const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
 
         {/* Nội dung Cảm nhận */}
         <p className="mt-3 text-sm leading-relaxed text-gray-600 line-clamp-5">
-          {testimonial.quote}
+          &quot;{testimonial.quote}&quot;
         </p>
       </div>
     </div>

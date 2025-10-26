@@ -5,17 +5,16 @@ import BoxHead from '~/components/client/BoxHead/BoxHead'
 
 const Section3 = () => {
   const { dataHome } = useHome()
+  const isLoading = !dataHome || !dataHome.productsNew
+
   return (
     <>
       {/* Section 3 */}
-      <div
-        className="sm:pb-[62px] pb-[40px]">
+      <div className="sm:pb-[62px] pb-[40px]">
         <div className="container mx-auto px-[16px]">
           <BoxHead title={'Thời trang mới'}/>
-          {dataHome?.productsNew && (
-            <SliderWrapper items={dataHome.productsNew} />
-          )}
-          <div className="text-center sm:bt-[40px] mt-[30px]">
+          <SliderWrapper items={dataHome?.productsNew || []} loading={isLoading} />
+          <div className="text-center sm:mt-[40px] mt-[30px]">
             <Link
               className="
                 nav-link border border-[#0000001A]

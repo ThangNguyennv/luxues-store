@@ -74,7 +74,8 @@ import Search from './components/client/Search/Search'
 import DetailProductClient from './pages/client/Product/Detail'
 import DetailArticleClient from './pages/client/Article/Detail'
 import MyOrders from './pages/client/MyAccount/MyOrders'
-import HelpCenter from './pages/Client/HelpCenter/HelpCenter'
+import HelpCenter from './pages/client/HelpCenter/HelpCenter'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 
 function App() {
   useEffect(() => {
@@ -88,6 +89,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path='/' element={<LayoutDefault />}>
             <Route index element={<Home />}/>
