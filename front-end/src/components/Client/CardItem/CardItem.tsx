@@ -26,18 +26,16 @@ const CardItem = ({ item }: CardItemProps) => {
     return stars
   }
 
+  const price = item.price ?? 0
+  const discountPercentage = item.discountPercentage ?? 0
+  const averageRating = item.stars?.average ?? 0
   const formatCurrency = (amount: number) => {
     return amount.toLocaleString('vi-VN') + 'đ'
   }
 
-  const price = item.price ?? 0
-  const discountPercentage = item.discountPercentage ?? 0
-  const stars = item.stars?.average ?? 0
-  // Tính giá sau khi giảm giá
   const discountedPrice = (price > 0 && discountPercentage > 0)
     ? Math.floor(price * (100 - discountPercentage) / 100)
     : price
-
   return (
     <motion.div
       whileHover={{ y: -5, scale: 1.02 }} // Hiệu ứng hover mượt mà hơn
@@ -50,9 +48,10 @@ const CardItem = ({ item }: CardItemProps) => {
           Nổi bật
         </div>
       )}
-      {item.discountPercentage && item.discountPercentage > 0 && (
+
+      {discountPercentage > 0 && (
         <div className="absolute right-0 top-0 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-tr-md rounded-bl-md z-50">
-          -{item.discountPercentage}%
+          -{discountPercentage}%
         </div>
       )}
 
@@ -71,27 +70,25 @@ const CardItem = ({ item }: CardItemProps) => {
 
         {/* Phần đánh giá sao */}
         <div className="flex items-center gap-1 text-sm text-gray-600">
-          {renderStars(stars)}
+          {renderStars(averageRating)}
           <span className="ml-1 text-gray-500">
-            {stars.toFixed(1)}/5
+            {(averageRating).toFixed(1)}/5
           </span>
         </div>
 
         {/* Phần giá */}
-        {item.price !== undefined && (
-          <div className="mt-2 flex items-center gap-2 text-lg font-bold">
-            {item.discountPercentage && item.discountPercentage > 0 ? (
-              <>
-                <span className="text-red-600">{formatCurrency(discountedPrice!)}</span>
-                <span className="text-gray-400 line-through text-sm font-normal">
-                  {formatCurrency(item.price)}
-                </span>
-              </>
-            ) : (
-              <span className="text-gray-800">{formatCurrency(item.price)}</span>
-            )}
-          </div>
-        )}
+        <div className="mt-2 flex items-center justify-center gap-2 text-lg font-bold min-h-[28px]">
+          {discountPercentage > 0 ? (
+            <>
+              <span className="text-red-600">{formatCurrency(discountedPrice)}</span>
+              <span className="text-gray-400 line-through text-sm font-normal">
+                {formatCurrency(price)}
+              </span>
+            </>
+          ) : (
+            <span className="text-gray-800">{formatCurrency(price)}</span>
+          )}
+        </div>
       </div>
     </motion.div>
   )
