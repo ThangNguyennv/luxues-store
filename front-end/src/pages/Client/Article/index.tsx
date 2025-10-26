@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import BoxHead from '~/components/client/BoxHead/BoxHead'
-import CardItem from '~/components/client/CardItem/CardItem'
 import Pagination from '~/components/admin/Pagination/Pagination'
 import useIndex from '~/hooks/client/article/useIndex'
+import ArticleCard from '~/components/client/ArticleCard/ArticleCard'
 
 const ArticleClient = () => {
   const {
@@ -20,7 +20,7 @@ const ArticleClient = () => {
             <div className='grid grid-cols-4 gap-[15px]'>
               {articles.map((article, index) => (
                 <Link to={`/articles/detail/${article.slug}`} key={index}>
-                  <CardItem {...article}/>
+                  <ArticleCard item={article}/>
                 </Link>
               ))}
             </div>

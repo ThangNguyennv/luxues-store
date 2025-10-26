@@ -23,7 +23,7 @@ const CardItemSkeleton = () => (
 
 const ProductClient = () => {
   const { stateProduct, fetchProduct } = useProductContext()
-  const { products, pagination, loading, allProducts } = stateProduct
+  const { products, pagination, loading } = stateProduct
   const [searchParams, setSearchParams] = useSearchParams()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [isSortOpen, setIsSortOpen] = useState(false)

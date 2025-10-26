@@ -44,13 +44,13 @@ const CardItem = ({ item }: CardItemProps) => {
     >
       {/* Tag nổi bật */}
       {item.featured === '1' && (
-        <div className="absolute left-[-5px] top-[15px] rounded-r-lg bg-[#0542AB] px-3 py-1 text-xs font-semibold uppercase text-white shadow-md z-50">
+        <div className="absolute left-[-5px] top-[15px] rounded-r-lg bg-[#0542AB] px-3 py-1 text-xs font-semibold uppercase text-white shadow-md z-[500]">
           Nổi bật
         </div>
       )}
 
       {discountPercentage > 0 && (
-        <div className="absolute right-0 top-0 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-tr-md rounded-bl-md z-50">
+        <div className="absolute right-0 top-0 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-tr-md rounded-bl-md z-[500]">
           -{discountPercentage}%
         </div>
       )}

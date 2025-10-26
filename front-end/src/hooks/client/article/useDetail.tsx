@@ -1,22 +1,34 @@
+// ~/hooks/client/article/useDetail.ts
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchDetailArticleAPI } from '~/apis/client/article.api'
+import { fetchDetailArticleAPI } from '~/apis/client/article.api' // (Giả sử bạn đã có hàm này)
 import type { ArticleDetailInterface, ArticleInfoInterface } from '~/types/article.type'
 
 const useDetail = () => {
   const [articleDetail, setArticleDetail] = useState<ArticleInfoInterface | null>(null)
+  const [loading, setLoading] = useState(true) // THÊM STATE NÀY
   const params = useParams()
   const slugArticle = params.slugArticle as string
 
   useEffect(() => {
     if (!slugArticle) return
-    fetchDetailArticleAPI(slugArticle)
-      .then((response: ArticleDetailInterface) => {
-        setArticleDetail(response.article)
-      })
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const res: ArticleDetailInterface = await fetchDetailArticleAPI(slugArticle)
+        setArticleDetail(res.article)
+      } catch (error) {
+        console.error('Lỗi khi fetch chi tiết bài viết:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
   }, [slugArticle])
+
   return {
-    articleDetail
+    articleDetail,
+    loading // TRẢ RA STATE NÀY
   }
 }
 

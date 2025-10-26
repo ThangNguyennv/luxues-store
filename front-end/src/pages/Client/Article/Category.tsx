@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
+import ArticleCard from '~/components/client/ArticleCard/ArticleCard'
 import BoxHead from '~/components/client/BoxHead/BoxHead'
-import CardItem from '~/components/client/CardItem/CardItem'
 import useCategory from '~/hooks/client/article/useCategory'
 
 const ArticleCategory = () => {
@@ -18,7 +18,7 @@ const ArticleCategory = () => {
             <div className='grid grid-cols-4 gap-[15px]'>
               {articleCategory.map((article, index) => (
                 <Link to={`/articles/detail/${article.slug}`} key={index}>
-                  <CardItem {...article}/>
+                  <ArticleCard item={article}/>
                 </Link>
               ))}
             </div>

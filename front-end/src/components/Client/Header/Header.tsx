@@ -106,11 +106,11 @@ const Header = () => {
       {/* Header */}
       <header className="sm:py-[24px] py-[19px] sticky top-0 bg-[#96D5FE] backdrop-blur-[45px] z-[999]">
         <div className="container mx-auto px-[16px]">
-          <div className="flex items-center md:gap-x-[35px] gap-x-[16px]">
+          <div className="flex items-center justify-between 2xl:gap-x-[35px]">
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="text-[20px] md:hidden inline"
+              className="text-[20px] lg:hidden inline"
               aria-label="Toggle menu"
             >
               <FaBars />
@@ -118,7 +118,7 @@ const Header = () => {
 
             {/* Logo */}
             <Link
-              className="flex items-center justify-start gap-[4px] font-[700] sm:text-[30px] text-[27px] text-primary lg:flex-none flex-1"
+              className="flex items-center justify-center gap-[4px] font-[700] sm:text-[30px] text-[27px] text-primary lg:flex-none flex-1"
               to={'/'}
             >
               {settingGeneral ? (
@@ -149,8 +149,8 @@ const Header = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="md:block hidden">
-              <ul className="menu flex 2xl:gap-x-[17px] gap-x-[10px] font-[400] 2xl:text-[16px] xl:text-[13px] text-black">
+            <nav className="lg:block hidden">
+              <ul className="menu flex xl:gap-x-[17px] gap-x-[10px] font-[400] xl:text-[16px] lg:text-[14px] text-[13px] text-black">
                 <li>
                   <Link to="/">Trang chủ</Link>
                 </li>
@@ -171,7 +171,11 @@ const Header = () => {
                       transition={{ duration: 0.35, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="absolute top-[20px] left-[-428px] p-[12px] w-[1527px] z-50">
+                      <div className="
+                        absolute 2xl:top-[20px] 2xl:left-[-410px] 2xl:p-[12px] 2xl:w-[1527px] z-[999]
+                        xl:top-[20px] xl:left-[-470px] xl:p-[12px] xl:w-[1260px]
+                        lg:top-[20px] lg:left-[-370px] lg:p-[12px] lg:w-[1100px]
+                      ">
                         {dataHome && dataHome.productCategories && (
                           <SubMenu
                             dataDropdown={
@@ -231,7 +235,7 @@ const Header = () => {
                       transition={{ duration: 0.35, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="absolute top-[20px] left-[-600px] p-[12px] w-[1527px] z-50">
+                      <div className="absolute top-[50px] left-[-600px] p-[12px] w-[1527px] z-50">
                         {dataHome && dataHome.articleCategories && (
                           <SubMenu
                             dataDropdown={
@@ -320,7 +324,7 @@ const Header = () => {
             </div>
 
             {/* Action Icons */}
-            <div className="flex items-center gap-x-[20px] text-[26px]">
+            <div className="flex items-center xl:gap-x-[20px] gap-x-[15px] text-[26px]">
               {/* Mobile Search Button */}
               <button
                 onClick={toggleMobileSearch}
@@ -454,7 +458,7 @@ const Header = () => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 bg-white z-[9999] md:hidden overflow-y-auto"
+            className="fixed inset-0 bg-white z-[9999] lg:hidden overflow-y-auto"
           >
             <div className="p-4">
               {/* Mobile Menu Header */}
