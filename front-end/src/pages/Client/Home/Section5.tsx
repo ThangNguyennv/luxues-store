@@ -5,6 +5,8 @@ import { useHome } from '~/contexts/client/HomeContext'
 
 const Section5 = () => {
   const { dataHome } = useHome()
+  const isLoading = !dataHome || !dataHome.articlesNew
+
   return (
     <>
       {/* Section 5 */}
@@ -12,9 +14,7 @@ const Section5 = () => {
         <div className="container mx-auto px-[16px]">
           <div className="sm:px-[64px] px-[24px] sm:rounded-[40px] rounded-[20px]">
             <BoxHead title={'Bài viết mới'} />
-            {dataHome?.articlesNew && (
-              <BrandSlider items={dataHome.articlesNew} />
-            )}
+            <BrandSlider items={dataHome.articlesNew || []} loading={isLoading} />
             <div className="text-center border-[#0000001A] sm:pt-[40px] pt-[30px] sm:pb-[62px] pb-[26px]">
               <Link
                 className="nav-link border-[1px] text-[16px] font-[500] px-[63px] py-[16px] rounded-[62px] text-black inline-block sm:w-auto w-[100%] hover:bg-amber-300"

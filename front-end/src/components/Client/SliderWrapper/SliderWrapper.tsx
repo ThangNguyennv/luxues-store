@@ -8,21 +8,6 @@ import { Link } from 'react-router-dom'
 import Skeleton from '@mui/material/Skeleton'
 import type { ProductInfoInterface } from '~/types/product.type'
 
-// export type BaseItem = {
-//   _id?: string
-//   slug?: string
-//   title: string
-//   thumbnail: string
-//   price?: number
-//   discountPercentage?: number
-//   featured?: string
-//   comments?: [
-//     {
-//       rating?: number,
-//     }
-//   ]
-// }
-
 interface SliderWrapperProps {
   items: ProductInfoInterface[]
   // slidesPerView: Giá trị mặc định sẽ được ghi đè bởi breakpoints
