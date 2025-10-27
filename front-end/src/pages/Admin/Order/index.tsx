@@ -12,6 +12,8 @@ import FilterStatusOrder from '~/components/admin/FilterStatus/FilterStatusOrder
 import OrderTable from '~/components/admin/ItemTable/OrderTable'
 import type { OrderStatus } from '~/types/order.type'
 import { FaTrashAlt } from 'react-icons/fa'
+import { FaFileExcel } from 'react-icons/fa'
+import { API_ROOT } from '~/utils/constants'
 
 const OrderAdmin = () => {
   const {
@@ -105,12 +107,22 @@ const OrderAdmin = () => {
                 </DialogActions>
               </Dialog>
             </form>
-            <SortOrder
-              handleSort={handleSort}
-              sortKey={sortKey}
-              sortValue={sortValue}
-              clearSortParams={clearSortParams}
-            />
+            <div className='flex items-center justify-center gap-[15px]'>
+              <a
+                href={`${API_ROOT}/admin/orders/export?status=${currentStatus}`}
+                download={`don-hang-${currentStatus || 'all'}.xlsx`}
+                className='p-[5px] border rounded-[5px] border-green-600 text-green-600 hover:bg-green-600 hover:text-white flex items-center justify-center gap-[5px]'
+              >
+                <FaFileExcel />
+                <span>Xuất Excel</span>
+              </a>
+              <SortOrder
+                handleSort={handleSort}
+                sortKey={sortKey}
+                sortValue={sortValue}
+                clearSortParams={clearSortParams}
+              />
+            </div>
           </div>
           <OrderTable
             selectedIds={selectedIds}
