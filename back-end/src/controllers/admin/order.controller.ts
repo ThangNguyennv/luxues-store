@@ -8,6 +8,7 @@ import Product from '~/models/product.model'
 import * as productsHelper from '~/helpers/product'
 import { OneProduct } from '~/helpers/product'
 import mongoose from 'mongoose'
+import ExcelJS from 'exceljs'
 
 // [GET] /admin/orders
 export const index = async (req: Request, res: Response) => {
@@ -398,4 +399,92 @@ export const estimatedConfirmedDay = async (req: Request, res: Response) => {
       error: error
     })
   }
+}
+
+// [GET] /admin/orders/export
+export const exportOrder = async (req: Request, res: Response) => {
+  try {
+    const find: any = { deleted: false }
+    const status = req.query.status as string
+
+    if (status) {
+      find.status = status
+    }
+
+    // Lấy TẤT CẢ đơn hàng (không phân trang) khớp với bộ lọc
+    const orders = await Order.find(find).sort({ createdAt: -1 })
+
+    // Tạo file Excel
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet(`Đơn hàng ${status || 'Tất cả'}`)
+
+    // Định nghĩa các cột
+    worksheet.columns = [
+      { header: 'Mã Đơn Hàng', key: 'orderId', width: 30 },
+      { header: 'Ngày Đặt', key: 'createdAt', width: 20, style: { numFmt: 'dd/mm/yyyy hh:mm:ss' } },
+      { header: 'Tên Khách Hàng', key: 'customerName', width: 30 },
+      { header: 'Số Điện Thoại', key: 'phone', width: 20 },
+      { header: 'Địa Chỉ', key: 'address', width: 50 },
+      { header: 'Trạng Thái Đơn', key: 'orderStatus', width: 20 },
+      { header: 'Sản Phẩm', key: 'productTitle', width: 40 },
+      { header: 'Phân Loại (Màu)', key: 'color', width: 15 },
+      { header: 'Phân Loại (Size)', key: 'size', width: 15 },
+      { header: 'Số Lượng', key: 'quantity', width: 10 },
+      { header: 'Đơn Giá (Đã giảm)', key: 'price', width: 20, style: { numFmt: '#,##0"đ"' } },
+      { header: 'Thành Tiền', key: 'total', width: 20, style: { numFmt: '#,##0"đ"' } },
+      { header: 'PT Thanh Toán', key: 'paymentMethod', width: 15 },
+      { header: 'TT Thanh Toán', key: 'paymentStatus', width: 15 },
+      { header: 'Ghi Chú', key: 'note', width: 30 }
+    ]
+
+    // Làm cho hàng tiêu đề in đậm
+    worksheet.getRow(1).font = { bold: true }
+
+    // Thêm dữ liệu vào file
+    for (const order of orders) {
+      for (const product of order.products) {
+        const priceNew = Math.floor(product.price * (100 - product.discountPercentage) / 100)
+        
+        worksheet.addRow({
+          orderId: order._id.toString(),
+          createdAt: order.createdAt,
+          customerName: order.userInfo.fullName,
+          phone: order.userInfo.phone,
+          address: order.userInfo.address,
+          orderStatus: order.status,
+          productTitle: product.title,
+          color: product.color, 
+          size: product.size,  
+          quantity: product.quantity,
+          price: priceNew,
+          total: priceNew * product.quantity,
+          paymentMethod: order.paymentInfo.method,
+          paymentStatus: order.paymentInfo.status,
+          note: order.note
+        })
+      }
+    }
+
+    // Gửi file về cho client
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="don-hang-${status || 'all'}-${new Date().getTime()}.xlsx`
+    )
+
+    // Ghi workbook vào response
+    await workbook.xlsx.write(res)
+    res.end()
+
+  } catch (error) {
+    console.error("Lỗi khi xuất Excel:", error)
+    res.status(500).json({ 
+      code: 500, 
+      message: "Lỗi máy chủ khi xuất file", 
+      error: error.message 
+    })
+  }
 }

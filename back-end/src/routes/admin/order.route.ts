@@ -6,10 +6,12 @@ router.get('/', controller.index)
 router.patch('/change-multi', controller.changeMulti)
 router.patch('/edit-estimatedDeliveryDay', controller.estimatedDeliveryDay)
 router.patch('/edit-estimatedConfirmedDay', controller.estimatedConfirmedDay)
+router.get('/export', controller.exportOrder)
 router.patch('/change-status/:status/:id', controller.changeStatus)
 router.delete('/delete/:id', controller.deleteItem)
 router.delete('/permanentlyDelete/:id', controller.permanentlyDeleteItem)
 router.get('/detail/:id', controller.detail)
+
 router.patch('/recover/:id', controller.recoverPatch)
 
 export const orderRoutes: Router = router
