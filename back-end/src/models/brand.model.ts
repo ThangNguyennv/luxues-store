@@ -9,15 +9,8 @@ const brandSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    brand_category_id: {
-      type: String,
-      default: ''
-      // Tùy chọn: bạn có thể dùng 'ref' nếu muốn populate
-      // type: mongoose.Schema.Types.ObjectId,
-      // ref: 'BrandCategory'
-    },
     description: String,
-    thumbnail: String, // Dùng để lưu logo
+    thumbnail: String,
     status: {
       type: String,
       enum: ['active', 'inactive'],

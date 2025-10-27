@@ -14,7 +14,6 @@ import { articleRoutes } from './article.route'
 import { articleCategoryRoutes } from './article-category.route'
 import { orderRoutes } from './order.route'
 import { settingRoutes } from './setting.route'
-import { brandCategoryRoutes } from './brand-category.route'
 import { brandRoutes } from './brand.route'
 
 const routeAdmin = (app: Express): void => {
@@ -29,7 +28,6 @@ const routeAdmin = (app: Express): void => {
   app.use(PATH_ADMIN + '/orders', authMiddleware.requireAuth, orderRoutes)
   app.use(PATH_ADMIN + '/products-category', authMiddleware.requireAuth, productCategoryRoutes)
   app.use(PATH_ADMIN + '/products', authMiddleware.requireAuth, productRoutes)
-  app.use(PATH_ADMIN + '/brands-category', authMiddleware.requireAuth, brandCategoryRoutes)
   app.use(PATH_ADMIN + '/brands', authMiddleware.requireAuth, brandRoutes)
   app.use(PATH_ADMIN + '/roles', authMiddleware.requireAuth, roleRoutes)
   app.use(PATH_ADMIN + '/settings', authMiddleware.requireAuth, settingRoutes)

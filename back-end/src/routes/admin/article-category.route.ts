@@ -4,7 +4,7 @@ const router: Router = Router()
 import * as controller from '~/controllers/admin/article-category.controller'
 // Upload ảnh
 import multer from 'multer'
-import uploadCloud from '~/middlewares/admin/uploadCloud.middleware'
+import { uploadWithOneImageToCloud } from '~/middlewares/admin/uploadCloud.middleware'
 // Upload ảnh
 import * as validate from '~/validates/admin/products-category.validate'
 
@@ -14,7 +14,7 @@ router.patch('/change-multi', controller.changeMulti)
 router.post(
   '/create',
   multer().single('thumbnail'),
-  uploadCloud,
+  uploadWithOneImageToCloud,
   validate.createPost, // middleware
   controller.createPost
 )
@@ -22,7 +22,7 @@ router.delete('/delete/:id', controller.deleteItem)
 router.patch(
   '/edit/:id',
   multer().single('thumbnail'),
-  uploadCloud,
+  uploadWithOneImageToCloud,
   validate.createPost, // middleware
   controller.editPatch
 )

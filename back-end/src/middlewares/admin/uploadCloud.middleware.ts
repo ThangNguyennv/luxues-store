@@ -9,6 +9,36 @@ cloudinary.config({
  api_secret: process.env.CLOUD_SECRET
 })
 
+export const uploadWithOneImageToCloud = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  if (req.file) {
+    const streamUpload = (req) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream((error, result) => {
+          if (result) {
+            resolve(result)
+          } else {
+            reject(error)
+          }
+        })
+        streamifier.createReadStream(req.file.buffer).pipe(stream)
+      })
+    }
+    async function upload(req) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result: any = await streamUpload(req)
+      req.body[req.file.fieldname] = result.secure_url
+      next()
+    }
+    upload(req)
+  } else {
+    next()
+  }
+}
+
 // Helper function để upload một file buffer
 const streamUpload = (fileBuffer: Buffer): Promise<any> => {
   return new Promise((resolve, reject) => {

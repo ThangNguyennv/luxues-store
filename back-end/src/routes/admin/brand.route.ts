@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
-import uploadCloud from '~/middlewares/admin/uploadCloud.middleware'
+import { uploadWithOneImageToCloud } from '~/middlewares/admin/uploadCloud.middleware'
 import * as controller from '~/controllers/admin/brand.controller'
 import * as validate from '~/validates/admin/brand.validate'
 
@@ -11,7 +11,7 @@ router.get('/', controller.index)
 router.post(
   '/create',
   multer().single('thumbnail'), // Nhận file logo với field 'thumbnail'
-  uploadCloud,
+  uploadWithOneImageToCloud,
   validate.createPost,
   controller.createPost
 )
@@ -21,7 +21,7 @@ router.get('/detail/:id', controller.detail)
 router.patch(
   '/edit/:id',
   multer().single('thumbnail'), // Nhận file logo mới nếu có
-  uploadCloud,
+  uploadWithOneImageToCloud,
   validate.createPost,
   controller.editPatch
 )
