@@ -15,6 +15,8 @@ import { userRoutes } from './user.route'
 import { settingRoutes } from './setting.route'
 import { brandClientRoutes } from './brand.route'
 // import chatRoutes from "./chat.route";
+import passport from 'passport'
+import '~/config/passport'
 
 const routeClient = (app: Express): void => {
   // Middleware để lấy danh mục sản phẩm và bài viết
@@ -23,6 +25,7 @@ const routeClient = (app: Express): void => {
   app.use(userMiddleware.infoUser)
   app.use(settingMiddleware.settingsGeneral)
 
+  app.use(passport.initialize())
   app.use('/', homeRoutes)
   app.use('/products', productRoutes)
   app.use('/articles', articleRoutes)

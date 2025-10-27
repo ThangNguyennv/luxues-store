@@ -1,33 +1,45 @@
 import mongoose from 'mongoose'
-import * as generate from '../helpers/generate'
 
 const userSchema = new mongoose.Schema(
-  {
-    fullName: String,
-    email: String,
+  {
+    fullName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true // Email phải là duy nhất
+    },
     address: String,
-    password: String,
-    tokenUser: {
+    password: {
       type: String,
-      default: generate.generateRandomString(20)
-    }, 
-    phone: String,
-    avatar: String,
-    status: {
+      required: false, // Bắt buộc là false để cho phép OAuth
+      select: false // Rất quan trọng: Không bao giờ trả về trường này
+    },
+    googleId: {
       type: String,
-      default: 'active'
+      unique: true,
+      sparse: true // Cho phép nhiều document không có trường này
     },
-    deleted: {
-      type: Boolean,
-      default: false
-    },
-    deletedAt: Date
-  },
-  {
-    timestamps: true
-  }
+    phone: String,
+    avatar: String,
+    status: {
+      type: String,
+      default: 'active'
+    },
+    deleted: {
+      type: Boolean,
+      default: false
+    },
+    deletedAt: Date
+  },
+  {
+    timestamps: true
+  }
 )
 
 const User = mongoose.model('User', userSchema, 'users')
 
 export default User
+

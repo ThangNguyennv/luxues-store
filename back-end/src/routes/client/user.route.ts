@@ -1,5 +1,7 @@
 import { Router } from 'express'
 const router: Router = Router()
+import passport from 'passport'
+
 // Upload ảnh
 import multer from 'multer'
 import { uploadWithOneImageToCloud } from '~/middlewares/client/uploadCloud.middleware'
@@ -16,15 +18,30 @@ router.post(
   validate.forgotPasswordPost,
   controller.forgotPasswordPost
 )
-router.post(
-  '/password/otp', 
-  validate.otpPasswordPost,
-  controller.otpPasswordPost)
+// router.post(
+//   '/password/otp', 
+//   validate.otpPasswordPost,
+//   controller.otpPasswordPost)
 router.post(
   '/password/reset',
   validate.resetPasswordPost,
   controller.resetPasswordPost
 )
+
+router.get('/auth/google',
+  passport.authenticate('google', { 
+    scope: ['profile', 'email'] // Yêu cầu Google trả về profile và email
+  })
+)
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { 
+    failureRedirect: '/user/login', // Nếu thất bại, đá về trang đăng nhập
+    session: false // Chúng ta không dùng session, chúng ta dùng JWT
+  }),
+  controller.googleCallback // Nếu thành công, gọi hàm controller này để cấp JWT
+)
+
 // route private
 router.get(
   '/account/info', 
