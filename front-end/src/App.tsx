@@ -75,9 +75,6 @@ import MyOrders from './pages/client/MyAccount/MyOrders'
 import HelpCenter from './pages/client/HelpCenter/HelpCenter'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import BrandAdmin from './pages/admin/Brand/BrandAdmin'
-import BrandCategoryAdmin from './pages/admin/BrandCategory/BrandCategoryAdmin'
-import CreateBrandCategory from './pages/admin/BrandCategory/CreateBrandCategory'
-import EditBrandCategory from './pages/admin/BrandCategory/EditBrandCategory'
 import CreateBrand from './pages/admin/Brand/CreateBrand'
 import EditBrand from './pages/admin/Brand/EditBrand'
 import BrandPage from './pages/client/Brand/Brand'
@@ -157,12 +154,6 @@ function App() {
               <Route path='create' element={ <CreateBrand />}/>
               <Route path='edit/:id' element={ <EditBrand />}/>
               {/* <Route path='detail/:id' element={ <DetailBrand />}/> */}
-            </Route>
-            <Route path='brands-category'>
-              <Route index element={<BrandCategoryAdmin />}/>
-              <Route path='create' element={<CreateBrandCategory />}/>
-              <Route path='edit/:id' element={<EditBrandCategory />}/>
-              {/* <Route path='detail/:id' element={<DetailBrandCategory />}/> */}
             </Route>
             <Route path='products'>
               <Route index element={ <ProductAdmin />}/>

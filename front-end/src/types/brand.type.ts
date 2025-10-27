@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GeneralInfoInterface, HelperInterface, ParamsInterface } from './helper.type'
 
-// --- Brand Category ---
 export interface BrandCategory extends GeneralInfoInterface {
  parent_id?: string
  description?: string
@@ -14,7 +13,6 @@ export interface BrandCategoriesResponseInterface {
  categories: BrandCategory[]
 }
 
-// --- Brand ---
 export interface Brand extends GeneralInfoInterface {
  description?: string
  brand_category_id?: string
