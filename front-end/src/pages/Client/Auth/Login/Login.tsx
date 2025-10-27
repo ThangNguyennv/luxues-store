@@ -3,6 +3,7 @@ import { IoEye, IoEyeOff } from 'react-icons/io5'
 import useLoginClient from '~/hooks/client/auth/login/useLogin'
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import { FcGoogle } from 'react-icons/fc'
 
 const LoginClient = () => {
   const {
@@ -11,6 +12,10 @@ const LoginClient = () => {
     setShowPassword,
     isLoading
   } = useLoginClient()
+
+  // 2. Lấy API_ROOT từ biến môi trường của Vite
+  const API_ROOT = import.meta.env.VITE_API_ROOT
+  const googleAuthUrl = `${API_ROOT}/user/auth/google`
 
   return (
     <>
@@ -25,10 +30,11 @@ const LoginClient = () => {
           <div className='font-[600]'>LUXUES STORE</div>
           <div>Shop thời trang được yêu thích nhất tại Việt Nam</div>
         </div>
-        <div className="w-full max-w-md md:w-[40%] lg:w-[30%]">
+
+        <div className="w-full max-w-md md:w-[40%] lg:w-[30%] border rounded-[5px] p-[20px] bg-amber-50">
           <form
             onSubmit={(event) => handleSubmit(event)}
-            className="flex flex-col gap-[15px] text-center border rounded-[5px] p-[20px] bg-amber-50"
+            className="flex flex-col gap-[15px] text-center"
           >
             <div className='text-[20px] font-[500]'>Đăng nhập</div>
             <input
@@ -67,6 +73,19 @@ const LoginClient = () => {
             >
               Quên mật khẩu?
             </Link>
+            <div className="relative flex items-center my-4">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="flex-shrink mx-4 text-gray-500 text-sm">HOẶC</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+
+            <a
+              href={googleAuthUrl}
+              className="flex items-center justify-center gap-2 w-full bg-white border border-gray-300 rounded-[5px] p-[10px] text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+            >
+              <FcGoogle size={20} />
+              <span>Đăng nhập bằng Google</span>
+            </a>
             <div className="flex items-center justify-center gap-[5px]">
               <p className='text-[15px]'>Bạn mới biết đến LUXUES STORE?</p>
               <Link

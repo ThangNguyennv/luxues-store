@@ -45,7 +45,6 @@ import LayoutAuth from './layouts/client/layoutAuth/LayoutAuth'
 import LoginClient from './pages/client/Auth/Login/Login'
 import RegisterClient from './pages/client/Auth/Register/Register'
 import Forgot from './pages/client/Auth/Password/Forgot/Forgot'
-import OTP from './pages/client/Auth/Password/OTP/OTP'
 import Reset from './pages/client/Auth/Password/Reset/Reset'
 import PrivateRouteAdmin from './components/admin/PrivateRoute/PrivateRoute '
 import PrivateRouteClient from './components/client/PrivateRoute/PrivateRoute'
@@ -137,7 +136,7 @@ function App() {
             <Route path='register' element={<RegisterClient />} />
             <Route path='password'>
               <Route path='forgot' element={ <Forgot />}/>
-              <Route path='otp' element={ <OTP />}/>
+              {/* <Route path='otp' element={ <OTP />}/> */}
               <Route path='reset' element={ <Reset />}/>
             </Route>
           </Route>

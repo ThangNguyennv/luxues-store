@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { fetchForgotPasswordAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 const useForgot = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const { dispatchAlert } = useAlertContext()
 
@@ -22,9 +21,9 @@ const useForgot = () => {
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
-        setTimeout(() => {
-          navigate(`/user/password/otp?email=${email}`)
-        }, 1500)
+        // setTimeout(() => {
+        //   navigate(`/user/password/otp?email=${email}`)
+        // }, 1500)
       } else if (response.code === 401) {
         dispatchAlert({
           type: 'SHOW_ALERT',

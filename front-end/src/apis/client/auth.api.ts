@@ -45,10 +45,19 @@ export const fetchOTPPasswordAPI = async (email: string, otp: string) => {
   return response.data
 }
 
-export const fetchResetPasswordOTPAPI = async (password: string, confirmPassword: string) => {
+// export const fetchResetPasswordOTPAPI = async (password: string, confirmPassword: string) => {
+//   const response = await axios.post(
+//     `${API_ROOT}/user/password/reset`,
+//     { password, confirmPassword },
+//     { withCredentials: true }
+//   )
+//   return response.data
+// }
+
+export const fetchResetPasswordAPI = async (password: string, confirmPassword: string, token: string) => {
   const response = await axios.post(
     `${API_ROOT}/user/password/reset`,
-    { password, confirmPassword },
+    { password, confirmPassword, token },
     { withCredentials: true }
   )
   return response.data
