@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IoMdClose } from 'react-icons/io'

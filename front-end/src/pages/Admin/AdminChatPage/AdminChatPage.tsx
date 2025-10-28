@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { fetchAdminChatRoomsAPI, fetchAdminChatHistoryAPI } from '~/apis/admin/chat.api'
