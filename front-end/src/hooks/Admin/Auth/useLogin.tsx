@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/admin/auth.api'
@@ -7,41 +9,45 @@ export const useLoginAdmin = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    const form = event.currentTarget
-    const email = form.email.value
-    const password = form.password.value
-    const response = await fetchLoginAPI(email, password)
-    if (response.code === 200) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'success' }
-      })
-      setTimeout(() => {
+    setIsLoading(true)
+    try {
+      const form = event.currentTarget
+      const email = form.email.value
+      const password = form.password.value
+      const response = await fetchLoginAPI(email, password)
+
+      if (response.code === 200 && response.accountAdmin) {
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: response.message, severity: 'success' }
+        })
+
         navigate('/admin/dashboard')
-      }, 1500)
-    } else if (response.code === 401) {
+
+      } else {
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: { message: response.message, severity: 'error' }
+        })
+      }
+    } catch (error) {
       dispatchAlert({
         type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
+        payload: { message: 'Lỗi máy chủ, vui lòng thử lại.', severity: 'error' }
       })
-    } else if (response.code == 403) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
-    } else if (response.code === 400) {
-      dispatchAlert({
-        type: 'SHOW_ALERT',
-        payload: { message: response.message, severity: 'error' }
-      })
+    } finally {
+      setIsLoading(false)
     }
   }
   return {
     handleSubmit,
     showPassword,
-    setShowPassword
+    setShowPassword,
+    isLoading
   }
 }
+

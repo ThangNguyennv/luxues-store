@@ -77,6 +77,7 @@ import BrandAdmin from './pages/admin/Brand/BrandAdmin'
 import CreateBrand from './pages/admin/Brand/CreateBrand'
 import EditBrand from './pages/admin/Brand/EditBrand'
 import BrandPage from './pages/client/Brand/Brand'
+import AdminChatPage from './pages/admin/AdminChatPage/AdminChatPage'
 
 function App() {
   useEffect(() => {
@@ -200,6 +201,7 @@ function App() {
               <Route index element={ <MyAccountAdmin />}/>
               <Route path='edit' element={ <EditMyAccount />}/>
             </Route>
+            <Route path='chats' element={ <AdminChatPage />}/>
             <Route path='settings'>
               <Route path='general'>
                 <Route index element={<General />}/>

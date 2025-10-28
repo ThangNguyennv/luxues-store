@@ -293,7 +293,7 @@ const Sidebar = () => {
           {/* Hết cài đặt */}
 
           {/* Chat */}
-          <Link to={'/admin/chat'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
+          <Link to={'/admin/chats'} className="hover-sidebar flex items-center justify-start gap-[15px] p-[5px]">
             <BsChatLeftText className='text-[18px]'/>
             {isOpen && (
               <span>Chat khách hàng</span>

@@ -6,7 +6,6 @@ import { LiaFileInvoiceSolid } from 'react-icons/lia'
 import { LuTicket } from 'react-icons/lu'
 import { Link, Outlet } from 'react-router-dom'
 
-
 const LayoutUser = () => {
   const [isOpen, setIsOpen] = useState(false)
 
