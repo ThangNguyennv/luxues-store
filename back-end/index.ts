@@ -12,6 +12,8 @@ import * as database from './src/config/database'
 import systemConfig from './src/config/system'
 import routeClient from './src/routes/client/index.route'
 import routeAdmin from './src/routes/admin/index.route'
+import { chatSocket } from './src/middlewares/sockets/chatSocket.middleware'
+import { chatSocketBrain } from '~/sockets/chat.socket'
 
 database.connect()
 
@@ -27,8 +29,19 @@ app.use(cors({
 
 // Socket IO
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", // Cho phép client React kết nối
+    credentials: true
+  }
+})
+
 global._io = io
+// MIDDLEWARE XÁC THỰC CHO SOCKET.IO
+chatSocket(io)
+  
+// LOGIC XỬ LÝ CHAT REAL-TIME
+chatSocketBrain(io)
 // End Socket IO
 
 // Parse JSON bodies
@@ -52,9 +65,9 @@ app.use(
 // App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 
-app.use(express.static(`${__dirname}/public`)) // giúp Express phục vụ các file tĩnh trong thư mục public mà không cần viết route thủ công.
+// giúp Express phục vụ các file tĩnh trong thư mục public mà không cần viết route thủ công.
+app.use(express.static(`${__dirname}/public`)) 
 
-// Routes
 routeAdmin(app)
 routeClient(app)
 

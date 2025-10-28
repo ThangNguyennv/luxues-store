@@ -19,6 +19,7 @@ export const requireAuth = async (
   try {
     // Xác thực chữ ký của token
     const decoded = jwt.verify(tokenUser, process.env.JWT_SECRET as string) as { userId: string }
+    console.log("🚀 ~ auth.middleware.ts ~ requireAuth ~ decoded:", decoded);
 
     // Tìm user bằng ID lấy từ payload của token
     const user = await User.findOne({

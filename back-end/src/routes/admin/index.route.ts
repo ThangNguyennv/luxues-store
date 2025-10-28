@@ -15,6 +15,7 @@ import { articleCategoryRoutes } from './article-category.route'
 import { orderRoutes } from './order.route'
 import { settingRoutes } from './setting.route'
 import { brandRoutes } from './brand.route'
+import { chatAdminRoutes } from './chat.admin.route'
 
 const routeAdmin = (app: Express): void => {
   const PATH_ADMIN = systemConfig.prefixAdmin
@@ -33,5 +34,6 @@ const routeAdmin = (app: Express): void => {
   app.use(PATH_ADMIN + '/settings', authMiddleware.requireAuth, settingRoutes)
   app.use(PATH_ADMIN + '/trash', authMiddleware.requireAuth, trashRoutes)
   app.use(PATH_ADMIN + '/users', authMiddleware.requireAuth, userRoutes)
+  app.use(PATH_ADMIN + '/chats', authMiddleware.requireAuth, chatAdminRoutes)
 }
 export default routeAdmin

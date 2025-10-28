@@ -14,7 +14,7 @@ import { checkoutRoutes } from './checkout.route'
 import { userRoutes } from './user.route'
 import { settingRoutes } from './setting.route'
 import { brandClientRoutes } from './brand.route'
-// import chatRoutes from "./chat.route";
+import { chatRoutes } from "./chat.route"
 import passport from 'passport'
 import '~/config/passport'
 
@@ -35,8 +35,7 @@ const routeClient = (app: Express): void => {
   app.use('/checkout', cartMiddleware.cartId, checkoutRoutes)
   app.use('/user', userRoutes)
   app.use('/settings', settingRoutes)
-
-  // app.use("/chat", authMiddleware.requireAuth, chatRoutes);
+  app.use("/chats", chatRoutes)
 }
 
 // app.use() -> Đi vào router con thì có thể là các phương thức khác

@@ -43,9 +43,7 @@ export const registerPost = async (req: Request, res: Response) => {
       })
       return
     }
-    // req.body.password = md5(req.body.password)
-    // req.body.confirmPassword = md5(req.body.confirmPassword)
-    // Băm mật khẩu bằng bcrypt
+
     const salt = await bcrypt.genSalt(10)
     req.body.password = await bcrypt.hash(password, salt)
     delete req.body.confirmPassword 
@@ -69,6 +67,7 @@ export const loginPost = async (req: Request, res: Response) => {
       email: email,
       deleted: false
     }).select('+password')
+    
     if (!user) {
       res.json({
         code: 401,
@@ -76,7 +75,6 @@ export const loginPost = async (req: Request, res: Response) => {
       })
       return
     }
-    // So sánh mật khẩu bằng bcrypt
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
       res.json({
@@ -111,7 +109,7 @@ export const loginPost = async (req: Request, res: Response) => {
     res.cookie('tokenUser', token, {
       httpOnly: true, // Chỉ server có thể truy cập
       secure: true, // Chỉ gửi qua HTTPS ở môi trường production
-      sameSite: 'none',
+      sameSite: 'none', 
       maxAge: 24 * 60 * 60 * 1000 
     })
     res.json({
@@ -269,8 +267,6 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
 // [GET] /user/info
 export const info = async (req: Request, res: Response) => {
   try {
-    // Dữ liệu user đã được middleware 'requireAuth' lấy và gán vào req['accountUser']
-    // Không cần truy vấn DB ở đây nữa
     const accountUser = req['accountUser'] 
     res.json({
       code: 200,
@@ -323,13 +319,11 @@ export const changePasswordPatch = async (req: Request, res: Response) => {
       return res.json({ code: 404, message: 'Không tìm thấy người dùng.' })
     }
 
-    // So sánh mật khẩu hiện tại bằng bcrypt
     const isMatch = await bcrypt.compare(req.body.currentPassword, user.password)
     if (!isMatch) {
       return res.json({ code: 400, message: 'Mật khẩu hiện tại không chính xác, vui lòng nhập lại!' })
     }
 
-    // Băm và cập nhật mật khẩu mới
     const salt = await bcrypt.genSalt(10)
     const newHashedPassword = await bcrypt.hash(req.body.password, salt)
 
