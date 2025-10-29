@@ -1,25 +1,4 @@
-{
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
-  "compilerOptions": {
-    // "ignoreDeprecations": "6.0",
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ] // This maps '~' to the 'src' directory
-    }
-  }
-}
 // {
-//   // Chỉ giữ lại "files" (nếu có) và "references".
-//   // XÓA BỎ HOÀN TOÀN "compilerOptions" khỏi file này.
 //   "files": [],
 //   "references": [
 //     {
@@ -28,5 +7,26 @@
 //     {
 //       "path": "./tsconfig.node.json"
 //     }
-//   ]
+//   ],
+//   "compilerOptions": {
+//     // "ignoreDeprecations": "6.0",
+//     "paths": {
+//       "~/*": [
+//         "./src/*"
+//       ] // This maps '~' to the 'src' directory
+//     }
+//   }
 // }
+{
+  // Chỉ giữ lại "files" (nếu có) và "references".
+  // XÓA BỎ HOÀN TOÀN "compilerOptions" khỏi file này.
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

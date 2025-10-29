@@ -130,9 +130,9 @@ const OrderAdmin = () => {
           />
           <Pagination
             pagination={pagination}
-            handlePagination={(page) => updateSearchParams('page', (page).toString())}
-            handlePaginationPrevious={(page) => updateSearchParams('page', (page - 1).toString())}
-            handlePaginationNext={(page) => updateSearchParams('page', (page + 1).toString())}
+            handlePagination={(page: number) => updateSearchParams('page', (page).toString())}
+            handlePaginationPrevious={(page: number) => updateSearchParams('page', (page - 1).toString())}
+            handlePaginationNext={(page: number) => updateSearchParams('page', (page + 1).toString())}
             items={orders}
           />
         </div>
