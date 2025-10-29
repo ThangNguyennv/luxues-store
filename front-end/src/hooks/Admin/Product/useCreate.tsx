@@ -32,7 +32,8 @@ export const useCreate = () => {
     stars: {
       average: 0,
       count: 0
-    }
+    },
+    comments: []
   }
 
   const [productInfo, setProductInfo] = useState<ProductInfoInterface>(initialProduct)

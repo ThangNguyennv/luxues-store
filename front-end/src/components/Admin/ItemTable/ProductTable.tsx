@@ -149,8 +149,8 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <TableRow key={index}>
                     <TableCell align='center' sx={{ padding: '0px 2px' }}>
                       <Checkbox
-                        checked={selectedIds.includes(product._id)}
-                        onChange={(event) => handleCheckbox(product._id, event.target.checked)}
+                        checked={selectedIds.includes(product._id ?? '')}
+                        onChange={(event) => handleCheckbox(product._id ?? '', event.target.checked)}
                         {...label}
                         size="small"
                         sx={{ padding: 0 }}
@@ -173,7 +173,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                     <TableCell align="center" sx={{ padding: '6px 0px' }}>{product.stock.toLocaleString()}</TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       <button
-                        onClick={() => handleToggleStatus(product._id, product.status)}
+                        onClick={() => handleToggleStatus(product._id ?? '', product.status)}
                         className={`border rounded-[5px] p-[5px] text-white 
                           ${product.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
                       >
@@ -236,7 +236,7 @@ const ProductTable = ({ selectedIds, setSelectedIds }: Props) => {
                           Sửa
                       </Link>
                       <button
-                        onClick={() => handleOpen(product._id)}
+                        onClick={() => handleOpen(product._id ?? '')}
                         className='border rounded-[5px] bg-[#BC3433] p-[5px] text-white'
                       >
                           Xóa

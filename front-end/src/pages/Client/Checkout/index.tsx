@@ -15,7 +15,7 @@ import { useAuth } from '~/contexts/client/AuthContext'
 
 const Checkout = () => {
   const [cartDetail, setCartDetail] = useState<CartInfoInterface | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
   const { refreshCart } = useCart()
   const [paymentMethod, setPaymentMethod] = useState('COD')
   const navigate = useNavigate()

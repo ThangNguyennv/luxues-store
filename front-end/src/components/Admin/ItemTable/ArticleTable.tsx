@@ -143,8 +143,8 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                   <TableRow key={index}>
                     <TableCell align='center' sx={{ padding: '0px 2px' }}>
                       <Checkbox
-                        checked={selectedIds.includes(article._id)}
-                        onChange={(event) => handleCheckbox(article._id, event.target.checked)}
+                        checked={selectedIds.includes(article._id ?? '')}
+                        onChange={(event) => handleCheckbox(article._id ?? '', event.target.checked)}
                         {...label}
                         size="small"
                         sx={{ padding: 0 }}
@@ -161,7 +161,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                     </TableCell>
                     <TableCell align='center' sx={{ padding: '6px 0px' }}>
                       <button
-                        onClick={() => handleToggleStatus(article._id, article.status)}
+                        onClick={() => handleToggleStatus(article._id ?? '', article.status)}
                         className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
                           ${article.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
                       >
@@ -222,7 +222,7 @@ const ArticleTable = ({ selectedIds, setSelectedIds }: Props) => {
                       Sửa
                       </Link>
                       <button
-                        onClick={() => handleOpen(article._id)}
+                        onClick={() => handleOpen(article._id ?? '')}
                         className='cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white'>
                       Xóa
                       </button>

@@ -89,10 +89,10 @@ export const useProductCategory = () => {
   }
 
   const executeAction = async (typeChange: string) => {
-    const selectedProductsCategory = productCategories.filter(productCategory => selectedIds.includes(productCategory._id))
-    let result: string[] = []
-    result = selectedProductsCategory.map(productCategory => productCategory._id)
-
+    const selectedProductsCategory = productCategories.filter(productCategory => selectedIds.includes(productCategory._id ?? ''))
+    const result: string[] = selectedProductsCategory
+      .map(productCategory => productCategory._id)
+      .filter((id): id is string => typeof id === 'string')
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
     if ([200, 204].includes(response.code)) {

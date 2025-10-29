@@ -95,8 +95,9 @@ export const useArticle = () => {
       selectedIds.includes(article._id as string)
     )
 
-    let result: string[] = []
-    result = selectedArticles.map(article => article._id)
+    const result: string[] = selectedArticles
+      .map(article => article._id)
+      .filter((id): id is string => typeof id === 'string')
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 

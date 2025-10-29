@@ -99,7 +99,10 @@ export const useTable = ({ selectedIds, setSelectedIds }: Props) => {
 
   const handleCheckAll = (checked: boolean) => {
     if (checked) {
-      const allIds = products.map((product) => product._id)
+      const allIds = products
+        .map((product) => product._id)
+        .filter((id): id is string => id !== undefined)
+
       setSelectedIds(allIds)
     } else {
       setSelectedIds([])

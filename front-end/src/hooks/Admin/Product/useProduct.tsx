@@ -91,11 +91,12 @@ export const useProduct = () => {
 
   const executeAction = async (typeChange: string) => {
     const selectedProducts = products.filter(product =>
-      selectedIds.includes(product._id)
+      selectedIds.includes(product._id ?? '')
     )
 
-    let result: string[] = []
-    result = selectedProducts.map(product => product._id)
+    const result: string[] = selectedProducts
+      .map(product => product._id)
+      .filter((id): id is string => typeof id === 'string')
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 

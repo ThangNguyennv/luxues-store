@@ -89,9 +89,10 @@ export const useArticleCategory = () => {
   }
   const executeAction = async (typeChange: string) => {
     const selectedArticlesCategory = articleCategories.filter(articleCategory => selectedIds.includes(articleCategory._id as string))
-    let result: string[] = []
 
-    result = selectedArticlesCategory.map(articleCategory => articleCategory._id)
+    const result: string[] = selectedArticlesCategory
+      .map(articleCategory => articleCategory._id)
+      .filter((id): id is string => typeof id === 'string')
 
     const response = await fetchChangeMultiAPI({ ids: result, type: typeChange })
 
