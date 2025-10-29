@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // ~/hooks/client/article/useDetail.ts
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'

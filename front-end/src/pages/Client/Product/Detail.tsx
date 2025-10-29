@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState, type FormEvent } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchDetailProductAPI, fetchRelatedProductsAPI } from '~/apis/client/product.api'

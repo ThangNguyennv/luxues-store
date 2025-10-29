@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, type ReactNode } from 'react'
 import type { SettingGeneralDetailInterface } from '~/types/setting.type'

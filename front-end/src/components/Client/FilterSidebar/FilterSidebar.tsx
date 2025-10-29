@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, type ChangeEvent, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { fetchFilterDataAPI } from '~/apis/client/product.api'

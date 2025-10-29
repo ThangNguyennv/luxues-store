@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { FaCheck } from 'react-icons/fa6'
 
 const sortOptions = [

@@ -36,7 +36,7 @@ const useReset = () => {
     try {
       // Kiểm tra lại token trước khi gửi
       if (!token) {
-        dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Token không hợp lệ.', severity: 'error' }})
+        dispatchAlert({ type: 'SHOW_ALERT', payload: { message: 'Token không hợp lệ.', severity: 'error' } })
         setIsLoading(false)
         return
       }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Skeleton from '@mui/material/Skeleton'

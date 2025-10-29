@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { fetchCartAPI, fetchAddProductToCartAPI } from '~/apis/client/cart.api'

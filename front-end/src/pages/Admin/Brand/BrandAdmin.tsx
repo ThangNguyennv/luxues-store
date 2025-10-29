@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-console */
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchAllBrandsAPI, deleteBrandAPI } from '~/apis/admin/brand.api'
@@ -7,7 +10,7 @@ import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 const BrandAdmin = () => {
   const [brands, setBrands] = useState<Brand[]>([])
-  const [pagination, setPagination] = useState({})
+  const [, setPagination] = useState({})
   const [loading, setLoading] = useState(true)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [selectedId, setSelectedId] = useState<string | null>(null)

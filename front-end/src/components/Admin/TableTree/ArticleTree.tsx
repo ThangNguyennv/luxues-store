@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { TableRow, TableCell, Checkbox } from '@mui/material'
 import { Link } from 'react-router-dom'
 import FormatDateTime from '../Moment/FormatDateTime'
@@ -46,8 +45,8 @@ const ArticleTree = ({
       <TableRow key={articleCategory._id}>
         <TableCell align="center" sx={{ padding: '0px 2px' }}>
           <Checkbox
-            checked={selectedIds.includes(articleCategory._id)}
-            onChange={(e) => handleCheckbox(articleCategory._id, e.target.checked)}
+            checked={selectedIds.includes(articleCategory._id ?? '')}
+            onChange={(e) => handleCheckbox(articleCategory._id ?? '', e.target.checked)}
             size="small"
             sx={{ padding: 0 }}
           />
@@ -68,7 +67,7 @@ const ArticleTree = ({
         </TableCell>
         <TableCell align="center" sx={{ padding: '6px 0px' }}>
           <button
-            onClick={() => handleToggleStatus(articleCategory.status, articleCategory._id)}
+            onClick={() => handleToggleStatus(articleCategory.status, articleCategory._id ?? '')}
             className={`cursor-pointer border rounded-[5px] p-[5px] text-white 
               ${articleCategory.status === 'active' ? 'bg-[#18BA2A]' : 'bg-[#BC3433]'}`}
           >
@@ -113,7 +112,7 @@ const ArticleTree = ({
             Sửa
           </Link>
           <button
-            onClick={() => handleOpen(articleCategory._id)}
+            onClick={() => handleOpen(articleCategory._id ?? '')}
             className="cursor-pointer border rounded-[5px] bg-[#BC3433] p-[5px] text-white"
           >
             Xóa

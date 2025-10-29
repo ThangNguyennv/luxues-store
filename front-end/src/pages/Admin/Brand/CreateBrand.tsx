@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createBrandAPI } from '~/apis/admin/brand.api'

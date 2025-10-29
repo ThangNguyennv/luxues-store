@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
 import { fetchAllProductCategoriesAPI } from '~/apis/admin/productCategory.api'

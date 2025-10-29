@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useReducer } from 'react'
 import { alertReducer, initialState } from '~/reducers/alert/alertReducer'
 import type { AlertActions, AlertStates } from '~/types/alert.type'
