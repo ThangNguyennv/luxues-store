@@ -1,6 +1,6 @@
 import { Editor } from '@tinymce/tinymce-react'
-import SelectTree from '~/components/admin/TableTree/SelectTreeProduct'
-import { useCreate } from '~/hooks/admin/productCategory/useCreate'
+import SelectTree from '~/components/Admin/TableTree/SelectTreeProduct'
+import { useCreate } from '~/hooks/Admin/productCategory/useCreate'
 import { API_KEY } from '~/utils/constants'
 
 const CreateProductCategory = () => {

@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { Link } from 'react-router-dom'
 import Checkbox from '@mui/material/Checkbox'
-import { useTable, type Props } from '~/hooks/admin/Order/useTable'
+import { useTable, type Props } from '~/hooks/Admin/Order/useTable'
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 import FormatDateTime from '../Moment/FormatDateTime'
 import TableContainer from '@mui/material/TableContainer'

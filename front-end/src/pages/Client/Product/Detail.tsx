@@ -9,9 +9,9 @@ import Skeleton from '@mui/material/Skeleton'
 import { FaStar, FaRegStar } from 'react-icons/fa6' // Import thêm icon
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, FreeMode, Thumbs } from 'swiper/modules'
-import ProductCard from '~/components/client/ProductCard/ProductCard'
+import ProductCard from '~/components/Client/ProductCard/ProductCard'
 import { useMemo } from 'react' // Import useMemo để tối ưu
-import ReviewCard from '~/components/client/ReviewCard/ReviewCard'
+import ReviewCard from '~/components/Client/ReviewCard/ReviewCard'
 
 import 'swiper/css'
 import 'swiper/css/navigation'

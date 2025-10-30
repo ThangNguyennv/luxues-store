@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import Footer from '~/components/client/Footer/Footer'
+import Footer from '~/components/Client/Footer/Footer'
 
 const LayoutAuth = () => {
   return (

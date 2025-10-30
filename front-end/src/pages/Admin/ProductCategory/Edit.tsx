@@ -1,7 +1,7 @@
 import { Editor } from '@tinymce/tinymce-react'
 import { API_KEY } from '~/utils/constants'
-import { useEdit } from '~/hooks/admin/productCategory/useEdit'
-import SelectTree from '~/components/admin/TableTree/SelectTreeProduct'
+import { useEdit } from '~/hooks/Admin/productCategory/useEdit'
+import SelectTree from '~/components/Admin/TableTree/SelectTreeProduct'
 
 const EditProductCategory = () => {
   const {

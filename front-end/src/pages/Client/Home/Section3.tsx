@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useHome } from '~/contexts/client/HomeContext'
-import SliderWrapper from '~/components/client/SliderWrapper/SliderWrapper'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
+import SliderWrapper from '~/components/Client/SliderWrapper/SliderWrapper'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
 
 const Section3 = () => {
   const { dataHome } = useHome()

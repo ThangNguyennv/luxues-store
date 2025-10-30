@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
 import { useHome } from '~/contexts/client/HomeContext'
 import Skeleton from '@mui/material/Skeleton'
-import ArticleCard from '~/components/client/ArticleCard/ArticleCard'
+import ArticleCard from '~/components/Client/ArticleCard/ArticleCard'
 
 const ArticlesFeatured = () => {
   const { dataHome } = useHome()

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Header from '~/components/client/Header/Header'
-import Footer from '~/components/client/Footer/Footer'
-import ChatPage from '~/pages/client/ChatPage/ChatPage'
+import Header from '~/components/Client/Header/Header'
+import Footer from '~/components/Client/Footer/Footer'
+import ChatPage from '~/pages/Client/ChatPage/ChatPage'
 
 const LayoutDefault = () => {
   return (

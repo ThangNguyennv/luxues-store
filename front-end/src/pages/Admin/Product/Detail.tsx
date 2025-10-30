@@ -1,6 +1,6 @@
 import Skeleton from '@mui/material/Skeleton'
 import { Link } from 'react-router-dom'
-import { useDetail } from '~/hooks/admin/product/useDetail'
+import { useDetail } from '~/hooks/Admin/product/useDetail'
 import { FaStar, FaRegStar } from 'react-icons/fa'
 
 const DetailProduct = () => {

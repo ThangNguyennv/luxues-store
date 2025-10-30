@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
-import Pagination from '~/components/admin/Pagination/Pagination'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
+import Pagination from '~/components/Admin/Pagination/Pagination'
 import useIndex from '~/hooks/client/article/useIndex'
-import ArticleCard from '~/components/client/ArticleCard/ArticleCard'
+import ArticleCard from '~/components/Client/ArticleCard/ArticleCard'
 
 const ArticleClient = () => {
   const {

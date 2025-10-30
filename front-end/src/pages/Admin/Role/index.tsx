@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchDeleteRoleAPI, fetchRoleAPI } from '~/apis/admin/role.api'
-import FormatDateTime from '~/components/admin/Moment/FormatDateTime'
+import FormatDateTime from '~/components/Admin/Moment/FormatDateTime'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 import type { AccountInfoInterface } from '~/types/account.type'
 import type { UpdatedBy } from '~/types/helper.type'

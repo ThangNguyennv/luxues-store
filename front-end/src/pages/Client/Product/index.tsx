@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
-import CardItem from '~/components/client/CardItem/CardItem'
-import Pagination from '~/components/admin/Pagination/Pagination'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
+import CardItem from '~/components/Client/CardItem/CardItem'
+import Pagination from '~/components/Admin/Pagination/Pagination'
 import { useProductContext } from '~/contexts/client/ProductContext'
 import Skeleton from '@mui/material/Skeleton'
-import { FilterSidebar } from '~/components/client/FilterSidebar/FilterSidebar'
+import { FilterSidebar } from '~/components/Client/FilterSidebar/FilterSidebar'
 import { FaFilter, FaTimes, FaSort } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
-import { SortDropdown } from '~/components/client/SortDropdown/SortDropdown'
+import { SortDropdown } from '~/components/Client/SortDropdown/SortDropdown'
 
 const CardItemSkeleton = () => (
   <div className="flex flex-col items-center gap-[15px] rounded-[5px] border border-gray-200 bg-white p-[10px] text-center h-full">

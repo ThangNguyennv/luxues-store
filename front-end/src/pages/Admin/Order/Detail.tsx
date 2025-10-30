@@ -1,5 +1,5 @@
 import Skeleton from '@mui/material/Skeleton'
-import { useDetail } from '~/hooks/admin/Order/useDetail'
+import { useDetail } from '~/hooks/Admin/Order/useDetail'
 import { formatDateForInput } from '~/helpers/formatDateForInput'
 
 const DetailOrder = () => {

@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchDetailProductCategoryAPI } from '~/apis/client/product.api'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
-import CardItem from '~/components/client/CardItem/CardItem'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
+import CardItem from '~/components/Client/CardItem/CardItem'
 import type { ProductInfoInterface, ProductsWithCategoryDetailInterface } from '~/types/product.type'
 import Skeleton from '@mui/material/Skeleton'
 

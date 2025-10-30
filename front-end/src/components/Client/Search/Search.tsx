@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useProductContext } from '~/contexts/client/ProductContext'
-import CardItem from '~/components/client/CardItem/CardItem'
+import CardItem from '~/components/Client/CardItem/CardItem'
 import Skeleton from '@mui/material/Skeleton' // Để hiển thị loading
-import Pagination from '~/components/admin/Pagination/Pagination'
+import Pagination from '~/components/Admin/Pagination/Pagination'
 
 const Search = () => {
   const { stateProduct, fetchProduct } = useProductContext()

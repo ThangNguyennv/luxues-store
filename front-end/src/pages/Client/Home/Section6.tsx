@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import TestimonialCard, {
   type Testimonial
-} from '~/components/client/TestimonialCard/TestimonialCard'
+} from '~/components/Client/TestimonialCard/TestimonialCard'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { useEffect, useState } from 'react'
 import { fetchTopRatedReviewsAPI } from '~/apis/client/product.api'

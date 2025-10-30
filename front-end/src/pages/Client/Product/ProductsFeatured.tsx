@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import BoxHead from '~/components/client/BoxHead/BoxHead'
-import CardItem from '~/components/client/CardItem/CardItem'
+import BoxHead from '~/components/Client/BoxHead/BoxHead'
+import CardItem from '~/components/Client/CardItem/CardItem'
 import { useHome } from '~/contexts/client/HomeContext'
 import Skeleton from '@mui/material/Skeleton'
 
