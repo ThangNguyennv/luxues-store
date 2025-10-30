@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '~': path.resolve(__dirname, './src') // Make sure this matches your tsconfig.json alias
-    }
+    },
+    extensions: ['.tsx', '.ts', '.jsx', '.js']
   }
 })
