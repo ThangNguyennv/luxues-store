@@ -1,22 +1,3 @@
-// {
-//   "files": [],
-//   "references": [
-//     {
-//       "path": "./tsconfig.app.json"
-//     },
-//     {
-//       "path": "./tsconfig.node.json"
-//     }
-//   ],
-//   "compilerOptions": {
-//     // "ignoreDeprecations": "6.0",
-//     "paths": {
-//       "~/*": [
-//         "./src/*"
-//       ] // This maps '~' to the 'src' directory
-//     }
-//   }
-// }
 {
   "files": [],
   "references": [
@@ -26,5 +7,24 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    // "ignoreDeprecations": "6.0",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ] // This maps '~' to the 'src' directory
+    }
+  }
 }
+// {
+//   "files": [],
+//   "references": [
+//     {
+//       "path": "./tsconfig.app.json"
+//     },
+//     {
+//       "path": "./tsconfig.node.json"
+//     }
+//   ]
+// }
