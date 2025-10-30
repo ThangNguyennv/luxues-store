@@ -1,4 +1,4 @@
-Dự án Luxues Store (Website E-commerce Thời trang Full-Stack) (Vấn đang trong quá trình cập nhật thêm tính năng và tối ưu cho web mượt hơn)
+Dự án Luxues Store (Website E-commerce Thời trang Full-Stack) (Vẫn đang trong quá trình cập nhật thêm tính năng và tối ưu cho web mượt hơn)
 
 Đây là một dự án website thương mại điện tử (E-commerce) thời trang full-stack hoàn chỉnh, bao gồm trang web cho khách hàng (Client) và hệ thống quản trị (Admin). Dự án được xây dựng trên kiến trúc MERN (MongoDB, Express, React, Node) nhưng được hiện đại hóa với Vite, TypeScript, và JWT.
 
