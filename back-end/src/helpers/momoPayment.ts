@@ -11,8 +11,8 @@ export const momoCreateOrder = async (id: string, totalBill: number, res: Respon
   const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz'
   const orderInfoText = `Thanh toán đơn hàng ${id}`
   const partnerCode = 'MOMO'
-  const redirectUrl = `http://localhost:5173/checkout/success/${id}`
-  const ipnUrl = 'https://1cc7842f3113.ngrok-free.app/checkout/momo-callback'
+  const redirectUrl = `${process.env.CLIENT_URL}/checkout/success/${id}`
+  const ipnUrl = `${process.env.CLIENT_URL}/checkout/momo-callback`
   const requestType = "payWithMethod"
   const amount = Math.floor(totalBill)
   const orderId = newOrderId
@@ -124,7 +124,7 @@ export const momoCallback = async (req: Request, res: Response) => {
       // Thanh toán thất bại / bị hủy
       order.paymentInfo.status = 'FAILED'
       order.paymentInfo.details = {
-        redirectUrl: `http://localhost:5173/cart`
+        redirectUrl: `${process.env.CLIENT_URL}/cart`
       }
     }
     await order.save()
