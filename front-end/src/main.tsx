@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import '~/index.css'
+import App from '~/App'
 import CssBaseline from '@mui/material/CssBaseline'
-import { AlertToast } from './components/alert/Alert.tsx'
-import { AppProviders } from './AppProviders.tsx'
+import { AlertToast } from '~/components/alert/Alert'
+import { AppProviders } from '~/AppProviders'
 
 createRoot(document.getElementById('root')!).render(
   <AppProviders>
