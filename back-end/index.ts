@@ -18,12 +18,13 @@ import { chatSocketBrain } from '~/sockets/chat.socket'
 database.connect()
 
 const app: Express = express()
-const port: number | string = process.env.PORT || 3000
+const port: number | string = process.env.PORT
 
 // ✅ Dùng biến môi trường và cho phép cả local + production
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.CLIENT_URL
+  process.env.CLIENT_URL,
+  'https://luxues-store-demo1-pvym.vercel.app'
 ].filter(Boolean) // Loại bỏ undefined
 
 app.use(cors({
