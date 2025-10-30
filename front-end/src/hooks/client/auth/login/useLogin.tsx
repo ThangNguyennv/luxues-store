@@ -4,12 +4,14 @@ import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/client/auth.api'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
+import { useAuth } from '~/contexts/client/AuthContext'
 
 const useLoginClient = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { dispatchAlert } = useAlertContext()
+  const { setAccountUser } = useAuth()
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
@@ -20,14 +22,13 @@ const useLoginClient = () => {
       const password = form.password.value
       const response = await fetchLoginAPI(email, password)
 
-      if (response.code === 200) {
+      if (response.code === 200 && response.accountUser) {
+        setAccountUser(response.accountUser)
         dispatchAlert({
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
-        setTimeout(() => {
-          navigate('/')
-        }, 1500)
+        navigate('/')
       } else if (response.code === 401) {
         dispatchAlert({
           type: 'SHOW_ALERT',
