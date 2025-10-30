@@ -108,8 +108,7 @@ const port: number | string = process.env.PORT || 3000
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'http://localhost:5174',
-  process.env.CLIENT_URL
+  'https://luxues-store-demo1-pvym.vercel.app'
 ].filter(Boolean)
 
 console.log('🔥 Allowed Origins:', allowedOrigins)
