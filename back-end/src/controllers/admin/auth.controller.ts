@@ -51,7 +51,7 @@ export const loginPost = async (req: Request, res: Response) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: true, // Chỉ gửi qua HTTPS
-      sameSite: 'strict', // 'strict' an toàn hơn cho trang admin
+      sameSite: 'none', // 'strict' an toàn hơn cho trang admin
       maxAge: 24 * 60 * 60 * 1000 // 1 ngày
     })
     
