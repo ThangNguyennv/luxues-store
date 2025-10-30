@@ -158,16 +158,16 @@ MONGO_URL=mongodb+srv://...
 CLIENT_URL=http://localhost:5173
 
 # Cloundinary
-CLOUD_NAME=dq26lhcth
-CLOUD_KEY=254533486175735
-CLOUD_SECRET=VmUs26ehBmmQPLd7oNmcKy-HQ1c
+CLOUD_NAME=...
+CLOUD_KEY=...
+CLOUD_SECRET=...
 
 # Session Key
 SESSION_SECRET=Sodsfo89sdFDfdasdgdsf65asd
 
 # Tính năng gửi mail
-EMAIL_USER='email của bạn'
-EMAIL_PASSWORD='mật khẩu ứng dụng của bạn'
+EMAIL_USER=email của bạn
+EMAIL_PASSWORD=mật khẩu ứng dụng của bạn
 
 # API Key thanh toán
 VNP_TMN_CODE=ZPIAQCW7
@@ -184,8 +184,8 @@ JWT_SECRET_RESET=ijhduashOHDOAUHSDohdohs993rnfwe$@&%^&^%@
 JWT_SECRET_ADMIN=dfgdfg43534gregfdg$$34greasdasdasdsadasd
 
 # Google OAuth (Lấy từ Google Cloud Console)
-GOOGLE_CLIENT_ID=12538771737-mhtqg6f7o91lpl715n8nevec077dspne.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=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
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3100/user/auth/google/callback
 ```
 
@@ -209,7 +209,9 @@ GOOGLE_CALLBACK_URL=http://localhost:3100/user/auth/google/callback
 3. Tạo file .env.development ở gốc thư mục front-end:
 ```
 # Link đến API backend đang chạy ở local
-VITE_API_ROOT=http://localhost:8080
+VITE_API_ROOT=http://localhost:3100
+(Tạo tk trên tinymce, lấy về và điền vào nhé)
+VITE_TINYMCE_API_KEY=...
 ```
 
 4. Khởi động server frontend:
