@@ -24,7 +24,6 @@ const port: number | string = process.env.PORT
 const allowedOrigins = [
   'http://localhost:5173',
   process.env.CLIENT_URL,
-  'https://luxues-store-demo1-pvym.vercel.app'
 ].filter(Boolean) // Loại bỏ undefined
 
 app.use(cors({
