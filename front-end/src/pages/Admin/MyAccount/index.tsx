@@ -1,6 +1,6 @@
 import Skeleton from '@mui/material/Skeleton'
 import { Link } from 'react-router-dom'
-import { useMyAccount } from '~/hooks/Admin/myAccount/useMyAccount'
+import { useMyAccount } from '~/hooks/Admin/MyAccount/useMyAccount'
 
 const MyAccountAdmin = () => {
   const {

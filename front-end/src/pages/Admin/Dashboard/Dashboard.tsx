@@ -1,4 +1,4 @@
-import { useDashboard } from '~/hooks/Admin/dashboard/useDashboard'
+import { useDashboard } from '~/hooks/Admin/Dashboard/useDashboard'
 import { FaProductHunt } from 'react-icons/fa'
 import { PiUserListBold } from 'react-icons/pi'
 import { RiBillLine } from 'react-icons/ri'

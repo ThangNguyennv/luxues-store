@@ -4,7 +4,7 @@ import ProductCategoryTable from '~/components/Admin/ItemTable/ProductCategoryTa
 import Pagination from '~/components/Admin/Pagination/Pagination'
 import Search from '~/components/Admin/Search/Search'
 import SortRecords from '~/components/Admin/Sort/SortRecords'
-import { useProductCategory } from '~/hooks/Admin/productCategory/useProductCategory'
+import { useProductCategory } from '~/hooks/Admin/ProductCategory/useProductCategory'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
