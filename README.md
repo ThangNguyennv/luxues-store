@@ -142,7 +142,7 @@ Dự án được chia thành hai phần riêng biệt: front-end (Client) và b
 
 `cd back-end`
 
-2. Cài đặt các gói:
+3. Cài đặt các gói:
 
 `npm install`
 
