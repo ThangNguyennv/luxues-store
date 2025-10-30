@@ -2,6 +2,8 @@
 
 Đây là một dự án website thương mại điện tử (E-commerce) thời trang full-stack hoàn chỉnh, bao gồm trang web cho khách hàng (Client) và hệ thống quản trị (Admin). Dự án được xây dựng trên kiến trúc MERN (MongoDB, Express, React, Node) nhưng được hiện đại hóa với Vite, TypeScript, và JWT.
 
+<img width="1918" height="919" alt="image" src="https://github.com/user-attachments/assets/e168bbfe-cf73-4ebe-85ac-47bdc1fcc411" />
+
 - Link Deploy Frontend (Vercel): [https://luxues-store-demt-pvym.vercel.app]
 
 - Link Deploy Backend (Render): [https://luxues-store.onrender.com]
