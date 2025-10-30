@@ -20,8 +20,14 @@ database.connect()
 const app: Express = express()
 const port: number | string = process.env.PORT || 3000
 
+// ✅ Dùng biến môi trường và cho phép cả local + production
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.CLIENT_URL
+].filter(Boolean) // Loại bỏ undefined
+
 app.use(cors({
-  origin: 'http://localhost:5173', // FE origin
+  origin: allowedOrigins, // FE origin
   credentials: true, // Cho phép gửi cookie từ FE
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],     // Các phương thức HTTP được phép
   allowedHeaders: ['Content-Type', 'Authorization']     // Cho phép các header cần thiết
@@ -31,7 +37,7 @@ app.use(cors({
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Cho phép client React kết nối
+    origin: allowedOrigins, // Cho phép client React kết nối
     credentials: true
   }
 })
