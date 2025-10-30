@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import LayoutDefault from '~/layouts/client/layoutDefault/LayoutDefault'
-import LayoutDefaultAdmin from '~/layouts/admin/layoutDefault/LayoutDefault'
+import LayoutDefault from '~/layouts/client/LayoutDefault/LayoutDefault'
+import LayoutDefaultAdmin from '~/layouts/admin/LayoutDefault/LayoutDefault'
 import Home from '~/pages/client/Home'
 import AOS from 'aos'
 import 'aos'
