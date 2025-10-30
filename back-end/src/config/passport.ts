@@ -10,7 +10,7 @@ passport.use(new GoogleStrategy({
   // URL này phải khớp 100% với "Authorized redirect URI" bạn đã cấu hình
   // trên Google Cloud Console.
   // Đảm bảo biến 'API_ROOT' (ví dụ: http://localhost:3100) có trong file .env của backend.
-  callbackURL: `${process.env.API_ROOT}/user/auth/google/callback`,
+  callbackURL: process.env.GOOGLE_CALLBACK_URL as string,
   
   passReqToCallback: false // Đặt là false, chúng ta không cần `req` trong callback
 },
