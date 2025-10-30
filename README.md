@@ -148,7 +148,8 @@ Dự án được chia thành hai phần riêng biệt: front-end (Client) và b
 3. Tạo file .env ở gốc thư mục back-end và điền các biến môi trường:
 ```
 # Cổng chạy server
-PORT=8080
+PORT=3100
+API_ROOT=http://localhost:3100
 
 # Link database MongoDB của bạn
 MONGO_URL=mongodb+srv://...
@@ -156,15 +157,36 @@ MONGO_URL=mongodb+srv://...
 # Link frontend (để cấu hình CORS)
 CLIENT_URL=http://localhost:5173
 
+# Cloundinary
+CLOUD_NAME=dq26lhcth
+CLOUD_KEY=254533486175735
+CLOUD_SECRET=VmUs26ehBmmQPLd7oNmcKy-HQ1c
+
+# Session Key
+SESSION_SECRET=Sodsfo89sdFDfdasdgdsf65asd
+
+# Tính năng gửi mail
+EMAIL_USER='email của bạn'
+EMAIL_PASSWORD='mật khẩu ứng dụng của bạn'
+
+# API Key thanh toán
+VNP_TMN_CODE=ZPIAQCW7
+VNP_HASH_SECRET=7CVJIOQL9KSC3FEZLEUCKT362HKSGZB4
+ZALOPAY_APP_ID=2554
+ZALOPAY_KEY1=sdngKKJmqEMzvh5QQcdD2A9XBSKUNaYn
+ZALOPAY_KEY2=trMrHtvjo6myautxDUiAcYsVtaeQ8nhf
+ZALOPAY_ENDPOINT_CREATE=https://sb-openapi.zalopay.vn/v2/create
+ZALOPAY_ENDPOINT_QUERY=https://sb-openapi.zalopay.vn/v2/query
+
 # Các khóa bí mật (TỰ TẠO CHUỖI NGẪU NHIÊN, PHỨC TẠP)
-JWT_SECRET=daylachuoibimatratphuctapcuaban_thaydoino
-JWT_SECRET_ADMIN=DAY_LA_KHOA_BI_MAT_CHO_ADMIN_CUC_KY_AN_TOAN
-JWT_SECRET_RESET=daylachuoibimatkhac_dungdechoresetmatkhau
+JWT_SECRET=fghfghKDASDJD9UOH7T7GHOIIOJDOIH8998$%%$^$%DF
+JWT_SECRET_RESET=ijhduashOHDOAUHSDohdohs993rnfwe$@&%^&^%@
+JWT_SECRET_ADMIN=dfgdfg43534gregfdg$$34greasdasdasdsadasd
 
 # Google OAuth (Lấy từ Google Cloud Console)
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-API_ROOT=http://localhost:8080 # Dùng cho Google Callback
+GOOGLE_CLIENT_ID=12538771737-mhtqg6f7o91lpl715n8nevec077dspne.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CALLBACK_URL=http://localhost:3100/user/auth/google/callback
 ```
 
 4. Khởi động server backend:
