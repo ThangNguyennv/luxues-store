@@ -42,6 +42,7 @@ const io = new Server(server, {
   }
 })
 
+app.options('*', cors())
 
 global._io = io
 // MIDDLEWARE XÁC THỰC CHO SOCKET.IO
@@ -77,7 +78,6 @@ app.use(express.static(`${__dirname}/public`))
 
 routeAdmin(app)
 routeClient(app)
-app.options('*', cors())
 
 server.listen(port, () => {
   // eslint-disable-next-line no-console
