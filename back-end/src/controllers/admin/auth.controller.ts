@@ -76,7 +76,12 @@ export const loginPost = async (req: Request, res: Response) => {
 export const logout = (req: Request, res: Response) => {
   try {
     // Xóa cookie với tên mới 'token'
-    res.clearCookie('token')
+    res.cookie('token', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0) // Hết hạn ngay lập tức
+    })
     res.json({
       code: 200,
       message: 'Đăng xuất thành công!'

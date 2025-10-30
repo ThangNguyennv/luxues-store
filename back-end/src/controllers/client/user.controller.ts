@@ -105,6 +105,9 @@ export const loginPost = async (req: Request, res: Response) => {
       await Cart.updateOne({ _id: req.cookies.cartId }, {user_id: user._id })
     }
 
+    const userInfo = user.toObject()
+    delete userInfo.password
+
     // Gửi JWT về client qua cookie
     res.cookie('tokenUser', token, {
       httpOnly: true, // Chỉ server có thể truy cập
@@ -115,7 +118,8 @@ export const loginPost = async (req: Request, res: Response) => {
     res.json({
       code: 200,
       message: 'Đăng nhập thành công!',
-      tokenUser: token
+      tokenUser: token,
+      accountUser: userInfo
     })
   } catch (error) {
     res.json({ code: 400, message: 'Lỗi!', error: error })
@@ -125,8 +129,18 @@ export const loginPost = async (req: Request, res: Response) => {
 // [GET] /user/logout
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.clearCookie('tokenUser')
-    res.clearCookie('cartId')
+    res.cookie('tokenUser', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0) // Hết hạn ngay lập tức
+    })
+    res.cookie('cartId', '', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      expires: new Date(0)
+    })
     res.json({
       code: 200,
       message: 'Đăng xuất thành công!'
