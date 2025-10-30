@@ -28,7 +28,7 @@ export const vnpayCreateOrder = (totalBill: number, orderId: string,  res: Respo
     vnp_TxnRef: txnRef,
     vnp_OrderInfo: `Thanh toán đơn hàng: ${txnRef}`,
     vnp_OrderType: ProductCode.Other,
-    vnp_ReturnUrl: 'http://localhost:3100/checkout/vnpay-return',
+    vnp_ReturnUrl: `${process.env.API_ROOT}/checkout/vnpay-return`,
     vnp_Locale: VnpLocale.VN,
     vnp_CreateDate: dateFormat(new Date()),
     vnp_ExpireDate: dateFormat(expire),
@@ -63,10 +63,10 @@ export const vnpayReturn = async (req: Request, res: Response) => {
         })
       }
       if (req.query["vnp_ResponseCode"] === "00" && req.query["vnp_TransactionStatus"] === "00") {
-        return res.redirect(`http://localhost:5173/checkout/success/${order.id}`)
+        return res.redirect(`${process.env.CLIENT_URL}/checkout/success/${order.id}`)
       } 
       if (req.query["vnp_ResponseCode"] === "24" && req.query["vnp_TransactionStatus"] === "02") {
-        return res.redirect('http://localhost:5173/cart')
+        return res.redirect(`${process.env.CLIENT_URL}/cart`)
       }
       return res.json({ 
         code: 200,  

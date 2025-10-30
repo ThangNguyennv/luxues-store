@@ -15,7 +15,7 @@ export const zalopayCreateOrder = async (
   res: Response
 ) => {
   const embed_data = {
-    redirecturl: `http://localhost:5173/checkout/success/${orderId}`
+    redirecturl: `${process.env.CLIENT_URL}/checkout/success/${orderId}`
   }
   const items = products.map(p => ({
     itemid: p.product_id,
@@ -36,7 +36,7 @@ export const zalopayCreateOrder = async (
     description: `Thanh toán đơn hàng ${transID}`,
     bank_code: "", 
     mac: '',
-    callback_url: 'https://ecbde85a8603.ngrok-free.app/checkout/zalopay-callback'
+    callback_url: `${process.env.CLIENT_URL}/checkout/zalopay-callback`
   }
 
   const data = [
@@ -76,7 +76,6 @@ export const zalopayCreateOrder = async (
 export const zalopayCallback = async (req: Request, res: Response) => {
   try {
     let { data, mac } = req.body
-    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ req.body:", req.body);
     const macVerify = crypto.createHmac("sha256", process.env.ZALOPAY_KEY2)
       .update(data)
       .digest("hex")
@@ -85,7 +84,6 @@ export const zalopayCallback = async (req: Request, res: Response) => {
       return res.json({ return_code: -1, return_message: "mac not match" }) // Báo lỗi, thường khi MAC không khớp (nghi ngờ giả mạo).
     }
     let dataJson = JSON.parse(data)
-    console.log("🚀 ~ zalopayPayment.ts ~ zalopayCallback ~ dataJson:", dataJson);
     const [phone, id] = dataJson.app_user.split("-");
     const order = await Order.findOne({
       _id: id,
