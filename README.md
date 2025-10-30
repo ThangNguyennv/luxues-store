@@ -1,102 +1,104 @@
-### Dự án Luxues Store (Website E-commerce Thời trang Full-Stack) (Vẫn đang trong quá trình cập nhật thêm tính năng và tối ưu cho web mượt hơn)
-
-Đây là một dự án website thương mại điện tử (E-commerce) thời trang full-stack hoàn chỉnh, bao gồm trang web cho khách hàng (Client) và hệ thống quản trị (Admin). Dự án được xây dựng trên kiến trúc MERN (MongoDB, Express, React, Node) nhưng được hiện đại hóa với Vite, TypeScript, và JWT.
+# Luxues Store Project (Full-Stack Fashion E-commerce Website)
+---
+This is a complete full-stack fashion e-commerce website project, including a customer-facing site (Client) and an administrative system (Admin). The project is built on the MERN stack (MongoDB, Express, React, Node) but modernized with Vite, TypeScript, and JWT.
 
 <img width="1918" height="919" alt="image" src="https://github.com/user-attachments/assets/e168bbfe-cf73-4ebe-85ac-47bdc1fcc411" />
 
-- Link Deploy Frontend (Vercel): [https://luxues-store-demt-pvym.vercel.app]
+- Frontend Deploy (Vercel): [https://luxues-store-demt-pvym.vercel.app]
 
-- Link Deploy Backend (Render): [https://luxues-store.onrender.com]
+- Backend Deploy (Render): [https://luxues-store.onrender.com]
 
-1. Các Tính năng Nổi bật
+---
 
-Dự án được chia thành hai phần riêng biệt: front-end (Client) và back-end (Admin/API).
+## 1. Key Features
 
-1.1. Client (Trang người dùng)
+The project is divided into two separate parts: front-end (Client) and back-end (Admin/API).
 
-- Xác thực (Authentication):
+1.1. Client
 
-  - Đăng ký và Đăng nhập bằng bcrypt (băm mật khẩu) và JWT (JSON Web Token).
+- Authentication:
 
-  - Sử dụng httpOnly cookie để lưu trữ token, tăng cường bảo mật (chống XSS).
+  - Registration and Login using bcrypt (password hashing) and JWT (JSON Web Token).
 
-  - Đăng nhập bằng Google (OAuth 2.0): Tích hợp Passport.js để cho phép đăng nhập/đăng ký nhanh qua Google.
+  - Uses httpOnly cookies for token storage, enhancing security (prevents XSS).
 
-  - Luồng "Quên mật khẩu" an toàn sử dụng JWT tạm thời gửi qua email (hoặc mã OTP).
+  - Google Login (OAuth 2.0): Integrated with Passport.js for quick sign-in/sign-up via Google.
 
-- Mua sắm (Shopping):
+  - Secure "Forgot Password" flow using temporary JWTs sent via email (or OTP).
 
-  - Logic giỏ hàng (Cart) nâng cao: Tự động tạo giỏ hàng cho khách vãng lai. Khi khách đăng nhập, hệ thống tự động gộp giỏ hàng (merge cart) của khách vào giỏ hàng của tài khoản.
+- Shopping:
 
-  - Trang sản phẩm với bộ lọc (Filter) đa cấp: Lọc theo Danh mục (đa cấp), Giá (thanh trượt), Màu sắc, và Kích cỡ.
+  - Advanced Cart Logic: Automatically creates carts for guests. When a guest logs in, the system automatically merges the guest cart into their account cart.
 
-  - Sắp xếp (Sort) sản phẩm: Sắp xếp theo "Mặc định" (vị trí), Tên (A-Z, Z-A), và đặc biệt là sắp xếp theo Giá khuyến mãi (tính toán qua Aggregation).
+  - Product listing page with multi-level filtering: Filter by Category (multi-level), Price (slider), Color, and Size.
 
-  - Trang chi tiết sản phẩm với gallery ảnh (Image Swiper), chọn màu sắc, kích cỡ, và xem đánh giá.
+  - Product Sorting: Sort by "Default" (position), Name (A-Z, Z-A), and especially sort by Discounted Price (calculated via Aggregation).
 
-- Tìm kiếm:
+  - Product detail page with an image gallery (Image Swiper), color/size selection, and review display.
 
-  - Tìm kiếm "cổ điển" (nhấn Enter) để chuyển đến trang kết quả (có phân trang).
+- Search:
+
+  - "Classic Search" (pressing Enter) navigates to a paginated results page.
  
-  - Gợi ý tìm kiếm (suggestions) real-time (sử dụng debounce) ngay dưới thanh tìm kiếm.
+  - Real-time search suggestions (using debounce) directly under the search bar.
 
-- Tài khoản người dùng (Private Routes):
+- User Account (Private Routes):
 
-  - Trang thông tin tài khoản (cập nhật avatar, thông tin).
+  - Account information page (update avatar, details).
  
-  - Trang "Đơn hàng của tôi" (xem lịch sử, lọc đơn hàng).
+  - "My Orders" page (view history, filter orders).
  
-  - Hủy đơn hàng (nếu trạng thái cho phép).
+  - Cancel order (if status allows).
  
-  - Đánh giá sản phẩm: Cho phép người dùng đã mua hàng để lại đánh giá (rating) và upload ảnh.
+  - Product Reviews: Allows verified purchasers to leave a rating and upload images.
 
 - Chat Real-time:
 
-  - Sử dụng Socket.io để chat 1-1 với Admin.
+  - Uses Socket.io for 1-on-1 real-time chat with Admin.
  
-  - Tự động xác thực qua httpOnly cookie khi kết nối socket.
+  - Automatic authentication via httpOnly cookie on socket connection.
  
-  - Hiển thị dưới dạng bong bóng chat (chat bubble) tiện lợi.
+  - Displayed as a convenient chat bubble on the site.
 
-1.2. Admin (Trang quản trị)
+1.2. Admin
 
-- Xác thực Admin: Hệ thống đăng nhập riêng biệt, sử dụng JWT (cookie tokenAdmin) và bcrypt.
+- Admin Authentication: Separate login system, also using JWT (cookie tokenAdmin) and bcrypt.
 
-- Phân quyền (Authorization): Tích hợp logic role_id vào JWT payload để kiểm soát quyền truy cập cho từng API (ví dụ: Super Admin vs. Biên tập viên).
+- Authorization: Integrates role_id logic into the JWT payload to control API access (e.g., Super Admin vs. Editor).
 
-- Dashboard: Tổng quan về doanh thu, đơn hàng, người dùng mới.
+- Dashboard: Overview of revenue, orders, and new users.
 
-- Quản lý CRUD đầy đủ:
+- Full CRUD Management:
 
-  - Quản lý Sản phẩm (Thêm, Sửa, Xóa, Cập nhật trạng thái).
+  - Product Management (Add, Edit, Delete, Update Status).
  
-  - Quản lý Đơn hàng (Xem chi tiết, cập nhật trạng thái: Đang xử lý -> Vận chuyển -> Hoàn thành...).
+  - Order Management (View details, update status: Processing -> Transporting -> Confirmed...).
  
-  - Quản lý Thương hiệu (Brand) & Danh mục Thương hiệu.
+  - Brand & Brand Category Management.
  
-  - Quản lý Người dùng (Client) & Tài khoản (Admin).
+  - User (Client) & Account (Admin) Management.
  
-  - Quản lý Phân quyền (Role).
+  - Role & Permission Management.
 
-- Xuất file Excel:
+- Excel Export:
 
-  - Tính năng xuất toàn bộ danh sách đơn hàng (đã lọc) ra file .xlsx bằng exceljs ở backend.
+  - Feature to export the entire (filtered) order list to an .xlsx file using exceljs on the backend.
 
-- Chat Real-time (Admin View):
+- Real-time Chat (Admin View):
 
-  - Giao diện 2 cột, hiển thị tất cả các cuộc trò chuyện của khách hàng.
+  - 2-column interface displaying all customer chat sessions.
  
-  - Nhận tin nhắn real-time và trả lời trực tiếp cho từng khách hàng.
+  - Receive real-time messages and reply directly to each customer.
 
-2. Công nghệ sử dụng (Tech Stack)
+## 2. Tech Stack
 
-2.1. Frontend (Thư mục front-end)
+2.1. Frontend (in front-end folder)
 
 - Framework/Library: React 19, Vite
 
-- Ngôn ngữ: TypeScript
+- Language: TypeScript
 
-- Styling: Tailwind CSS, Framer Motion (cho hiệu ứng)
+- Styling: Tailwind CSS, Framer Motion (for animations)
 
 - Routing: React Router v7+
 
@@ -106,57 +108,60 @@ Dự án được chia thành hai phần riêng biệt: front-end (Client) và b
 
 - Real-time: Socket.io-client
 
-- Components: Material-UI (MUI) (cho Skeleton, Menu, Dialog), Swiper.js (cho sliders)
+- Components: Material-UI (MUI) (for Skeletons, Menus, Dialogs), Swiper.js (for sliders)
 
-2.2. Backend (Thư mục back-end)
+2.2. Backend (in back-end folder)
 
 - Framework: Node.js, Express.js
 
-- Ngôn ngữ: TypeScript
+- Language: TypeScript
 
-- Database: MongoDB (với Mongoose)
+- Database: MongoDB (with Mongoose)
 
-- Xác thực: jsonwebtoken (JWT), bcrypt (Hashing), passport, passport-google-oauth20
+- Authentication: jsonwebtoken (JWT), bcrypt (Hashing), passport, passport-google-oauth20
 
 - Real-time: Socket.io
 
 - API: REST API, Cookie-Parser, CORS
 
-- File Upload: Multer (xử lý file), Cloudinary (lưu trữ ảnh)
+- File Upload: Multer (file handling), Cloudinary (image storage)
 
-- Khác: exceljs (Xuất file Excel), mongoose-slug-updater
+- Others: exceljs (Excel Export), mongoose-slug-updater
 
 2.3. Deployment
 
-- Frontend: Vercel (kết nối với front-end và vercel.json cho SPA routing)
+- Frontend: Vercel (connected to the front-end directory and vercel.json for SPA routing)
 
-- Backend: Render (kết nối với back-end và chạy npm run build & npm run start)
+- Backend: Render (connected to the back-end directory and running npm run build & npm run start)
 
-3. Cài đặt và Chạy dự án (Local)
+## 3. Local Installation and Setup
 
-- Đây là một dự án Monorepo (quản lý trong 2 thư mục riêng biệt).
+- This is a Monorepo project (managed in 2 separate folders).
 
-3.1. Cài đặt Backend
+3.1. Backend Setup
 
-1. Mở một terminal, cd vào thư mục back-end:
+1. Open a terminal, cd into the back-end directory:
 
-`cd back-end`
-
-3. Cài đặt các gói:
-
-`npm install`
-
-
-3. Tạo file .env ở gốc thư mục back-end và điền các biến môi trường:
 ```
-# Cổng chạy server
+cd back-end
+```
+
+2. Install packages:
+
+```
+npm install
+````
+
+3. Create a .env file in the back-end root and fill in the environment variables:
+```
+# Server port
 PORT=3100
 API_ROOT=http://localhost:3100
 
-# Link database MongoDB của bạn
+# Your MongoDB connection string
 MONGO_URL=mongodb+srv://...
 
-# Link frontend (để cấu hình CORS)
+# Frontend URL (for CORS config)
 CLIENT_URL=http://localhost:5173
 
 # Cloundinary
@@ -164,14 +169,14 @@ CLOUD_NAME=...
 CLOUD_KEY=...
 CLOUD_SECRET=...
 
-# Session Key
+# Session Key 
 SESSION_SECRET=Sodsfo89sdFDfdasdgdsf65asd
 
 # Tính năng gửi mail
-EMAIL_USER=email của bạn
-EMAIL_PASSWORD=mật khẩu ứng dụng của bạn
+EMAIL_USER=your-gmail@gmail.com
+EMAIL_PASSWORD=your-google-app-password
 
-# API Key thanh toán
+# Payment API Keys
 VNP_TMN_CODE=ZPIAQCW7
 VNP_HASH_SECRET=7CVJIOQL9KSC3FEZLEUCKT362HKSGZB4
 ZALOPAY_APP_ID=2554
@@ -180,45 +185,60 @@ ZALOPAY_KEY2=trMrHtvjo6myautxDUiAcYsVtaeQ8nhf
 ZALOPAY_ENDPOINT_CREATE=https://sb-openapi.zalopay.vn/v2/create
 ZALOPAY_ENDPOINT_QUERY=https://sb-openapi.zalopay.vn/v2/query
 
-# Các khóa bí mật (TỰ TẠO CHUỖI NGẪU NHIÊN, PHỨC TẠP)
+# Secret Keys (CREATE YOUR OWN COMPLEX RANDOM STRINGS)
 JWT_SECRET=fghfghKDASDJD9UOH7T7GHOIIOJDOIH8998$%%$^$%DF
 JWT_SECRET_RESET=ijhduashOHDOAUHSDohdohs993rnfwe$@&%^&^%@
 JWT_SECRET_ADMIN=dfgdfg43534gregfdg$$34greasdasdasdsadasd
 
-# Google OAuth (Lấy từ Google Cloud Console)
+# Google OAuth (Get from Google Cloud Console)
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3100/user/auth/google/callback
 ```
 
-4. Khởi động server backend:
+4. Start the backend server:
 
- `npm run dev`
-
-
-3.2. Cài đặt Frontend
-
-1. Mở một terminal thứ hai, cd vào thư mục front-end:
-
-`cd front-end`
-
-
-2. Cài đặt các gói:
-
-`npm install`
-
-
-3. Tạo file .env.development ở gốc thư mục front-end:
 ```
-# Link đến API backend đang chạy ở local
+npm run dev
+```
+
+
+3.2. Frontend Setup
+
+1. Open a second terminal, cd into the front-end directory:
+
+```
+cd front-end
+```
+
+
+2. Install packages:
+
+```
+npm install
+```
+
+
+3. Create a .env.development file in the front-end root:
+```
+# Link to the local running backend API
 VITE_API_ROOT=http://localhost:3100
-(Tạo tk trên tinymce, lấy về và điền vào nhé)
+# (Create a tinymce account, get the key, and paste it here)
 VITE_TINYMCE_API_KEY=...
 ```
 
-4. Khởi động server frontend:
+4. Start the frontend server:
 
-`npm run dev`
+```
+npm run dev
+```
 
 
-5. Mở trình duyệt và truy cập http://localhost:5173.
+5. Open your browser and navigate to http://localhost:5173.
+
+--- 
+
+### Contact: If you have any problems, you can contact with me thangnv1029@gmail.com
+---
+
+### Note: With more time, I will try to update more features and further optimize the website for performance.
