@@ -137,6 +137,9 @@ The project is divided into two separate parts: front-end (Client) and back-end 
 ## 3. Local Installation and Setup
 
 - This is a Monorepo project (managed in 2 separate folders).
+```
+git clone https://github.com/ThangNguyennv/luxues-store.git
+```
 
 3.1. Backend Setup
 
