@@ -20,9 +20,8 @@ database.connect()
 const app: Express = express()
 const port: number | string = process.env.PORT
 
-// ✅ Dùng biến môi trường và cho phép cả local + production
+// Dùng biến môi trường và cho phép cả local + production
 const allowedOrigins = [
-  'http://localhost:5173',
   process.env.CLIENT_URL,
 ].filter(Boolean) // Loại bỏ undefined
 

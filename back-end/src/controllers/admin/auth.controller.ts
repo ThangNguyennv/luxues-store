@@ -11,7 +11,7 @@ export const loginPost = async (req: Request, res: Response) => {
     const accountAdmin = await Account.findOne({
       email: email,
       deleted: false
-    }).select('+password') 
+    }).select('+password') // Bị chặn bởi select = false nên phải dùng dấu "+"
 
     if (!accountAdmin) {
       return res.json({

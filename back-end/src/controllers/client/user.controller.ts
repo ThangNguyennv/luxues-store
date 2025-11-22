@@ -515,7 +515,7 @@ export const googleCallback = async (req: Request, res: Response) => {
       return res.redirect(`${process.env.CLIENT_URL}/user/login?error=auth_failed`);
     }
 
-    // 2. Logic giỏ hàng (giống hệt loginPost)
+    // 2. Logic giỏ hàng 
     const cart = await Cart.findOne({ user_id: user._id });
     if (cart) {
       res.cookie('cartId', cart._id);
