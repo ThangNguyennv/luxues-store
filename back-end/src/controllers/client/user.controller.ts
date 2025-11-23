@@ -497,18 +497,28 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     // TH1: User đã có giỏ hàng cũ(userCart)
     if (userCart) {
-      if (guestCartId && guestCartId !== userCart._id.toString()) {
+      finalCartId = userCart._id.toString()
+
+      if (guestCartId && guestCartId !== finalCartId) {
         // TH1a: User có giỏ cũ VÀ có giỏ khách(guestCartId)
         // => Gộp sản phẩm từ giỏ khách vào giỏ cũ
         const guestCart = await Cart.findById(guestCartId)
         if (guestCart && guestCart.products.length > 0) {
+          // Chuyển đổi products sang Object thuần túy để tránh lỗi Mongoose
+          const userProducts = userCart.toObject().products || []
+          const guestProducts = guestCart.toObject().products || []
+
           const productMap = new Map()
+          // Hàm tạo Key duy nhất (ProductId + Color + Size)
+          const generateKey = (pId: string, color: string, size: string) => {
+            return `${pId}-${color || 'null'}-${size || 'null'}`
+          }
           // Thêm sản phẩm từ giỏ user cũ
-          userCart.products.forEach((item: any) => {
-            const productId = (item.product_id._id || item.product_id).toString()
-            const uniqueKey = `${productId}_${item.color ?? ''}_${item.size ?? ''}`
-            productMap.set(uniqueKey, {
-              product_id: item.product_id,
+          userProducts.forEach((item: any) => {
+            const productId = item.product_id._id ? item.product_id._id.toString() : item.product_id.toString()
+            const key = generateKey(productId, item.color, item.size)
+            productMap.set(key, {
+              product_id: productId,
               quantity: item.quantity,
               color: item.color,
               size: item.size
@@ -516,18 +526,17 @@ export const googleCallback = async (req: Request, res: Response) => {
           })
 
           // Merge với sản phẩm từ giỏ khách
-          guestCart.products.forEach((item: any) => {
-            const productId = (item.product_id._id || item.product_id).toString()
-            const uniqueKey = `${productId}_${item.color ?? ''}_${item.size ?? ''}`
-            if (productMap.has(uniqueKey)) {
+          guestProducts.forEach((item: any) => {
+           const productId = item.product_id._id ? item.product_id._id.toString() : item.product_id.toString()
+           const key = generateKey(productId, item.color, item.size)
+            if (productMap.has(key)) {
               // check xem có cùng color và size không
-              const existingItem = productMap.get(uniqueKey)
+              const existingItem = productMap.get(key)
               // Cùng sản phẩm, cùng color và size => Cộng dồn số lượng
               existingItem.quantity += item.quantity
-              productMap.set(uniqueKey, existingItem)
             } else {
-              productMap.set(uniqueKey, {
-                product_id: item.product_id,
+              productMap.set(key, {
+                product_id: (item.product_id._id || item.product_id).toString(),
                 quantity: item.quantity,
                 color: item.color,
                 size: item.size
@@ -540,10 +549,10 @@ export const googleCallback = async (req: Request, res: Response) => {
           await Cart.deleteOne({ _id: guestCartId })      
         }
       }
-      finalCartId = userCart._id.toString()
+      
       // TH1b: User có giỏ cũ, không có giỏ khách
       // => Chỉ cần set cookie về giỏ cũ
-      res.cookie('cartId', userCart._id.toString(), COOKIE_OPTIONS)
+      res.cookie('cartId', finalCartId, COOKIE_OPTIONS)
     } else {
       // TH2: User chưa có giỏ hàng (user mới)
       if (guestCartId) {
@@ -551,15 +560,14 @@ export const googleCallback = async (req: Request, res: Response) => {
         // => Gán giỏ khách cho user
         finalCartId = guestCartId
         await Cart.updateOne({ _id: guestCartId }, { user_id: user._id })
-        res.cookie('cartId', guestCartId, COOKIE_OPTIONS)
       } else {
         // TH2b: User mới, không có giỏ nào
         // => Tạo giỏ mới cho user
         const newCart = new Cart({ user_id: user._id, products: [] })
-        finalCartId = newCart._id.toString()
         await newCart.save()
-        res.cookie('cartId', newCart._id.toString(), COOKIE_OPTIONS)
+        finalCartId = newCart._id.toString()
       }
+      res.cookie('cartId', finalCartId, COOKIE_OPTIONS)
     }
 
     // 3. Tạo JWT (token đăng nhập chính)
