@@ -543,7 +543,7 @@ export const googleCallback = async (req: Request, res: Response) => {
       maxAge: 24 * 60 * 60 * 1000 
     })
 
-    const redirectUrl = new URL(process.env.CLIENT_URL as string)
+    const redirectUrl = new URL(`${process.env.CLIENT_URL}/auth/google/callback`)
     redirectUrl.searchParams.set('tokenUser', token)
     redirectUrl.searchParams.set('cartId', finalCartId)
 
