@@ -2,6 +2,7 @@ import Account from '~/models/account.model'
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt' 
 import jwt from 'jsonwebtoken'
+import { COOKIE_OPTIONS } from '~/utils/constants'
 
 // [POST] /admin/auth/login
 export const loginPost = async (req: Request, res: Response) => {
@@ -75,13 +76,10 @@ export const loginPost = async (req: Request, res: Response) => {
 // [GET] /admin/auth/logout
 export const logout = (req: Request, res: Response) => {
   try {
+    const { expires, ...clearOptions } = COOKIE_OPTIONS
     // Xóa cookie với tên mới 'token'
-    res.cookie('token', '', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: new Date(0) // Hết hạn ngay lập tức
-    })
+    res.clearCookie('token', clearOptions)
+
     res.json({
       code: 200,
       message: 'Đăng xuất thành công!'

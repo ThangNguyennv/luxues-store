@@ -11,6 +11,7 @@ import Order from '~/models/order.model'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken' 
+import { COOKIE_OPTIONS } from '~/utils/constants'
 
 // [POST] /user/register
 export const registerPost = async (req: Request, res: Response) => {
@@ -90,61 +91,43 @@ export const loginPost = async (req: Request, res: Response) => {
       })
     }
 
-    // Tạo JWT
+
     const payload = { userId: user._id, email: user.email }
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       expiresIn: '1d' // Token hết hạn sau 1 ngày
     })
 
-    // const cart = await Cart.findOne({
-    //   user_id: user._id
-    // })
-    // if (cart) {
-    //   res.cookie('cartId', cart._id)
-    // } else {
-    //   await Cart.updateOne({ _id: req.cookies.cartId }, {user_id: user._id })
-    // }
-    const guestCartId = req.cookies.cartId;
-    const userCart = await Cart.findOne({ user_id: user._id });
+    const guestCartId = req.cookies.cartId
+    const userCart = await Cart.findOne({ user_id: user._id })
 
-    // Định nghĩa tùy chọn cookie
-    const cookieOptions = {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none' as const, 
-      maxAge: 365 * 24 * 60 * 60 * 1000 // 1 năm
-    };
-
+    // Case 1: User đã có giỏ hàng cũ (userCart)
     if (userCart) {
-      // Case 1: User đã có giỏ hàng cũ (userCart)
       if (guestCartId && guestCartId !== userCart._id.toString()) {
         // Case 1a: User có giỏ cũ VÀ có giỏ khách (guestCartId)
         // => Gộp sản phẩm từ giỏ khách vào giỏ cũ
-        const guestCart = await Cart.findById(guestCartId);
+        const guestCart = await Cart.findById(guestCartId)
         if (guestCart && guestCart.products.length > 0) {
-          // (Đây là logic gộp đơn giản, bạn có thể cần logic phức tạp hơn để xử lý trùng lặp)
-          userCart.products.push(...guestCart.products);
-          await userCart.save();
-          await Cart.deleteOne({ _id: guestCartId }); // Xóa giỏ khách
+          userCart.products.push(...guestCart.products)
+          await userCart.save()
+          await Cart.deleteOne({ _id: guestCartId })
         }
       }
       // Case 1b: User có giỏ cũ, không có giỏ khách
       // => Chỉ cần set cookie về giỏ cũ
-      res.cookie('cartId', userCart._id.toString(), cookieOptions);
+      res.cookie('cartId', userCart._id.toString(), COOKIE_OPTIONS)
 
-    } else {
-      // Case 2: User chưa có giỏ hàng (user mới)
+    } else { // Case 2: User chưa có giỏ hàng (user mới)
       if (guestCartId) {
         // Case 2a: User chưa có giỏ, nhưng có giỏ khách
         // => Gán giỏ khách cho user
-        await Cart.updateOne({ _id: guestCartId }, { user_id: user._id });
-        res.cookie('cartId', guestCartId, cookieOptions); // Giữ nguyên cartId
+        await Cart.updateOne({ _id: guestCartId }, { user_id: user._id })
+        res.cookie('cartId', guestCartId, COOKIE_OPTIONS)
       } else {
         // Case 2b: User mới, không có giỏ nào
         // => Tạo giỏ mới cho user
-        const newCart = new Cart({ user_id: user._id, products: [] });
-        await newCart.save();
-        res.cookie('cartId', newCart._id.toString(), cookieOptions);
+        const newCart = new Cart({ user_id: user._id, products: [] })
+        await newCart.save()
+        res.cookie('cartId', newCart._id.toString(), COOKIE_OPTIONS)
       }
     }
 
@@ -156,7 +139,7 @@ export const loginPost = async (req: Request, res: Response) => {
       httpOnly: true, // Chỉ server có thể truy cập
       secure: true, // Chỉ gửi qua HTTPS ở môi trường production
       sameSite: 'none', 
-      maxAge: 24 * 60 * 60 * 1000 
+      maxAge: 24 * 60 * 60 * 1000 // 1 ngày
     })
     res.json({
       code: 200,
@@ -172,18 +155,10 @@ export const loginPost = async (req: Request, res: Response) => {
 // [GET] /user/logout
 export const logout = async (req: Request, res: Response) => {
   try {
-    res.cookie('tokenUser', '', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: new Date(0) // Hết hạn ngay lập tức
-    })
-    res.cookie('cartId', '', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-      expires: new Date(0)
-    })
+    const { expires, ...clearOptions } = COOKIE_OPTIONS
+    res.clearCookie('tokenUser', clearOptions)
+    res.clearCookie('cartId',clearOptions)
+
     res.json({
       code: 200,
       message: 'Đăng xuất thành công!'

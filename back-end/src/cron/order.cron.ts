@@ -21,9 +21,9 @@ cron.schedule("*/5 * * * *", async () => {
     )
 
     if (result.modifiedCount > 0) {
-      console.log(`✅ Đã hủy ${result.modifiedCount} đơn PENDING quá hạn`)
+      console.log(`Đã hủy ${result.modifiedCount} đơn PENDING quá hạn`)
     }
   } catch (error) {
-    console.error("❌ Lỗi khi auto-cancel order:", error)
+    console.error("Lỗi khi auto-cancel order:", error)
   }
 })

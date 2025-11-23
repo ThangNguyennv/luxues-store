@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import Cart from '~/models/cart.model'
+import { COOKIE_OPTIONS } from '~/utils/constants'
 
 export const cartId = async (
   req: Request,
@@ -8,19 +9,11 @@ export const cartId = async (
 ): Promise<void> => {
   const cartId = req.cookies.cartId
 
-  // Định nghĩa tùy chọn cookie
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none' as const, 
-    expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 năm
-  };
-
   if (!cartId) {
     // Tạo giỏ hàng
     const cart = new Cart()
     await cart.save()
-    res.cookie('cartId', cart.id, cookieOptions) // SỬA LỖI: Dùng cookieOptions
+    res.cookie('cartId', cart.id, COOKIE_OPTIONS)
     req["cartId"] = cart.id,
     req['miniCart'] = cart
   } else {
@@ -31,7 +24,7 @@ export const cartId = async (
       // => Tạo giỏ hàng mới
       const newCart = new Cart()
       await newCart.save()
-      res.cookie('cartId', newCart.id, cookieOptions) // SỬA LỖI: Dùng cookieOptions
+      res.cookie('cartId', newCart.id, COOKIE_OPTIONS)
       req["cartId"] = newCart.id,
       req['miniCart'] = newCart
     } else {

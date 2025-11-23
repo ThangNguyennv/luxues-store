@@ -19,9 +19,7 @@ export const requireAuth = async (
   try {
     // Xác thực chữ ký của token
     const decoded = jwt.verify(tokenUser, process.env.JWT_SECRET as string) as { userId: string }
-    console.log("🚀 ~ auth.middleware.ts ~ requireAuth ~ decoded:", decoded);
 
-    // Tìm user bằng ID lấy từ payload của token
     const user = await User.findOne({
       _id: decoded.userId,
       deleted: false
@@ -36,7 +34,6 @@ export const requireAuth = async (
     next()
 
   } catch (error) {
-    // Nếu token hết hạn hoặc không hợp lệ, jwt.verify sẽ ném lỗi
     res.json({
       code: 401,
       message: 'Token không hợp lệ hoặc đã hết hạn!'

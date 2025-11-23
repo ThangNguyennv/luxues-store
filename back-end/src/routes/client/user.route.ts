@@ -37,7 +37,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback', 
   passport.authenticate('google', { 
     failureRedirect: '/user/login', // Nếu thất bại, đá về trang đăng nhập
-    session: false // Chúng ta không dùng session, chúng ta dùng JWT
+    session: false // Không dùng session, dùng JWT
   }),
   controller.googleCallback // Nếu thành công, gọi hàm controller này để cấp JWT
 )
