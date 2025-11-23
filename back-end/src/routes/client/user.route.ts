@@ -9,6 +9,7 @@ import { uploadWithOneImageToCloud } from '~/middlewares/client/uploadCloud.midd
 import * as controller from '~/controllers/client/user.controller'
 import * as validate from '~/validates/client/user.validate'
 import * as authMiddleware from '~/middlewares/client/auth.middleware'
+import { setAuthCookies } from '~/controllers/client/user.controller'
 
 router.post('/register', validate.registerPost, controller.registerPost)
 router.post('/login', validate.loginPost, controller.loginPost)
@@ -41,6 +42,8 @@ router.get('/auth/google/callback',
   }),
   controller.googleCallback // Nếu thành công, gọi hàm controller này để cấp JWT
 )
+
+router.post('/set-auth-cookies', setAuthCookies)
 
 // route private
 router.get(

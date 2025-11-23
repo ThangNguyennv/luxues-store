@@ -491,7 +491,10 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     // 2. Logic giỏ hàng 
     const guestCartId = req.cookies.cartId
+    
     const userCart = await Cart.findOne({ user_id: user._id })  
+    let finalCartId: string
+
     // TH1: User đã có giỏ hàng cũ(userCart)
     if (userCart) {
       if (guestCartId && guestCartId !== userCart._id.toString()) {
@@ -504,6 +507,7 @@ export const googleCallback = async (req: Request, res: Response) => {
           await Cart.deleteOne({ _id: guestCartId })      
         }
       }
+      finalCartId = userCart._id.toString()
       // TH1b: User có giỏ cũ, không có giỏ khách
       // => Chỉ cần set cookie về giỏ cũ
       res.cookie('cartId', userCart._id.toString(), COOKIE_OPTIONS)
@@ -512,12 +516,14 @@ export const googleCallback = async (req: Request, res: Response) => {
       if (guestCartId) {
         // TH2a: User chưa có giỏ, nhưng có giỏ khách
         // => Gán giỏ khách cho user
+        finalCartId = guestCartId
         await Cart.updateOne({ _id: guestCartId }, { user_id: user._id })
         res.cookie('cartId', guestCartId, COOKIE_OPTIONS)
       } else {
         // TH2b: User mới, không có giỏ nào
         // => Tạo giỏ mới cho user
         const newCart = new Cart({ user_id: user._id, products: [] })
+        finalCartId = newCart._id.toString()
         await newCart.save()
         res.cookie('cartId', newCart._id.toString(), COOKIE_OPTIONS)
       }
@@ -537,11 +543,60 @@ export const googleCallback = async (req: Request, res: Response) => {
       maxAge: 24 * 60 * 60 * 1000 
     })
 
+    const redirectUrl = new URL(process.env.CLIENT_URL as string)
+    redirectUrl.searchParams.set('tokenUser', token)
+    redirectUrl.searchParams.set('cartId', finalCartId)
+
     // 5. Chuyển hướng người dùng về trang chủ React
-    res.redirect(process.env.CLIENT_URL as string)
+    res.redirect(redirectUrl.toString())
 
   } catch (error) {
     console.error("LỖI GOOGLE CALLBACK:", error)
     res.redirect(`${process.env.CLIENT_URL}/user/login?error=server_error`)
+  }
+}
+
+// controllers/user.controller.ts
+export const setAuthCookies = async (req: Request, res: Response) => {
+  try {
+    const { tokenUser, cartId } = req.body
+
+    if (!tokenUser) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Thiếu token" 
+      })
+    }
+
+    // Verify token
+    jwt.verify(tokenUser, process.env.JWT_SECRET as string)
+
+    // Set cookies
+    res.cookie('tokenUser', tokenUser, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24 * 60 * 60 * 1000
+    })
+
+    if (cartId) {
+      res.cookie('cartId', cartId, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      })
+    }
+
+    res.json({ 
+      success: true, 
+      message: "Đã set cookies thành công" 
+    })
+  } catch (error) {
+    console.error('Lỗi setAuthCookies:', error)
+    res.status(401).json({ 
+      success: false, 
+      message: "Token không hợp lệ" 
+    })
   }
 }
