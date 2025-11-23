@@ -491,9 +491,11 @@ export const googleCallback = async (req: Request, res: Response) => {
 
     // 2. Logic giỏ hàng 
     const guestCartId = req.cookies.cartId
+    console.log("🚀 ~ user.controller.ts ~ googleCallback ~ guestCartId:", guestCartId);
     
     const userCart = await Cart.findOne({ user_id: user._id })  
     let finalCartId: string
+    console.log("🚀 ~ user.controller.ts ~ googleCallback ~ finalCartId:", finalCartId);
 
     // TH1: User đã có giỏ hàng cũ(userCart)
     if (userCart) {
@@ -506,7 +508,8 @@ export const googleCallback = async (req: Request, res: Response) => {
           // Thêm sản phẩm từ giỏ user cũ
           userCart.products.forEach((item: any) => {
             const productId = item.product_id.toString()
-            productMap.set(productId, {
+            const uniqueKey = `${productId}_${item.color || 'default'}_${item.size || 'default'}`
+            productMap.set(uniqueKey, {
               product_id: item.product_id,
               quantity: item.quantity,
               color: item.color,
@@ -517,16 +520,16 @@ export const googleCallback = async (req: Request, res: Response) => {
           // Merge với sản phẩm từ giỏ khách
           guestCart.products.forEach((item: any) => {
             const productId = item.product_id.toString()
-            if (productMap.has(productId)) {
+            const uniqueKey = `${productId}_${item.color || 'default'}_${item.size || 'default'}`
+            if (productMap.has(uniqueKey)) {
               // check xem có cùng color và size không
-              const existingItem = productMap.get(productId)
+              const existingItem = productMap.get(uniqueKey)
               if (existingItem.color === item.color && existingItem.size === item.size) {
                 // Cùng sản phẩm, cùng color và size => Cộng dồn số lượng
                 existingItem.quantity += item.quantity
-                productMap.set(productId, existingItem)
+                productMap.set(uniqueKey, existingItem)
               } else {
                 // Cùng sản phẩm nhưng khác color hoặc size => Thêm mới
-                const uniqueKey = productId + '_' + item.color + '_' + item.size
                 productMap.set(uniqueKey, {
                   product_id: item.product_id,
                   quantity: item.quantity,
@@ -535,7 +538,7 @@ export const googleCallback = async (req: Request, res: Response) => {
                 })
               }
             } else {
-              productMap.set(productId, {
+              productMap.set(uniqueKey, {
                 product_id: item.product_id,
                 quantity: item.quantity,
                 color: item.color,
@@ -545,6 +548,8 @@ export const googleCallback = async (req: Request, res: Response) => {
           })
 
           userCart.set('products', Array.from(productMap.values()))
+          console.log("🚀 ~ user.controller.ts ~ googleCallback ~ productMap:", productMap);
+          console.log("🚀 ~ user.controller.ts ~ googleCallback ~ userCart:", userCart);
           await userCart.save()
           await Cart.deleteOne({ _id: guestCartId })      
         }
