@@ -506,7 +506,7 @@ export const googleCallback = async (req: Request, res: Response) => {
           // Thêm sản phẩm từ giỏ user cũ
           userCart.products.forEach((item: any) => {
             const productId = (item.product_id._id || item.product_id).toString()
-            const uniqueKey = `${productId}_${item.color || 'default'}_${item.size || 'default'}`
+            const uniqueKey = `${productId}_${item.color ?? ''}_${item.size ?? ''}`
             productMap.set(uniqueKey, {
               product_id: item.product_id,
               quantity: item.quantity,
@@ -518,7 +518,7 @@ export const googleCallback = async (req: Request, res: Response) => {
           // Merge với sản phẩm từ giỏ khách
           guestCart.products.forEach((item: any) => {
             const productId = (item.product_id._id || item.product_id).toString()
-            const uniqueKey = `${productId}_${item.color || 'default'}_${item.size || 'default'}`
+            const uniqueKey = `${productId}_${item.color ?? ''}_${item.size ?? ''}`
             if (productMap.has(uniqueKey)) {
               // check xem có cùng color và size không
               const existingItem = productMap.get(uniqueKey)
