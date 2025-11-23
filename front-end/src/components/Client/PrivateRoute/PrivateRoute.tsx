@@ -6,25 +6,32 @@ import type { UserDetailInterface } from '~/types/user.type'
 import Skeleton from '@mui/material/Skeleton'
 
 const PrivateRouteClient = ({ children }: { children: JSX.Element }) => {
-  const { accountUser, setAccountUser } = useAuth()
+  const { accountUser, setAccountUser, loading: globalLoading } = useAuth()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    //  Nếu đang xử lý Google callback, chờ xong
+    if (globalLoading) {
+      setLoading(true)
+      return
+    }
+
     if (accountUser) {
       setLoading(false)
       return
     }
-    fetchInfoUserAPI().then((response: UserDetailInterface) => {
-      setAccountUser(response.accountUser)
-    })
+    fetchInfoUserAPI()
+      .then((response: UserDetailInterface) => {
+        setAccountUser(response.accountUser)
+      })
       .catch(() => {
         setAccountUser(null) // nếu lỗi thì vẫn set null
       })
       .finally(() => {
         setLoading(false) // kết thúc loading
       })
-  }, [accountUser, setAccountUser])
-  if (loading) {
+  }, [accountUser, setAccountUser, globalLoading])
+  if (loading || globalLoading) {
     return (
       <div className="container mx-auto p-8">
         <Skeleton variant="text" width="60%" height={50} />
