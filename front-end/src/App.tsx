@@ -78,6 +78,7 @@ import CreateBrand from '~/pages/Admin/Brand/CreateBrand'
 import EditBrand from '~/pages/Admin/Brand/EditBrand'
 import BrandPage from '~/pages/Client/Brand/Brand'
 import AdminChatPage from '~/pages/Admin/AdminChatPage/AdminChatPage'
+import GoogleCallback from './pages/Client/GoogleCallback/GoogleCallback'
 
 function App() {
   useEffect(() => {
@@ -141,6 +142,7 @@ function App() {
               <Route path='reset' element={ <Reset />}/>
             </Route>
           </Route>
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
           <Route path='admin' element={<PrivateRouteAdmin><LayoutDefaultAdmin /></PrivateRouteAdmin>}>
             <Route index element={ <Dashboard />} />
             <Route path='dashboard' element={ <Dashboard />}/>
