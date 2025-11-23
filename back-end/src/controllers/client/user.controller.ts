@@ -502,7 +502,49 @@ export const googleCallback = async (req: Request, res: Response) => {
         // => Gộp sản phẩm từ giỏ khách vào giỏ cũ
         const guestCart = await Cart.findById(guestCartId)
         if (guestCart && guestCart.products.length > 0) {
-          userCart.products.push(...guestCart.products)
+          const productMap = new Map()
+          // Thêm sản phẩm từ giỏ user cũ
+          userCart.products.forEach((item: any) => {
+            const productId = item.product_id.toString()
+            productMap.set(productId, {
+              product_id: item.product_id,
+              quantity: item.quantity,
+              color: item.color,
+              size: item.size
+            })
+          })
+
+          // Merge với sản phẩm từ giỏ khách
+          guestCart.products.forEach((item: any) => {
+            const productId = item.product_id.toString()
+            if (productMap.has(productId)) {
+              // check xem có cùng color và size không
+              const existingItem = productMap.get(productId)
+              if (existingItem.color === item.color && existingItem.size === item.size) {
+                // Cùng sản phẩm, cùng color và size => Cộng dồn số lượng
+                existingItem.quantity += item.quantity
+                productMap.set(productId, existingItem)
+              } else {
+                // Cùng sản phẩm nhưng khác color hoặc size => Thêm mới
+                const uniqueKey = productId + '_' + item.color + '_' + item.size
+                productMap.set(uniqueKey, {
+                  product_id: item.product_id,
+                  quantity: item.quantity,
+                  color: item.color,
+                  size: item.size
+                })
+              }
+            } else {
+              productMap.set(productId, {
+                product_id: item.product_id,
+                quantity: item.quantity,
+                color: item.color,
+                size: item.size
+              })
+            }
+          })
+
+          userCart.set('products', Array.from(productMap.values()))
           await userCart.save()
           await Cart.deleteOne({ _id: guestCartId })      
         }
