@@ -486,27 +486,48 @@ export const googleCallback = async (req: Request, res: Response) => {
     const user = req.user as any
 
     if (!user) {
-      // Chuyển hướng về trang đăng nhập của React với thông báo lỗi
-      return res.redirect(`${process.env.CLIENT_URL}/user/login?error=auth_failed`);
+      return res.redirect(`${process.env.CLIENT_URL}/user/login?error=auth_failed`)
     }
 
     // 2. Logic giỏ hàng 
-    const cart = await Cart.findOne({ user_id: user._id });
-    if (cart) {
-      res.cookie('cartId', cart._id);
-    } else if (req.cookies.cartId) {
-      // Nếu có giỏ hàng khách, gán nó cho người dùng
-      await Cart.updateOne(
-        { _id: req.cookies.cartId },
-        { user_id: user._id }
-      );
-    } // Nếu không có giỏ hàng khách, middleware cartId sẽ tự tạo giỏ hàng mới
+    const guestCartId = req.cookies.cartId
+    const userCart = await Cart.findOne({ user_id: user._id })  
+    // TH1: User đã có giỏ hàng cũ(userCart)
+    if (userCart) {
+      if (guestCartId && guestCartId !== userCart._id.toString()) {
+        // TH1a: User có giỏ cũ VÀ có giỏ khách(guestCartId)
+        // => Gộp sản phẩm từ giỏ khách vào giỏ cũ
+        const guestCart = await Cart.findById(guestCartId)
+        if (guestCart && guestCart.products.length > 0) {
+          userCart.products.push(...guestCart.products)
+          await userCart.save()
+          await Cart.deleteOne({ _id: guestCartId })      
+        }
+      }
+      // TH1b: User có giỏ cũ, không có giỏ khách
+      // => Chỉ cần set cookie về giỏ cũ
+      res.cookie('cartId', userCart._id.toString(), COOKIE_OPTIONS)
+    } else {
+      // TH2: User chưa có giỏ hàng (user mới)
+      if (guestCartId) {
+        // TH2a: User chưa có giỏ, nhưng có giỏ khách
+        // => Gán giỏ khách cho user
+        await Cart.updateOne({ _id: guestCartId }, { user_id: user._id })
+        res.cookie('cartId', guestCartId, COOKIE_OPTIONS)
+      } else {
+        // TH2b: User mới, không có giỏ nào
+        // => Tạo giỏ mới cho user
+        const newCart = new Cart({ user_id: user._id, products: [] })
+        await newCart.save()
+        res.cookie('cartId', newCart._id.toString(), COOKIE_OPTIONS)
+      }
+    }
 
     // 3. Tạo JWT (token đăng nhập chính)
-    const payload = { userId: user._id, email: user.email };
+    const payload = { userId: user._id, email: user.email }
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       expiresIn: '1d' // Token hết hạn sau 1 ngày
-    });
+    })
 
     // 4. Gửi JWT về client qua cookie
     res.cookie('tokenUser', token, {
@@ -517,10 +538,10 @@ export const googleCallback = async (req: Request, res: Response) => {
     })
 
     // 5. Chuyển hướng người dùng về trang chủ React
-    res.redirect(process.env.CLIENT_URL as string);
+    res.redirect(process.env.CLIENT_URL as string)
 
   } catch (error) {
-    console.error("LỖI GOOGLE CALLBACK:", error);
-    res.redirect(`${process.env.CLIENT_URL}/user/login?error=server_error`);
+    console.error("LỖI GOOGLE CALLBACK:", error)
+    res.redirect(`${process.env.CLIENT_URL}/user/login?error=server_error`)
   }
 }
