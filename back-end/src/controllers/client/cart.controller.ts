@@ -58,13 +58,16 @@ export const addPost = async (req: Request, res: Response) => {
     const productId = req.params.productId
     const { quantity, color, size } = req.body 
     const cartId = req["cartId"]
-    // Thử cập nhật số lượng của sản phẩm nếu nó đã tồn tại với ĐÚNG color và size
     const result = await Cart.updateOne(
       {
         _id: cartId,
-        'products.product_id': productId,
-        'products.color': color, // Phải khớp cả color
-        'products.size': size    // và cả size
+        products: {
+          $elemMatch: {
+            product_id: productId,
+            color: color,
+            size: size
+          }
+        }
       },
       {
         // Dùng $inc để tăng số lượng một cách an toàn
@@ -72,7 +75,7 @@ export const addPost = async (req: Request, res: Response) => {
       }
     )
 
-    if (result.modifiedCount === 0) {
+    if (result.modifiedCount === 0) { // Dùng khi không có sản phẩm nào được cập nhật
       const productInfo = {
         product_id: productId,
         quantity: quantity,
