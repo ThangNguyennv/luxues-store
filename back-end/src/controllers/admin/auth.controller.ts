@@ -43,23 +43,35 @@ export const loginPost = async (req: Request, res: Response) => {
     }
 
     // Ký và tạo JWT
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       payload,
       process.env.JWT_SECRET_ADMIN as string, 
-      { expiresIn: '1d' } // Token hết hạn sau 1 ngày
+      { expiresIn: '15m' } // Token hết hạn sau 15 phút
     )
 
-    res.cookie('token', token, {
+    const refreshToken = jwt.sign(
+      payload,
+      process.env.JWT_REFRESH_SECRET_ADMIN as string,
+      { expiresIn: '7d' } // Refresh token hết hạn sau 7 ngày
+    )
+
+    await Account.updateOne(
+      { _id: accountAdmin._id },
+      { refreshToken: refreshToken }
+    )
+
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: true, // Chỉ gửi qua HTTPS
       sameSite: 'none', // 'strict' an toàn hơn cho trang admin
-      maxAge: 24 * 60 * 60 * 1000 // 1 ngày
+      maxAge: 24 * 60 * 60 * 1000, // 1 ngày
+      path: '/admin/auth/refresh-token' // Chỉ gửi cookie này đến endpoint làm mới token
     })
     
     res.json({
       code: 200,
       message: 'Đăng nhập thành công!',
-      token: token,
+      accessToken: accessToken,
       accountAdmin: accountAdmin
     })
 
@@ -73,12 +85,73 @@ export const loginPost = async (req: Request, res: Response) => {
   }
 }
 
+// [GET] /admin/auth/refresh-token
+export const refreshToken = async (req: Request, res: Response) => {
+  try {
+    const refreshToken = req.cookies.refreshToken
+
+    if (!refreshToken) {
+      return res.json({
+        code: 401,
+        message: 'Không tìm thấy token!'
+      })
+    }
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET_ADMIN as string) as jwt.JwtPayload
+
+    const account = await Account.findOne({
+      _id: decoded.accountId,
+      refreshToken: refreshToken,
+      deleted: false,
+      status: 'active'
+    })
+
+    if (!account) {
+      return res.json({
+        code: 401,
+        message: 'Token không hợp lệ!'
+      })
+    }
+
+    const payload = {
+      accountId: account._id,
+      email: account.email,
+      role_id: account.role_id 
+    }
+
+    const newAccessToken = jwt.sign(
+      payload,
+      process.env.JWT_SECRET_ADMIN as string,
+      { expiresIn: '15m' }
+    )
+
+    res.json({
+      code: 200,
+      message: 'Làm mới token thành công!',
+      accessToken: newAccessToken
+    })
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: 'Lỗi!',
+      error: error.message
+    })
+  }
+}
 // [GET] /admin/auth/logout
-export const logout = (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   try {
-    const { expires, ...clearOptions } = COOKIE_OPTIONS
-    // Xóa cookie với tên mới 'token'
-    res.clearCookie('token', clearOptions)
+    const accessToken = req.headers.authorization?.split(' ')[1]
+    const decoded = jwt.verify(accessToken as string, process.env.JWT_SECRET_ADMIN as string) as jwt.JwtPayload 
+    await Account.updateOne(
+      { _id: decoded.accountId },
+      { refreshToken: null }
+    )
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/admin/auth/refresh-token'
+    })
 
     res.json({
       code: 200,

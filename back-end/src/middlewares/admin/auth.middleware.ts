@@ -41,27 +41,28 @@ export const requireAuth = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const token = req.cookies.token 
-  if (!token) {
-    res.json({
-      code: 401,
-      message: 'Vui lòng gửi kèm token!'
-    })
-    return
-  }
 
   try {
+    const accessToken = req.headers.authorization?.split(' ')[1]
+    if (!accessToken) {
+      res.json({
+        code: 401,
+        message: 'Vui lòng gửi kèm token!'
+      })
+      return
+    }
     // Xác thực chữ ký của token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_ADMIN as string) as { 
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_ADMIN as string) as { 
       accountId: string,
       email: string,
       role_id: string  
     }
 
-    // Tìm user bằng ID lấy từ payload của token
+    // Tìm user bằng ID lấy từ payload của accessToken
     const accountAdmin = await Account.findOne({
       _id: decoded.accountId,
-      deleted: false
+      deleted: false,
+      status: 'active'
     }).select('-password')
   
     if (!accountAdmin) {

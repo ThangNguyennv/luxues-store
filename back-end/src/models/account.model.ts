@@ -17,6 +17,10 @@ const accountSchema = new mongoose.Schema(
       required: true,
       select: false // Quan trọng: Ẩn mật khẩu khỏi các truy vấn find()
     },
+    refreshToken: {
+      type: String,
+      select: false // Ẩn khỏi query
+    },
     phone: String,
     avatar: String,
     role_id: {
