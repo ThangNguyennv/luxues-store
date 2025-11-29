@@ -50,16 +50,14 @@ const BrandPage = () => {
       {loading ? (
         // === Trạng thái Loading ===
         <div className="flex flex-col gap-12">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i}>
-              <Skeleton variant="text" width={250} height={40} sx={{ fontSize: '1.875rem' }} />
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-                {Array.from({ length: 6 }).map((_, j) => (
-                  <BrandSkeleton key={j} />
-                ))}
-              </div>
+          <div>
+            <Skeleton variant="text" width={250} height={40} sx={{ fontSize: '1.875rem' }} />
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+              {Array.from({ length: 6 }).map((_, j) => (
+                <BrandSkeleton key={j} />
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       ) : brandGroups.length > 0 ? (
         // === Hiển thị dữ liệu ===
