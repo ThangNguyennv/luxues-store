@@ -75,12 +75,12 @@ const SubMenu = ({
   // Desktop Version
   if (!isMobile) {
     return (
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[10px] p-[16px] md:p-[24px] bg-white shadow-lg w-full divide-x divide-black">
+      <div className="flex flex-col items-center justify-center gap-[10px] p-[16px] md:p-[24px] bg-white shadow-lg w-full">
         {dataDropdown.map((parent) => (
-          <div key={parent._id} className="px-3 md:px-4 first:pl-0 last:border-r-0">
+          <div key={parent._id} className="px-3 md:px-4 first:pl-0">
             <Link
               to={`/${items}/${parent.slug}`}
-              className="font-[600] uppercase mb-[10px] md:mb-[12px] border-b-[2px] border-black inline-block hover:text-[#FFAB19] transition-colors text-[13px] md:text-[15px] lg:text-[16px]"
+              className="font-[600] uppercase mb-[10px] md:mb-[12px] inline-block hover:text-[#FFAB19] transition-colors text-[13px] md:text-[15px] lg:text-[16px]"
             >
               {parent.title}
             </Link>

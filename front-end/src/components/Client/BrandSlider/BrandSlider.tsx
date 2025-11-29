@@ -62,7 +62,7 @@ export default function BrandSlider({ items, loading = false }: BrandSliderProps
           items && items.length > 0 && (
             items.map((item, index) => (
               <SwiperSlide key={index}>
-                <Link to={`/products/detail/${item.slug}`}>
+                <Link to={`/articles/detail/${item.slug}`}>
                   <ArticleCard item={item} />
                 </Link>
               </SwiperSlide>

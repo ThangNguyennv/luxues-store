@@ -15,7 +15,7 @@ const ArticleCategory = () => {
         <div className="container flex flex-col mb-[150px]">
           <BoxHead title={pageTitle}/>
           {articleCategory && (
-            <div className='grid grid-cols-4 gap-[15px]'>
+            <div className='grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[15px]'>
               {articleCategory.map((article, index) => (
                 <Link to={`/articles/detail/${article.slug}`} key={index}>
                   <ArticleCard item={article}/>

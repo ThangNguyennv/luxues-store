@@ -17,6 +17,7 @@ import { IoChevronDown } from 'react-icons/io5'
 import { RiBillLine } from 'react-icons/ri'
 import SearchInput from './SearchInput'
 import useHeader from '~/hooks/client/components/header/useHeader'
+import SubMenuArticle from '../SubMenuArticle/SubMenuArticle'
 
 const Header = () => {
   const {
@@ -173,8 +174,8 @@ const Header = () => {
                     >
                       <div className="
                         absolute 2xl:top-[20px] 2xl:left-[-410px] 2xl:p-[12px] 2xl:w-[1527px] z-[999]
-                        xl:top-[20px] xl:left-[-470px] xl:p-[12px] xl:w-[1260px]
-                        lg:top-[20px] lg:left-[-370px] lg:p-[12px] lg:w-[1100px]
+                        xl:top-[20px] xl:left-[-530px] xl:p-[12px] xl:w-[1160px]
+                        lg:top-[20px] lg:left-[-450px] lg:p-[12px] lg:w-[1000px]
                       ">
                         {dataHome && dataHome.productCategories && (
                           <SubMenu
@@ -206,12 +207,6 @@ const Header = () => {
                     </motion.div>
                   )}
                 </li>
-                {/* <li>
-                  <Link to={''} className='flex items-center gap-[5px]'>
-                    <span>Phụ kiện</span>
-                    <IoChevronDown />
-                  </Link>
-                </li> */}
                 <li>
                   <Link to={'/brands'} className='flex items-center gap-[5px]'>
                     <span>Thương hiệu</span>
@@ -235,9 +230,11 @@ const Header = () => {
                       transition={{ duration: 0.35, ease: 'easeInOut' }}
                       className="overflow-hidden"
                     >
-                      <div className="absolute top-[50px] left-[-600px] p-[12px] w-[1527px] z-50">
+                      <div className="absolute 2xl:top-[20px] 2xl:left-[-100px] 2xl:p-[12px] 2xl:w-[310px] z-[999]
+                        xl:top-[20px] xl:left-[-110px] xl:p-[12px] xl:w-[310px]
+                        lg:top-[20px] lg:left-[-110px] lg:p-[12px] lg:w-[310px]">
                         {dataHome && dataHome.articleCategories && (
-                          <SubMenu
+                          <SubMenuArticle
                             dataDropdown={
                               dataHome.articleCategories.map((category) => ({
                                 ...category,
@@ -531,16 +528,6 @@ const Header = () => {
 
                   <li>
                     <Link
-                      to={''}
-                      onClick={toggleMobileMenu}
-                      className="block py-3 px-4 hover:bg-[#E0F2FE] rounded-lg"
-                    >
-                      Phụ kiện
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
                       to={'/brands'}
                       onClick={toggleMobileMenu}
                       className="block py-3 px-4 hover:bg-[#E0F2FE] rounded-lg"
@@ -552,9 +539,9 @@ const Header = () => {
                   {/* Articles with dropdown */}
                   <li>
                     {dataHome && dataHome.articleCategories && dataHome.articleCategories.length > 0 && (
-                      <SubMenu
+                      <SubMenuArticle
                         dataDropdown={
-                          dataHome.productCategories.map((category) => ({
+                          dataHome.articleCategories.map((category) => ({
                             ...category,
                             _id: category._id ?? '',
                             slug: category.slug ?? '',
@@ -578,8 +565,8 @@ const Header = () => {
                         isMobile={true}
                         onLinkClick={toggleMobileMenu}
                         showParentLink={true} // Bật main parent
-                        parentLinkPath={'/articles'} // Link chính
-                        parentLinkText="bài viết" // Text hiển thị
+                        parentLinkPath={'/articles'}
+                        parentLinkText="bài viết"
                       />
                     ) }
                   </li>
