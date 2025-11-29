@@ -3,11 +3,9 @@ import { Server, Socket } from 'socket.io'
 import Chat from '~/models/chat.model'
 
 export const chatSocketBrain = (io: Server) => {
-    // LOGIC XỬ LÝ CHAT REAL-TIME
     io.on('connection', (socket: Socket) => {
         console.log('Một người dùng đã kết nối:', socket.id, 'với vai trò:', socket.data.role)
 
-        // --- Logic cho Admin ---
         if (socket.data.role === 'admin') {
             // Admin tham gia phòng (ADMIN_ROOM hoặc phòng của user)
             socket.on('ADMIN_JOIN_ROOM', (roomName: string) => {
@@ -52,7 +50,6 @@ export const chatSocketBrain = (io: Server) => {
             })
         }
 
-        // --- Logic cho Client (User) ---
         if (socket.data.role === 'user') {
             const userId = socket.data.userId
 
