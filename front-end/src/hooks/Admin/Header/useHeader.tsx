@@ -8,7 +8,7 @@ import { useState } from 'react'
 export const useHeader = () => {
   const navigate = useNavigate()
   const { dispatchAlert } = useAlertContext()
-  const { myAccount, setMyAccount } = useAuth()
+  const { myAccount, logout } = useAuth()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -22,7 +22,7 @@ export const useHeader = () => {
         type: 'SHOW_ALERT',
         payload: { message: response.message, severity: 'success' }
       })
-      setMyAccount(null)
+      await logout()
       setTimeout(() => {
         navigate('/admin/auth/login')
       })

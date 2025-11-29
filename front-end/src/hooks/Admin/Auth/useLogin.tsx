@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import axios from 'axios'
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginAPI } from '~/apis/admin/auth.api'
+import { useAuth } from '~/contexts/admin/AuthContext'
 import { useAlertContext } from '~/contexts/alert/AlertContext'
 
 export const useLoginAdmin = () => {
@@ -10,7 +12,7 @@ export const useLoginAdmin = () => {
   const { dispatchAlert } = useAlertContext()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  const { refreshUser } = useAuth()
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     setIsLoading(true)
@@ -25,6 +27,7 @@ export const useLoginAdmin = () => {
           type: 'SHOW_ALERT',
           payload: { message: response.message, severity: 'success' }
         })
+        await refreshUser()
 
         navigate('/admin/dashboard')
 

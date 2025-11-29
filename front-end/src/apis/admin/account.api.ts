@@ -1,11 +1,11 @@
 import axios from 'axios'
 import type { AccountDetailInterface, AccountsDetailInterface } from '~/types/account.type'
 import { API_ROOT } from '~/utils/constants'
+import axiosInstance from '../axiosInstance'
 
 export const fetchAccountsAPI = async (): Promise<AccountsDetailInterface> => {
-  const resposne = await axios.get(
-    `${API_ROOT}/admin/accounts`,
-    { withCredentials: true }
+  const resposne = await axiosInstance.get(
+    `${API_ROOT}/admin/accounts`
   )
   return resposne.data
 }

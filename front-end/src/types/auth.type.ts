@@ -3,7 +3,7 @@ export interface LoginInterface {
   code: number,
   email: string,
   password: string,
-  token: string,
+  accessToken?: string
   message: string,
   accountAdmin: AccountInfoInterface,
 }

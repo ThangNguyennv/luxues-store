@@ -1,9 +1,9 @@
-import axios from 'axios'
 import type { MyAccountDetailInterface } from '~/types/account.type'
 import { API_ROOT } from '~/utils/constants'
+import axiosInstance from '../axiosInstance'
 
 export const fetchMyAccountAPI = async (): Promise<MyAccountDetailInterface> => {
-  const response = await axios.get(
+  const response = await axiosInstance.get(
     `${API_ROOT}/admin/my-account`,
     { withCredentials: true }
   )
@@ -11,7 +11,7 @@ export const fetchMyAccountAPI = async (): Promise<MyAccountDetailInterface> => 
 }
 
 export const fetchUpdateMyAccountAPI = async (formData: FormData) => {
-  const response = await axios.patch(
+  const response = await axiosInstance.patch(
     `${API_ROOT}/admin/my-account/edit`,
     formData,
     { withCredentials: true }
